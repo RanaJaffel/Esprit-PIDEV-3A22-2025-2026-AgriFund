@@ -1,0 +1,75 @@
+package entities;
+
+public class capteur {
+    private int idCapteur;
+    private String typeCapteur;
+    private String localisation;
+    private String statut;
+    private int idProjet;
+
+    public capteur() {
+    }
+
+    public capteur(int idCapteur , String typeCapteur ,String localisation, String statut,int idProjet) {
+        this.idCapteur = idCapteur;
+        this.typeCapteur = typeCapteur;
+        this.localisation = localisation;
+        this.statut = statut;
+        this.idProjet = idProjet;
+    }
+
+
+
+    public int getIdCapteur() {
+        return idCapteur;
+    }
+
+    public void setIdCapteur(int idCapteur) {
+        this.idCapteur = idCapteur;
+    }
+
+    public String getTypeCapteur() {
+        return typeCapteur;
+    }
+
+    public void setTypeCapteur(String typeCapteur) {
+        this.typeCapteur = typeCapteur;
+    }
+
+    public String getLocalisation() {
+        return localisation;
+    }
+
+    public void setLocalisation(String localisation) {
+        this.localisation = localisation;
+    }
+
+    public String getStatut() {
+        return statut;
+    }
+
+    public void setStatut(String statut) {
+        this.statut = statut;
+    }
+
+    public int getIdProjet() {
+        return idProjet;
+    }
+
+    public void setIdProjet(int idProjet) {
+        this.idProjet = idProjet;
+    }
+
+    @Override
+    public String toString() {
+        return "capteur{" +
+                "idCapteur=" + idCapteur +
+                ", typeCapteur='" + typeCapteur + '\'' +
+                ", localisation='" + localisation + '\'' +
+                ", statut='" + statut + '\'' +
+                ", idProjet=" + idProjet +
+                '}';
+    }
+
+}
+
