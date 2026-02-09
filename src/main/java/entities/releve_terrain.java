@@ -1,10 +1,9 @@
 package entities;
 
 import java.time.LocalDateTime;
-import java.time.*;
-
 
 public class releve_terrain {
+
     private int idReleve;
     private String typeMesure;
     private double valeurMesuree;
@@ -12,10 +11,12 @@ public class releve_terrain {
     private LocalDateTime dateHeure;
     private int idCapteur;
 
+    // Constructeurs
     public releve_terrain() {
     }
 
-    public releve_terrain(int idReleve,String typeMesure,double valeurMesuree,String unite,LocalDateTime dateHeure,int idCapteur) {
+    public releve_terrain(int idReleve, String typeMesure, double valeurMesuree,
+                          String unite, LocalDateTime dateHeure, int idCapteur) {
         this.idReleve = idReleve;
         this.typeMesure = typeMesure;
         this.valeurMesuree = valeurMesuree;
@@ -24,6 +25,15 @@ public class releve_terrain {
         this.idCapteur = idCapteur;
     }
 
+    public releve_terrain(String typeMesure, double valeurMesuree, String unite, int idCapteur) {
+        this.typeMesure = typeMesure;
+        this.valeurMesuree = valeurMesuree;
+        this.unite = unite;
+        this.idCapteur = idCapteur;
+        this.dateHeure = LocalDateTime.now();
+    }
+
+    // Getters et Setters
     public int getIdReleve() {
         return idReleve;
     }
@@ -74,13 +84,13 @@ public class releve_terrain {
 
     @Override
     public String toString() {
-        return "releve_terrain{" +
-                "idReleve=" + idReleve +
-                ", typeMesure='" + typeMesure + '\'' +
-                ", valeurMesuree=" + valeurMesuree +
+        return "ReleveT{" +
+                "id=" + idReleve +
+                ", type='" + typeMesure + '\'' +
+                ", valeur=" + valeurMesuree +
                 ", unite='" + unite + '\'' +
-                ", dateHeure=" + dateHeure +
-                ", idCapteur=" + idCapteur +
+                ", date=" + dateHeure +
+                ", capteur=" + idCapteur +
                 '}';
     }
 }

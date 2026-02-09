@@ -1,16 +1,21 @@
 package entities;
 
+import java.time.LocalDateTime;
+
 public class capteur {
+
     private int idCapteur;
     private String typeCapteur;
     private String localisation;
     private String statut;
     private int idProjet;
+    private LocalDateTime dateInstallation;
 
+    // Constructeurs
     public capteur() {
     }
 
-    public capteur(int idCapteur , String typeCapteur ,String localisation, String statut,int idProjet) {
+    public capteur(int idCapteur, String typeCapteur, String localisation, String statut, int idProjet) {
         this.idCapteur = idCapteur;
         this.typeCapteur = typeCapteur;
         this.localisation = localisation;
@@ -18,8 +23,7 @@ public class capteur {
         this.idProjet = idProjet;
     }
 
-
-
+    // Getters et Setters
     public int getIdCapteur() {
         return idCapteur;
     }
@@ -60,16 +64,22 @@ public class capteur {
         this.idProjet = idProjet;
     }
 
-    @Override
-    public String toString() {
-        return "capteur{" +
-                "idCapteur=" + idCapteur +
-                ", typeCapteur='" + typeCapteur + '\'' +
-                ", localisation='" + localisation + '\'' +
-                ", statut='" + statut + '\'' +
-                ", idProjet=" + idProjet +
-                '}';
+    public LocalDateTime getDateInstallation() {
+        return dateInstallation;
     }
 
-}
+    public void setDateInstallation(LocalDateTime dateInstallation) {
+        this.dateInstallation = dateInstallation;
+    }
 
+    @Override
+    public String toString() {
+        return "Capteur{" +
+                "id=" + idCapteur +
+                ", type='" + typeCapteur + '\'' +
+                ", localisation='" + localisation + '\'' +
+                ", statut='" + statut + '\'' +
+                ", projet=" + idProjet +
+                '}';
+    }
+}

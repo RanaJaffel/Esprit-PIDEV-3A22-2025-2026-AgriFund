@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controlers.ReleveController"
+      spacing="20"
+      styleClass="content-area"
+      stylesheets="@style.css">
+
+    <Label text="Relevés Terrain – IoT" styleClass="title"/>
+
+    <!-- TABLE -->
+    <VBox styleClass="panel" spacing="10">
+        <Label text="Historique des relevés" styleClass="section-title"/>
+
+        <TableView fx:id="tableReleve" prefHeight="250">
+            <columns>
+                <TableColumn fx:id="colType" text="Type"/>
+                <TableColumn fx:id="colValeur" text="Valeur"/>
+                <TableColumn fx:id="colUnite" text="Unité"/>
+                <TableColumn fx:id="colCapteur" text="Capteur"/>
+            </columns>
+        </TableView>
+    </VBox>
+
+    <!-- GRAPH -->
+    <VBox styleClass="panel" spacing="10">
+        <Label text="Évolution des mesures" styleClass="section-title"/>
+
+        <LineChart fx:id="chart">
+            <xAxis>
+                <CategoryAxis label="Temps"/>
+            </xAxis>
+            <yAxis>
+                <NumberAxis label="Valeur"/>
+            </yAxis>
+        </LineChart>
+    </VBox>
+
+</VBox>
+

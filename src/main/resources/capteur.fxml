@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.chart.PieChart?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controlers.CapteurController"
+      spacing="20"
+      styleClass="content-area"
+      stylesheets="@style.css">
+
+    <Label text="Gestion des Capteurs" styleClass="title"/>
+
+    <VBox styleClass="panel" spacing="10">
+
+        <Label text="Liste des capteurs" styleClass="section-title"/>
+
+        <TableView fx:id="tableCapteur">
+            <columns>
+                <TableColumn fx:id="colId" text="ID"/>
+                <TableColumn fx:id="colType" text="Type"/>
+                <TableColumn fx:id="colLocalisation" text="Localisation"/>
+                <TableColumn fx:id="colStatut" text="Statut"/>
+            </columns>
+        </TableView>
+
+    </VBox>
+</VBox>
+
