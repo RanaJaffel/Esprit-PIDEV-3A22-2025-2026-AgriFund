@@ -22,6 +22,18 @@
             <artifactId>mysql-connector-j</artifactId>
             <version>8.0.32</version>
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>20.0.2</version>
+        </dependency>
+        <!-- AJOUT DE JAVAFX-FXML OBLIGATOIRE -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>20.0.2</version>
+        </dependency>
+
     </dependencies>
 
 </project>

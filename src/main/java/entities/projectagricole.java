@@ -8,12 +8,12 @@ public class projectagricole {
     private String nomproject;
     private float surface;
     private BigDecimal budgetdemande;
-    private String statut; // 'en cours','accepte','refuse'
+    private String statut;
     private Date datesoumission;
 
     public projectagricole() {}
 
-    // For inserting (no id)
+
     public projectagricole(String nomproject, float surface, BigDecimal budgetdemande, String statut, Date datesoumission) {
         this.nomproject = nomproject;
         this.surface = surface;
@@ -22,7 +22,7 @@ public class projectagricole {
         this.datesoumission = datesoumission;
     }
 
-    // Full constructor
+
     public projectagricole(int idproject, String nomproject, float surface, BigDecimal budgetdemande, String statut, Date datesoumission) {
         this.idproject = idproject;
         this.nomproject = nomproject;
@@ -32,7 +32,6 @@ public class projectagricole {
         this.datesoumission = datesoumission;
     }
 
-    // getters & setters
     public int getIdproject() { return idproject; }
     public void setIdproject(int idproject) { this.idproject = idproject; }
 

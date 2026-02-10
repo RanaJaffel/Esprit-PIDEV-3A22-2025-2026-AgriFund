@@ -10,12 +10,12 @@ public class ressourceproject {
     private int quantite;
     private BigDecimal cout;
     private String fournisseur;
-    private String statut; // 'prevu','achete'
+    private String statut;
     private Date dateajout;
-    private int idproject; // foreign key
+    private int idproject;
 
     public ressourceproject() {}
-    // For inserting
+
     public ressourceproject(String nomressource, String typeressource, int quantite, BigDecimal cout,
                             String fournisseur, String statut, Date dateajout, int idproject) {
         this.nomressource = nomressource;
@@ -28,7 +28,7 @@ public class ressourceproject {
         this.idproject = idproject;
     }
 
-    // Full constructor
+
     public ressourceproject(int idressource, String nomressource, String typeressource, int quantite, BigDecimal cout,
                             String fournisseur, String statut, Date dateajout, int idproject) {
         this.idressource = idressource;
@@ -42,7 +42,6 @@ public class ressourceproject {
         this.idproject = idproject;
     }
 
-    // getters & setters
     public int getIdressource() { return idressource; }
     public void setIdressource(int idressource) { this.idressource = idressource; }
 
