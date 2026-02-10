@@ -13,8 +13,35 @@
 
     <Label text="Gestion des Capteurs" styleClass="title"/>
 
+    <!-- FORMULAIRE CRUD -->
     <VBox styleClass="panel" spacing="10">
 
+        <Label text="Ajouter / Modifier un capteur" styleClass="section-title"/>
+
+        <GridPane hgap="15" vgap="10">
+            <Label text="Type :" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="tfType" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Localisation :" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField fx:id="tfLocalisation" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Statut :" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="cbStatut" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <Label text="ID Projet :" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <TextField fx:id="tfProjet" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+        </GridPane>
+
+        <HBox spacing="15">
+            <Button text="➕ Ajouter" onAction="#ajouterCapteur" styleClass="btn-success"/>
+            <Button text="✏️ Modifier" onAction="#modifierCapteur" styleClass="btn"/>
+            <Button text="🗑️ Supprimer" onAction="#supprimerCapteur" styleClass="btn-danger"/>
+        </HBox>
+
+    </VBox>
+
+    <!-- TABLE -->
+    <VBox styleClass="panel" spacing="10">
         <Label text="Liste des capteurs" styleClass="section-title"/>
 
         <TableView fx:id="tableCapteur">
@@ -25,7 +52,9 @@
                 <TableColumn fx:id="colStatut" text="Statut"/>
             </columns>
         </TableView>
-
     </VBox>
+
 </VBox>
+
+
 
