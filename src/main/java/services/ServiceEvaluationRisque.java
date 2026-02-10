@@ -5,9 +5,7 @@ import utils.MyConnection;
 
 import java.sql.*;
 
-/**
- * Classe de service pour gérer les opérations CRUD sur EvaluationRisque
- */
+
 public class ServiceEvaluationRisque {
 
     private Connection connection;
@@ -17,11 +15,7 @@ public class ServiceEvaluationRisque {
         this.connection = MyConnection.getInstance();
     }
 
-    /**
-     * Méthode pour ajouter une nouvelle évaluation de risque
-     * @param evaluation - l'objet EvaluationRisque à ajouter
-     * @throws SQLException
-     */
+
     public void ajouter(EvaluationRisque evaluation) throws SQLException {
         String req = "INSERT INTO EvaluationRisque (scoreGlobal, niveauRisque, fiabiliteDonnees, " +
                 "facteurPrincipal, recommandation, dateEvaluation, idProjet) " +
@@ -46,11 +40,7 @@ public class ServiceEvaluationRisque {
         }
     }
 
-    /**
-     * Méthode pour modifier une évaluation de risque existante
-     * @param evaluation - l'objet EvaluationRisque avec les nouvelles valeurs
-     * @throws SQLException
-     */
+
     public void modifier(EvaluationRisque evaluation) throws SQLException {
         String req = "UPDATE EvaluationRisque SET scoreGlobal = ?, niveauRisque = ?, " +
                 "fiabiliteDonnees = ?, facteurPrincipal = ?, recommandation = ?, " +
@@ -78,11 +68,7 @@ public class ServiceEvaluationRisque {
         }
     }
 
-    /**
-     * Méthode pour supprimer une évaluation de risque
-     * @param idEvaluation - l'ID de l'évaluation à supprimer
-     * @throws SQLException
-     */
+
     public void supprimer(int idEvaluation) throws SQLException {
         String req = "DELETE FROM EvaluationRisque WHERE idEvaluation = ?";
 

@@ -4,13 +4,13 @@ import entities.DecisionFinanciere;
 import utils.MyConnection;
 
 import java.sql.*;
-
+import java.util.ArrayList;
+import java.util.List;
 
 public class ServiceDecisionFinanciere {
 
     private Connection connection;
 
-    // Constructeur
     public ServiceDecisionFinanciere() {
         this.connection = MyConnection.getInstance();
     }
@@ -35,11 +35,6 @@ public class ServiceDecisionFinanciere {
         }
     }
 
-    /**
-     * Méthode pour modifier une décision financière existante
-     * @param decision - l'objet DecisionFinanciere avec les nouvelles valeurs
-     * @throws SQLException
-     */
     public void modifier(DecisionFinanciere decision) throws SQLException {
         String req = "UPDATE DecisionFinanciere SET statut = ?, justification = ?, " +
                 "dateDecision = ?, idProjet = ? WHERE idDecision = ?";
@@ -63,11 +58,6 @@ public class ServiceDecisionFinanciere {
         }
     }
 
-    /**
-     * Méthode pour supprimer une décision financière
-     * @param idDecision - l'ID de la décision à supprimer
-     * @throws SQLException
-     */
     public void supprimer(int idDecision) throws SQLException {
         String req = "DELETE FROM DecisionFinanciere WHERE idDecision = ?";
 
@@ -84,5 +74,67 @@ public class ServiceDecisionFinanciere {
             System.err.println("Erreur lors de la suppression de la décision");
             throw e;
         }
+    }
+
+    // *** NOUVELLE MÉTHODE À AJOUTER ***
+    /**
+     * Méthode pour afficher toutes les décisions financières
+     * @return List<DecisionFinanciere>
+     * @throws SQLException
+     */
+    public List<DecisionFinanciere> afficher() throws SQLException {
+        List<DecisionFinanciere> decisions = new ArrayList<>();
+        String req = "SELECT * FROM DecisionFinanciere";
+
+        try (Statement st = connection.createStatement();
+             ResultSet rs = st.executeQuery(req)) {
+
+            while (rs.next()) {
+                DecisionFinanciere decision = new DecisionFinanciere(
+                        rs.getInt("idDecision"),
+                        rs.getString("statut"),
+                        rs.getString("justification"),
+                        rs.getDate("dateDecision"),
+                        rs.getInt("idProjet")
+                );
+                decisions.add(decision);
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de l'affichage des décisions");
+            throw e;
+        }
+
+        return decisions;
+    }
+
+    /**
+     * Méthode pour récupérer une décision par son ID
+     * @param idDecision
+     * @return DecisionFinanciere ou null
+     * @throws SQLException
+     */
+    public DecisionFinanciere getById(int idDecision) throws SQLException {
+        String req = "SELECT * FROM DecisionFinanciere WHERE idDecision = ?";
+
+        try (PreparedStatement pst = connection.prepareStatement(req)) {
+            pst.setInt(1, idDecision);
+
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    return new DecisionFinanciere(
+                            rs.getInt("idDecision"),
+                            rs.getString("statut"),
+                            rs.getString("justification"),
+                            rs.getDate("dateDecision"),
+                            rs.getInt("idProjet")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la récupération de la décision");
+            throw e;
+        }
+
+        return null;
     }
 }
