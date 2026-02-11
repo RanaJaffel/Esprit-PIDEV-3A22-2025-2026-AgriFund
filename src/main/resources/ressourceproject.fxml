@@ -24,7 +24,7 @@
 
          <!-- Left Side: Formulaire -->
          <VBox spacing="15" prefWidth="380" style="-fx-background-color: white; -fx-padding: 25; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #B2D944; -fx-border-width: 4px 0 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 2);">
-            <Label text="⚙️ Détails de la Ressource" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #076A39;"/>
+            <Label text="⚙️ Ajouter une Ressource" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #076A39;"/>
 
             <GridPane vgap="15" hgap="10">
                <columnConstraints>
@@ -59,12 +59,10 @@
 
             <Region VBox.vgrow="ALWAYS" />
 
-            <HBox spacing="10" alignment="CENTER">
-               <Button text="Ajouter" styleClass="btn-primary" onAction="#addRessource" prefWidth="95" prefHeight="38"/>
-               <Button text="Modifier" styleClass="btn-secondary" onAction="#updateRessource" prefWidth="95" prefHeight="38"/>
-               <Button text="Supprimer" styleClass="btn-danger" onAction="#deleteRessource" prefWidth="95" prefHeight="38"/>
-            </HBox>
-            <Button text="🧹 Vider les champs" style="-fx-background-color: transparent; -fx-text-fill: #848A86; -fx-cursor: hand;" onAction="#clearFields" maxWidth="Infinity" alignment="CENTER"/>
+            <VBox spacing="10">
+               <Button text="➕ Ajouter la Ressource" styleClass="btn-primary" onAction="#addRessource" maxWidth="Infinity" prefHeight="40"/>
+               <Button text="🧹 Vider les champs" style="-fx-background-color: transparent; -fx-text-fill: #848A86; -fx-cursor: hand;" onAction="#clearFields" maxWidth="Infinity" alignment="CENTER"/>
+            </VBox>
          </VBox>
 
          <!-- Right Side: Zone des Cartes -->
@@ -73,7 +71,6 @@
                <Label text="📦 Ressources Disponibles / Prévues" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #133D03;"/>
             </HBox>
 
-            <!-- NOUVELLE ZONE : Recherche et Filtre -->
             <HBox spacing="15" alignment="CENTER_LEFT">
                <TextField fx:id="tfSearchRessource" promptText="🔍 Rechercher par nom..." HBox.hgrow="ALWAYS" style="-fx-font-size: 14px; -fx-padding: 8px;"/>
                <ComboBox fx:id="cbFilterTypeList" promptText="Tous les types" style="-fx-font-size: 14px; -fx-padding: 4px;"/>

@@ -115,8 +115,38 @@ public class projectagricolecontroller implements Initializable {
         Label lblDate = new Label("📅 Soumis le: " + p.getDatesoumission());
         lblDate.getStyleClass().add("card-info");
 
-        card.getChildren().addAll(topRow, new Separator(), lblSurface, lblBudget, lblDate);
-        card.setOnMouseClicked(event -> populateForm(p));
+        // --- NOUVEAU : Création des boutons sur la carte ---
+        HBox actionBox = new HBox(10);
+        actionBox.setAlignment(Pos.CENTER_RIGHT);
+        actionBox.setPadding(new javafx.geometry.Insets(10, 0, 0, 0)); // Marge en haut
+
+        Button btnModifier = new Button("✏️ Modifier");
+        btnModifier.getStyleClass().add("btn-secondary");
+        btnModifier.setStyle("-fx-font-size: 11px; -fx-padding: 5px 10px;");
+        btnModifier.setOnAction(e -> {
+            selectedProject = p;
+            updateProject(null); // Déclenche la méthode de mise à jour existante
+        });
+
+        Button btnSupprimer = new Button("🗑️ Supprimer");
+        btnSupprimer.getStyleClass().add("btn-danger");
+        btnSupprimer.setStyle("-fx-font-size: 11px; -fx-padding: 5px 10px;");
+        btnSupprimer.setOnAction(e -> {
+            selectedProject = p;
+            deleteProject(null); // Déclenche la méthode de suppression existante
+        });
+
+        actionBox.getChildren().addAll(btnModifier, btnSupprimer);
+        // --------------------------------------------------
+
+        card.getChildren().addAll(topRow, new Separator(), lblSurface, lblBudget, lblDate, actionBox);
+
+        // Au clic sur n'importe quel endroit de la carte, on remplit le formulaire de gauche
+        card.setOnMouseClicked(event -> {
+            populateForm(p);
+            // verifierRentabiliteProjet(p); // (Décommentez si vous avez ajouté la méthode métier)
+        });
+
         return card;
     }
 

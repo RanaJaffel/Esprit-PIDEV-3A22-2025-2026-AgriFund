@@ -108,7 +108,7 @@ public class ressourceprojectcontroller implements Initializable {
     private VBox createCard(ressourceproject r) {
         VBox card = new VBox(8);
         card.getStyleClass().add("project-card");
-        card.setPrefWidth(250);
+        card.setPrefWidth(260);
 
         Label lblNom = new Label(r.getNomressource() + " (Proj #" + r.getIdproject() + ")");
         lblNom.getStyleClass().add("card-title");
@@ -134,7 +134,31 @@ public class ressourceprojectcontroller implements Initializable {
         Label lblFournisseur = new Label("🏢 Fournisseur: " + r.getFournisseur());
         lblFournisseur.getStyleClass().add("card-info");
 
-        card.getChildren().addAll(topRow, new Separator(), lblType, lblQte, lblCout, lblFournisseur);
+        // --- NOUVEAU : Création des boutons sur la carte ---
+        HBox actionBox = new HBox(10);
+        actionBox.setAlignment(Pos.CENTER_RIGHT);
+        actionBox.setPadding(new javafx.geometry.Insets(10, 0, 0, 0));
+
+        Button btnModifier = new Button("✏️ Modifier");
+        btnModifier.getStyleClass().add("btn-secondary");
+        btnModifier.setStyle("-fx-font-size: 11px; -fx-padding: 5px 10px;");
+        btnModifier.setOnAction(e -> {
+            selectedRessource = r;
+            updateRessource(null); // Déclenche la mise à jour
+        });
+
+        Button btnSupprimer = new Button("🗑️ Supprimer");
+        btnSupprimer.getStyleClass().add("btn-danger");
+        btnSupprimer.setStyle("-fx-font-size: 11px; -fx-padding: 5px 10px;");
+        btnSupprimer.setOnAction(e -> {
+            selectedRessource = r;
+            deleteRessource(null); // Déclenche la suppression
+        });
+
+        actionBox.getChildren().addAll(btnModifier, btnSupprimer);
+        // --------------------------------------------------
+
+        card.getChildren().addAll(topRow, new Separator(), lblType, lblQte, lblCout, lblFournisseur, actionBox);
 
         card.setOnMouseClicked(event -> populateForm(r));
         return card;
