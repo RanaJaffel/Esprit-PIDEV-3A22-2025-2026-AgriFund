@@ -13,6 +13,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import services.ServiceDecisionFinanciere;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import java.util.Optional;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -34,7 +37,6 @@ public class DecisionListController {
     @FXML private Label lblTotal;
     @FXML private Label lblApprouves;
     @FXML private Label lblEnAttente;
-    @FXML private Label lblRejetes;
     @FXML private Label lblStatus;
 
     private ServiceDecisionFinanciere service;
@@ -180,12 +182,10 @@ public class DecisionListController {
         int total = decisionsData.size();
         int approuves = (int) decisionsData.stream().filter(d -> "Approuvé".equals(d.getStatut())).count();
         int enAttente = (int) decisionsData.stream().filter(d -> "En attente".equals(d.getStatut())).count();
-        int rejetes = (int) decisionsData.stream().filter(d -> "Rejeté".equals(d.getStatut())).count();
 
         lblTotal.setText(String.valueOf(total));
         lblApprouves.setText(String.valueOf(approuves));
         lblEnAttente.setText(String.valueOf(enAttente));
-        lblRejetes.setText(String.valueOf(rejetes));
     }
 
     @FXML
@@ -281,15 +281,12 @@ public class DecisionListController {
                 "📊 STATISTIQUES DES DÉCISIONS\n\n" +
                         "Total: %d\n" +
                         "Approuvés: %d (%.1f%%)\n" +
-                        "En Attente: %d (%.1f%%)\n" +
-                        "Rejetés: %d (%.1f%%)",
+                        "En Attente: %d (%.1f%%)",
                 decisionsData.size(),
                 Integer.parseInt(lblApprouves.getText()),
                 decisionsData.isEmpty() ? 0 : (Integer.parseInt(lblApprouves.getText()) * 100.0 / decisionsData.size()),
                 Integer.parseInt(lblEnAttente.getText()),
-                decisionsData.isEmpty() ? 0 : (Integer.parseInt(lblEnAttente.getText()) * 100.0 / decisionsData.size()),
-                Integer.parseInt(lblRejetes.getText()),
-                decisionsData.isEmpty() ? 0 : (Integer.parseInt(lblRejetes.getText()) * 100.0 / decisionsData.size())
+                decisionsData.isEmpty() ? 0 : (Integer.parseInt(lblEnAttente.getText()) * 100.0 / decisionsData.size())
         );
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -297,6 +294,25 @@ public class DecisionListController {
         alert.setHeaderText(null);
         alert.setContentText(stats);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void handleViewRisqueList() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/RisqueList.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Liste des Évaluations de Risque");
+            stage.setScene(new Scene(root));
+            stage.setMinWidth(1400);
+            stage.setMinHeight(800);
+            stage.show();
+
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir la liste des évaluations de risque: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void updateStatus(String message) {

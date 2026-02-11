@@ -1,14 +1,177 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="CONTROLLER_NAME"
-            prefHeight="400.0" prefWidth="600.0">
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.RisqueController"
+            prefWidth="1200"
+            prefHeight="800"
+            styleClass="root"
+            stylesheets="@style.css">
 
-</AnchorPane>
+    <!-- En-tête -->
+    <top>
+        <HBox styleClass="header">
+            <Label styleClass="title" text="Gestion Agricole Pro - Détail de l'Évaluation de Risque"/>
+        </HBox>
+    </top>
+
+    <!-- Contenu principal -->
+    <center>
+        <HBox spacing="25" styleClass="main-content">
+            <padding>
+                <Insets top="30" right="30" bottom="30" left="30"/>
+            </padding>
+
+            <!-- Section Formulaire (Gauche) -->
+            <VBox spacing="20" styleClass="form-section" HBox.hgrow="ALWAYS">
+                <Label text="INFORMATIONS DE L'ÉVALUATION" styleClass="section-title"/>
+
+                <GridPane hgap="20" vgap="20" styleClass="form-grid">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+
+                    <!-- Ligne 1 -->
+                    <Label text="ID Évaluation :" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
+                    <TextField fx:id="tfIdEvaluation" editable="false"
+                               GridPane.rowIndex="0" GridPane.columnIndex="1"
+                               prefWidth="350" styleClass="text-field-readonly"/>
+
+                    <!-- Ligne 2 -->
+                    <Label text="ID Projet :" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+                    <TextField fx:id="tfIdProjet"
+                               GridPane.rowIndex="1" GridPane.columnIndex="1"
+                               prefWidth="350" promptText="Entrez l'ID du projet"/>
+
+                    <!-- Ligne 3 -->
+                    <Label text="Score Global :" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
+                    <TextField fx:id="tfScoreGlobal"
+                               GridPane.rowIndex="2" GridPane.columnIndex="1"
+                               prefWidth="350" promptText="Entrez le score global"/>
+
+                    <!-- Ligne 4 -->
+                    <Label text="Niveau de Risque :" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label"/>
+                    <ComboBox fx:id="cbNiveauRisque"
+                              promptText="Sélectionner un niveau"
+                              GridPane.rowIndex="3" GridPane.columnIndex="1"
+                              prefWidth="350"/>
+
+                    <!-- Ligne 5 -->
+                    <Label text="Fiabilité des Données :" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="form-label"/>
+                    <ComboBox fx:id="cbFiabiliteDonnees"
+                              promptText="Sélectionner la fiabilité"
+                              GridPane.rowIndex="4" GridPane.columnIndex="1"
+                              prefWidth="350"/>
+
+                    <!-- Ligne 6 -->
+                    <Label text="Facteur Principal :" GridPane.rowIndex="5" GridPane.columnIndex="0" styleClass="form-label"/>
+                    <TextField fx:id="tfFacteurPrincipal"
+                               GridPane.rowIndex="5" GridPane.columnIndex="1"
+                               prefWidth="350" promptText="Entrez le facteur principal"/>
+
+                    <!-- Ligne 7 -->
+                    <Label text="Recommandation :" GridPane.rowIndex="6" GridPane.columnIndex="0" styleClass="form-label"/>
+                    <ComboBox fx:id="cbRecommandation"
+                              promptText="Sélectionner une recommandation"
+                              GridPane.rowIndex="6" GridPane.columnIndex="1"
+                              prefWidth="350"/>
+
+                    <!-- Ligne 8 -->
+                    <Label text="Date d'Évaluation :" GridPane.rowIndex="7" GridPane.columnIndex="0" styleClass="form-label"/>
+                    <DatePicker fx:id="dpDateEvaluation"
+                                GridPane.rowIndex="7" GridPane.columnIndex="1"
+                                prefWidth="350" promptText="Sélectionner une date"/>
+
+                    <!-- Ligne 9 - Boutons -->
+                    <HBox spacing="15" GridPane.rowIndex="8" GridPane.columnIndex="0"
+                          GridPane.columnSpan="2" alignment="CENTER">
+                        <padding>
+                            <Insets top="20"/>
+                        </padding>
+                        <Button text="📋 Voir la Liste" styleClass="button-accent" onAction="#handleViewList" prefWidth="150"/>
+                        <Button text="📋 Décisions" styleClass="button-accent" onAction="#handleViewDecisionList" prefWidth="150"/>
+                        <Button text="Annuler" styleClass="button-secondary" onAction="#handleCancel" prefWidth="150"/>
+                        <Button text="Enregistrer" styleClass="button-primary" onAction="#handleSave" prefWidth="150"/>
+                        <Button text="Effacer" styleClass="button-accent" onAction="#handleClear" prefWidth="150"/>
+                    </HBox>
+                </GridPane>
+            </VBox>
+
+            <!-- Séparateur vertical -->
+            <Separator orientation="VERTICAL" styleClass="vertical-separator"/>
+
+            <!-- Section Affichage (Droite) -->
+            <VBox spacing="15" styleClass="display-section" HBox.hgrow="ALWAYS" prefWidth="450">
+                <Label text="APERÇU &amp; HISTORIQUE" styleClass="section-title"/>
+
+                <!-- Zone d'aperçu -->
+                <VBox styleClass="preview-card" spacing="10" VBox.vgrow="ALWAYS">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+
+                    <Label text="Aperçu de l'évaluation" styleClass="preview-header"/>
+
+                    <Separator/>
+
+                    <ScrollPane fitToWidth="true" styleClass="preview-scroll" VBox.vgrow="ALWAYS">
+                        <VBox fx:id="vboxPreview" spacing="12" styleClass="preview-content">
+                            <HBox spacing="10">
+                                <Label text="📋 ID:" styleClass="preview-label"/>
+                                <Label fx:id="lblPreviewId" text="-" styleClass="preview-value"/>
+                            </HBox>
+
+                            <HBox spacing="10">
+                                <Label text="🔗 Projet:" styleClass="preview-label"/>
+                                <Label fx:id="lblPreviewProjet" text="-" styleClass="preview-value"/>
+                            </HBox>
+
+                            <HBox spacing="10">
+                                <Label text="📊 Score:" styleClass="preview-label"/>
+                                <Label fx:id="lblPreviewScore" text="-" styleClass="preview-value"/>
+                            </HBox>
+
+                            <HBox spacing="10">
+                                <Label text="🎯 Niveau:" styleClass="preview-label"/>
+                                <Label fx:id="lblPreviewNiveau" text="-" styleClass="preview-value"/>
+                            </HBox>
+
+                            <HBox spacing="10">
+                                <Label text="📈 Fiabilité:" styleClass="preview-label"/>
+                                <Label fx:id="lblPreviewFiabilite" text="-" styleClass="preview-value"/>
+                            </HBox>
+
+                            <HBox spacing="10">
+                                <Label text="🔍 Facteur:" styleClass="preview-label"/>
+                                <Label fx:id="lblPreviewFacteur" text="-" styleClass="preview-value"/>
+                            </HBox>
+
+                            <HBox spacing="10">
+                                <Label text="📢 Recommandation:" styleClass="preview-label"/>
+                                <Label fx:id="lblPreviewRecommandation" text="-" styleClass="preview-value"/>
+                            </HBox>
+
+                            <HBox spacing="10">
+                                <Label text="📅 Date:" styleClass="preview-label"/>
+                                <Label fx:id="lblPreviewDate" text="-" styleClass="preview-value"/>
+                            </HBox>
+                        </VBox>
+                    </ScrollPane>
+                </VBox>
+            </VBox>
+        </HBox>
+    </center>
+
+    <!-- Pied de page -->
+    <bottom>
+        <HBox styleClass="footer" alignment="CENTER_LEFT" spacing="20">
+            <Label styleClass="signature" text="💚 I Love You Salmoucha"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label styleClass="signature" text="Développé par SawSaw"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lblStatus" styleClass="status-label" text="Prêt"/>
+        </HBox>
+    </bottom>
+</BorderPane>

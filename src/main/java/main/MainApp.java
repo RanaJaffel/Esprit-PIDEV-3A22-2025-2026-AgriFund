@@ -11,7 +11,7 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            // Charger le fichier FXML
+            // Charger le fichier FXML par défaut
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/DecisionList.fxml"));
             Parent root = loader.load();
 
