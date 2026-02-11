@@ -332,7 +332,7 @@
     -fx-background-color: #6A6F6C;
 }
 
-/* Bouton Accent (Effacer) */
+/* Bouton Accent (Effacer/Voir Liste) */
 .button-accent {
     -fx-background-color: linear-gradient(to bottom, #E1B323, #9A951F);
     -fx-text-fill: #133D03;
@@ -346,7 +346,7 @@
     -fx-background-color: linear-gradient(to bottom, #F5C830, #E1B323);
 }
 
-/* === SÉPARATEUR VERTICAL === */
+/* === SÉPARATEUR === */
 .vertical-separator {
     -fx-background-color: #B2D944;
     -fx-padding: 0 2 0 2;
@@ -479,6 +479,66 @@
     -fx-background-radius: 15px;
 }
 
+/* === TABLE VIEW (POUR LA LISTE) === */
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #B2D944;
+    -fx-border-width: 2;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(19, 61, 3, 0.15), 20, 0, 0, 5);
+}
+
+.table-view .column-header {
+    -fx-background-color: linear-gradient(to bottom, #089647, #076A39);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+    -fx-padding: 10;
+    -fx-font-size: 13px;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+}
+
+.table-view .table-cell {
+    -fx-padding: 10 12;
+    -fx-border-color: #e0e8e3;
+    -fx-border-width: 0 0 1 0;
+}
+
+.table-row-cell {
+    -fx-background-color: white;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #f8faf9;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #e8f0eb;
+    -fx-cursor: hand;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #B2D944;
+}
+
+.table-row-cell:selected .table-cell {
+    -fx-text-fill: #133D03;
+}
+
+/* Toolbar pour la recherche */
+.toolbar {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-border-color: #B2D944;
+    -fx-border-width: 2;
+    -fx-border-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(19, 61, 3, 0.1), 10, 0, 0, 2);
+}
+
 /* === SCROLLBAR === */
 .scroll-bar:vertical {
     -fx-background-color: #f8faf9;
@@ -504,6 +564,21 @@
 .scroll-bar:vertical .increment-arrow,
 .scroll-bar:vertical .decrement-arrow {
     -fx-background-color: #089647;
+}
+
+.scroll-bar:horizontal {
+    -fx-background-color: #f8faf9;
+    -fx-background-radius: 8px;
+}
+
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #089647;
+    -fx-background-radius: 8px;
+    -fx-background-insets: 2;
+}
+
+.scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: #076A39;
 }
 
 /* === TOOLTIP === */

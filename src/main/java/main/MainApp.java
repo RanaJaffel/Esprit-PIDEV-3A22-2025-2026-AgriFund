@@ -12,7 +12,7 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) {
         try {
             // Charger le fichier FXML
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Decesion.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/DecisionList.fxml"));
             Parent root = loader.load();
 
             // Créer la scène

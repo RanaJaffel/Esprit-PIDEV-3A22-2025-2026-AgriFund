@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.DecisionListController"
+            prefWidth="1400"
+            prefHeight="800"
+            styleClass="root"
+            stylesheets="@style.css">
+
+    <!-- En-tête -->
+    <top>
+        <HBox styleClass="header" alignment="CENTER_LEFT" spacing="20">
+            <Label styleClass="title" text="Gestion Agricole Pro - Liste des Décisions"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="➕ Nouvelle Décision" styleClass="button-primary" onAction="#handleNewDecision"/>
+        </HBox>
+    </top>
+
+    <!-- Contenu principal -->
+    <center>
+        <VBox spacing="20" styleClass="main-content">
+            <padding>
+                <Insets top="30" right="30" bottom="30" left="30"/>
+            </padding>
+
+            <!-- Barre d'outils -->
+            <HBox spacing="15" alignment="CENTER_LEFT" styleClass="toolbar">
+                <padding>
+                    <Insets top="10" right="15" bottom="10" left="15"/>
+                </padding>
+
+                <Label text="🔍 Rechercher:" styleClass="form-label"/>
+                <TextField fx:id="tfSearch" promptText="Rechercher par ID, Statut, Justification..." prefWidth="350" onKeyReleased="#handleSearch"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Button text="🔄 Actualiser" styleClass="button-secondary" onAction="#handleRefresh"/>
+                <Button text="📊 Statistiques" styleClass="button-accent" onAction="#handleStats"/>
+            </HBox>
+
+            <!-- TableView -->
+            <TableView fx:id="tableDecisions" VBox.vgrow="ALWAYS" styleClass="table-view">
+                <columns>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="80" styleClass="table-column"/>
+                    <TableColumn fx:id="colIdProjet" text="ID Projet" prefWidth="100" styleClass="table-column"/>
+                    <TableColumn fx:id="colStatut" text="Statut" prefWidth="150" styleClass="table-column"/>
+                    <TableColumn fx:id="colDate" text="Date Décision" prefWidth="180" styleClass="table-column"/>
+                    <TableColumn fx:id="colJustification" text="Justification" prefWidth="450" styleClass="table-column"/>
+                    <TableColumn fx:id="colActions" text="Actions" prefWidth="240" styleClass="table-column"/>
+                </columns>
+
+                <placeholder>
+                    <VBox alignment="CENTER" spacing="10">
+                        <padding>
+                            <Insets top="50" bottom="50"/>
+                        </padding>
+                        <Label text="📭" style="-fx-font-size: 48px;"/>
+                        <Label text="Aucune décision financière" styleClass="preview-header"/>
+                        <Label text="Cliquez sur 'Nouvelle Décision' pour ajouter" styleClass="preview-label"/>
+                    </VBox>
+                </placeholder>
+            </TableView>
+
+            <!-- Statistiques en bas -->
+            <HBox spacing="30" alignment="CENTER" styleClass="stats-card">
+                <padding>
+                    <Insets top="15" right="20" bottom="15" left="20"/>
+                </padding>
+
+                <VBox alignment="CENTER" spacing="5" styleClass="stat-box">
+                    <Label fx:id="lblTotal" text="0" styleClass="stat-number"/>
+                    <Label text="Total" styleClass="stat-label"/>
+                </VBox>
+
+                <Separator orientation="VERTICAL"/>
+
+                <VBox alignment="CENTER" spacing="5" styleClass="stat-box">
+                    <Label fx:id="lblApprouves" text="0" styleClass="stat-number-success"/>
+                    <Label text="Approuvés" styleClass="stat-label"/>
+                </VBox>
+
+                <Separator orientation="VERTICAL"/>
+
+                <VBox alignment="CENTER" spacing="5" styleClass="stat-box">
+                    <Label fx:id="lblEnAttente" text="0" styleClass="stat-number-warning"/>
+                    <Label text="En Attente" styleClass="stat-label"/>
+                </VBox>
+
+                <Separator orientation="VERTICAL"/>
+
+                <VBox alignment="CENTER" spacing="5" styleClass="stat-box">
+                    <Label fx:id="lblRejetes" text="0" styleClass="stat-number"/>
+                    <Label text="Rejetés" styleClass="stat-label"/>
+                </VBox>
+            </HBox>
+        </VBox>
+    </center>
+
+    <!-- Pied de page -->
+    <bottom>
+        <HBox styleClass="footer" alignment="CENTER_LEFT" spacing="20">
+            <Label styleClass="signature" text="💚 I Love You Salmoucha"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lblStatus" styleClass="status-label" text="Chargement..."/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label styleClass="signature" text="Développé par SawSaw"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

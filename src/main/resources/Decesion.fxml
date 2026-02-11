@@ -68,12 +68,13 @@
                               promptText="Entrez la justification de la décision..."
                               GridPane.rowIndex="4" GridPane.columnIndex="1"/>
 
-                    <!-- Ligne 6 - Boutons -->
+                    <!-- Ligne 6 - Boutons AVEC LE BOUTON VOIR LA LISTE -->
                     <HBox spacing="15" GridPane.rowIndex="5" GridPane.columnIndex="0"
                           GridPane.columnSpan="2" alignment="CENTER">
                         <padding>
                             <Insets top="20"/>
                         </padding>
+                        <Button text="📋 Voir la Liste" styleClass="button-accent" onAction="#handleViewList" prefWidth="150"/>
                         <Button text="Annuler" styleClass="button-secondary" onAction="#handleCancel" prefWidth="150"/>
                         <Button text="Enregistrer" styleClass="button-primary" onAction="#handleSave" prefWidth="150"/>
                         <Button text="Effacer" styleClass="button-accent" onAction="#handleClear" prefWidth="150"/>
