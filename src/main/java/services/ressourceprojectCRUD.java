@@ -1,7 +1,7 @@
 package services;
 
 import entities.ressourceproject;
-import utils.MyDatabase;
+import Utils.MyDatabase;
 
 import java.sql.*;
 import java.util.ArrayList;

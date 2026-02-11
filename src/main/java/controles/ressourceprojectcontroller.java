@@ -21,9 +21,11 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class ressourceprojectcontroller implements Initializable {
 
@@ -35,9 +37,13 @@ public class ressourceprojectcontroller implements Initializable {
     @FXML private TextField tfFournisseur;
     @FXML private ComboBox<String> cbStatutRessource;
     @FXML private DatePicker dpDateAjout;
-
-    // Conteneur pour les cartes de ressources
     @FXML private FlowPane ressourcesContainer;
+
+    // --- NOUVEAUX ELEMENTS POUR RECHERCHE ET FILTRE ---
+    @FXML private TextField tfSearchRessource;
+    @FXML private ComboBox<String> cbFilterTypeList;
+    private List<ressourceproject> allRessources = new ArrayList<>();
+    // --------------------------------------------------
 
     private ressourceproject selectedRessource = null;
     private final ressourceprojectCRUD rService = new ressourceprojectCRUD();
@@ -48,6 +54,14 @@ public class ressourceprojectcontroller implements Initializable {
         cbTypeRessource.getItems().addAll("equipement", "materiaux", "service");
         cbStatutRessource.getItems().addAll("prevu", "achete");
 
+        // Initialisation du filtre
+        cbFilterTypeList.getItems().addAll("Tous", "equipement", "materiaux", "service");
+        cbFilterTypeList.setValue("Tous");
+
+        // Écouteurs pour la recherche dynamique (en temps réel)
+        tfSearchRessource.textProperty().addListener((observable, oldValue, newValue) -> updateCardsDisplay());
+        cbFilterTypeList.setOnAction(event -> updateCardsDisplay());
+
         try {
             for (projectagricole p : pService.afficher()) {
                 cbIdProject.getItems().add(p.getIdproject());
@@ -56,30 +70,44 @@ public class ressourceprojectcontroller implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger les ID des projets.");
         }
 
-        refreshCards();
+        refreshDataFromDB();
     }
 
     /**
-     * Rafraîchit l'affichage des cartes de ressources
+     * Charge les données depuis MySQL
      */
-    private void refreshCards() {
-        ressourcesContainer.getChildren().clear();
+    private void refreshDataFromDB() {
         try {
-            List<ressourceproject> list = rService.afficher();
-            for (ressourceproject r : list) {
-                ressourcesContainer.getChildren().add(createCard(r));
-            }
+            allRessources = rService.afficher(); // On stocke tout localement
+            updateCardsDisplay(); // On applique les filtres
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur BD", "Erreur lors du chargement : " + e.getMessage());
         }
     }
 
     /**
-     * Crée une carte visuelle (VBox) pour une ressource
+     * Filtre la liste locale et redessine les cartes
      */
+    private void updateCardsDisplay() {
+        ressourcesContainer.getChildren().clear();
+
+        String searchText = tfSearchRessource.getText().toLowerCase();
+        String filterType = cbFilterTypeList.getValue();
+
+        // Utilisation des Streams Java pour filtrer instantanément
+        List<ressourceproject> filteredList = allRessources.stream()
+                .filter(r -> r.getNomressource().toLowerCase().contains(searchText)) // Filtre par nom
+                .filter(r -> filterType.equals("Tous") || r.getTyperessource().equals(filterType)) // Filtre par type
+                .collect(Collectors.toList());
+
+        for (ressourceproject r : filteredList) {
+            ressourcesContainer.getChildren().add(createCard(r));
+        }
+    }
+
     private VBox createCard(ressourceproject r) {
         VBox card = new VBox(8);
-        card.getStyleClass().add("project-card"); // Utilise le même style CSS que les projets
+        card.getStyleClass().add("project-card");
         card.setPrefWidth(250);
 
         Label lblNom = new Label(r.getNomressource() + " (Proj #" + r.getIdproject() + ")");
@@ -87,7 +115,7 @@ public class ressourceprojectcontroller implements Initializable {
 
         Label lblStatut = new Label(r.getStatut().toUpperCase());
         if (r.getStatut().equals("achete")) lblStatut.getStyleClass().add("status-badge-accepte");
-        else lblStatut.getStyleClass().add("status-badge-encours"); // Pour "prevu"
+        else lblStatut.getStyleClass().add("status-badge-encours");
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -108,7 +136,6 @@ public class ressourceprojectcontroller implements Initializable {
 
         card.getChildren().addAll(topRow, new Separator(), lblType, lblQte, lblCout, lblFournisseur);
 
-        // Au clic, on remplit le formulaire de gauche
         card.setOnMouseClicked(event -> populateForm(r));
         return card;
     }
@@ -138,7 +165,7 @@ public class ressourceprojectcontroller implements Initializable {
             rService.ajouter(r);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Ressource ajoutée avec succès !");
             clearFields(null);
-            refreshCards();
+            refreshDataFromDB(); // Recharge et filtre
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur SQL", e.getMessage());
         }
@@ -165,7 +192,7 @@ public class ressourceprojectcontroller implements Initializable {
             rService.modifier(selectedRessource);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Ressource modifiée avec succès !");
             clearFields(null);
-            refreshCards();
+            refreshDataFromDB(); // Recharge et filtre
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur SQL", e.getMessage());
         }
@@ -185,7 +212,7 @@ public class ressourceprojectcontroller implements Initializable {
                 rService.supprimer(selectedRessource.getIdressource());
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Ressource supprimée !");
                 clearFields(null);
-                refreshCards();
+                refreshDataFromDB(); // Recharge et filtre
             } catch (SQLException e) {
                 showAlert(Alert.AlertType.ERROR, "Erreur SQL", e.getMessage());
             }

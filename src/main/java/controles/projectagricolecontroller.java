@@ -19,9 +19,11 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class projectagricolecontroller implements Initializable {
 
@@ -32,24 +34,59 @@ public class projectagricolecontroller implements Initializable {
     @FXML private DatePicker dpDateSoumission;
     @FXML private FlowPane projectsContainer;
 
+    // --- NOUVEAUX ELEMENTS POUR RECHERCHE ET FILTRE ---
+    @FXML private TextField tfSearchProject;
+    @FXML private ComboBox<String> cbFilterStatutList;
+    private List<projectagricole> allProjects = new ArrayList<>(); // Stockage local pour la recherche
+    // --------------------------------------------------
+
     private projectagricole selectedProject = null;
     private final projectagricoleCRUD service = new projectagricoleCRUD();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         cbStatut.getItems().addAll("en cours", "accepte", "refuse");
-        refreshCards();
+
+        // Initialisation du filtre
+        cbFilterStatutList.getItems().addAll("Tous", "en cours", "accepte", "refuse");
+        cbFilterStatutList.setValue("Tous");
+
+        // Écouteurs pour la recherche dynamique (en temps réel)
+        tfSearchProject.textProperty().addListener((observable, oldValue, newValue) -> updateCardsDisplay());
+        cbFilterStatutList.setOnAction(event -> updateCardsDisplay());
+
+        refreshDataFromDB();
     }
 
-    private void refreshCards() {
-        projectsContainer.getChildren().clear();
+    /**
+     * Charge les données depuis MySQL et met à jour l'affichage
+     */
+    private void refreshDataFromDB() {
         try {
-            List<projectagricole> list = service.afficher();
-            for (projectagricole p : list) {
-                projectsContainer.getChildren().add(createCard(p));
-            }
+            allProjects = service.afficher(); // On stocke tout localement
+            updateCardsDisplay(); // On applique les filtres et on affiche
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur Base de données", "Impossible de charger les projets : " + e.getMessage());
+        }
+    }
+
+    /**
+     * Filtre la liste locale et redessine les cartes
+     */
+    private void updateCardsDisplay() {
+        projectsContainer.getChildren().clear();
+
+        String searchText = tfSearchProject.getText().toLowerCase();
+        String filterStatut = cbFilterStatutList.getValue();
+
+        // Utilisation des Streams Java pour filtrer instantanément
+        List<projectagricole> filteredList = allProjects.stream()
+                .filter(p -> p.getNomproject().toLowerCase().contains(searchText)) // Filtre par nom
+                .filter(p -> filterStatut.equals("Tous") || p.getStatut().equals(filterStatut)) // Filtre par statut
+                .collect(Collectors.toList());
+
+        for (projectagricole p : filteredList) {
+            projectsContainer.getChildren().add(createCard(p));
         }
     }
 
@@ -103,7 +140,7 @@ public class projectagricolecontroller implements Initializable {
             service.ajouter(p);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Projet ajouté avec succès !");
             clearFields(null);
-            refreshCards();
+            refreshDataFromDB();
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur SQL", "Erreur lors de l'ajout : " + e.getMessage());
         }
@@ -127,7 +164,7 @@ public class projectagricolecontroller implements Initializable {
             service.modifier(selectedProject);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Projet modifié avec succès !");
             clearFields(null);
-            refreshCards();
+            refreshDataFromDB();
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur SQL", "Erreur lors de la modification : " + e.getMessage());
         }
@@ -147,7 +184,7 @@ public class projectagricolecontroller implements Initializable {
                 service.supprimer(selectedProject.getIdproject());
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Projet supprimé !");
                 clearFields(null);
-                refreshCards();
+                refreshDataFromDB();
             } catch (SQLException e) {
                 showAlert(Alert.AlertType.ERROR, "Erreur SQL", "Impossible de supprimer : " + e.getMessage());
             }
