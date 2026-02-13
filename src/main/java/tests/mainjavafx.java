@@ -17,16 +17,15 @@ public class mainjavafx extends Application {
             System.out.println("═══════════════════════════════════════════════════════");
             System.out.println("📦 Chargement de l'application...");
 
-            // Charger le FXML principal (DIRECTEMENT sous resources)
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/MainLayout.fxml")
             );
             Parent root = loader.load();
 
-            // Créer la scène
+
             Scene scene = new Scene(root, 1400, 850);
 
-            // Charger le CSS (s'il existe)
+
             try {
                 scene.getStylesheets().add(
                         getClass().getResource("/style.css").toExternalForm()
@@ -36,7 +35,7 @@ public class mainjavafx extends Application {
                 System.out.println("⚠️ style.css non trouvé (optionnel)");
             }
 
-            // Fenêtre principale
+
             primaryStage.setTitle("AgriFund Smart – Module IoT 🌾");
             primaryStage.setScene(scene);
             primaryStage.setMinWidth(1200);

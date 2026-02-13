@@ -11,7 +11,7 @@ public class capteur {
     private int idProjet;
     private LocalDateTime dateInstallation;
 
-    // Constructeurs
+
     public capteur() {
     }
 
@@ -23,7 +23,7 @@ public class capteur {
         this.idProjet = idProjet;
     }
 
-    // Getters et Setters
+
     public int getIdCapteur() {
         return idCapteur;
     }

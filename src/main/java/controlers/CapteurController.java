@@ -12,31 +12,23 @@ import java.sql.SQLException;
 
 public class CapteurController {
 
-    /* ============================
-       TABLE & COLUMNS
-       ============================ */
+
     @FXML private TableView<capteur> tableCapteur;
     @FXML private TableColumn<capteur, Integer> colId;
     @FXML private TableColumn<capteur, String> colType;
     @FXML private TableColumn<capteur, String> colLocalisation;
     @FXML private TableColumn<capteur, String> colStatut;
 
-    /* ============================
-       FORM FIELDS
-       ============================ */
+
     @FXML private TextField tfType;
     @FXML private TextField tfLocalisation;
     @FXML private TextField tfProjet;
     @FXML private ComboBox<String> cbStatut;
 
-    /* ============================
-       SERVICES
-       ============================ */
+
     private final ServiceCapteur service = new ServiceCapteur();
 
-    /* ============================
-       INITIALISATION
-       ============================ */
+
     @FXML
     public void initialize() {
 
@@ -54,9 +46,7 @@ public class CapteurController {
         gererSelection();
     }
 
-    /* ============================
-       CHARGEMENT DES DONNÉES
-       ============================ */
+
     private void chargerCapteurs() {
         try {
             ObservableList<capteur> list =
@@ -67,9 +57,7 @@ public class CapteurController {
         }
     }
 
-    /* ============================
-       AJOUT
-       ============================ */
+
     @FXML
     private void ajouterCapteur() {
         if (!formulaireValide()) return;
@@ -90,9 +78,7 @@ public class CapteurController {
         }
     }
 
-    /* ============================
-       MODIFICATION
-       ============================ */
+
     @FXML
     private void modifierCapteur() {
         capteur selected = tableCapteur.getSelectionModel().getSelectedItem();
@@ -118,9 +104,7 @@ public class CapteurController {
         }
     }
 
-    /* ============================
-       SUPPRESSION
-       ============================ */
+
     @FXML
     private void supprimerCapteur() {
         capteur selected = tableCapteur.getSelectionModel().getSelectedItem();
@@ -161,9 +145,7 @@ public class CapteurController {
         );
     }
 
-    /* ============================
-       BADGES DE STATUT
-       ============================ */
+
     private void styliserStatut() {
         colStatut.setCellFactory(column -> new TableCell<>() {
             @Override
@@ -187,9 +169,7 @@ public class CapteurController {
         });
     }
 
-    /* ============================
-       UTILITAIRES
-       ============================ */
+
     private boolean formulaireValide() {
         if (tfType.getText().isEmpty()
                 || tfLocalisation.getText().isEmpty()

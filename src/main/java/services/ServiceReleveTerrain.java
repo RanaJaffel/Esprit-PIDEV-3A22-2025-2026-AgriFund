@@ -84,9 +84,7 @@ public class ServiceReleveTerrain implements interfaceCrud<releve_terrain> {
         return list;
     }
 
-    /**
-     * Récupérer un relevé par son ID
-     */
+
     public releve_terrain getReleveById(int idReleve) throws SQLException {
         String req = "SELECT * FROM releve_terrain WHERE id_releve = ?";
         PreparedStatement pst = con.prepareStatement(req);
@@ -111,9 +109,7 @@ public class ServiceReleveTerrain implements interfaceCrud<releve_terrain> {
         return null;
     }
 
-    /**
-     * Récupérer les relevés par capteur
-     */
+
     public List<releve_terrain> getRelevesByCapteur(int idCapteur) throws SQLException {
         List<releve_terrain> list = new ArrayList<>();
         String req = "SELECT * FROM releve_terrain WHERE id_capteur = ? ORDER BY date_heure DESC";
@@ -141,9 +137,7 @@ public class ServiceReleveTerrain implements interfaceCrud<releve_terrain> {
         return list;
     }
 
-    /**
-     * Compter le nombre total de relevés
-     */
+
     public int countReleves() throws SQLException {
         String req = "SELECT COUNT(*) as total FROM releve_terrain";
         Statement st = con.createStatement();
@@ -153,5 +147,30 @@ public class ServiceReleveTerrain implements interfaceCrud<releve_terrain> {
             return rs.getInt("total");
         }
         return 0;
+    }
+    public void supprimerTousLesRelevesDuJour() throws SQLException {
+        String sql = "DELETE FROM releve_terrain WHERE DATE(date_heure) = CURDATE()";
+        PreparedStatement pst = con.prepareStatement(sql);
+        pst.executeUpdate();
+    }
+
+    public void genererRapportJournalier() throws SQLException {
+        String sql = """
+            INSERT INTO rapport_journalier
+            (date_rapport, type_mesure, moyenne, min, max, id_capteur)
+            SELECT
+                CURDATE(),
+                type_mesure,
+                AVG(valeur_mesuree),
+                MIN(valeur_mesuree),
+                MAX(valeur_mesuree),
+                id_capteur
+            FROM releve_terrain
+            WHERE DATE(date_heure) = CURDATE()
+            GROUP BY type_mesure, id_capteur
+        """;
+
+        PreparedStatement pst = con.prepareStatement(sql);
+        pst.executeUpdate();
     }
 }

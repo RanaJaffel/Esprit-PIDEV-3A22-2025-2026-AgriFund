@@ -4,10 +4,12 @@ import entities.releve_terrain;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.chart.*;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import services.ServiceReleveTerrain;
 
 import java.sql.SQLException;
@@ -24,6 +26,11 @@ public class ReleveController {
 
     @FXML private LineChart<String, Number> chart;
 
+    @FXML private TextField txtType;
+    @FXML private TextField txtValeur;
+    @FXML private TextField txtUnite;
+    @FXML private TextField txtCapteur;
+
     private final ServiceReleveTerrain service = new ServiceReleveTerrain();
 
     @FXML
@@ -38,9 +45,7 @@ public class ReleveController {
         gererSelection();
     }
 
-    /* ============================
-       CHARGEMENT
-       ============================ */
+
     private void chargerReleves() {
         try {
             ObservableList<releve_terrain> list =
@@ -54,9 +59,7 @@ public class ReleveController {
         }
     }
 
-    /* ============================
-       GRAPHIQUE TEMPOREL
-       ============================ */
+
     private void alimenterGraphique(List<releve_terrain> list) {
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();
@@ -79,31 +82,107 @@ public class ReleveController {
         chart.getData().add(series);
     }
 
-    /* ============================
-       FILTRER PAR CAPTEUR
-       ============================ */
+
     private void gererSelection() {
         tableReleve.getSelectionModel().selectedItemProperty().addListener(
-                (obs, oldVal, newVal) -> {
-                    if (newVal != null) {
-                        afficherParCapteur(newVal.getIdCapteur());
+                (obs, oldVal, selected) -> {
+                    if (selected != null) {
+                        txtType.setText(selected.getTypeMesure());
+                        txtValeur.setText(String.valueOf(selected.getValeurMesuree()));
+                        txtUnite.setText(selected.getUnite());
+                        txtCapteur.setText(String.valueOf(selected.getIdCapteur()));
                     }
                 }
         );
     }
 
-    private void afficherParCapteur(int idCapteur) {
+
+    @FXML
+    private void ajouterReleve() {
         try {
-            ObservableList<releve_terrain> list =
-                    FXCollections.observableArrayList(
-                            service.getRelevesByCapteur(idCapteur)
-                    );
+            releve_terrain r = new releve_terrain(
+                    txtType.getText(),
+                    Double.parseDouble(txtValeur.getText()),
+                    txtUnite.getText(),
+                    Integer.parseInt(txtCapteur.getText())
+            );
+            service.ajouter(r);
+            chargerReleves();
+            viderChamps();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-            tableReleve.setItems(list);
-            alimenterGraphique(list);
+    @FXML
+    private void modifierReleve() {
+        releve_terrain selected = tableReleve.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            try {
+                selected.setTypeMesure(txtType.getText());
+                selected.setValeurMesuree(Double.parseDouble(txtValeur.getText()));
+                selected.setUnite(txtUnite.getText());
+                selected.setIdCapteur(Integer.parseInt(txtCapteur.getText()));
 
+                service.modifier(selected);
+                chargerReleves();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    private void supprimerReleve() {
+        releve_terrain selected = tableReleve.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            try {
+                service.supprimer(selected.getIdReleve());
+                chargerReleves();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    private void viderGraphique() {
+        try {
+            service.genererRapportJournalier();
+            service.supprimerTousLesRelevesDuJour();
+            chart.getData().clear();
+            tableReleve.getItems().clear();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    private void viderChamps() {
+        txtType.clear();
+        txtValeur.clear();
+        txtUnite.clear();
+        txtCapteur.clear();
+    }
+    @FXML
+    private void ouvrirRapports() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/rapport.fxml")
+            );
+
+            Scene scene = new Scene(loader.load(), 900, 600);
+            Stage stage = new Stage();
+            stage.setTitle("Rapports journaliers");
+            stage.setScene(scene);
+            stage.show();
+
+            System.out.println("✅ Fenêtre Rapport ouverte");
+
+        } catch (Exception e) {
+            System.err.println("❌ IMPOSSIBLE DE CHARGER rapport.fxml");
+            e.printStackTrace();
+        }
+    }
+
+
 }

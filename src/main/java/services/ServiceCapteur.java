@@ -65,9 +65,7 @@ public class ServiceCapteur implements interfaceCrud<capteur> {
         return list;
     }
 
-    /**
-     * Récupérer la localisation d'un capteur par son ID
-     */
+
     public String getLocalisationById(int idCapteur) throws SQLException {
         String req = "SELECT localisation FROM capteur WHERE id_capteur = ?";
         PreparedStatement ps = con.prepareStatement(req);
@@ -80,9 +78,7 @@ public class ServiceCapteur implements interfaceCrud<capteur> {
         return null;
     }
 
-    /**
-     * Récupérer un capteur par son ID
-     */
+
     public capteur getCapteurById(int idCapteur) throws SQLException {
         String req = "SELECT * FROM capteur WHERE id_capteur = ?";
         PreparedStatement ps = con.prepareStatement(req);
@@ -101,9 +97,7 @@ public class ServiceCapteur implements interfaceCrud<capteur> {
         return null;
     }
 
-    /**
-     * Compter le nombre de capteurs actifs
-     */
+
     public int countCapteursActifs() throws SQLException {
         String req = "SELECT COUNT(*) as total FROM capteur WHERE statut = 'ACTIF'";
         Statement st = con.createStatement();

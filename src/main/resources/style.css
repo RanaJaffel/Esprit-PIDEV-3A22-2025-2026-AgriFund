@@ -1,9 +1,4 @@
-/* ============================================
-   AGRIFUND SMART - MODERN UI STYLESHEET
-   Module 4: IoT & Data Management
-   ============================================ */
 
-/* ROOT COLORS - Palette AgriFund */
 .root {
     -fx-noir: #060806;
     -fx-vert-vif: #089647;
@@ -19,15 +14,13 @@
     -fx-white: #FFFFFF;
 }
 
-/* GLOBAL STYLING */
+
 .root {
     -fx-font-family: 'Segoe UI', 'Arial', sans-serif;
     -fx-background-color: -fx-bg-light;
 }
 
-/* ============================================
-   MENU LATERAL (SIDEBAR)
-   ============================================ */
+
 .menu {
     -fx-background-color: linear-gradient(to bottom, #076A39, #095032);
     -fx-pref-width: 250px;
@@ -72,9 +65,7 @@
     -fx-font-weight: bold;
 }
 
-/* ============================================
-   TITRES ET HEADERS
-   ============================================ */
+
 .title {
     -fx-font-size: 32px;
     -fx-font-weight: bold;
@@ -96,9 +87,7 @@
     -fx-padding: 15 0 10 0;
 }
 
-/* ============================================
-   CARDS (CARTES DE STATISTIQUES)
-   ============================================ */
+
 .stat-card {
     -fx-background-color: white;
     -fx-background-radius: 12;
@@ -130,9 +119,7 @@
     -fx-font-size: 48px;
 }
 
-/* ============================================
-   TABLEVIEW
-   ============================================ */
+
 .table-view {
     -fx-background-color: white;
     -fx-background-radius: 10;
@@ -179,9 +166,7 @@
     -fx-text-fill: #060806;
 }
 
-/* ============================================
-   BUTTONS
-   ============================================ */
+
 .btn {
     -fx-background-color: #089647;
     -fx-text-fill: white;
@@ -232,9 +217,7 @@
     -fx-text-fill: white;
 }
 
-/* ============================================
-   FORM INPUTS
-   ============================================ */
+
 .text-field, .text-area, .combo-box, .choice-box {
     -fx-background-color: white;
     -fx-background-radius: 6;
@@ -262,9 +245,7 @@
     -fx-padding: 0 0 5 0;
 }
 
-/* ============================================
-   CHARTS
-   ============================================ */
+
 .chart {
     -fx-background-color: white;
     -fx-background-radius: 10;
@@ -304,9 +285,7 @@
     -fx-font-weight: bold;
 }
 
-/* ============================================
-   STATUS BADGES
-   ============================================ */
+
 .badge {
     -fx-background-radius: 12;
     -fx-padding: 5 12;
@@ -334,9 +313,7 @@
     -fx-text-fill: white;
 }
 
-/* ============================================
-   SCROLLBAR
-   ============================================ */
+
 .scroll-bar {
     -fx-background-color: transparent;
 }
@@ -355,17 +332,13 @@
     -fx-background-radius: 5;
 }
 
-/* ============================================
-   SEPARATORS
-   ============================================ */
+
 .separator .line {
     -fx-border-color: #E8E8E8;
     -fx-border-width: 1;
 }
 
-/* ============================================
-   PROGRESS INDICATORS
-   ============================================ */
+
 .progress-bar {
     -fx-accent: #089647;
     -fx-background-radius: 5;
@@ -376,9 +349,7 @@
     -fx-background-radius: 5;
 }
 
-/* ============================================
-   TOOLTIPS
-   ============================================ */
+
 .tooltip {
     -fx-background-color: #095032;
     -fx-text-fill: white;
@@ -388,9 +359,7 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0, 0, 2);
 }
 
-/* ============================================
-   CONTENT AREA
-   ============================================ */
+
 .content-area {
     -fx-background-color: -fx-bg-light;
     -fx-padding: 30;
@@ -403,9 +372,7 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 3);
 }
 
-/* ============================================
-   ALERTS & NOTIFICATIONS
-   ============================================ */
+
 .alert-success {
     -fx-background-color: #B2D944;
     -fx-text-fill: #133D03;
@@ -430,9 +397,7 @@
     -fx-font-weight: bold;
 }
 
-/* ============================================
-   SENSOR CARD (Carte capteur personnalisée)
-   ============================================ */
+
 .sensor-card {
     -fx-background-color: white;
     -fx-background-radius: 15;
