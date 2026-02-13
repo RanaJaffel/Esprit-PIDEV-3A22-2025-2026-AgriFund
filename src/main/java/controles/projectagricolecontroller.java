@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -19,6 +20,7 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -34,36 +36,41 @@ public class projectagricolecontroller implements Initializable {
     @FXML private DatePicker dpDateSoumission;
     @FXML private FlowPane projectsContainer;
 
-    // --- NOUVEAUX ELEMENTS POUR RECHERCHE ET FILTRE ---
+    // Search and Filter Elements
     @FXML private TextField tfSearchProject;
     @FXML private ComboBox<String> cbFilterStatutList;
-    private List<projectagricole> allProjects = new ArrayList<>();
-    // --------------------------------------------------
 
+    // Statistics Labels
+    @FXML private Label lblTotalProjects;
+    @FXML private Label lblAcceptedProjects;
+    @FXML private Label lblInProgressProjects;
+    @FXML private Label lblRefusedProjects;
+
+    // Footer Statistics (Optional)
+    @FXML private Label lblTotalBudget;
+    @FXML private Label lblTotalSurface;
+    @FXML private Label lblLastUpdate;
+
+    private List<projectagricole> allProjects = new ArrayList<>();
     private projectagricole selectedProject = null;
     private final projectagricoleCRUD service = new projectagricoleCRUD();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Only initialize if the fields exist (for main view with form)
+        // Initialize combo boxes if they exist
         if (cbStatut != null) {
             cbStatut.getItems().addAll("en cours", "accepte", "refuse");
         }
 
-        // Initialize filter combo if it exists (for list view)
+        // Initialize filter combo
         if (cbFilterStatutList != null) {
-            cbFilterStatutList.getItems().addAll("Tous", "en cours", "accepte", "refuse");
-            cbFilterStatutList.setValue("Tous");
+            cbFilterStatutList.getItems().addAll("Tous les statuts", "en cours", "accepte", "refuse");
+            cbFilterStatutList.setValue("Tous les statuts");
         }
 
-        // Listeners for search (only if search field exists)
-        if (tfSearchProject != null) {
-            tfSearchProject.textProperty().addListener((observable, oldValue, newValue) -> updateCardsDisplay());
-        }
-
-        if (cbFilterStatutList != null) {
-            cbFilterStatutList.setOnAction(event -> updateCardsDisplay());
-        }
+        // Setup listeners
+        setupSearchListener();
+        setupFilterListener();
 
         // Load data if container exists
         if (projectsContainer != null) {
@@ -72,19 +79,113 @@ public class projectagricolecontroller implements Initializable {
     }
 
     /**
-     * Charge les données depuis MySQL et met à jour l'affichage
+     * Sets up real-time search functionality
+     */
+    private void setupSearchListener() {
+        if (tfSearchProject != null) {
+            tfSearchProject.textProperty().addListener((observable, oldValue, newValue) -> {
+                updateCardsDisplay();
+            });
+        }
+    }
+
+    /**
+     * Sets up filter dropdown functionality
+     */
+    private void setupFilterListener() {
+        if (cbFilterStatutList != null) {
+            cbFilterStatutList.setOnAction(event -> {
+                updateCardsDisplay();
+            });
+        }
+    }
+
+    /**
+     * Refreshes data from database and updates all displays
      */
     public void refreshDataFromDB() {
         try {
             allProjects = service.afficher();
             updateCardsDisplay();
+            updateStatistics();
         } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur Base de données", "Impossible de charger les projets : " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur Base de données",
+                    "Impossible de charger les projets : " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     /**
-     * Filtre la liste locale et redessine les cartes
+     * Updates all statistics displayed in the dashboard
+     */
+    private void updateStatistics() {
+        try {
+            int totalCount = allProjects.size();
+            long acceptedCount = allProjects.stream()
+                    .filter(p -> "accepte".equals(p.getStatut()))
+                    .count();
+            long inProgressCount = allProjects.stream()
+                    .filter(p -> "en cours".equals(p.getStatut()))
+                    .count();
+            long refusedCount = allProjects.stream()
+                    .filter(p -> "refuse".equals(p.getStatut()))
+                    .count();
+
+            // Update stat labels if they exist
+            if (lblTotalProjects != null) {
+                lblTotalProjects.setText(String.valueOf(totalCount));
+            }
+            if (lblAcceptedProjects != null) {
+                lblAcceptedProjects.setText(String.valueOf(acceptedCount));
+            }
+            if (lblInProgressProjects != null) {
+                lblInProgressProjects.setText(String.valueOf(inProgressCount));
+            }
+            if (lblRefusedProjects != null) {
+                lblRefusedProjects.setText(String.valueOf(refusedCount));
+            }
+
+            // Update footer stats
+            updateFooterStats();
+
+        } catch (Exception e) {
+            System.err.println("Error updating statistics: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Updates the footer statistics (total budget, surface, etc.)
+     */
+    private void updateFooterStats() {
+        if (allProjects.isEmpty()) return;
+
+        // Calculate total budget
+        BigDecimal totalBudget = allProjects.stream()
+                .map(projectagricole::getBudgetdemande)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        // Calculate total surface
+        double totalSurface = allProjects.stream()
+                .mapToDouble(projectagricole::getSurface)
+                .sum();
+
+        // Update footer labels if they exist
+        if (lblTotalBudget != null) {
+            lblTotalBudget.setText(String.format("%,.2f DT", totalBudget));
+        }
+        if (lblTotalSurface != null) {
+            lblTotalSurface.setText(String.format("%.2f Ha", totalSurface));
+        }
+        if (lblLastUpdate != null) {
+            lblLastUpdate.setText(java.time.LocalDate.now().format(
+                    DateTimeFormatter.ofPattern("dd/MM/yyyy")
+            ));
+        }
+    }
+
+    /**
+     * Filters and displays projects based on search text and status filter
      */
     private void updateCardsDisplay() {
         if (projectsContainer == null) return;
@@ -92,88 +193,184 @@ public class projectagricolecontroller implements Initializable {
         projectsContainer.getChildren().clear();
 
         String searchText = tfSearchProject != null ? tfSearchProject.getText().toLowerCase() : "";
-        String filterStatut = cbFilterStatutList != null ? cbFilterStatutList.getValue() : "Tous";
+        String filterStatut = cbFilterStatutList != null ? cbFilterStatutList.getValue() : "Tous les statuts";
 
-        // Utilisation des Streams Java pour filtrer instantanément
+        // Filter projects using streams
         List<projectagricole> filteredList = allProjects.stream()
-                .filter(p -> p.getNomproject().toLowerCase().contains(searchText))
-                .filter(p -> filterStatut.equals("Tous") || p.getStatut().equals(filterStatut))
+                .filter(p -> {
+                    // Search filter
+                    boolean matchesSearch = searchText.isEmpty()
+                            || p.getNomproject().toLowerCase().contains(searchText);
+
+                    // Status filter
+                    boolean matchesStatus = filterStatut.equals("Tous les statuts")
+                            || p.getStatut().equals(filterStatut);
+
+                    return matchesSearch && matchesStatus;
+                })
                 .collect(Collectors.toList());
 
+        // Create and display cards
         for (projectagricole p : filteredList) {
-            projectsContainer.getChildren().add(createCard(p));
+            projectsContainer.getChildren().add(createEnhancedProjectCard(p));
         }
     }
 
     /**
-     * Creates a visual card for a project
+     * Creates an enhanced project card with professional styling
      */
-    private VBox createCard(projectagricole p) {
-        VBox card = new VBox(10);
+    private VBox createEnhancedProjectCard(projectagricole project) {
+        VBox card = new VBox(12);
         card.getStyleClass().add("project-card");
-        card.setPrefWidth(260);
+        card.setPrefWidth(280);
+        card.setMaxWidth(280);
+        card.setPadding(new Insets(18));
 
-        // Create ID label
-        Label lblId = new Label("#" + p.getIdproject());
-        lblId.setStyle("-fx-font-size: 10px; -fx-text-fill: #999; -fx-padding: 2px 6px; -fx-background-color: #f0f0f0; -fx-background-radius: 3px;");
+        // Card Header with Icon and Project Name
+        HBox header = new HBox(10);
+        header.setAlignment(Pos.CENTER_LEFT);
 
-        // Create project name label
-        Label lblNom = new Label(p.getNomproject());
-        lblNom.getStyleClass().add("card-title");
+        Label icon = new Label(getProjectIcon(project.getStatut()));
+        icon.setStyle("-fx-font-size: 24px;");
 
-        // Combine ID and Name in one HBox
-        HBox nameRow = new HBox(8);
-        nameRow.setAlignment(Pos.CENTER_LEFT);
-        nameRow.getChildren().addAll(lblId, lblNom);
+        Label title = new Label(project.getNomproject());
+        title.getStyleClass().add("card-title");
+        title.setWrapText(true);
+        title.setMaxWidth(220);
 
-        // Create status badge
-        Label lblStatut = new Label(p.getStatut().toUpperCase());
-        if (p.getStatut().equals("accepte")) lblStatut.getStyleClass().add("status-badge-accepte");
-        else if (p.getStatut().equals("refuse")) lblStatut.getStyleClass().add("status-badge-refuse");
-        else lblStatut.getStyleClass().add("status-badge-encours");
+        header.getChildren().addAll(icon, title);
 
-        // Create top row with name+ID on left and status on right
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-        HBox topRow = new HBox(nameRow, spacer, lblStatut);
-        topRow.setAlignment(Pos.CENTER_LEFT);
+        // Separator
+        Separator separator = new Separator();
+        separator.setPadding(new Insets(5, 0, 5, 0));
 
-        Label lblSurface = new Label("🌱 Surface: " + p.getSurface() + " Ha");
-        lblSurface.getStyleClass().add("card-info");
-        Label lblBudget = new Label("💰 Budget: " + p.getBudgetdemande() + " DT");
-        lblBudget.getStyleClass().add("card-info");
-        Label lblDate = new Label("📅 Soumis le: " + p.getDatesoumission());
-        lblDate.getStyleClass().add("card-info");
+        // Project Details
+        VBox details = new VBox(8);
 
-        // Action buttons on the card
-        HBox actionBox = new HBox(10);
-        actionBox.setAlignment(Pos.CENTER_RIGHT);
-        actionBox.setPadding(new javafx.geometry.Insets(10, 0, 0, 0));
+        // ID Row
+        HBox idRow = createInfoRow("🔖", "ID Projet", "#" + project.getIdproject());
 
-        Button btnModifier = new Button("✏️ Modifier");
-        btnModifier.getStyleClass().add("btn-secondary");
-        btnModifier.setStyle("-fx-font-size: 11px; -fx-padding: 5px 10px;");
-        btnModifier.setOnAction(e -> {
-            selectedProject = p;
+        // Surface
+        HBox surfaceBox = createInfoRow("🌍", "Surface",
+                String.format("%.2f Ha", project.getSurface()));
+
+        // Budget
+        HBox budgetBox = createInfoRow("💰", "Budget",
+                String.format("%,.2f DT", project.getBudgetdemande()));
+
+        // Date
+        HBox dateBox = createInfoRow("📅", "Date",
+                project.getDatesoumission().toLocalDate().format(
+                        DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                ));
+
+        details.getChildren().addAll(idRow, surfaceBox, budgetBox, dateBox);
+
+        // Status Badge
+        HBox statusBox = new HBox(5);
+        statusBox.setAlignment(Pos.CENTER_LEFT);
+        Label statusLabel = new Label("Statut:");
+        statusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #6C757D; -fx-font-weight: 600;");
+
+        Label badge = new Label(capitalizeStatus(project.getStatut()));
+        badge.getStyleClass().add(getStatusBadgeClass(project.getStatut()));
+
+        statusBox.getChildren().addAll(statusLabel, badge);
+
+        // Action Buttons
+        HBox actions = new HBox(10);
+        actions.setAlignment(Pos.CENTER_RIGHT);
+        actions.setPadding(new Insets(10, 0, 0, 0));
+
+        Button btnEdit = new Button("✏️");
+        btnEdit.getStyleClass().add("btn-secondary");
+        btnEdit.setStyle("-fx-min-width: 35; -fx-min-height: 35; -fx-font-size: 14px;");
+        btnEdit.setOnAction(e -> {
+            selectedProject = project;
             openModifyProjectForm(null);
         });
+        btnEdit.setTooltip(new Tooltip("Modifier le projet"));
 
-        Button btnSupprimer = new Button("🗑️ Supprimer");
-        btnSupprimer.getStyleClass().add("btn-danger");
-        btnSupprimer.setStyle("-fx-font-size: 11px; -fx-padding: 5px 10px;");
-        btnSupprimer.setOnAction(e -> {
-            selectedProject = p;
+        Button btnDelete = new Button("🗑️");
+        btnDelete.getStyleClass().add("btn-danger");
+        btnDelete.setStyle("-fx-min-width: 35; -fx-min-height: 35; -fx-font-size: 14px;");
+        btnDelete.setOnAction(e -> {
+            selectedProject = project;
             deleteProject(null);
         });
+        btnDelete.setTooltip(new Tooltip("Supprimer le projet"));
 
-        actionBox.getChildren().addAll(btnModifier, btnSupprimer);
+        actions.getChildren().addAll(btnEdit, btnDelete);
 
-        card.getChildren().addAll(topRow, new Separator(), lblSurface, lblBudget, lblDate, actionBox);
+        // Add all elements to card
+        card.getChildren().addAll(header, separator, details, statusBox, actions);
 
         return card;
     }
 
-    // Add this method to open the Add Project form
+    /**
+     * Creates an info row with icon, label, and value
+     */
+    private HBox createInfoRow(String emoji, String label, String value) {
+        HBox row = new HBox(8);
+        row.setAlignment(Pos.CENTER_LEFT);
+
+        Label icon = new Label(emoji);
+        icon.setStyle("-fx-font-size: 16px;");
+
+        Label labelText = new Label(label + ":");
+        labelText.getStyleClass().add("card-info-label");
+
+        Label valueText = new Label(value);
+        valueText.getStyleClass().add("card-info-value");
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        row.getChildren().addAll(icon, labelText, spacer, valueText);
+
+        return row;
+    }
+
+    /**
+     * Returns appropriate icon based on project status
+     */
+    private String getProjectIcon(String status) {
+        switch (status.toLowerCase()) {
+            case "accepte": return "✅";
+            case "en cours": return "⏳";
+            case "refuse": return "❌";
+            default: return "📁";
+        }
+    }
+
+    /**
+     * Returns CSS class for status badge
+     */
+    private String getStatusBadgeClass(String status) {
+        switch (status.toLowerCase()) {
+            case "accepte": return "status-badge-accepte";
+            case "en cours": return "status-badge-encours";
+            case "refuse": return "status-badge-refuse";
+            default: return "status-badge-encours";
+        }
+    }
+
+    /**
+     * Capitalizes status text for display
+     */
+    private String capitalizeStatus(String status) {
+        switch (status.toLowerCase()) {
+            case "accepte": return "Accepté";
+            case "en cours": return "En Cours";
+            case "refuse": return "Refusé";
+            default: return status;
+        }
+    }
+
+    /**
+     * Opens the Add Project form
+     */
     @FXML
     public void openAddProjectForm(ActionEvent event) {
         try {
@@ -193,16 +390,20 @@ public class projectagricolecontroller implements Initializable {
             // Refresh the list after closing the add window
             refreshDataFromDB();
         } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir le formulaire d'ajout: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur",
+                    "Impossible d'ouvrir le formulaire d'ajout: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    // Modify your existing updateProject method to open the modify form
+    /**
+     * Opens the Modify Project form
+     */
     @FXML
     void openModifyProjectForm(ActionEvent event) {
         if (selectedProject == null) {
-            showAlert(Alert.AlertType.WARNING, "Attention", "Veuillez sélectionner un projet à modifier.");
+            showAlert(Alert.AlertType.WARNING, "Attention",
+                    "Veuillez sélectionner un projet à modifier.");
             return;
         }
 
@@ -223,88 +424,124 @@ public class projectagricolecontroller implements Initializable {
 
             // Refresh the list after closing
             refreshDataFromDB();
+            selectedProject = null;
         } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir le formulaire de modification: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur",
+                    "Impossible d'ouvrir le formulaire de modification: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    private void populateForm(projectagricole p) {
-        if (tfNomProject == null) return; // Only populate if form fields exist
-
-        selectedProject = p;
-        tfNomProject.setText(p.getNomproject());
-        tfSurface.setText(String.valueOf(p.getSurface()));
-        tfBudget.setText(p.getBudgetdemande().toString());
-        cbStatut.setValue(p.getStatut());
-        dpDateSoumission.setValue(p.getDatesoumission().toLocalDate());
-    }
-
-    @FXML
-    void addProject(ActionEvent event) {
-        if (!validateInputs()) return;
-        try {
-            projectagricole p = new projectagricole(
-                    tfNomProject.getText(), Float.parseFloat(tfSurface.getText()),
-                    new BigDecimal(tfBudget.getText()), cbStatut.getValue(), Date.valueOf(dpDateSoumission.getValue())
-            );
-            service.ajouter(p);
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "Projet ajouté avec succès !");
-            clearFields(null);
-            refreshDataFromDB();
-        } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur SQL", "Erreur lors de l'ajout : " + e.getMessage());
-        }
-    }
-
-    @FXML
-    void updateProject(ActionEvent event) {
-        if (selectedProject == null) {
-            showAlert(Alert.AlertType.WARNING, "Attention", "Veuillez sélectionner une carte à modifier.");
-            return;
-        }
-        if (!validateInputs()) return;
-
-        try {
-            selectedProject.setNomproject(tfNomProject.getText());
-            selectedProject.setSurface(Float.parseFloat(tfSurface.getText()));
-            selectedProject.setBudgetdemande(new BigDecimal(tfBudget.getText()));
-            selectedProject.setStatut(cbStatut.getValue());
-            selectedProject.setDatesoumission(Date.valueOf(dpDateSoumission.getValue()));
-
-            service.modifier(selectedProject);
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "Projet modifié avec succès !");
-            clearFields(null);
-            refreshDataFromDB();
-        } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur SQL", "Erreur lors de la modification : " + e.getMessage());
-        }
-    }
-
+    /**
+     * Deletes the selected project
+     */
     @FXML
     void deleteProject(ActionEvent event) {
         if (selectedProject == null) {
-            showAlert(Alert.AlertType.WARNING, "Attention", "Veuillez sélectionner une carte à supprimer.");
+            showAlert(Alert.AlertType.WARNING, "Attention",
+                    "Veuillez sélectionner un projet à supprimer.");
             return;
         }
 
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Voulez-vous vraiment supprimer ce projet ?", ButtonType.YES, ButtonType.NO);
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Confirmation de suppression");
+        confirm.setHeaderText("Supprimer le projet");
+        confirm.setContentText("Voulez-vous vraiment supprimer le projet \"" +
+                selectedProject.getNomproject() + "\" ?\n\nCette action est irréversible.");
+
         confirm.showAndWait();
-        if (confirm.getResult() == ButtonType.YES) {
+        if (confirm.getResult() == ButtonType.OK) {
             try {
                 service.supprimer(selectedProject.getIdproject());
-                showAlert(Alert.AlertType.INFORMATION, "Succès", "Projet supprimé !");
-                clearFields(null);
+                showAlert(Alert.AlertType.INFORMATION, "Succès",
+                        "Projet supprimé avec succès !");
+                selectedProject = null;
                 refreshDataFromDB();
             } catch (SQLException e) {
-                showAlert(Alert.AlertType.ERROR, "Erreur SQL", "Impossible de supprimer : " + e.getMessage());
+                showAlert(Alert.AlertType.ERROR, "Erreur SQL",
+                        "Impossible de supprimer : " + e.getMessage());
+                e.printStackTrace();
             }
         }
     }
 
+    /**
+     * Navigates to Resources view
+     */
+    @FXML
+    void goToRessources(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(Objects.requireNonNull(
+                    getClass().getResource("/ressourceproject.fxml")));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root, 1000, 600));
+            stage.setTitle("Gestion des Ressources");
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur",
+                    "Impossible de charger la vue des ressources: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Validates form inputs
+     */
+    private boolean validateInputs() {
+        if (tfNomProject == null || tfSurface == null || tfBudget == null ||
+                cbStatut == null || dpDateSoumission == null) {
+            return false;
+        }
+
+        if (tfNomProject.getText().trim().isEmpty() ||
+                tfSurface.getText().trim().isEmpty() ||
+                tfBudget.getText().trim().isEmpty() ||
+                cbStatut.getValue() == null ||
+                dpDateSoumission.getValue() == null) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de saisie",
+                    "Veuillez remplir tous les champs !");
+            return false;
+        }
+
+        try {
+            float surface = Float.parseFloat(tfSurface.getText().trim());
+            if (surface <= 0) {
+                showAlert(Alert.AlertType.ERROR, "Erreur de validation",
+                        "La surface doit être un nombre positif !");
+                return false;
+            }
+
+            BigDecimal budget = new BigDecimal(tfBudget.getText().trim());
+            if (budget.compareTo(BigDecimal.ZERO) <= 0) {
+                showAlert(Alert.AlertType.ERROR, "Erreur de validation",
+                        "Le budget doit être un nombre positif !");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de format",
+                    "Surface et Budget doivent être des nombres valides !");
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Displays an alert dialog
+     */
+    private void showAlert(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    /**
+     * Clears all form fields
+     */
     @FXML
     void clearFields(ActionEvent event) {
-        if (tfNomProject == null) return; // Only clear if form fields exist
+        if (tfNomProject == null) return;
 
         selectedProject = null;
         tfNomProject.clear();
@@ -312,43 +549,5 @@ public class projectagricolecontroller implements Initializable {
         tfBudget.clear();
         cbStatut.getSelectionModel().clearSelection();
         dpDateSoumission.setValue(null);
-    }
-
-    @FXML
-    void goToRessources(ActionEvent event) {
-        try {
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/ressourceproject.fxml")));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root, 1000, 600));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private boolean validateInputs() {
-        if (tfNomProject == null || tfSurface == null || tfBudget == null || cbStatut == null || dpDateSoumission == null) {
-            return false;
-        }
-
-        if (tfNomProject.getText().isEmpty() || tfSurface.getText().isEmpty() || tfBudget.getText().isEmpty() || cbStatut.getValue() == null || dpDateSoumission.getValue() == null) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Veuillez remplir tous les champs !");
-            return false;
-        }
-        try {
-            Float.parseFloat(tfSurface.getText());
-            new BigDecimal(tfBudget.getText());
-        } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de format", "Surface et Budget doivent être des nombres !");
-            return false;
-        }
-        return true;
-    }
-
-    private void showAlert(Alert.AlertType type, String title, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 }

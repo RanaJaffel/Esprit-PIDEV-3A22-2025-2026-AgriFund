@@ -1,185 +1,397 @@
-/* src/main/resources/style.css */
+/* Agricultural Project Management - JavaFX CSS */
 
 .root {
-    -fx-background-color: #F8F9FA; /* Very light clean background */
-    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-background-color: #F8F9FA;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 14px;
 }
 
-/* Titles */
+/* Typography */
 .title-label {
-    -fx-font-size: 24px;
+    -fx-font-size: 28px;
     -fx-font-weight: bold;
-    -fx-text-fill: #133D03; /* Vert très foncé */
+    -fx-text-fill: #2D6A4F;
 }
 
-/* Form Labels */
+.subtitle-label {
+    -fx-font-size: 20px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #2D6A4F;
+}
+
+.section-header {
+    -fx-font-size: 18px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #2D6A4F;
+}
+
 .label {
-    -fx-text-fill: #060806; /* Noir */
-    -fx-font-size: 13px;
-    -fx-font-weight: bold;
+    -fx-text-fill: #495057;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
 }
 
-/* TextFields, DatePickers, ComboBoxes */
+.label-small {
+    -fx-font-size: 12px;
+    -fx-text-fill: #ADB5BD;
+}
+
+/* Form Controls */
 .text-field, .combo-box, .date-picker {
     -fx-background-color: white;
-    -fx-border-color: #848A86; /* Gris */
-    -fx-border-radius: 4px;
-    -fx-background-radius: 4px;
-    -fx-padding: 5px;
+    -fx-border-color: #E9ECEF;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 10 14;
+    -fx-font-size: 14px;
 }
 
 .text-field:focused, .combo-box:focused, .date-picker:focused {
-    -fx-border-color: #089647; /* Vert vif */
-    -fx-border-width: 2px;
+    -fx-border-color: #52B788;
+    -fx-border-width: 2;
 }
 
-/* Primary Button (Add) */
+.text-field:hover, .combo-box:hover, .date-picker:hover {
+    -fx-border-color: #ADB5BD;
+}
+
+/* Buttons */
 .btn-primary {
-    -fx-background-color: #089647; /* Vert vif */
+    -fx-background-color: #52B788;
     -fx-text-fill: white;
     -fx-font-weight: bold;
-    -fx-background-radius: 5px;
+    -fx-font-size: 14px;
+    -fx-background-radius: 8;
+    -fx-padding: 12 24;
     -fx-cursor: hand;
 }
+
 .btn-primary:hover {
-    -fx-background-color: #076A39; /* Vert foncé */
+    -fx-background-color: #2D6A4F;
 }
 
-/* Secondary Button (Update) */
 .btn-secondary {
-    -fx-background-color: #E1B323; /* Jaune moutarde */
+    -fx-background-color: #D4A574;
     -fx-text-fill: white;
     -fx-font-weight: bold;
-    -fx-background-radius: 5px;
+    -fx-font-size: 14px;
+    -fx-background-radius: 8;
+    -fx-padding: 12 24;
     -fx-cursor: hand;
 }
+
 .btn-secondary:hover {
-    -fx-background-color: #c99f1c;
+    -fx-background-color: #8B7355;
 }
 
-/* Danger Button (Delete) */
 .btn-danger {
     -fx-background-color: transparent;
-    -fx-border-color: #060806;
-    -fx-text-fill: #060806;
+    -fx-border-color: #E76F51;
+    -fx-border-width: 2;
+    -fx-text-fill: #E76F51;
     -fx-font-weight: bold;
-    -fx-background-radius: 5px;
-    -fx-border-radius: 5px;
+    -fx-font-size: 14px;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-padding: 10 24;
     -fx-cursor: hand;
 }
+
 .btn-danger:hover {
-    -fx-background-color: #848A86; /* Gris */
+    -fx-background-color: #E76F51;
     -fx-text-fill: white;
 }
 
-/* Navigation Button */
 .btn-nav {
-    -fx-background-color: #095032; /* Vert forêt */
+    -fx-background-color: #2D6A4F;
     -fx-text-fill: white;
     -fx-font-weight: bold;
-    -fx-background-radius: 5px;
+    -fx-font-size: 14px;
+    -fx-background-radius: 8;
+    -fx-padding: 10 20;
     -fx-cursor: hand;
 }
+
 .btn-nav:hover {
-    -fx-background-color: #B2D944; /* Vert clair / vert citron */
-    -fx-text-fill: #060806;
+    -fx-background-color: #52B788;
 }
 
-/* TableView Styling */
+.btn-info {
+    -fx-background-color: #457B9D;
+    -fx-text-fill: white;
+    -fx-font-weight: 600;
+    -fx-background-radius: 8;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+}
+
+.btn-info:hover {
+    -fx-background-color: #3A6B8C;
+}
+
+/* Table View */
 .table-view {
     -fx-background-color: white;
-    -fx-border-color: #848A86;
-    -fx-border-radius: 5px;
+    -fx-border-color: #E9ECEF;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
 }
+
 .table-view .column-header-background {
-    -fx-background-color: #095032; /* Vert forêt */
-    -fx-background-radius: 5px 5px 0 0;
+    -fx-background-color: #2D6A4F;
 }
+
 .table-view .column-header .label {
     -fx-text-fill: white;
     -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 12 8;
 }
-.table-row-cell:odd {
-    -fx-background-color: #f2f5f2;
-}
-.table-row-cell:selected {
-    -fx-background-color: #B2D944; /* Vert clair */
-    -fx-text-fill: #060806;
-}
-/* ========================================= */
-/* STYLES DES CARTES (PROJECT CARDS)         */
-/* ========================================= */
 
-/* Conteneur de fond transparent pour le ScrollPane */
+.table-view .table-cell {
+    -fx-padding: 10 8;
+}
+
+.table-row-cell {
+    -fx-background-color: white;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #D8F3DC;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #95D5B2;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #52B788;
+}
+
+.table-row-cell:selected .table-cell {
+    -fx-text-fill: white;
+}
+
+/* Cards */
+.content-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #E9ECEF;
+    -fx-border-width: 1;
+    -fx-padding: 25;
+}
+
+.project-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #E9ECEF;
+    -fx-border-width: 1;
+    -fx-padding: 20;
+    -fx-cursor: hand;
+}
+
+.project-card:hover {
+    -fx-border-color: #52B788;
+    -fx-border-width: 2;
+}
+
+.card-header {
+    -fx-background-color: #D8F3DC;
+    -fx-background-radius: 8 8 0 0;
+    -fx-padding: 15 20;
+}
+
+.card-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2D6A4F;
+}
+
+.card-info {
+    -fx-font-size: 14px;
+    -fx-text-fill: #495057;
+}
+
+.card-info-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #ADB5BD;
+}
+
+.card-info-value {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2D6A4F;
+}
+
+/* Status Badges */
+.status-badge {
+    -fx-padding: 6 14;
+    -fx-background-radius: 16;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.status-badge-accepte {
+    -fx-background-color: #40916C;
+    -fx-text-fill: white;
+}
+
+.status-badge-encours {
+    -fx-background-color: #F4A261;
+    -fx-text-fill: #212529;
+}
+
+.status-badge-refuse {
+    -fx-background-color: #E76F51;
+    -fx-text-fill: white;
+}
+
+.status-badge-prevu {
+    -fx-background-color: #457B9D;
+    -fx-text-fill: white;
+}
+
+.status-badge-achete {
+    -fx-background-color: #40916C;
+    -fx-text-fill: white;
+}
+
+/* Scroll Pane */
 .scroll-pane {
     -fx-background-color: transparent;
-    -fx-control-inner-background: transparent;
 }
+
 .scroll-pane > .viewport {
     -fx-background-color: transparent;
 }
 
-/* Le design de la carte elle-même */
-.project-card {
+.scroll-pane > .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane > .scroll-bar:vertical > .thumb {
+    -fx-background-color: #ADB5BD;
+    -fx-background-radius: 4;
+}
+
+.scroll-pane > .scroll-bar:vertical > .thumb:hover {
+    -fx-background-color: #495057;
+}
+
+/* Separator */
+.separator {
+    -fx-background-color: #E9ECEF;
+}
+
+.separator .line {
+    -fx-border-color: #E9ECEF;
+    -fx-border-width: 1;
+}
+
+/* Headers */
+.app-header, .page-header {
+    -fx-background-color: #2D6A4F;
+    -fx-padding: 18 30;
+}
+
+.header-title {
+    -fx-text-fill: white;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+/* Toolbar */
+.toolbar {
     -fx-background-color: white;
-    -fx-background-radius: 10px;
-    -fx-border-radius: 10px;
-    -fx-border-color: #848A86; /* Gris de votre palette */
-    -fx-border-width: 1px;
-    -fx-padding: 15px;
-    -fx-cursor: hand;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 8, 0, 0, 2);
+    -fx-padding: 15 20;
+    -fx-border-color: #E9ECEF;
+    -fx-border-width: 0 0 1 0;
 }
 
-/* Effet interactif au survol de la carte */
-.project-card:hover {
-    -fx-border-color: #089647; /* Vert vif */
-    -fx-border-width: 2px;
-    -fx-effect: dropshadow(three-pass-box, rgba(8,150,71,0.2), 12, 0, 0, 4);
+/* Stats Cards */
+.stat-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-padding: 20;
 }
 
-/* Textes dans la carte */
-.card-title {
-    -fx-font-size: 15px;
+.stat-value {
+    -fx-font-size: 32px;
     -fx-font-weight: bold;
-    -fx-text-fill: #133D03; /* Vert très foncé */
-}
-.card-info {
-    -fx-font-size: 13px;
-    -fx-text-fill: #060806; /* Noir */
+    -fx-text-fill: #2D6A4F;
 }
 
-/* Séparateur dans la carte */
-.project-card .separator *.line {
-    -fx-border-style: solid;
-    -fx-border-width: 1px;
-    -fx-border-color: #f0f0f0;
+.stat-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #ADB5BD;
 }
 
-/* Badges de Statut (Arrondis et colorés selon votre palette) */
-.status-badge-accepte {
-    -fx-background-color: #B2D944; /* Vert clair / vert citron */
-    -fx-text-fill: #133D03; /* Vert très foncé */
-    -fx-padding: 3px 8px;
-    -fx-background-radius: 12px;
-    -fx-font-size: 11px;
-    -fx-font-weight: bold;
+/* Icons */
+.icon-container {
+    -fx-background-color: #D8F3DC;
+    -fx-background-radius: 50;
+    -fx-padding: 12;
 }
 
-.status-badge-encours {
-    -fx-background-color: #E1B323; /* Jaune moutarde */
-    -fx-text-fill: white;
-    -fx-padding: 3px 8px;
-    -fx-background-radius: 12px;
-    -fx-font-size: 11px;
-    -fx-font-weight: bold;
+.icon-success {
+    -fx-text-fill: #40916C;
+    -fx-font-size: 24px;
 }
 
-.status-badge-refuse {
-    -fx-background-color: #848A86; /* Gris */
-    -fx-text-fill: white;
-    -fx-padding: 3px 8px;
-    -fx-background-radius: 12px;
-    -fx-font-size: 11px;
-    -fx-font-weight: bold;
+.icon-warning {
+    -fx-text-fill: #F4A261;
+    -fx-font-size: 24px;
+}
+
+.icon-info {
+    -fx-text-fill: #457B9D;
+    -fx-font-size: 24px;
+}
+
+/* Form Container */
+.form-container {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-padding: 30;
+}
+
+.form-section {
+    -fx-background-color: #F8F9FA;
+    -fx-background-radius: 8;
+    -fx-padding: 20;
+    -fx-border-color: #E9ECEF;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+}
+
+/* Alerts */
+.alert-success {
+    -fx-background-color: #D8F3DC;
+    -fx-border-color: #40916C;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 12 16;
+}
+
+.alert-warning {
+    -fx-background-color: #FFF3E0;
+    -fx-border-color: #F4A261;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 12 16;
+}
+
+.alert-error {
+    -fx-background-color: #FFEBEE;
+    -fx-border-color: #E76F51;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 12 16;
 }
