@@ -1,83 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <BorderPane stylesheets="@style.css" style="-fx-background-color: #f4f7f4;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controles.projectagricolecontroller">
-
-    <!-- Header avec dégradé Vert Agricole -->
+    <!-- Header -->
     <top>
         <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: linear-gradient(to right, #095032, #089647); -fx-padding: 15px 25px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.25), 10, 0, 0, 2);">
             <Label text="🌿 Gestion des Projets Agricoles" styleClass="title-label" style="-fx-text-fill: white; -fx-font-size: 22px;" HBox.hgrow="ALWAYS"/>
             <Region HBox.hgrow="ALWAYS" />
-            <!-- Label Météo -->
-            <VBox alignment="CENTER_RIGHT">
-                <Label fx:id="lblMeteo" text="Chargement météo..." style="-fx-text-fill: #B2D944; -fx-font-size: 13px; -fx-font-weight: bold;"/>
-            </VBox>
+            <VBox alignment="CENTER_RIGHT"><Label fx:id="lblMeteo" text="Chargement météo..." style="-fx-text-fill: #B2D944; -fx-font-size: 13px; -fx-font-weight: bold;"/></VBox>
             <Region HBox.hgrow="ALWAYS" />
             <Button text="Aller vers Ressources 🚜 ➔" styleClass="btn-nav" style="-fx-background-color: #E1B323; -fx-text-fill: #133D03;" onAction="#goToRessources" prefHeight="35"/>
         </HBox>
     </top>
 
-    <!-- Main Content -->
+    <!-- Main Content (Liste) -->
     <center>
-        <HBox spacing="25" BorderPane.alignment="CENTER">
-            <padding>
-                <Insets top="25" right="25" bottom="25" left="25"/>
-            </padding>
-
-            <!-- Left Side: Formulaire -->
-            <VBox spacing="20" prefWidth="360" style="-fx-background-color: white; -fx-padding: 25; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #B2D944; -fx-border-width: 4px 0 0 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 2);">
-                <Label text="📝 Créer un Projet" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #076A39;"/>
-
-                <GridPane vgap="18" hgap="10">
-                    <columnConstraints>
-                        <ColumnConstraints percentWidth="38"/>
-                        <ColumnConstraints percentWidth="62"/>
-                    </columnConstraints>
-
-                    <Label text="🏷️ Nom du projet:" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #476C1A;"/>
-                    <TextField fx:id="tfNomProject" promptText="Ex: Projet Blé" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-
-                    <Label text="📏 Surface (Ha):" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #476C1A;"/>
-                    <TextField fx:id="tfSurface" promptText="Ex: 25.5" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-
-                    <Label text="💰 Budget (DT):" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #476C1A;"/>
-                    <TextField fx:id="tfBudget" promptText="Ex: 12000.00" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-
-                    <Label text="📊 Statut:" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #476C1A;"/>
-                    <ComboBox fx:id="cbStatut" promptText="Sélectionner..." maxWidth="Infinity" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-
-                    <Label text="📅 Date:" GridPane.rowIndex="4" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #476C1A;"/>
-                    <DatePicker fx:id="dpDateSoumission" maxWidth="Infinity" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
-                </GridPane>
-
-                <Region VBox.vgrow="ALWAYS"/>
-
-                <VBox spacing="10">
-                    <Button text="➕ Ajouter un nouveau projet" styleClass="btn-primary" onAction="#addProject" maxWidth="Infinity" prefHeight="40"/>
-                    <Button text="🧹 Vider les champs" style="-fx-background-color: transparent; -fx-text-fill: #848A86; -fx-cursor: hand;" onAction="#clearFields" maxWidth="Infinity" alignment="CENTER"/>
-                </VBox>
-            </VBox>
-
-            <!-- Right Side: Zone des Cartes avec Recherche -->
-            <VBox HBox.hgrow="ALWAYS" spacing="15">
-                <HBox alignment="CENTER_LEFT" spacing="10">
-                    <Label text="🌾 Liste des Projets Récents" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #133D03;"/>
-                </HBox>
-
-                <HBox spacing="15" alignment="CENTER_LEFT">
-                    <TextField fx:id="tfSearchProject" promptText="🔍 Rechercher par nom..." HBox.hgrow="ALWAYS" style="-fx-font-size: 14px; -fx-padding: 8px;"/>
-                    <ComboBox fx:id="cbFilterStatutList" promptText="Tous les statuts" style="-fx-font-size: 14px; -fx-padding: 4px;"/>
-                </HBox>
-
-                <ScrollPane fitToWidth="true" styleClass="scroll-pane" VBox.vgrow="ALWAYS">
-                    <FlowPane fx:id="projectsContainer" hgap="15" vgap="15" style="-fx-padding: 5;">
-                        <!-- Les cartes seront ajoutées ici en Java -->
-                    </FlowPane>
-                </ScrollPane>
-            </VBox>
-        </HBox>
+        <VBox spacing="15">
+            <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <Label text="🌾 Liste des Projets" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #133D03;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <TextField fx:id="tfSearchProject" promptText="🔍 Rechercher..." prefWidth="250" style="-fx-font-size: 14px; -fx-padding: 8px;"/>
+                <ComboBox fx:id="cbFilterStatutList" promptText="Tous les statuts" style="-fx-font-size: 14px; -fx-padding: 4px;"/>
+                <Button text="➕ Nouveau Projet" styleClass="btn-primary" onAction="#openAddProjectForm" prefHeight="38"/>
+            </HBox>
+            <ScrollPane fitToWidth="true" styleClass="scroll-pane" VBox.vgrow="ALWAYS">
+                <FlowPane fx:id="projectsContainer" hgap="15" vgap="15" style="-fx-padding: 5;"/>
+            </ScrollPane>
+        </VBox>
     </center>
 </BorderPane>

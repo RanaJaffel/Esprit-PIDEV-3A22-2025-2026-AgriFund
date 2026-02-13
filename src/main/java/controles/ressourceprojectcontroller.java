@@ -17,9 +17,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,75 +27,64 @@ import java.util.stream.Collectors;
 
 public class ressourceprojectcontroller implements Initializable {
 
-    @FXML private ComboBox<Integer> cbIdProject;
-    @FXML private TextField tfNomRessource;
-    @FXML private ComboBox<String> cbTypeRessource;
-    @FXML private TextField tfQuantite;
-    @FXML private TextField tfCout;
-    @FXML private TextField tfFournisseur;
-    @FXML private ComboBox<String> cbStatutRessource;
-    @FXML private DatePicker dpDateAjout;
     @FXML private FlowPane ressourcesContainer;
-
-    // --- NOUVEAUX ELEMENTS POUR RECHERCHE ET FILTRE ---
     @FXML private TextField tfSearchRessource;
     @FXML private ComboBox<String> cbFilterTypeList;
-    private List<ressourceproject> allRessources = new ArrayList<>();
-    // --------------------------------------------------
 
+    private List<ressourceproject> allRessources = new ArrayList<>();
     private ressourceproject selectedRessource = null;
     private final ressourceprojectCRUD rService = new ressourceprojectCRUD();
     private final projectagricoleCRUD pService = new projectagricoleCRUD();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        cbTypeRessource.getItems().addAll("equipement", "materiaux", "service");
-        cbStatutRessource.getItems().addAll("prevu", "achete");
-
-        // Initialisation du filtre
-        cbFilterTypeList.getItems().addAll("Tous", "equipement", "materiaux", "service");
-        cbFilterTypeList.setValue("Tous");
-
-        // Écouteurs pour la recherche dynamique (en temps réel)
-        tfSearchRessource.textProperty().addListener((observable, oldValue, newValue) -> updateCardsDisplay());
-        cbFilterTypeList.setOnAction(event -> updateCardsDisplay());
-
-        try {
-            for (projectagricole p : pService.afficher()) {
-                cbIdProject.getItems().add(p.getIdproject());
-            }
-        } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger les ID des projets.");
+        // Initialize filter combo if it exists
+        if (cbFilterTypeList != null) {
+            cbFilterTypeList.getItems().addAll("Tous", "equipement", "materiaux", "service");
+            cbFilterTypeList.setValue("Tous");
         }
 
-        refreshDataFromDB();
+        // Listeners for search (only if search field exists)
+        if (tfSearchRessource != null) {
+            tfSearchRessource.textProperty().addListener((observable, oldValue, newValue) -> updateCardsDisplay());
+        }
+
+        if (cbFilterTypeList != null) {
+            cbFilterTypeList.setOnAction(event -> updateCardsDisplay());
+        }
+
+        // Load data if container exists
+        if (ressourcesContainer != null) {
+            refreshDataFromDB();
+        }
     }
 
     /**
-     * Charge les données depuis MySQL
+     * Load data from database
      */
-    private void refreshDataFromDB() {
+    public void refreshDataFromDB() {
         try {
-            allRessources = rService.afficher(); // On stocke tout localement
-            updateCardsDisplay(); // On applique les filtres
+            allRessources = rService.afficher();
+            updateCardsDisplay();
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur BD", "Erreur lors du chargement : " + e.getMessage());
         }
     }
 
     /**
-     * Filtre la liste locale et redessine les cartes
+     * Filter and display cards
      */
     private void updateCardsDisplay() {
+        if (ressourcesContainer == null) return;
+
         ressourcesContainer.getChildren().clear();
 
-        String searchText = tfSearchRessource.getText().toLowerCase();
-        String filterType = cbFilterTypeList.getValue();
+        String searchText = tfSearchRessource != null ? tfSearchRessource.getText().toLowerCase() : "";
+        String filterType = cbFilterTypeList != null ? cbFilterTypeList.getValue() : "Tous";
 
-        // Utilisation des Streams Java pour filtrer instantanément
         List<ressourceproject> filteredList = allRessources.stream()
-                .filter(r -> r.getNomressource().toLowerCase().contains(searchText)) // Filtre par nom
-                .filter(r -> filterType.equals("Tous") || r.getTyperessource().equals(filterType)) // Filtre par type
+                .filter(r -> r.getNomressource().toLowerCase().contains(searchText))
+                .filter(r -> filterType.equals("Tous") || r.getTyperessource().equals(filterType))
                 .collect(Collectors.toList());
 
         for (ressourceproject r : filteredList) {
@@ -105,6 +92,9 @@ public class ressourceprojectcontroller implements Initializable {
         }
     }
 
+    /**
+     * Create a visual card for a resource
+     */
     private VBox createCard(ressourceproject r) {
         VBox card = new VBox(8);
         card.getStyleClass().add("project-card");
@@ -134,7 +124,7 @@ public class ressourceprojectcontroller implements Initializable {
         Label lblFournisseur = new Label("🏢 Fournisseur: " + r.getFournisseur());
         lblFournisseur.getStyleClass().add("card-info");
 
-        // --- NOUVEAU : Création des boutons sur la carte ---
+        // Action buttons
         HBox actionBox = new HBox(10);
         actionBox.setAlignment(Pos.CENTER_RIGHT);
         actionBox.setPadding(new javafx.geometry.Insets(10, 0, 0, 0));
@@ -144,7 +134,7 @@ public class ressourceprojectcontroller implements Initializable {
         btnModifier.setStyle("-fx-font-size: 11px; -fx-padding: 5px 10px;");
         btnModifier.setOnAction(e -> {
             selectedRessource = r;
-            updateRessource(null); // Déclenche la mise à jour
+            openModifyRessourceForm(null);
         });
 
         Button btnSupprimer = new Button("🗑️ Supprimer");
@@ -152,80 +142,79 @@ public class ressourceprojectcontroller implements Initializable {
         btnSupprimer.setStyle("-fx-font-size: 11px; -fx-padding: 5px 10px;");
         btnSupprimer.setOnAction(e -> {
             selectedRessource = r;
-            deleteRessource(null); // Déclenche la suppression
+            deleteRessource(null);
         });
 
         actionBox.getChildren().addAll(btnModifier, btnSupprimer);
-        // --------------------------------------------------
 
         card.getChildren().addAll(topRow, new Separator(), lblType, lblQte, lblCout, lblFournisseur, actionBox);
 
-        card.setOnMouseClicked(event -> populateForm(r));
         return card;
     }
 
-    private void populateForm(ressourceproject r) {
-        selectedRessource = r;
-        cbIdProject.setValue(r.getIdproject());
-        tfNomRessource.setText(r.getNomressource());
-        cbTypeRessource.setValue(r.getTyperessource());
-        tfQuantite.setText(String.valueOf(r.getQuantite()));
-        tfCout.setText(r.getCout().toString());
-        tfFournisseur.setText(r.getFournisseur());
-        cbStatutRessource.setValue(r.getStatut());
-        dpDateAjout.setValue(r.getDateajout().toLocalDate());
-    }
-
+    /**
+     * Open the Add Resource form
+     */
     @FXML
-    void addRessource(ActionEvent event) {
-        if (!validateInputs()) return;
+    public void openAddRessourceForm(ActionEvent event) {
         try {
-            ressourceproject r = new ressourceproject(
-                    tfNomRessource.getText(), cbTypeRessource.getValue(),
-                    Integer.parseInt(tfQuantite.getText()), new BigDecimal(tfCout.getText()),
-                    tfFournisseur.getText(), cbStatutRessource.getValue(),
-                    Date.valueOf(dpDateAjout.getValue()), cbIdProject.getValue()
-            );
-            rService.ajouter(r);
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "Ressource ajoutée avec succès !");
-            clearFields(null);
-            refreshDataFromDB(); // Recharge et filtre
-        } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur SQL", e.getMessage());
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ressourceagricoleadd.fxml"));
+            Parent root = loader.load();
+
+            ressourceprojectaddcontroller addController = loader.getController();
+            addController.setMainController(this);
+
+            Stage stage = new Stage();
+            stage.setTitle("Ajouter une Nouvelle Ressource");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.showAndWait();
+
+            refreshDataFromDB();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir le formulaire d'ajout: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
+    /**
+     * Open the Modify Resource form
+     */
     @FXML
-    void updateRessource(ActionEvent event) {
+    void openModifyRessourceForm(ActionEvent event) {
         if (selectedRessource == null) {
-            showAlert(Alert.AlertType.WARNING, "Attention", "Veuillez sélectionner une carte à modifier.");
+            showAlert(Alert.AlertType.WARNING, "Attention", "Veuillez sélectionner une ressource à modifier.");
             return;
         }
-        if (!validateInputs()) return;
 
         try {
-            selectedRessource.setIdproject(cbIdProject.getValue());
-            selectedRessource.setNomressource(tfNomRessource.getText());
-            selectedRessource.setTyperessource(cbTypeRessource.getValue());
-            selectedRessource.setQuantite(Integer.parseInt(tfQuantite.getText()));
-            selectedRessource.setCout(new BigDecimal(tfCout.getText()));
-            selectedRessource.setFournisseur(tfFournisseur.getText());
-            selectedRessource.setStatut(cbStatutRessource.getValue());
-            selectedRessource.setDateajout(Date.valueOf(dpDateAjout.getValue()));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ressourceagricolemodify.fxml"));
+            Parent root = loader.load();
 
-            rService.modifier(selectedRessource);
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "Ressource modifiée avec succès !");
-            clearFields(null);
-            refreshDataFromDB(); // Recharge et filtre
-        } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur SQL", e.getMessage());
+            ressourceprojectmodifycontroller modifyController = loader.getController();
+            modifyController.setRessource(selectedRessource);
+            modifyController.setMainController(this);
+
+            Stage stage = new Stage();
+            stage.setTitle("Modifier la Ressource");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.showAndWait();
+
+            refreshDataFromDB();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir le formulaire de modification: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
+    /**
+     * Delete a resource
+     */
     @FXML
     void deleteRessource(ActionEvent event) {
         if (selectedRessource == null) {
-            showAlert(Alert.AlertType.WARNING, "Attention", "Veuillez sélectionner une carte à supprimer.");
+            showAlert(Alert.AlertType.WARNING, "Attention", "Veuillez sélectionner une ressource à supprimer.");
             return;
         }
 
@@ -235,23 +224,17 @@ public class ressourceprojectcontroller implements Initializable {
             try {
                 rService.supprimer(selectedRessource.getIdressource());
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Ressource supprimée !");
-                clearFields(null);
-                refreshDataFromDB(); // Recharge et filtre
+                selectedRessource = null;
+                refreshDataFromDB();
             } catch (SQLException e) {
                 showAlert(Alert.AlertType.ERROR, "Erreur SQL", e.getMessage());
             }
         }
     }
 
-    @FXML
-    void clearFields(ActionEvent event) {
-        selectedRessource = null;
-        cbIdProject.getSelectionModel().clearSelection();
-        tfNomRessource.clear(); cbTypeRessource.getSelectionModel().clearSelection();
-        tfQuantite.clear(); tfCout.clear(); tfFournisseur.clear();
-        cbStatutRessource.getSelectionModel().clearSelection(); dpDateAjout.setValue(null);
-    }
-
+    /**
+     * Navigate to Projects view
+     */
     @FXML
     void goToProjects(ActionEvent event) {
         try {
@@ -261,22 +244,6 @@ public class ressourceprojectcontroller implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private boolean validateInputs() {
-        if (tfNomRessource.getText().isEmpty() || tfQuantite.getText().isEmpty() || tfCout.getText().isEmpty() ||
-                cbIdProject.getValue() == null || cbTypeRessource.getValue() == null || cbStatutRessource.getValue() == null || dpDateAjout.getValue() == null) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Veuillez remplir tous les champs !");
-            return false;
-        }
-        try {
-            Integer.parseInt(tfQuantite.getText());
-            new BigDecimal(tfCout.getText());
-        } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de format", "La quantité et le coût doivent être des nombres valides !");
-            return false;
-        }
-        return true;
     }
 
     private void showAlert(Alert.AlertType type, String title, String content) {

@@ -37,7 +37,7 @@ public class projectagricolecontroller implements Initializable {
     // --- NOUVEAUX ELEMENTS POUR RECHERCHE ET FILTRE ---
     @FXML private TextField tfSearchProject;
     @FXML private ComboBox<String> cbFilterStatutList;
-    private List<projectagricole> allProjects = new ArrayList<>(); // Stockage local pour la recherche
+    private List<projectagricole> allProjects = new ArrayList<>();
     // --------------------------------------------------
 
     private projectagricole selectedProject = null;
@@ -45,26 +45,39 @@ public class projectagricolecontroller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        cbStatut.getItems().addAll("en cours", "accepte", "refuse");
+        // Only initialize if the fields exist (for main view with form)
+        if (cbStatut != null) {
+            cbStatut.getItems().addAll("en cours", "accepte", "refuse");
+        }
 
-        // Initialisation du filtre
-        cbFilterStatutList.getItems().addAll("Tous", "en cours", "accepte", "refuse");
-        cbFilterStatutList.setValue("Tous");
+        // Initialize filter combo if it exists (for list view)
+        if (cbFilterStatutList != null) {
+            cbFilterStatutList.getItems().addAll("Tous", "en cours", "accepte", "refuse");
+            cbFilterStatutList.setValue("Tous");
+        }
 
-        // Écouteurs pour la recherche dynamique (en temps réel)
-        tfSearchProject.textProperty().addListener((observable, oldValue, newValue) -> updateCardsDisplay());
-        cbFilterStatutList.setOnAction(event -> updateCardsDisplay());
+        // Listeners for search (only if search field exists)
+        if (tfSearchProject != null) {
+            tfSearchProject.textProperty().addListener((observable, oldValue, newValue) -> updateCardsDisplay());
+        }
 
-        refreshDataFromDB();
+        if (cbFilterStatutList != null) {
+            cbFilterStatutList.setOnAction(event -> updateCardsDisplay());
+        }
+
+        // Load data if container exists
+        if (projectsContainer != null) {
+            refreshDataFromDB();
+        }
     }
 
     /**
      * Charge les données depuis MySQL et met à jour l'affichage
      */
-    private void refreshDataFromDB() {
+    public void refreshDataFromDB() {
         try {
-            allProjects = service.afficher(); // On stocke tout localement
-            updateCardsDisplay(); // On applique les filtres et on affiche
+            allProjects = service.afficher();
+            updateCardsDisplay();
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur Base de données", "Impossible de charger les projets : " + e.getMessage());
         }
@@ -74,15 +87,17 @@ public class projectagricolecontroller implements Initializable {
      * Filtre la liste locale et redessine les cartes
      */
     private void updateCardsDisplay() {
+        if (projectsContainer == null) return;
+
         projectsContainer.getChildren().clear();
 
-        String searchText = tfSearchProject.getText().toLowerCase();
-        String filterStatut = cbFilterStatutList.getValue();
+        String searchText = tfSearchProject != null ? tfSearchProject.getText().toLowerCase() : "";
+        String filterStatut = cbFilterStatutList != null ? cbFilterStatutList.getValue() : "Tous";
 
         // Utilisation des Streams Java pour filtrer instantanément
         List<projectagricole> filteredList = allProjects.stream()
-                .filter(p -> p.getNomproject().toLowerCase().contains(searchText)) // Filtre par nom
-                .filter(p -> filterStatut.equals("Tous") || p.getStatut().equals(filterStatut)) // Filtre par statut
+                .filter(p -> p.getNomproject().toLowerCase().contains(searchText))
+                .filter(p -> filterStatut.equals("Tous") || p.getStatut().equals(filterStatut))
                 .collect(Collectors.toList());
 
         for (projectagricole p : filteredList) {
@@ -90,6 +105,9 @@ public class projectagricolecontroller implements Initializable {
         }
     }
 
+    /**
+     * Creates a visual card for a project
+     */
     private VBox createCard(projectagricole p) {
         VBox card = new VBox(10);
         card.getStyleClass().add("project-card");
@@ -115,17 +133,17 @@ public class projectagricolecontroller implements Initializable {
         Label lblDate = new Label("📅 Soumis le: " + p.getDatesoumission());
         lblDate.getStyleClass().add("card-info");
 
-        // --- NOUVEAU : Création des boutons sur la carte ---
+        // Action buttons on the card
         HBox actionBox = new HBox(10);
         actionBox.setAlignment(Pos.CENTER_RIGHT);
-        actionBox.setPadding(new javafx.geometry.Insets(10, 0, 0, 0)); // Marge en haut
+        actionBox.setPadding(new javafx.geometry.Insets(10, 0, 0, 0));
 
         Button btnModifier = new Button("✏️ Modifier");
         btnModifier.getStyleClass().add("btn-secondary");
         btnModifier.setStyle("-fx-font-size: 11px; -fx-padding: 5px 10px;");
         btnModifier.setOnAction(e -> {
             selectedProject = p;
-            updateProject(null); // Déclenche la méthode de mise à jour existante
+            openModifyProjectForm(null);
         });
 
         Button btnSupprimer = new Button("🗑️ Supprimer");
@@ -133,24 +151,75 @@ public class projectagricolecontroller implements Initializable {
         btnSupprimer.setStyle("-fx-font-size: 11px; -fx-padding: 5px 10px;");
         btnSupprimer.setOnAction(e -> {
             selectedProject = p;
-            deleteProject(null); // Déclenche la méthode de suppression existante
+            deleteProject(null);
         });
 
         actionBox.getChildren().addAll(btnModifier, btnSupprimer);
-        // --------------------------------------------------
 
         card.getChildren().addAll(topRow, new Separator(), lblSurface, lblBudget, lblDate, actionBox);
-
-        // Au clic sur n'importe quel endroit de la carte, on remplit le formulaire de gauche
-        card.setOnMouseClicked(event -> {
-            populateForm(p);
-            // verifierRentabiliteProjet(p); // (Décommentez si vous avez ajouté la méthode métier)
-        });
 
         return card;
     }
 
+    // Add this method to open the Add Project form
+    @FXML
+    public void openAddProjectForm(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/projectagricoleadd.fxml"));
+            Parent root = loader.load();
+
+            // Get the controller of the add form
+            ProjectAgricoleAddController addController = loader.getController();
+            addController.setMainController(this);
+
+            Stage stage = new Stage();
+            stage.setTitle("Ajouter un Nouveau Projet");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.showAndWait();
+
+            // Refresh the list after closing the add window
+            refreshDataFromDB();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir le formulaire d'ajout: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    // Modify your existing updateProject method to open the modify form
+    @FXML
+    void openModifyProjectForm(ActionEvent event) {
+        if (selectedProject == null) {
+            showAlert(Alert.AlertType.WARNING, "Attention", "Veuillez sélectionner un projet à modifier.");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/projectagricolemodify.fxml"));
+            Parent root = loader.load();
+
+            // Get the controller and pass the selected project
+            ProjectAgricoleModifyController modifyController = loader.getController();
+            modifyController.setProject(selectedProject);
+            modifyController.setMainController(this);
+
+            Stage stage = new Stage();
+            stage.setTitle("Modifier le Projet");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.showAndWait();
+
+            // Refresh the list after closing
+            refreshDataFromDB();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir le formulaire de modification: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     private void populateForm(projectagricole p) {
+        if (tfNomProject == null) return; // Only populate if form fields exist
+
         selectedProject = p;
         tfNomProject.setText(p.getNomproject());
         tfSurface.setText(String.valueOf(p.getSurface()));
@@ -223,9 +292,14 @@ public class projectagricolecontroller implements Initializable {
 
     @FXML
     void clearFields(ActionEvent event) {
+        if (tfNomProject == null) return; // Only clear if form fields exist
+
         selectedProject = null;
-        tfNomProject.clear(); tfSurface.clear(); tfBudget.clear();
-        cbStatut.getSelectionModel().clearSelection(); dpDateSoumission.setValue(null);
+        tfNomProject.clear();
+        tfSurface.clear();
+        tfBudget.clear();
+        cbStatut.getSelectionModel().clearSelection();
+        dpDateSoumission.setValue(null);
     }
 
     @FXML
@@ -240,6 +314,10 @@ public class projectagricolecontroller implements Initializable {
     }
 
     private boolean validateInputs() {
+        if (tfNomProject == null || tfSurface == null || tfBudget == null || cbStatut == null || dpDateSoumission == null) {
+            return false;
+        }
+
         if (tfNomProject.getText().isEmpty() || tfSurface.getText().isEmpty() || tfBudget.getText().isEmpty() || cbStatut.getValue() == null || dpDateSoumission.getValue() == null) {
             showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Veuillez remplir tous les champs !");
             return false;

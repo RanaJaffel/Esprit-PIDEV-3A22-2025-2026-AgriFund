@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="550.0" prefWidth="450.0" spacing="20.0" stylesheets="@style.css"
+      style="-fx-background-color: white; -fx-padding: 30;"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controles.ressourceprojectmodifycontroller">
+    <children>
+        <Label text="✏️ Modifier la Ressource" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #076A39;"/>
+        <Separator/>
+
+        <GridPane vgap="15" hgap="10">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="40"/>
+                <ColumnConstraints percentWidth="60"/>
+            </columnConstraints>
+
+            <Label text="🔗 Projet Lié:" GridPane.rowIndex="0" style="-fx-font-weight: bold;"/>
+            <ComboBox fx:id="cbIdProject" promptText="Choisir Projet..." maxWidth="Infinity" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="🏷️ Nom:" GridPane.rowIndex="1" style="-fx-font-weight: bold;"/>
+            <TextField fx:id="tfNomRessource" promptText="Ex: Tracteur" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="📦 Type:" GridPane.rowIndex="2" style="-fx-font-weight: bold;"/>
+            <ComboBox fx:id="cbTypeRessource" promptText="Type..." maxWidth="Infinity" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <Label text="🔢 Quantité:" GridPane.rowIndex="3" style="-fx-font-weight: bold;"/>
+            <TextField fx:id="tfQuantite" promptText="Ex: 1" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+            <Label text="💲 Coût Total:" GridPane.rowIndex="4" style="-fx-font-weight: bold;"/>
+            <TextField fx:id="tfCout" promptText="Ex: 8000.00" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+            <Label text="🏢 Fournisseur:" GridPane.rowIndex="5" style="-fx-font-weight: bold;"/>
+            <TextField fx:id="tfFournisseur" promptText="Ex: Agro Equipement" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+            <Label text="📊 Statut:" GridPane.rowIndex="6" style="-fx-font-weight: bold;"/>
+            <ComboBox fx:id="cbStatutRessource" promptText="Statut..." maxWidth="Infinity" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+
+            <Label text="📅 Date Ajout:" GridPane.rowIndex="7" style="-fx-font-weight: bold;"/>
+            <DatePicker fx:id="dpDateAjout" maxWidth="Infinity" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+        </GridPane>
+
+        <Region VBox.vgrow="ALWAYS"/>
+
+        <HBox spacing="15" alignment="CENTER_RIGHT">
+            <Button text="Annuler" onAction="#handleCancel" prefWidth="100" styleClass="btn-danger"/>
+            <Button fx:id="btnSave" text="Sauvegarder" onAction="#handleSave" prefWidth="120" styleClass="btn-primary"/>
+        </HBox>
+    </children>
+</VBox>
