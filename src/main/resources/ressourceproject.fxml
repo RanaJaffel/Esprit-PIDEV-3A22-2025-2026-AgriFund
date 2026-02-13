@@ -28,7 +28,7 @@
          <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
 
          <HBox alignment="CENTER_LEFT" spacing="15">
-            <Label text="📦 Ressources Disponibles / Prévues"
+            <Label text="📦 Liste des Ressources "
                    style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #133D03;"/>
             <Region HBox.hgrow="ALWAYS"/>
             <TextField fx:id="tfSearchRessource" promptText="🔍 Rechercher par nom..."

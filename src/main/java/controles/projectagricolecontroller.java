@@ -113,17 +113,29 @@ public class projectagricolecontroller implements Initializable {
         card.getStyleClass().add("project-card");
         card.setPrefWidth(260);
 
+        // Create ID label
+        Label lblId = new Label("#" + p.getIdproject());
+        lblId.setStyle("-fx-font-size: 10px; -fx-text-fill: #999; -fx-padding: 2px 6px; -fx-background-color: #f0f0f0; -fx-background-radius: 3px;");
+
+        // Create project name label
         Label lblNom = new Label(p.getNomproject());
         lblNom.getStyleClass().add("card-title");
 
+        // Combine ID and Name in one HBox
+        HBox nameRow = new HBox(8);
+        nameRow.setAlignment(Pos.CENTER_LEFT);
+        nameRow.getChildren().addAll(lblId, lblNom);
+
+        // Create status badge
         Label lblStatut = new Label(p.getStatut().toUpperCase());
         if (p.getStatut().equals("accepte")) lblStatut.getStyleClass().add("status-badge-accepte");
         else if (p.getStatut().equals("refuse")) lblStatut.getStyleClass().add("status-badge-refuse");
         else lblStatut.getStyleClass().add("status-badge-encours");
 
+        // Create top row with name+ID on left and status on right
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
-        HBox topRow = new HBox(lblNom, spacer, lblStatut);
+        HBox topRow = new HBox(nameRow, spacer, lblStatut);
         topRow.setAlignment(Pos.CENTER_LEFT);
 
         Label lblSurface = new Label("🌱 Surface: " + p.getSurface() + " Ha");

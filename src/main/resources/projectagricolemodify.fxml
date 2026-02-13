@@ -1,44 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 
-<VBox prefHeight="500.0" prefWidth="450.0" spacing="20.0" stylesheets="@style.css"
-      style="-fx-background-color: white; -fx-padding: 30;"
-      xmlns="http://javafx.com/javafx/17"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="controles.ProjectAgricoleModifyController">
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="500.0" prefWidth="450.0" spacing="20.0" style="-fx-background-color: white; -fx-padding: 30;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controles.ProjectAgricoleModifyController">
     <children>
-        <Label text="✏️ Modifier le Projet" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #076A39;"/>
-        <Separator/>
+        <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #076A39;" text="✏️ Modifier le Projet" />
+        <Separator />
 
-        <GridPane vgap="20" hgap="10">
+        <GridPane hgap="10" vgap="20">
             <columnConstraints>
-                <ColumnConstraints percentWidth="40"/>
-                <ColumnConstraints percentWidth="60"/>
+                <ColumnConstraints percentWidth="40" />
+                <ColumnConstraints percentWidth="60" />
             </columnConstraints>
 
-            <Label text="Nom du projet:" GridPane.rowIndex="0"/>
-            <TextField fx:id="tfNomProject" promptText="Ex: Projet Blé" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+            <Label text="Nom du projet:" GridPane.rowIndex="0" />
+            <TextField fx:id="tfNomProject" promptText="Ex: Projet Blé" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-            <Label text="Surface (Ha):" GridPane.rowIndex="1"/>
-            <TextField fx:id="tfSurface" promptText="Ex: 25.5" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+            <Label text="Surface (Ha):" GridPane.rowIndex="1" />
+            <TextField fx:id="tfSurface" promptText="Ex: 25.5" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-            <Label text="Budget (DT):" GridPane.rowIndex="2"/>
-            <TextField fx:id="tfBudget" promptText="Ex: 12000.00" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+            <Label text="Budget (DT):" GridPane.rowIndex="2" />
+            <TextField fx:id="tfBudget" promptText="Ex: 12000.00" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-            <Label text="Statut:" GridPane.rowIndex="3"/>
-            <ComboBox fx:id="cbStatut" promptText="Sélectionner..." maxWidth="Infinity" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+            <Label text="Statut:" GridPane.rowIndex="3" />
+            <ComboBox fx:id="cbStatut" maxWidth="Infinity" promptText="Sélectionner..." GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
-            <Label text="Date:" GridPane.rowIndex="4"/>
-            <DatePicker fx:id="dpDateSoumission" maxWidth="Infinity" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+            <Label text="Date:" GridPane.rowIndex="4" />
+            <DatePicker fx:id="dpDateSoumission" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+         <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+         </rowConstraints>
         </GridPane>
 
-        <Region VBox.vgrow="ALWAYS"/>
+        <Region VBox.vgrow="ALWAYS" />
 
-        <HBox spacing="15" alignment="CENTER_RIGHT">
-            <Button text="Annuler" onAction="#handleCancel" prefWidth="100" styleClass="btn-danger"/>
-            <Button fx:id="btnSave" text="Sauvegarder" onAction="#handleSave" prefWidth="120" styleClass="btn-primary"/>
+        <HBox alignment="CENTER_RIGHT" spacing="15">
+            <Button onAction="#handleCancel" prefWidth="100" styleClass="btn-danger" text="Annuler" />
+            <Button fx:id="btnSave" onAction="#handleSave" prefWidth="120" styleClass="btn-primary" text="Sauvegarder" />
         </HBox>
     </children>
 </VBox>
