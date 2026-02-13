@@ -88,21 +88,51 @@ public class ressourceprojectaddcontroller implements Initializable {
     }
 
     private boolean validateInputs() {
-        if (tfNomRessource.getText().isEmpty() || tfQuantite.getText().isEmpty() ||
-                tfCout.getText().isEmpty() || tfFournisseur.getText().isEmpty() ||
+        // Check for empty fields
+        if (tfNomRessource.getText().trim().isEmpty() || tfQuantite.getText().trim().isEmpty() ||
+                tfCout.getText().trim().isEmpty() || tfFournisseur.getText().trim().isEmpty() ||
                 cbIdProject.getValue() == null || cbTypeRessource.getValue() == null ||
                 cbStatutRessource.getValue() == null || dpDateAjout.getValue() == null) {
             showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Veuillez remplir tous les champs!");
             return false;
         }
 
+        // Validate resource name length
+        if (tfNomRessource.getText().trim().length() < 2) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Le nom de la ressource doit contenir au moins 2 caractères!");
+            return false;
+        }
+
+        // Validate supplier name length
+        if (tfFournisseur.getText().trim().length() < 2) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Le nom du fournisseur doit contenir au moins 2 caractères!");
+            return false;
+        }
+
+        // Validate numeric fields
         try {
-            Integer.parseInt(tfQuantite.getText());
-            new BigDecimal(tfCout.getText());
+            int quantite = Integer.parseInt(tfQuantite.getText().trim());
+            if (quantite <= 0) {
+                showAlert(Alert.AlertType.ERROR, "Erreur de validation", "La quantité doit être un nombre positif!");
+                return false;
+            }
+
+            BigDecimal cout = new BigDecimal(tfCout.getText().trim());
+            if (cout.compareTo(BigDecimal.ZERO) <= 0) {
+                showAlert(Alert.AlertType.ERROR, "Erreur de validation", "Le coût doit être un nombre positif!");
+                return false;
+            }
         } catch (NumberFormatException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur de format", "La quantité et le coût doivent être des nombres valides!");
             return false;
         }
+
+        // Validate date is not in the past
+        if (dpDateAjout.getValue().isBefore(java.time.LocalDate.now())) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de validation", "La date d'ajout ne peut pas être dans le passé!");
+            return false;
+        }
+
         return true;
     }
 

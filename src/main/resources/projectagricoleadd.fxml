@@ -5,7 +5,7 @@
 
 <VBox prefHeight="500.0" prefWidth="450.0" spacing="20.0" stylesheets="@style.css" style="-fx-background-color: white; -fx-padding: 30;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controles.ProjectAgricoleAddController">
     <children>
-        <Label fx:id="lblTitle" text="📝 Détails du Projet" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #076A39;"/>
+        <Label fx:id="lblTitle" text="📝 Ajouter un Projet" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #076A39;"/>
         <Separator/>
 
         <GridPane vgap="20" hgap="10">

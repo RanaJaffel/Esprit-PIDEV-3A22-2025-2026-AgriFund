@@ -9,8 +9,7 @@
         <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: linear-gradient(to right, #095032, #089647); -fx-padding: 15px 25px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.25), 10, 0, 0, 2);">
             <Label text="🌿 Gestion des Projets Agricoles" styleClass="title-label" style="-fx-text-fill: white; -fx-font-size: 22px;" HBox.hgrow="ALWAYS"/>
             <Region HBox.hgrow="ALWAYS" />
-            <VBox alignment="CENTER_RIGHT"><Label fx:id="lblMeteo" text="Chargement météo..." style="-fx-text-fill: #B2D944; -fx-font-size: 13px; -fx-font-weight: bold;"/></VBox>
-            <Region HBox.hgrow="ALWAYS" />
+
             <Button text="Aller vers Ressources 🚜 ➔" styleClass="btn-nav" style="-fx-background-color: #E1B323; -fx-text-fill: #133D03;" onAction="#goToRessources" prefHeight="35"/>
         </HBox>
     </top>

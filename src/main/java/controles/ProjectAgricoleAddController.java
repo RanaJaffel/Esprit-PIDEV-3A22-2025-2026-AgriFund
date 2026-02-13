@@ -68,20 +68,44 @@ public class ProjectAgricoleAddController implements Initializable {
     }
 
     private boolean validateInputs() {
-        if (tfNomProject.getText().isEmpty() || tfSurface.getText().isEmpty() ||
-                tfBudget.getText().isEmpty() || cbStatut.getValue() == null ||
+        // Check for empty fields
+        if (tfNomProject.getText().trim().isEmpty() || tfSurface.getText().trim().isEmpty() ||
+                tfBudget.getText().trim().isEmpty() || cbStatut.getValue() == null ||
                 dpDateSoumission.getValue() == null) {
             showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Veuillez remplir tous les champs!");
             return false;
         }
 
-        try {
-            Float.parseFloat(tfSurface.getText());
-            new BigDecimal(tfBudget.getText());
-        } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de format", "Surface et Budget doivent être des nombres!");
+        // Validate project name length
+        if (tfNomProject.getText().trim().length() < 3) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Le nom du projet doit contenir au moins 3 caractères!");
             return false;
         }
+
+        // Validate numeric fields
+        try {
+            float surface = Float.parseFloat(tfSurface.getText().trim());
+            if (surface <= 0) {
+                showAlert(Alert.AlertType.ERROR, "Erreur de validation", "La surface doit être un nombre positif!");
+                return false;
+            }
+
+            BigDecimal budget = new BigDecimal(tfBudget.getText().trim());
+            if (budget.compareTo(BigDecimal.ZERO) <= 0) {
+                showAlert(Alert.AlertType.ERROR, "Erreur de validation", "Le budget doit être un nombre positif!");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de format", "Surface et Budget doivent être des nombres valides!");
+            return false;
+        }
+
+        // Validate date is not in the past
+        if (dpDateSoumission.getValue().isBefore(java.time.LocalDate.now())) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de validation", "La date de soumission ne peut pas être dans le passé!");
+            return false;
+        }
+
         return true;
     }
 
