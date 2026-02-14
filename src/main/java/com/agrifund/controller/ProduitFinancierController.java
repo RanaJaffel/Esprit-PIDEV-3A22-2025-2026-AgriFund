@@ -1,110 +1,170 @@
-package controller;
+package com.agrifund.controller;
 
-import model.ProduitFinancier;
-import service.ProduitFinancierService;
-import view.ProduitFinancierView;
-import java.util.List;
+import com.agrifund.model.ProduitFinancier;
+import com.agrifund.util.DatabaseConnection;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.sql.*;
 
 public class ProduitFinancierController {
-    private ProduitFinancierService service;
-    private ProduitFinancierView view;
 
-    public ProduitFinancierController() {
-        this.service = new ProduitFinancierService();
-        this.view = new ProduitFinancierView();
+    // CREATE
+    public boolean ajouterProduit(ProduitFinancier produit) {
+        String sql = "INSERT INTO produit_financier (nom_produit, type_financement, taux_interet, " +
+                "montant_min, montant_max, regles_financieres) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, produit.getNomProduit());
+            pstmt.setString(2, produit.getTypeFinancement());
+            pstmt.setDouble(3, produit.getTauxInteret());
+            pstmt.setDouble(4, produit.getMontantMin());
+            pstmt.setDouble(5, produit.getMontantMax());
+            pstmt.setString(6, produit.getReglesFinancieres());
+
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
-    public void afficherMenu() {
-        boolean continuer = true;
+    // READ - Tous les produits
+    public ObservableList<ProduitFinancier> getAllProduits() {
+        ObservableList<ProduitFinancier> produits = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM produit_financier";
 
-        while (continuer) {
-            int choix = view.afficherMenuPrincipal();
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
 
-            switch (choix) {
-                case 1:
-                    ajouterProduit();
-                    break;
-                case 2:
-                    afficherTousProduits();
-                    break;
-                case 3:
-                    rechercherProduit();
-                    break;
-                case 4:
-                    modifierProduit();
-                    break;
-                case 5:
-                    supprimerProduit();
-                    break;
-                case 6:
-                    calculerInterets();
-                    break;
-                case 0:
-                    continuer = false;
-                    break;
-                default:
-                    view.afficherMessage("Option invalide!");
+            while (rs.next()) {
+                ProduitFinancier produit = new ProduitFinancier(
+                        rs.getInt("id_produit"),
+                        rs.getString("nom_produit"),
+                        rs.getString("type_financement"),
+                        rs.getDouble("taux_interet"),
+                        rs.getDouble("montant_min"),
+                        rs.getDouble("montant_max"),
+                        rs.getString("regles_financieres")
+                );
+                produits.add(produit);
             }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+
+        return produits;
     }
 
-    private void ajouterProduit() {
-        ProduitFinancier produit = view.saisirProduit();
-        if (service.ajouterProduit(produit)) {
-            view.afficherMessage("Produit ajouté avec succès!");
-        } else {
-            view.afficherMessage("Erreur lors de l'ajout du produit.");
-        }
-    }
+    // READ - Produit par ID
+    public ProduitFinancier getProduitById(int id) {
+        String sql = "SELECT * FROM produit_financier WHERE id_produit = ?";
 
-    private void afficherTousProduits() {
-        List<ProduitFinancier> produits = service.obtenirTousProduits();
-        view.afficherListeProduits(produits);
-    }
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-    private void rechercherProduit() {
-        int id = view.demanderIdProduit();
-        ProduitFinancier produit = service.obtenirProduit(id);
-        if (produit != null) {
-            view.afficherProduit(produit);
-        } else {
-            view.afficherMessage("Produit non trouvé.");
-        }
-    }
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
 
-    private void modifierProduit() {
-        int id = view.demanderIdProduit();
-        ProduitFinancier produit = service.obtenirProduit(id);
-        if (produit != null) {
-            view.afficherProduit(produit);
-            ProduitFinancier produitModifie = view.modifierProduit(produit);
-            if (service.modifierProduit(produitModifie)) {
-                view.afficherMessage("Produit modifié avec succès!");
-            } else {
-                view.afficherMessage("Erreur lors de la modification.");
+            if (rs.next()) {
+                return new ProduitFinancier(
+                        rs.getInt("id_produit"),
+                        rs.getString("nom_produit"),
+                        rs.getString("type_financement"),
+                        rs.getDouble("taux_interet"),
+                        rs.getDouble("montant_min"),
+                        rs.getDouble("montant_max"),
+                        rs.getString("regles_financieres")
+                );
             }
-        } else {
-            view.afficherMessage("Produit non trouvé.");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    // UPDATE
+    public boolean modifierProduit(ProduitFinancier produit) {
+        String sql = "UPDATE produit_financier SET nom_produit=?, type_financement=?, " +
+                "taux_interet=?, montant_min=?, montant_max=?, regles_financieres=? " +
+                "WHERE id_produit=?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, produit.getNomProduit());
+            pstmt.setString(2, produit.getTypeFinancement());
+            pstmt.setDouble(3, produit.getTauxInteret());
+            pstmt.setDouble(4, produit.getMontantMin());
+            pstmt.setDouble(5, produit.getMontantMax());
+            pstmt.setString(6, produit.getReglesFinancieres());
+            pstmt.setInt(7, produit.getIdProduit());
+
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
-    private void supprimerProduit() {
-        int id = view.demanderIdProduit();
-        if (view.confirmerSuppression()) {
-            if (service.supprimerProduit(id)) {
-                view.afficherMessage("Produit supprimé avec succès!");
-            } else {
-                view.afficherMessage("Erreur lors de la suppression.");
+    // DELETE
+    public boolean supprimerProduit(int id) {
+        String sql = "DELETE FROM produit_financier WHERE id_produit = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, id);
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // SEARCH
+    public ObservableList<ProduitFinancier> rechercherProduits(String critere) {
+        ObservableList<ProduitFinancier> produits = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM produit_financier WHERE nom_produit LIKE ? OR type_financement LIKE ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            String searchPattern = "%" + critere + "%";
+            pstmt.setString(1, searchPattern);
+            pstmt.setString(2, searchPattern);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                ProduitFinancier produit = new ProduitFinancier(
+                        rs.getInt("id_produit"),
+                        rs.getString("nom_produit"),
+                        rs.getString("type_financement"),
+                        rs.getDouble("taux_interet"),
+                        rs.getDouble("montant_min"),
+                        rs.getDouble("montant_max"),
+                        rs.getString("regles_financieres")
+                );
+                produits.add(produit);
             }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    }
 
-    private void calculerInterets() {
-        int id = view.demanderIdProduit();
-        double montant = view.demanderMontant();
-        int duree = view.demanderDuree();
-
-        double interets = service.calculerInterets(id, montant, duree);
-        view.afficherInterets(interets, montant, duree);
+        return produits;
     }
 }

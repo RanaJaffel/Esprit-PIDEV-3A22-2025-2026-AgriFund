@@ -1,4 +1,4 @@
-package model;
+package com.agrifund.model;
 
 public class OffreFinanciere {
     private int idOffre;
@@ -6,11 +6,23 @@ public class OffreFinanciere {
     private String conditions;
     private String statut;
     private int idProduit;
-    private ProduitFinancier produitFinancier;
+    private ProduitFinancier produitFinancier; // Pour les jointures
 
-    // Constructeurs
-    public OffreFinanciere() {}
+    // Constructeur vide
+    public OffreFinanciere() {
+    }
 
+    // Constructeur complet
+    public OffreFinanciere(int idOffre, String nomOffre, String conditions,
+                           String statut, int idProduit) {
+        this.idOffre = idOffre;
+        this.nomOffre = nomOffre;
+        this.conditions = conditions;
+        this.statut = statut;
+        this.idProduit = idProduit;
+    }
+
+    // Constructeur sans ID
     public OffreFinanciere(String nomOffre, String conditions,
                            String statut, int idProduit) {
         this.nomOffre = nomOffre;

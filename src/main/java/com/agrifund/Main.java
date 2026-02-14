@@ -1,49 +1,37 @@
 package com.agrifund;
 
-import controller.ProduitFinancierController;
-import controller.OffreFinanciereController;
-import util.DatabaseConnection;
-import java.util.Scanner;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        ProduitFinancierController produitController = new ProduitFinancierController();
-        OffreFinanciereController offreController = new OffreFinanciereController();
+public class Main extends Application {
 
-        System.out.println("╔════════════════════════════════╗");
-        System.out.println("║     BIENVENUE DANS AGRIFUND   ║");
-        System.out.println("║   Système de Gestion Agricole ║");
-        System.out.println("╚════════════════════════════════╝");
+    @Override
+    public void start(Stage primaryStage) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/agrifund/view/ProduitFinancierView.fxml")
+            );
+            Parent root = loader.load();
 
-        boolean continuer = true;
+            Scene scene = new Scene(root, 1200, 700);
 
-        while (continuer) {
-            System.out.println("\n========== MENU PRINCIPAL ==========");
-            System.out.println("1. Gestion des Produits Financiers");
-            System.out.println("2. Gestion des Offres Financières");
-            System.out.println("0. Quitter");
-            System.out.print("Votre choix: ");
+            primaryStage.setTitle("🌾 AgriFund - Gestion Produits Financiers");
+            primaryStage.setScene(scene);
+            primaryStage.setResizable(true);
+            primaryStage.show();
 
-            int choix = scanner.nextInt();
+            System.out.println("✅ Application lancée avec succès!");
 
-            switch (choix) {
-                case 1:
-                    produitController.afficherMenu();
-                    break;
-                case 2:
-                    offreController.afficherMenu();
-                    break;
-                case 0:
-                    continuer = false;
-                    System.out.println("\nMerci d'avoir utilisé AgriFund. Au revoir!");
-                    DatabaseConnection.closeConnection();
-                    break;
-                default:
-                    System.out.println("Option invalide!");
-            }
+        } catch (Exception e) {
+            System.err.println("❌ ERREUR:");
+            e.printStackTrace();
         }
+    }
 
-        scanner.close();
+    public static void main(String[] args) {
+        launch(args);
     }
 }

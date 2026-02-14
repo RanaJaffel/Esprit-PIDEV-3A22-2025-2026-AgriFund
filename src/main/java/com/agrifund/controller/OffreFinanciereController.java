@@ -1,163 +1,232 @@
-package controller;
+package com.agrifund.controller;
 
-import model.OffreFinanciere;
-import model.ProduitFinancier;
-import service.OffreFinanciereService;
-import service.ProduitFinancierService;
-import view.OffreFinanciereView;
-import java.util.List;
+import com.agrifund.model.OffreFinanciere;
+import com.agrifund.model.ProduitFinancier;
+import com.agrifund.util.DatabaseConnection;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.sql.*;
 
 public class OffreFinanciereController {
-    private OffreFinanciereService service;
-    private ProduitFinancierService produitService;
-    private OffreFinanciereView view;
 
-    public OffreFinanciereController() {
-        this.service = new OffreFinanciereService();
-        this.produitService = new ProduitFinancierService();
-        this.view = new OffreFinanciereView();
+    // CREATE
+    public boolean ajouterOffre(OffreFinanciere offre) {
+        String sql = "INSERT INTO offre_financiere (nom_offre, conditions, statut, id_produit) " +
+                "VALUES (?, ?, ?, ?)";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, offre.getNomOffre());
+            pstmt.setString(2, offre.getConditions());
+            pstmt.setString(3, offre.getStatut());
+            pstmt.setInt(4, offre.getIdProduit());
+
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
-    public void afficherMenu() {
-        boolean continuer = true;
+    // READ - Toutes les offres
+    public ObservableList<OffreFinanciere> getAllOffres() {
+        ObservableList<OffreFinanciere> offres = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM offre_financiere";
 
-        while (continuer) {
-            int choix = view.afficherMenuPrincipal();
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
 
-            switch (choix) {
-                case 1:
-                    ajouterOffre();
-                    break;
-                case 2:
-                    afficherToutesOffres();
-                    break;
-                case 3:
-                    rechercherOffre();
-                    break;
-                case 4:
-                    afficherOffresParProduit();
-                    break;
-                case 5:
-                    modifierOffre();
-                    break;
-                case 6:
-                    changerStatutOffre();
-                    break;
-                case 7:
-                    supprimerOffre();
-                    break;
-                case 0:
-                    continuer = false;
-                    break;
-                default:
-                    view.afficherMessage("Option invalide!");
+            while (rs.next()) {
+                OffreFinanciere offre = new OffreFinanciere(
+                        rs.getInt("id_offre"),
+                        rs.getString("nom_offre"),
+                        rs.getString("conditions"),
+                        rs.getString("statut"),
+                        rs.getInt("id_produit")
+                );
+                offres.add(offre);
             }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+
+        return offres;
     }
 
-    private void ajouterOffre() {
-        // Afficher les produits disponibles
-        List<ProduitFinancier> produits = produitService.obtenirTousProduits();
-        if (produits.isEmpty()) {
-            view.afficherMessage("Aucun produit financier disponible. Veuillez d'abord créer un produit.");
-            return;
-        }
+    // READ - Offres avec JOIN (avec détails du produit)
+    public ObservableList<OffreFinanciere> getAllOffresAvecProduit() {
+        ObservableList<OffreFinanciere> offres = FXCollections.observableArrayList();
+        String sql = "SELECT o.*, p.nom_produit, p.type_financement, p.taux_interet, " +
+                "p.montant_min, p.montant_max, p.regles_financieres " +
+                "FROM offre_financiere o " +
+                "INNER JOIN produit_financier p ON o.id_produit = p.id_produit";
 
-        view.afficherProduitsDisponibles(produits);
-        OffreFinanciere offre = view.saisirOffre();
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
 
-        // Vérifier que le produit existe
-        ProduitFinancier produit = produitService.obtenirProduit(offre.getIdProduit());
-        if (produit == null) {
-            view.afficherMessage("ID de produit invalide!");
-            return;
-        }
+            while (rs.next()) {
+                OffreFinanciere offre = new OffreFinanciere(
+                        rs.getInt("id_offre"),
+                        rs.getString("nom_offre"),
+                        rs.getString("conditions"),
+                        rs.getString("statut"),
+                        rs.getInt("id_produit")
+                );
 
-        if (service.ajouterOffre(offre)) {
-            view.afficherMessage("Offre ajoutée avec succès!");
-        } else {
-            view.afficherMessage("Erreur lors de l'ajout de l'offre.");
-        }
-    }
+                // Ajouter les détails du produit
+                ProduitFinancier produit = new ProduitFinancier(
+                        rs.getInt("id_produit"),
+                        rs.getString("nom_produit"),
+                        rs.getString("type_financement"),
+                        rs.getDouble("taux_interet"),
+                        rs.getDouble("montant_min"),
+                        rs.getDouble("montant_max"),
+                        rs.getString("regles_financieres")
+                );
 
-    private void afficherToutesOffres() {
-        List<OffreFinanciere> offres = service.obtenirToutesOffres();
-        view.afficherListeOffres(offres);
-    }
-
-    private void rechercherOffre() {
-        int id = view.demanderIdOffre();
-        OffreFinanciere offre = service.obtenirOffre(id);
-        if (offre != null) {
-            view.afficherOffre(offre);
-        } else {
-            view.afficherMessage("Offre non trouvée.");
-        }
-    }
-
-    private void afficherOffresParProduit() {
-        List<ProduitFinancier> produits = produitService.obtenirTousProduits();
-        if (produits.isEmpty()) {
-            view.afficherMessage("Aucun produit financier disponible.");
-            return;
-        }
-
-        view.afficherProduitsDisponibles(produits);
-        int idProduit = view.demanderIdProduit();
-
-        List<OffreFinanciere> offres = service.obtenirOffresParProduit(idProduit);
-        if (offres.isEmpty()) {
-            view.afficherMessage("Aucune offre trouvée pour ce produit.");
-        } else {
-            view.afficherListeOffres(offres);
-        }
-    }
-
-    private void modifierOffre() {
-        int id = view.demanderIdOffre();
-        OffreFinanciere offre = service.obtenirOffre(id);
-        if (offre != null) {
-            view.afficherOffre(offre);
-
-            // Afficher les produits disponibles pour modification
-            List<ProduitFinancier> produits = produitService.obtenirTousProduits();
-            view.afficherProduitsDisponibles(produits);
-
-            OffreFinanciere offreModifiee = view.modifierOffre(offre);
-            if (service.modifierOffre(offreModifiee)) {
-                view.afficherMessage("Offre modifiée avec succès!");
-            } else {
-                view.afficherMessage("Erreur lors de la modification.");
+                offre.setProduitFinancier(produit);
+                offres.add(offre);
             }
-        } else {
-            view.afficherMessage("Offre non trouvée.");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return offres;
+    }
+
+    // READ - Offre par ID
+    public OffreFinanciere getOffreById(int id) {
+        String sql = "SELECT * FROM offre_financiere WHERE id_offre = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return new OffreFinanciere(
+                        rs.getInt("id_offre"),
+                        rs.getString("nom_offre"),
+                        rs.getString("conditions"),
+                        rs.getString("statut"),
+                        rs.getInt("id_produit")
+                );
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    // UPDATE
+    public boolean modifierOffre(OffreFinanciere offre) {
+        String sql = "UPDATE offre_financiere SET nom_offre=?, conditions=?, " +
+                "statut=?, id_produit=? WHERE id_offre=?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, offre.getNomOffre());
+            pstmt.setString(2, offre.getConditions());
+            pstmt.setString(3, offre.getStatut());
+            pstmt.setInt(4, offre.getIdProduit());
+            pstmt.setInt(5, offre.getIdOffre());
+
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
-    private void changerStatutOffre() {
-        int id = view.demanderIdOffre();
-        OffreFinanciere offre = service.obtenirOffre(id);
-        if (offre != null) {
-            view.afficherOffre(offre);
-            String nouveauStatut = view.demanderNouveauStatut();
-            if (service.changerStatutOffre(id, nouveauStatut)) {
-                view.afficherMessage("Statut modifié avec succès!");
-            } else {
-                view.afficherMessage("Erreur lors du changement de statut.");
-            }
-        } else {
-            view.afficherMessage("Offre non trouvée.");
+    // DELETE
+    public boolean supprimerOffre(int id) {
+        String sql = "DELETE FROM offre_financiere WHERE id_offre = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, id);
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
-    private void supprimerOffre() {
-        int id = view.demanderIdOffre();
-        if (view.confirmerSuppression()) {
-            if (service.supprimerOffre(id)) {
-                view.afficherMessage("Offre supprimée avec succès!");
-            } else {
-                view.afficherMessage("Erreur lors de la suppression.");
+    // SEARCH
+    public ObservableList<OffreFinanciere> rechercherOffres(String critere) {
+        ObservableList<OffreFinanciere> offres = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM offre_financiere WHERE nom_offre LIKE ? OR statut LIKE ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            String searchPattern = "%" + critere + "%";
+            pstmt.setString(1, searchPattern);
+            pstmt.setString(2, searchPattern);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                OffreFinanciere offre = new OffreFinanciere(
+                        rs.getInt("id_offre"),
+                        rs.getString("nom_offre"),
+                        rs.getString("conditions"),
+                        rs.getString("statut"),
+                        rs.getInt("id_produit")
+                );
+                offres.add(offre);
             }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+
+        return offres;
+    }
+
+    // Obtenir offres par produit
+    public ObservableList<OffreFinanciere> getOffresByProduit(int idProduit) {
+        ObservableList<OffreFinanciere> offres = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM offre_financiere WHERE id_produit = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, idProduit);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                OffreFinanciere offre = new OffreFinanciere(
+                        rs.getInt("id_offre"),
+                        rs.getString("nom_offre"),
+                        rs.getString("conditions"),
+                        rs.getString("statut"),
+                        rs.getInt("id_produit")
+                );
+                offres.add(offre);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return offres;
     }
 }

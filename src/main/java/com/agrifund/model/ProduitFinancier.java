@@ -1,4 +1,4 @@
-package model;
+package com.agrifund.model;
 
 public class ProduitFinancier {
     private int idProduit;
@@ -9,12 +9,27 @@ public class ProduitFinancier {
     private double montantMax;
     private String reglesFinancieres;
 
-    // Constructeurs
-    public ProduitFinancier() {}
+    // Constructeur vide
+    public ProduitFinancier() {
+    }
 
+    // Constructeur complet
+    public ProduitFinancier(int idProduit, String nomProduit, String typeFinancement,
+                            double tauxInteret, double montantMin, double montantMax,
+                            String reglesFinancieres) {
+        this.idProduit = idProduit;
+        this.nomProduit = nomProduit;
+        this.typeFinancement = typeFinancement;
+        this.tauxInteret = tauxInteret;
+        this.montantMin = montantMin;
+        this.montantMax = montantMax;
+        this.reglesFinancieres = reglesFinancieres;
+    }
+
+    // Constructeur sans ID (pour insertion)
     public ProduitFinancier(String nomProduit, String typeFinancement,
-                            double tauxInteret, double montantMin,
-                            double montantMax, String reglesFinancieres) {
+                            double tauxInteret, double montantMin, double montantMax,
+                            String reglesFinancieres) {
         this.nomProduit = nomProduit;
         this.typeFinancement = typeFinancement;
         this.tauxInteret = tauxInteret;
