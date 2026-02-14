@@ -33,7 +33,7 @@
                 <HBox spacing="10">
                     <!-- PDF Export Button -->
                     <Button text="📄 Exporter PDF" styleClass="btn-info"
-                            style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: 600;"
+                            style="-fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: 600;"
                             onAction="#exportToPDF" prefHeight="40" prefWidth="150">
                         <tooltip>
                             <Tooltip text="Exporter la liste des projets en PDF"/>
@@ -42,7 +42,7 @@
 
                     <!-- Navigation Button -->
                     <Button text="📦 Ressources →" styleClass="btn-nav"
-                            style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"
+                            style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"
                             onAction="#goToRessources" prefHeight="40" prefWidth="170"/>
                 </HBox>
             </HBox>

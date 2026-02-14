@@ -1,8 +1,19 @@
-/* Agricultural Project Management - JavaFX CSS */
+/* Agricultural Project Management - New Green Palette */
+/* Color Palette:
+   Vert vif #089647
+   Vert foncé #076A39
+   Vert forêt #095032
+   Gris #848A86
+   Vert très foncé (olive foncé) #133D03
+   Jaune moutarde #E1B323
+   Vert clair / vert citron #B2D944
+   Olive #9A951F
+   Vert olive foncé #476C1A
+*/
 
 .root {
-    -fx-background-color: #F8F9FA;
-    -fx-font-family: "Segoe UI";
+    -fx-background-color: #F5F7F6;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
     -fx-font-size: 14px;
 }
 
@@ -10,36 +21,36 @@
 .title-label {
     -fx-font-size: 28px;
     -fx-font-weight: bold;
-    -fx-text-fill: #2D6A4F;
+    -fx-text-fill: #076A39;
 }
 
 .subtitle-label {
     -fx-font-size: 20px;
     -fx-font-weight: 600;
-    -fx-text-fill: #2D6A4F;
+    -fx-text-fill: #095032;
 }
 
 .section-header {
     -fx-font-size: 18px;
     -fx-font-weight: 600;
-    -fx-text-fill: #2D6A4F;
+    -fx-text-fill: #076A39;
 }
 
 .label {
-    -fx-text-fill: #495057;
+    -fx-text-fill: #133D03;
     -fx-font-size: 14px;
     -fx-font-weight: 600;
 }
 
 .label-small {
     -fx-font-size: 12px;
-    -fx-text-fill: #ADB5BD;
+    -fx-text-fill: #848A86;
 }
 
 /* Form Controls */
 .text-field, .combo-box, .date-picker {
     -fx-background-color: white;
-    -fx-border-color: #E9ECEF;
+    -fx-border-color: #E0E4E2;
     -fx-border-radius: 8;
     -fx-background-radius: 8;
     -fx-padding: 10 14;
@@ -47,17 +58,17 @@
 }
 
 .text-field:focused, .combo-box:focused, .date-picker:focused {
-    -fx-border-color: #52B788;
+    -fx-border-color: #089647;
     -fx-border-width: 2;
 }
 
 .text-field:hover, .combo-box:hover, .date-picker:hover {
-    -fx-border-color: #ADB5BD;
+    -fx-border-color: #848A86;
 }
 
 /* Buttons */
 .btn-primary {
-    -fx-background-color: #52B788;
+    -fx-background-color: linear-gradient(to bottom, #089647, #076A39);
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
@@ -67,11 +78,11 @@
 }
 
 .btn-primary:hover {
-    -fx-background-color: #2D6A4F;
+    -fx-background-color: linear-gradient(to bottom, #076A39, #095032);
 }
 
 .btn-secondary {
-    -fx-background-color: #D4A574;
+    -fx-background-color: linear-gradient(to bottom, #E1B323, #9A951F);
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
@@ -81,14 +92,14 @@
 }
 
 .btn-secondary:hover {
-    -fx-background-color: #8B7355;
+    -fx-background-color: linear-gradient(to bottom, #9A951F, #476C1A);
 }
 
 .btn-danger {
     -fx-background-color: transparent;
-    -fx-border-color: #E76F51;
+    -fx-border-color: #D32F2F;
     -fx-border-width: 2;
-    -fx-text-fill: #E76F51;
+    -fx-text-fill: #D32F2F;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
     -fx-background-radius: 8;
@@ -98,12 +109,12 @@
 }
 
 .btn-danger:hover {
-    -fx-background-color: #E76F51;
+    -fx-background-color: #D32F2F;
     -fx-text-fill: white;
 }
 
 .btn-nav {
-    -fx-background-color: #2D6A4F;
+    -fx-background-color: #e19f23;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
@@ -113,11 +124,11 @@
 }
 
 .btn-nav:hover {
-    -fx-background-color: #52B788;
+    -fx-background-color: #9A951F;
 }
 
 .btn-info {
-    -fx-background-color: #457B9D;
+    -fx-background-color: #e19f23;
     -fx-text-fill: white;
     -fx-font-weight: 600;
     -fx-background-radius: 8;
@@ -126,19 +137,19 @@
 }
 
 .btn-info:hover {
-    -fx-background-color: #3A6B8C;
+    -fx-background-color: #9A951F;
 }
 
 /* Table View */
 .table-view {
     -fx-background-color: white;
-    -fx-border-color: #E9ECEF;
+    -fx-border-color: #E0E4E2;
     -fx-border-radius: 12;
     -fx-background-radius: 12;
 }
 
 .table-view .column-header-background {
-    -fx-background-color: #2D6A4F;
+    -fx-background-color: linear-gradient(to bottom, #076A39, #095032);
 }
 
 .table-view .column-header .label {
@@ -150,6 +161,7 @@
 
 .table-view .table-cell {
     -fx-padding: 10 8;
+    -fx-text-fill: #133D03;
 }
 
 .table-row-cell {
@@ -157,15 +169,16 @@
 }
 
 .table-row-cell:odd {
-    -fx-background-color: #D8F3DC;
+    -fx-background-color: #E8F5E9;
 }
 
 .table-row-cell:hover {
-    -fx-background-color: #95D5B2;
+    -fx-background-color: #B2D944;
+    -fx-opacity: 0.3;
 }
 
 .table-row-cell:selected {
-    -fx-background-color: #52B788;
+    -fx-background-color: #089647;
 }
 
 .table-row-cell:selected .table-cell {
@@ -177,7 +190,7 @@
     -fx-background-color: white;
     -fx-background-radius: 12;
     -fx-border-radius: 12;
-    -fx-border-color: #E9ECEF;
+    -fx-border-color: #E0E4E2;
     -fx-border-width: 1;
     -fx-padding: 25;
 }
@@ -186,19 +199,21 @@
     -fx-background-color: white;
     -fx-background-radius: 12;
     -fx-border-radius: 12;
-    -fx-border-color: #E9ECEF;
+    -fx-border-color: #E0E4E2;
     -fx-border-width: 1;
     -fx-padding: 20;
     -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(7, 106, 57, 0.1), 8, 0, 0, 2);
 }
 
 .project-card:hover {
-    -fx-border-color: #52B788;
+    -fx-border-color: #089647;
     -fx-border-width: 2;
+    -fx-effect: dropshadow(three-pass-box, rgba(8, 150, 71, 0.25), 12, 0, 0, 4);
 }
 
 .card-header {
-    -fx-background-color: #D8F3DC;
+    -fx-background-color: linear-gradient(to right, #E8F5E9, #B2D944);
     -fx-background-radius: 8 8 0 0;
     -fx-padding: 15 20;
 }
@@ -206,24 +221,24 @@
 .card-title {
     -fx-font-size: 18px;
     -fx-font-weight: bold;
-    -fx-text-fill: #2D6A4F;
+    -fx-text-fill: #076A39;
 }
 
 .card-info {
     -fx-font-size: 14px;
-    -fx-text-fill: #495057;
+    -fx-text-fill: #133D03;
 }
 
 .card-info-label {
     -fx-font-size: 12px;
     -fx-font-weight: 600;
-    -fx-text-fill: #ADB5BD;
+    -fx-text-fill: #848A86;
 }
 
 .card-info-value {
     -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-text-fill: #2D6A4F;
+    -fx-text-fill: #076A39;
 }
 
 /* Status Badges */
@@ -235,27 +250,27 @@
 }
 
 .status-badge-accepte {
-    -fx-background-color: #40916C;
+    -fx-background-color: #089647;
     -fx-text-fill: white;
 }
 
 .status-badge-encours {
-    -fx-background-color: #F4A261;
-    -fx-text-fill: #212529;
+    -fx-background-color: #E1B323;
+    -fx-text-fill: #133D03;
 }
 
 .status-badge-refuse {
-    -fx-background-color: #E76F51;
+    -fx-background-color: #D32F2F;
     -fx-text-fill: white;
 }
 
 .status-badge-prevu {
-    -fx-background-color: #457B9D;
+    -fx-background-color: #E1B323;
     -fx-text-fill: white;
 }
 
 .status-badge-achete {
-    -fx-background-color: #40916C;
+    -fx-background-color: #089647;
     -fx-text-fill: white;
 }
 
@@ -273,27 +288,27 @@
 }
 
 .scroll-pane > .scroll-bar:vertical > .thumb {
-    -fx-background-color: #ADB5BD;
+    -fx-background-color: #848A86;
     -fx-background-radius: 4;
 }
 
 .scroll-pane > .scroll-bar:vertical > .thumb:hover {
-    -fx-background-color: #495057;
+    -fx-background-color: #095032;
 }
 
 /* Separator */
 .separator {
-    -fx-background-color: #E9ECEF;
+    -fx-background-color: #E0E4E2;
 }
 
 .separator .line {
-    -fx-border-color: #E9ECEF;
+    -fx-border-color: #E0E4E2;
     -fx-border-width: 1;
 }
 
 /* Headers */
 .app-header, .page-header {
-    -fx-background-color: #2D6A4F;
+    -fx-background-color: linear-gradient(to right, #076A39, #095032, #133D03);
     -fx-padding: 18 30;
 }
 
@@ -307,7 +322,7 @@
 .toolbar {
     -fx-background-color: white;
     -fx-padding: 15 20;
-    -fx-border-color: #E9ECEF;
+    -fx-border-color: #E0E4E2;
     -fx-border-width: 0 0 1 0;
 }
 
@@ -317,38 +332,44 @@
     -fx-background-radius: 12;
     -fx-border-radius: 12;
     -fx-padding: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(7, 106, 57, 0.08), 6, 0, 0, 2);
+}
+
+.stat-card:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(8, 150, 71, 0.15), 10, 0, 0, 3);
 }
 
 .stat-value {
     -fx-font-size: 32px;
     -fx-font-weight: bold;
-    -fx-text-fill: #2D6A4F;
+    -fx-text-fill: #076A39;
 }
 
 .stat-label {
     -fx-font-size: 14px;
-    -fx-text-fill: #ADB5BD;
+    -fx-text-fill: #848A86;
+    -fx-font-weight: 600;
 }
 
 /* Icons */
 .icon-container {
-    -fx-background-color: #D8F3DC;
+    -fx-background-color: #E8F5E9;
     -fx-background-radius: 50;
     -fx-padding: 12;
 }
 
 .icon-success {
-    -fx-text-fill: #40916C;
+    -fx-text-fill: #089647;
     -fx-font-size: 24px;
 }
 
 .icon-warning {
-    -fx-text-fill: #F4A261;
+    -fx-text-fill: #E1B323;
     -fx-font-size: 24px;
 }
 
 .icon-info {
-    -fx-text-fill: #457B9D;
+    -fx-text-fill: #476C1A;
     -fx-font-size: 24px;
 }
 
@@ -357,21 +378,24 @@
     -fx-background-color: white;
     -fx-background-radius: 12;
     -fx-padding: 30;
+    -fx-border-color: #E0E4E2;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
 }
 
 .form-section {
-    -fx-background-color: #F8F9FA;
+    -fx-background-color: #F5F7F6;
     -fx-background-radius: 8;
     -fx-padding: 20;
-    -fx-border-color: #E9ECEF;
+    -fx-border-color: #E0E4E2;
     -fx-border-width: 1;
     -fx-border-radius: 8;
 }
 
 /* Alerts */
 .alert-success {
-    -fx-background-color: #D8F3DC;
-    -fx-border-color: #40916C;
+    -fx-background-color: #E8F5E9;
+    -fx-border-color: #089647;
     -fx-border-width: 1;
     -fx-border-radius: 8;
     -fx-background-radius: 8;
@@ -379,8 +403,8 @@
 }
 
 .alert-warning {
-    -fx-background-color: #FFF3E0;
-    -fx-border-color: #F4A261;
+    -fx-background-color: #FFF9E6;
+    -fx-border-color: #E1B323;
     -fx-border-width: 1;
     -fx-border-radius: 8;
     -fx-background-radius: 8;
@@ -389,9 +413,49 @@
 
 .alert-error {
     -fx-background-color: #FFEBEE;
-    -fx-border-color: #E76F51;
+    -fx-border-color: #D32F2F;
     -fx-border-width: 1;
     -fx-border-radius: 8;
     -fx-background-radius: 8;
     -fx-padding: 12 16;
+}
+
+/* Additional Enhancements */
+.highlight-green {
+    -fx-background-color: #B2D944;
+    -fx-text-fill: #133D03;
+}
+
+.highlight-yellow {
+    -fx-background-color: #E1B323;
+    -fx-text-fill: #133D03;
+}
+
+.highlight-olive {
+    -fx-background-color: #9A951F;
+    -fx-text-fill: white;
+}
+
+.text-primary {
+    -fx-text-fill: #089647;
+}
+
+.text-secondary {
+    -fx-text-fill: #076A39;
+}
+
+.text-muted {
+    -fx-text-fill: #848A86;
+}
+
+.bg-light-green {
+    -fx-background-color: #E8F5E9;
+}
+
+.bg-olive {
+    -fx-background-color: #476C1A;
+}
+
+.border-primary {
+    -fx-border-color: #089647;
 }
