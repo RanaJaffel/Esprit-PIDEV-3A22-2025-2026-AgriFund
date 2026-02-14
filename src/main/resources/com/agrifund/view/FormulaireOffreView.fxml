@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.effect.*?>
+
+<VBox spacing="25" alignment="CENTER"
+      style="-fx-padding: 40; -fx-background-color: linear-gradient(to bottom, #095032, #133D03);"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.agrifund.view.FormulaireOffreController">
+
+    <!-- HEADER -->
+    <VBox alignment="CENTER" spacing="8"
+          style="-fx-background-color: linear-gradient(to right, #B2D944, #89a832);
+                 -fx-padding: 25 60 25 60; -fx-background-radius: 30;">
+        <effect>
+            <DropShadow color="#B2D944" offsetY="0" radius="30" spread="0.2"/>
+        </effect>
+        <Label fx:id="lblTitre" text="NOUVELLE OFFRE"
+               style="-fx-text-fill: #133D03; -fx-font-size: 28; -fx-font-weight: bold;"/>
+        <Label fx:id="lblSousTitre" text="Remplissez les informations ci-dessous"
+               style="-fx-text-fill: #476C1A; -fx-font-size: 13;"/>
+    </VBox>
+
+    <!-- FORMULAIRE -->
+    <VBox spacing="22"
+          style="-fx-background-color: rgba(255,255,255,0.08);
+                 -fx-padding: 35; -fx-background-radius: 25;
+                 -fx-border-color: rgba(178,217,68,0.3); -fx-border-width: 2; -fx-border-radius: 25;">
+        <effect>
+            <DropShadow color="#000000" offsetY="10" radius="30"/>
+        </effect>
+
+        <!-- Nom de l'offre -->
+        <VBox spacing="10">
+            <Label text="NOM DE L OFFRE" style="-fx-text-fill: #B2D944; -fx-font-size: 12; -fx-font-weight: bold;"/>
+            <TextField fx:id="txtNomOffre" promptText="Entrez le nom de l offre..."
+                       prefWidth="500"
+                       style="-fx-background-color: #FFFFFF;
+                              -fx-text-fill: #133D03; -fx-prompt-text-fill: #888888;
+                              -fx-background-radius: 15; -fx-padding: 15;
+                              -fx-border-color: #089647; -fx-border-radius: 15; -fx-border-width: 2;
+                              -fx-font-size: 14;"/>
+        </VBox>
+
+        <!-- Produit -->
+        <VBox spacing="10">
+            <Label text="PRODUIT FINANCIER ASSOCIE" style="-fx-text-fill: #089647; -fx-font-size: 12; -fx-font-weight: bold;"/>
+            <ComboBox fx:id="cmbProduit" promptText="Selectionner un produit" prefWidth="500"
+                      style="-fx-background-color: #FFFFFF;
+                             -fx-background-radius: 15; -fx-padding: 10;
+                             -fx-border-color: #089647; -fx-border-radius: 15; -fx-border-width: 2;"/>
+        </VBox>
+
+        <!-- Statut -->
+        <VBox spacing="10">
+            <Label text="STATUT DE L OFFRE" style="-fx-text-fill: #E1B323; -fx-font-size: 12; -fx-font-weight: bold;"/>
+            <ComboBox fx:id="cmbStatut" promptText="Selectionner le statut" prefWidth="500"
+                      style="-fx-background-color: #FFFFFF;
+                             -fx-background-radius: 15; -fx-padding: 10;
+                             -fx-border-color: #089647; -fx-border-radius: 15; -fx-border-width: 2;"/>
+        </VBox>
+
+        <!-- Conditions -->
+        <VBox spacing="10">
+            <Label text="CONDITIONS ET DETAILS" style="-fx-text-fill: #76a832; -fx-font-size: 12; -fx-font-weight: bold;"/>
+            <TextArea fx:id="txtConditions" promptText="Decrivez les conditions, avantages, duree..."
+                      prefHeight="120" prefWidth="500" wrapText="true"
+                      style="-fx-background-color: #FFFFFF;
+                             -fx-text-fill: #133D03; -fx-prompt-text-fill: #888888;
+                             -fx-background-radius: 15; -fx-padding: 15;
+                             -fx-border-color: #089647; -fx-border-radius: 15; -fx-border-width: 2;
+                             -fx-font-size: 13;"/>
+        </VBox>
+    </VBox>
+
+    <!-- BOUTONS -->
+    <HBox spacing="20" alignment="CENTER">
+        <padding>
+            <Insets top="10"/>
+        </padding>
+
+        <Button fx:id="btnValider" text="ENREGISTRER" onAction="#handleValider"
+                prefWidth="200" prefHeight="55"
+                style="-fx-background-color: linear-gradient(to right, #089647, #076A39);
+                       -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 15;
+                       -fx-background-radius: 28; -fx-cursor: hand;">
+            <effect>
+                <DropShadow color="#089647" offsetY="6" radius="15"/>
+            </effect>
+        </Button>
+
+        <Button text="ANNULER" onAction="#handleAnnuler"
+                prefWidth="160" prefHeight="55"
+                style="-fx-background-color: transparent;
+                       -fx-text-fill: #B2D944; -fx-font-weight: bold; -fx-font-size: 15;
+                       -fx-border-color: #B2D944; -fx-border-width: 2;
+                       -fx-background-radius: 28; -fx-border-radius: 28; -fx-cursor: hand;">
+        </Button>
+    </HBox>
+
+    <!-- INFO -->
+    <Label text="Les champs marques sont obligatoires"
+           style="-fx-text-fill: #888888; -fx-font-size: 11;"/>
+
+</VBox>

@@ -6,13 +6,12 @@ public class OffreFinanciere {
     private String conditions;
     private String statut;
     private int idProduit;
-    private ProduitFinancier produitFinancier; // Pour les jointures
+    private String nomProduit;
+    private ProduitFinancier produitFinancier;
 
-    // Constructeur vide
     public OffreFinanciere() {
     }
 
-    // Constructeur complet
     public OffreFinanciere(int idOffre, String nomOffre, String conditions,
                            String statut, int idProduit) {
         this.idOffre = idOffre;
@@ -22,7 +21,6 @@ public class OffreFinanciere {
         this.idProduit = idProduit;
     }
 
-    // Constructeur sans ID
     public OffreFinanciere(String nomOffre, String conditions,
                            String statut, int idProduit) {
         this.nomOffre = nomOffre;
@@ -31,7 +29,6 @@ public class OffreFinanciere {
         this.idProduit = idProduit;
     }
 
-    // Getters et Setters
     public int getIdOffre() {
         return idOffre;
     }
@@ -72,21 +69,26 @@ public class OffreFinanciere {
         this.idProduit = idProduit;
     }
 
+    public String getNomProduit() {
+        return nomProduit;
+    }
+
+    public void setNomProduit(String nomProduit) {
+        this.nomProduit = nomProduit;
+    }
+
     public ProduitFinancier getProduitFinancier() {
         return produitFinancier;
     }
 
     public void setProduitFinancier(ProduitFinancier produitFinancier) {
         this.produitFinancier = produitFinancier;
+        if (produitFinancier != null) {
+            this.nomProduit = produitFinancier.getNomProduit();
+        }
     }
 
-    @Override
     public String toString() {
-        return "OffreFinanciere{" +
-                "idOffre=" + idOffre +
-                ", nomOffre='" + nomOffre + '\'' +
-                ", statut='" + statut + '\'' +
-                ", idProduit=" + idProduit +
-                '}';
+        return nomOffre + " (" + statut + ")";
     }
 }

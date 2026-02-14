@@ -7,367 +7,423 @@
 <?import javafx.scene.shape.*?>
 
 <VBox prefHeight="700" prefWidth="1200" spacing="0"
-      style="-fx-background-color: #060806;"
+      style="-fx-background-color: linear-gradient(to bottom, #FFFFFF, #E8F5E9, #C8E6C9);"
       xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.agrifund.view.ProduitFinancierViewController">
 
     <!-- ========== HEADER ========== -->
     <VBox alignment="CENTER_LEFT" prefHeight="100"
-          style="-fx-background-color: linear-gradient(to right, #095032, #089647);">
+          style="-fx-background-color: linear-gradient(to right, #089647, #4CAF50, #089647);">
         <padding>
             <Insets bottom="20" left="30" right="30" top="20"/>
         </padding>
 
         <Label style="-fx-text-fill: white; -fx-font-size: 28px; -fx-font-weight: bold;"
-               text="🌾 AGRIFUND - Gestion des Produits Financiers">
+               text="AGRIFUND - Gestion des Produits Financiers">
             <effect>
-                <DropShadow color="#133D03" offsetY="2" radius="5"/>
+                <DropShadow color="#1B5E20" offsetY="2" radius="5"/>
             </effect>
         </Label>
 
-        <Label style="-fx-text-fill: #B2D944; -fx-font-size: 14px; -fx-font-style: italic;"
-               text="Créez et gérez vos produits de financement agricole"/>
+        <Label style="-fx-text-fill: #E8F5E9; -fx-font-size: 14px; -fx-font-style: italic;"
+               text="Creez et gerez vos produits de financement agricole"/>
     </VBox>
 
     <!-- ========== BARRE D'OUTILS ========== -->
-    <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-background-color: #076A39; -fx-padding: 12;">
+    <HBox alignment="CENTER_LEFT" spacing="15"
+          style="-fx-background-color: linear-gradient(to right, #E8F5E9, #C8E6C9, #E8F5E9); -fx-padding: 12;
+                 -fx-border-color: #81C784; -fx-border-width: 0 0 2 0;">
 
-        <Button onAction="#handleNouveau" text="➕ Nouveau Produit"
-                style="-fx-background-color: #E1B323; -fx-text-fill: #060806; -fx-font-weight: bold;
-                       -fx-padding: 8 20; -fx-background-radius: 20; -fx-cursor: hand;">
+        <Button fx:id="btnNouveau" onAction="#handleNouveau" text="Nouveau Produit"
+                style="-fx-background-color: linear-gradient(to bottom, #4CAF50, #388E3C);
+                       -fx-text-fill: white; -fx-font-weight: bold;
+                       -fx-padding: 10 25; -fx-background-radius: 25; -fx-cursor: hand;"
+                onMousePressed="#onButtonPressed" onMouseReleased="#onButtonReleased">
             <effect>
-                <DropShadow color="#9A951F" offsetY="2" radius="3"/>
+                <DropShadow color="#2E7D32" offsetY="3" radius="5"/>
             </effect>
         </Button>
 
-        <Button onAction="#handleActualiser" text="🔄 Actualiser"
-                style="-fx-background-color: #B2D944; -fx-text-fill: #060806;
-                       -fx-padding: 8 15; -fx-background-radius: 20;"/>
+        <Button fx:id="btnActualiser" onAction="#handleActualiser" text="Actualiser"
+                style="-fx-background-color: linear-gradient(to bottom, #81C784, #66BB6A);
+                       -fx-text-fill: #1B5E20; -fx-font-weight: bold;
+                       -fx-padding: 10 20; -fx-background-radius: 25; -fx-cursor: hand;"
+                onMousePressed="#onButtonPressed" onMouseReleased="#onButtonReleased">
+            <effect>
+                <DropShadow color="#4CAF50" offsetY="3" radius="5"/>
+            </effect>
+        </Button>
 
-        <Separator orientation="VERTICAL" style="-fx-background-color: #476C1A;"/>
+        <Separator orientation="VERTICAL" style="-fx-background-color: #4CAF50;"/>
 
         <!-- Barre de recherche -->
-        <HBox alignment="CENTER_LEFT" spacing="5">
-            <Label style="-fx-text-fill: white; -fx-font-size: 16px;" text="🔍"/>
+        <HBox alignment="CENTER_LEFT" spacing="8">
+            <Label style="-fx-text-fill: #2E7D32; -fx-font-size: 14px; -fx-font-weight: bold;" text="Recherche:"/>
             <TextField fx:id="txtRecherche" promptText="Rechercher un produit..." prefWidth="250"
-                       style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 8 15;"/>
+                       style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 10 15;
+                              -fx-border-color: #4CAF50; -fx-border-radius: 20; -fx-border-width: 2;
+                              -fx-font-size: 13;"/>
             <Button text="Rechercher" onAction="#handleRechercher"
-                    style="-fx-background-color: #089647; -fx-text-fill: white; -fx-padding: 6 15; -fx-background-radius: 12;"/>
+                    style="-fx-background-color: linear-gradient(to bottom, #4CAF50, #388E3C);
+                           -fx-text-fill: white; -fx-font-weight: bold;
+                           -fx-padding: 10 20; -fx-background-radius: 20; -fx-cursor: hand;"
+                    onMousePressed="#onButtonPressed" onMouseReleased="#onButtonReleased">
+                <effect>
+                    <DropShadow color="#2E7D32" offsetY="2" radius="3"/>
+                </effect>
+            </Button>
         </HBox>
 
         <Region HBox.hgrow="ALWAYS"/>
 
-        <!-- Bouton pour afficher/masquer la gestion des types -->
-        <Button fx:id="btnToggleTypes" text="🏷️ Gérer Types" onAction="#handleToggleTypes"
-                style="-fx-background-color: #476C1A; -fx-text-fill: white; -fx-font-weight: bold;
-                       -fx-padding: 8 15; -fx-background-radius: 15;"/>
+        <Button fx:id="btnToggleTypes" text="Gerer Types" onAction="#handleToggleTypes"
+                style="-fx-background-color: linear-gradient(to bottom, #66BB6A, #43A047);
+                       -fx-text-fill: white; -fx-font-weight: bold;
+                       -fx-padding: 10 20; -fx-background-radius: 20; -fx-cursor: hand;"
+                onMousePressed="#onButtonPressed" onMouseReleased="#onButtonReleased">
+            <effect>
+                <DropShadow color="#2E7D32" offsetY="2" radius="3"/>
+            </effect>
+        </Button>
     </HBox>
 
     <!-- ========== CONTENU PRINCIPAL ========== -->
-    <SplitPane dividerPositions="0.65" style="-fx-background-color: #060806;" VBox.vgrow="ALWAYS">
+    <SplitPane dividerPositions="0.62"
+               style="-fx-background-color: linear-gradient(to bottom, #E8F5E9, #C8E6C9);"
+               VBox.vgrow="ALWAYS">
 
         <!-- ========== SECTION GAUCHE: TABLEAU ========== -->
-        <VBox spacing="15" style="-fx-background-color: #133D03; -fx-padding: 20;">
+        <VBox spacing="15"
+              style="-fx-background-color: linear-gradient(to bottom, #FFFFFF, #F1F8E9); -fx-padding: 20;
+                     -fx-border-color: #81C784; -fx-border-width: 0 2 0 0;">
 
             <!-- Statistiques -->
-            <HBox alignment="CENTER" spacing="20">
-                <VBox alignment="CENTER"
-                      style="-fx-background-color: linear-gradient(to bottom, #B2D944, #9A951F);
-                             -fx-padding: 15; -fx-background-radius: 12; -fx-min-width: 180;">
+            <HBox alignment="CENTER" spacing="15">
+                <VBox alignment="CENTER" prefWidth="170"
+                      style="-fx-background-color: linear-gradient(to bottom, #FFFFFF, #E8F5E9);
+                             -fx-padding: 20; -fx-background-radius: 15;
+                             -fx-border-color: #4CAF50; -fx-border-width: 2; -fx-border-radius: 15;">
                     <effect>
-                        <DropShadow color="#060806" offsetY="3" radius="8"/>
+                        <DropShadow color="#81C784" offsetY="4" radius="10"/>
                     </effect>
                     <Label fx:id="lblTotalProduits" text="0"
-                           style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #060806;"/>
-                    <Label text="Total Produits" style="-fx-text-fill: #133D03; -fx-font-weight: bold;"/>
+                           style="-fx-font-size: 40px; -fx-font-weight: bold; -fx-text-fill: #2E7D32;"/>
+                    <Label text="Total Produits" style="-fx-text-fill: #388E3C; -fx-font-weight: bold; -fx-font-size: 12;"/>
                 </VBox>
 
-                <VBox alignment="CENTER"
-                      style="-fx-background-color: linear-gradient(to bottom, #089647, #076A39);
-                             -fx-padding: 15; -fx-background-radius: 12; -fx-min-width: 180;">
+                <VBox alignment="CENTER" prefWidth="170"
+                      style="-fx-background-color: linear-gradient(to bottom, #E8F5E9, #C8E6C9);
+                             -fx-padding: 20; -fx-background-radius: 15;
+                             -fx-border-color: #66BB6A; -fx-border-width: 2; -fx-border-radius: 15;">
                     <effect>
-                        <DropShadow color="#060806" offsetY="3" radius="8"/>
+                        <DropShadow color="#81C784" offsetY="4" radius="10"/>
                     </effect>
                     <Label fx:id="lblPrets" text="0"
-                           style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-                    <Label text="Prêts" style="-fx-text-fill: #B2D944; -fx-font-weight: bold;"/>
+                           style="-fx-font-size: 40px; -fx-font-weight: bold; -fx-text-fill: #1B5E20;"/>
+                    <Label text="Prets" style="-fx-text-fill: #2E7D32; -fx-font-weight: bold; -fx-font-size: 12;"/>
                 </VBox>
 
-                <VBox alignment="CENTER"
-                      style="-fx-background-color: linear-gradient(to bottom, #E1B323, #9A951F);
-                             -fx-padding: 15; -fx-background-radius: 12; -fx-min-width: 180;">
+                <VBox alignment="CENTER" prefWidth="170"
+                      style="-fx-background-color: linear-gradient(to bottom, #FFFDE7, #FFF9C4);
+                             -fx-padding: 20; -fx-background-radius: 15;
+                             -fx-border-color: #FBC02D; -fx-border-width: 2; -fx-border-radius: 15;">
                     <effect>
-                        <DropShadow color="#060806" offsetY="3" radius="8"/>
+                        <DropShadow color="#F9A825" offsetY="4" radius="10"/>
                     </effect>
                     <Label fx:id="lblCredits" text="0"
-                           style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #060806;"/>
-                    <Label text="Crédits" style="-fx-text-fill: #476C1A; -fx-font-weight: bold;"/>
+                           style="-fx-font-size: 40px; -fx-font-weight: bold; -fx-text-fill: #F57F17;"/>
+                    <Label text="Credits" style="-fx-text-fill: #F9A825; -fx-font-weight: bold; -fx-font-size: 12;"/>
                 </VBox>
 
-                <VBox alignment="CENTER"
-                      style="-fx-background-color: linear-gradient(to bottom, #476C1A, #133D03);
-                             -fx-padding: 15; -fx-background-radius: 12; -fx-min-width: 180;">
+                <VBox alignment="CENTER" prefWidth="170"
+                      style="-fx-background-color: linear-gradient(to bottom, #F5F5F5, #EEEEEE);
+                             -fx-padding: 20; -fx-background-radius: 15;
+                             -fx-border-color: #9E9E9E; -fx-border-width: 2; -fx-border-radius: 15;">
                     <effect>
-                        <DropShadow color="#060806" offsetY="3" radius="8"/>
+                        <DropShadow color="#BDBDBD" offsetY="4" radius="10"/>
                     </effect>
                     <Label fx:id="lblAutres" text="0"
-                           style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #B2D944;"/>
-                    <Label text="Autres" style="-fx-text-fill: #848A86; -fx-font-weight: bold;"/>
+                           style="-fx-font-size: 40px; -fx-font-weight: bold; -fx-text-fill: #616161;"/>
+                    <Label text="Autres" style="-fx-text-fill: #757575; -fx-font-weight: bold; -fx-font-size: 12;"/>
                 </VBox>
             </HBox>
 
-            <Separator style="-fx-background-color: #076A39;"/>
+            <Separator style="-fx-background-color: #81C784;"/>
 
             <!-- Titre tableau -->
             <HBox alignment="CENTER_LEFT" spacing="10">
-                <Label text="📊 Liste des Produits Financiers"
-                       style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #E1B323;"/>
+                <Label text="Liste des Produits Financiers"
+                       style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2E7D32;"/>
                 <Region HBox.hgrow="ALWAYS"/>
                 <Label fx:id="lblCount" text="0 produits"
-                       style="-fx-text-fill: #848A86; -fx-font-size: 12;"/>
+                       style="-fx-text-fill: #66BB6A; -fx-font-size: 12; -fx-font-weight: bold;
+                              -fx-background-color: #E8F5E9; -fx-padding: 5 15; -fx-background-radius: 15;"/>
             </HBox>
 
             <!-- Tableau -->
             <TableView fx:id="tableView" VBox.vgrow="ALWAYS"
-                       style="-fx-background-color: #095032; -fx-border-color: #076A39;
-                              -fx-border-width: 2; -fx-border-radius: 8; -fx-background-radius: 8;">
+                       style="-fx-background-color: white; -fx-border-color: #4CAF50;
+                              -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10;">
                 <effect>
-                    <InnerShadow color="#060806" offsetY="2" radius="5"/>
+                    <DropShadow color="#81C784" offsetY="4" radius="10"/>
                 </effect>
                 <columns>
-                    <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
-                    <TableColumn fx:id="colNom" text="Nom du Produit" prefWidth="220"/>
-                    <TableColumn fx:id="colType" text="Type" prefWidth="130"/>
-                    <TableColumn fx:id="colTaux" text="Taux %" prefWidth="90"/>
-                    <TableColumn fx:id="colMontantMin" text="Min (DH)" prefWidth="120"/>
-                    <TableColumn fx:id="colMontantMax" text="Max (DH)" prefWidth="120"/>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+                    <TableColumn fx:id="colNom" text="Nom du Produit" prefWidth="200"/>
+                    <TableColumn fx:id="colType" text="Type" prefWidth="120"/>
+                    <TableColumn fx:id="colTaux" text="Taux %" prefWidth="80"/>
+                    <TableColumn fx:id="colMontantMin" text="Min (DH)" prefWidth="110"/>
+                    <TableColumn fx:id="colMontantMax" text="Max (DH)" prefWidth="110"/>
                 </columns>
                 <placeholder>
-                    <VBox alignment="CENTER" spacing="10">
-                        <Label text="📦" style="-fx-font-size: 40;"/>
+                    <VBox alignment="CENTER" spacing="15" style="-fx-padding: 40;">
                         <Label text="Aucun produit disponible"
-                               style="-fx-text-fill: #848A86; -fx-font-size: 14;"/>
-                        <Label text="Créez votre premier produit →"
-                               style="-fx-text-fill: #B2D944; -fx-font-size: 12;"/>
+                               style="-fx-text-fill: #4CAF50; -fx-font-size: 16; -fx-font-weight: bold;"/>
+                        <Label text="Cliquez sur 'Nouveau Produit' pour commencer"
+                               style="-fx-text-fill: #81C784; -fx-font-size: 13;"/>
                     </VBox>
                 </placeholder>
             </TableView>
 
             <!-- Boutons d'action -->
-            <HBox alignment="CENTER" spacing="12">
-                <Button text="✏️ Modifier" onAction="#handleModifier"
-                        style="-fx-background-color: #E1B323; -fx-text-fill: #060806;
-                               -fx-padding: 10 20; -fx-background-radius: 8; -fx-font-weight: bold;">
+            <HBox alignment="CENTER" spacing="15">
+                <Button text="Modifier" onAction="#handleModifier" prefWidth="130" prefHeight="45"
+                        style="-fx-background-color: linear-gradient(to bottom, #FBC02D, #F9A825);
+                               -fx-text-fill: #1B5E20; -fx-font-weight: bold; -fx-font-size: 14;
+                               -fx-padding: 12 25; -fx-background-radius: 22; -fx-cursor: hand;"
+                        onMousePressed="#onButtonPressed" onMouseReleased="#onButtonReleased">
                     <effect>
-                        <DropShadow color="#9A951F" offsetY="2" radius="3"/>
+                        <DropShadow color="#F57F17" offsetY="3" radius="5"/>
                     </effect>
                 </Button>
 
-                <Button text="🗑️ Supprimer" onAction="#handleSupprimer"
-                        style="-fx-background-color: #9A951F; -fx-text-fill: white;
-                               -fx-padding: 10 20; -fx-background-radius: 8; -fx-font-weight: bold;">
+                <Button text="Supprimer" onAction="#handleSupprimer" prefWidth="130" prefHeight="45"
+                        style="-fx-background-color: linear-gradient(to bottom, #EF5350, #E53935);
+                               -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14;
+                               -fx-padding: 12 25; -fx-background-radius: 22; -fx-cursor: hand;"
+                        onMousePressed="#onButtonPressed" onMouseReleased="#onButtonReleased">
                     <effect>
-                        <DropShadow color="#476C1A" offsetY="2" radius="3"/>
+                        <DropShadow color="#C62828" offsetY="3" radius="5"/>
                     </effect>
                 </Button>
 
-                <Button text="📄 Détails" onAction="#handleDetails"
-                        style="-fx-background-color: #476C1A; -fx-text-fill: white;
-                               -fx-padding: 10 20; -fx-background-radius: 8; -fx-font-weight: bold;">
+                <Button text="Details" onAction="#handleDetails" prefWidth="130" prefHeight="45"
+                        style="-fx-background-color: linear-gradient(to bottom, #5C6BC0, #3F51B5);
+                               -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14;
+                               -fx-padding: 12 25; -fx-background-radius: 22; -fx-cursor: hand;"
+                        onMousePressed="#onButtonPressed" onMouseReleased="#onButtonReleased">
                     <effect>
-                        <DropShadow color="#133D03" offsetY="2" radius="3"/>
+                        <DropShadow color="#303F9F" offsetY="3" radius="5"/>
+                    </effect>
+                </Button>
+
+                <Button text="Telecharger PDF" onAction="#handleDownloadPDF" prefWidth="160" prefHeight="45"
+                        style="-fx-background-color: linear-gradient(to bottom, #7E57C2, #5E35B1);
+                               -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14;
+                               -fx-padding: 12 25; -fx-background-radius: 22; -fx-cursor: hand;"
+                        onMousePressed="#onButtonPressed" onMouseReleased="#onButtonReleased">
+                    <effect>
+                        <DropShadow color="#4527A0" offsetY="3" radius="5"/>
                     </effect>
                 </Button>
             </HBox>
         </VBox>
 
         <!-- ========== SECTION DROITE: FORMULAIRES ========== -->
-        <ScrollPane fitToWidth="true" style="-fx-background-color: #060806;">
-            <VBox spacing="20" style="-fx-background-color: #095032; -fx-padding: 25;">
+        <ScrollPane fitToWidth="true"
+                    style="-fx-background-color: transparent; -fx-background: transparent;">
+            <VBox spacing="20"
+                  style="-fx-background-color: linear-gradient(to bottom, #FFFFFF, #E8F5E9, #C8E6C9); -fx-padding: 25;">
 
-                <!-- ========== PANNEAU GESTION DES TYPES (Masqué par défaut) ========== -->
+                <!-- ========== PANNEAU GESTION DES TYPES ========== -->
                 <VBox fx:id="panelTypes" spacing="12" managed="false" visible="false"
-                      style="-fx-background-color: #133D03; -fx-padding: 20; -fx-background-radius: 12;
-                             -fx-border-color: #E1B323; -fx-border-width: 2;">
+                      style="-fx-background-color: linear-gradient(to bottom, #FFFFFF, #F1F8E9);
+                             -fx-padding: 20; -fx-background-radius: 15;
+                             -fx-border-color: #4CAF50; -fx-border-width: 2; -fx-border-radius: 15;">
                     <effect>
-                        <DropShadow color="#060806" offsetY="3" radius="8"/>
+                        <DropShadow color="#81C784" offsetY="4" radius="10"/>
                     </effect>
 
-                    <HBox alignment="CENTER_LEFT" spacing="10">
-                        <Label text="🏷️" style="-fx-font-size: 22;"/>
-                        <Label text="Gestion des Types de Financement"
-                               style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #E1B323;"/>
-                    </HBox>
+                    <Label text="Gestion des Types de Financement"
+                           style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2E7D32;"/>
 
-                    <Separator style="-fx-background-color: #076A39;"/>
+                    <Separator style="-fx-background-color: #81C784;"/>
 
-                    <!-- Formulaire ajout/modification type -->
                     <HBox spacing="10" alignment="CENTER_LEFT">
                         <TextField fx:id="txtNouveauType" promptText="Nouveau type ou renommer..."
                                    HBox.hgrow="ALWAYS"
-                                   style="-fx-background-color: #095032; -fx-text-fill: white;
-                                          -fx-border-color: #B2D944; -fx-border-width: 0 0 2 0;
-                                          -fx-padding: 10; -fx-prompt-text-fill: #848A86;"/>
+                                   style="-fx-background-color: white; -fx-text-fill: #1B5E20;
+                                          -fx-border-color: #4CAF50; -fx-border-width: 2; -fx-border-radius: 10;
+                                          -fx-background-radius: 10; -fx-padding: 12; -fx-prompt-text-fill: #81C784;"/>
 
-                        <Button text="➕ Ajouter" onAction="#handleAjouterType"
-                                style="-fx-background-color: #089647; -fx-text-fill: white;
-                                       -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 8;"/>
+                        <Button text="Ajouter" onAction="#handleAjouterType"
+                                style="-fx-background-color: linear-gradient(to bottom, #4CAF50, #388E3C);
+                                       -fx-text-fill: white; -fx-font-weight: bold;
+                                       -fx-padding: 12 20; -fx-background-radius: 10; -fx-cursor: hand;"
+                                onMousePressed="#onButtonPressed" onMouseReleased="#onButtonReleased"/>
 
-                        <Button text="✏️ Renommer" onAction="#handleModifierType"
-                                style="-fx-background-color: #E1B323; -fx-text-fill: #060806;
-                                       -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 8;"/>
+                        <Button text="Renommer" onAction="#handleModifierType"
+                                style="-fx-background-color: linear-gradient(to bottom, #FBC02D, #F9A825);
+                                       -fx-text-fill: #1B5E20; -fx-font-weight: bold;
+                                       -fx-padding: 12 20; -fx-background-radius: 10; -fx-cursor: hand;"
+                                onMousePressed="#onButtonPressed" onMouseReleased="#onButtonReleased"/>
                     </HBox>
 
-                    <!-- Liste des types -->
                     <VBox spacing="8">
-                        <Label text="Types existants:"
-                               style="-fx-text-fill: #B2D944; -fx-font-weight: bold;"/>
-
+                        <Label text="Types existants:" style="-fx-text-fill: #2E7D32; -fx-font-weight: bold;"/>
                         <ListView fx:id="listTypes" prefHeight="150"
-                                  style="-fx-background-color: #095032; -fx-border-color: #076A39;
-                                         -fx-border-width: 1; -fx-border-radius: 5;"/>
-
-                        <HBox spacing="10" alignment="CENTER">
-                            <Button text="🗑️ Supprimer Type" onAction="#handleSupprimerType"
-                                    style="-fx-background-color: #9A951F; -fx-text-fill: white;
-                                           -fx-padding: 8 15; -fx-background-radius: 8;"/>
+                                  style="-fx-background-color: white; -fx-border-color: #81C784;
+                                         -fx-border-width: 2; -fx-border-radius: 8;"/>
+                        <HBox alignment="CENTER">
+                            <Button text="Supprimer Type" onAction="#handleSupprimerType"
+                                    style="-fx-background-color: linear-gradient(to bottom, #EF5350, #E53935);
+                                           -fx-text-fill: white; -fx-font-weight: bold;
+                                           -fx-padding: 10 20; -fx-background-radius: 10; -fx-cursor: hand;"
+                                    onMousePressed="#onButtonPressed" onMouseReleased="#onButtonReleased"/>
                         </HBox>
                     </VBox>
 
-                    <Label text="💡 Cliquez sur un type pour le sélectionner, puis renommez-le ou supprimez-le"
-                           style="-fx-text-fill: #848A86; -fx-font-size: 11; -fx-font-style: italic;"
-                           wrapText="true"/>
+                    <Label text="Cliquez sur un type pour le selectionner"
+                           style="-fx-text-fill: #66BB6A; -fx-font-size: 11; -fx-font-style: italic;"/>
                 </VBox>
 
                 <!-- ========== FORMULAIRE PRODUIT ========== -->
-                <VBox spacing="15">
-                    <HBox alignment="CENTER_LEFT" spacing="10">
-                        <Label text="📝" style="-fx-font-size: 24;"/>
-                        <VBox>
-                            <Label text="Formulaire Produit"
-                                   style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #B2D944;"/>
-                            <Label text="Remplissez les informations du produit"
-                                   style="-fx-text-fill: #848A86; -fx-font-size: 11;"/>
-                        </VBox>
-                    </HBox>
+                <VBox spacing="18"
+                      style="-fx-background-color: linear-gradient(to bottom, #FFFFFF, #F1F8E9);
+                             -fx-padding: 25; -fx-background-radius: 20;
+                             -fx-border-color: #4CAF50; -fx-border-width: 2; -fx-border-radius: 20;">
+                    <effect>
+                        <DropShadow color="#81C784" offsetY="5" radius="12"/>
+                    </effect>
 
-                    <Separator style="-fx-background-color: #076A39;"/>
+                    <VBox spacing="5">
+                        <Label text="Formulaire Produit"
+                               style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2E7D32;"/>
+                        <Label text="Remplissez les informations du produit"
+                               style="-fx-text-fill: #66BB6A; -fx-font-size: 12;"/>
+                    </VBox>
+
+                    <Separator style="-fx-background-color: #81C784;"/>
 
                     <!-- Nom -->
-                    <VBox spacing="5">
+                    <VBox spacing="8">
                         <Label text="Nom du Produit *"
-                               style="-fx-text-fill: #E1B323; -fx-font-weight: bold; -fx-font-size: 12;"/>
-                        <TextField fx:id="txtNom" promptText="Ex: Prêt Agricole Premium"
-                                   style="-fx-background-color: #133D03; -fx-text-fill: white;
-                                          -fx-border-color: #B2D944; -fx-border-width: 0 0 2 0;
-                                          -fx-padding: 12; -fx-prompt-text-fill: #848A86; -fx-font-size: 13;">
+                               style="-fx-text-fill: #2E7D32; -fx-font-weight: bold; -fx-font-size: 13;"/>
+                        <TextField fx:id="txtNom" promptText="Ex: Pret Agricole Premium"
+                                   style="-fx-background-color: white; -fx-text-fill: #1B5E20;
+                                          -fx-border-color: #4CAF50; -fx-border-width: 2; -fx-border-radius: 12;
+                                          -fx-background-radius: 12; -fx-padding: 14; -fx-prompt-text-fill: #A5D6A7;
+                                          -fx-font-size: 14;">
                             <effect>
-                                <InnerShadow color="#060806" offsetY="1" radius="2"/>
+                                <DropShadow color="#C8E6C9" offsetY="2" radius="3"/>
                             </effect>
                         </TextField>
                     </VBox>
 
                     <!-- Type -->
-                    <VBox spacing="5">
+                    <VBox spacing="8">
                         <Label text="Type de Financement *"
-                               style="-fx-text-fill: #E1B323; -fx-font-weight: bold; -fx-font-size: 12;"/>
-                        <ComboBox fx:id="cbType" promptText="Sélectionnez le type"
-                                  prefWidth="400" editable="true"
-                                  style="-fx-background-color: #133D03; -fx-border-color: #B2D944;
-                                         -fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5;"/>
+                               style="-fx-text-fill: #2E7D32; -fx-font-weight: bold; -fx-font-size: 13;"/>
+                        <ComboBox fx:id="cbType" promptText="Selectionnez le type"
+                                  maxWidth="Infinity" editable="true"
+                                  style="-fx-background-color: white; -fx-border-color: #4CAF50;
+                                         -fx-border-width: 2; -fx-border-radius: 12; -fx-background-radius: 12;
+                                         -fx-padding: 5;"/>
                     </VBox>
 
                     <!-- Taux -->
-                    <VBox spacing="5">
-                        <Label text="Taux d'intérêt (%) *"
-                               style="-fx-text-fill: #E1B323; -fx-font-weight: bold; -fx-font-size: 12;"/>
+                    <VBox spacing="8">
+                        <Label text="Taux d interet (%) *"
+                               style="-fx-text-fill: #2E7D32; -fx-font-weight: bold; -fx-font-size: 13;"/>
                         <TextField fx:id="txtTaux" promptText="Ex: 5.5"
-                                   style="-fx-background-color: #133D03; -fx-text-fill: #B2D944;
-                                          -fx-border-color: #089647; -fx-border-width: 0 0 2 0;
-                                          -fx-padding: 12; -fx-prompt-text-fill: #848A86;
-                                          -fx-font-size: 14; -fx-font-weight: bold;"/>
+                                   style="-fx-background-color: white; -fx-text-fill: #1B5E20;
+                                          -fx-border-color: #66BB6A; -fx-border-width: 2; -fx-border-radius: 12;
+                                          -fx-background-radius: 12; -fx-padding: 14; -fx-prompt-text-fill: #A5D6A7;
+                                          -fx-font-size: 15; -fx-font-weight: bold;"/>
                     </VBox>
 
                     <!-- Montants -->
                     <HBox spacing="15">
-                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <VBox spacing="8" HBox.hgrow="ALWAYS">
                             <Label text="Montant Min (DH) *"
-                                   style="-fx-text-fill: #B2D944; -fx-font-weight: bold; -fx-font-size: 12;"/>
-                            <TextField fx:id="txtMontantMin" promptText="10,000"
-                                       style="-fx-background-color: #133D03; -fx-text-fill: white;
-                                              -fx-border-color: #076A39; -fx-border-width: 0 0 2 0;
-                                              -fx-padding: 12; -fx-prompt-text-fill: #848A86;"/>
+                                   style="-fx-text-fill: #388E3C; -fx-font-weight: bold; -fx-font-size: 13;"/>
+                            <TextField fx:id="txtMontantMin" promptText="10000"
+                                       style="-fx-background-color: white; -fx-text-fill: #1B5E20;
+                                              -fx-border-color: #81C784; -fx-border-width: 2; -fx-border-radius: 12;
+                                              -fx-background-radius: 12; -fx-padding: 14; -fx-prompt-text-fill: #A5D6A7;"/>
                         </VBox>
 
-                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <VBox spacing="8" HBox.hgrow="ALWAYS">
                             <Label text="Montant Max (DH) *"
-                                   style="-fx-text-fill: #B2D944; -fx-font-weight: bold; -fx-font-size: 12;"/>
-                            <TextField fx:id="txtMontantMax" promptText="500,000"
-                                       style="-fx-background-color: #133D03; -fx-text-fill: white;
-                                              -fx-border-color: #076A39; -fx-border-width: 0 0 2 0;
-                                              -fx-padding: 12; -fx-prompt-text-fill: #848A86;"/>
+                                   style="-fx-text-fill: #388E3C; -fx-font-weight: bold; -fx-font-size: 13;"/>
+                            <TextField fx:id="txtMontantMax" promptText="500000"
+                                       style="-fx-background-color: white; -fx-text-fill: #1B5E20;
+                                              -fx-border-color: #81C784; -fx-border-width: 2; -fx-border-radius: 12;
+                                              -fx-background-radius: 12; -fx-padding: 14; -fx-prompt-text-fill: #A5D6A7;"/>
                         </VBox>
                     </HBox>
 
-                    <!-- Règles -->
-                    <VBox spacing="5">
-                        <Label text="Règles Financières"
-                               style="-fx-text-fill: #B2D944; -fx-font-weight: bold; -fx-font-size: 12;"/>
-                        <TextArea fx:id="txtRegles" promptText="Décrivez les règles et conditions..."
+                    <!-- Regles -->
+                    <VBox spacing="8">
+                        <Label text="Regles Financieres"
+                               style="-fx-text-fill: #388E3C; -fx-font-weight: bold; -fx-font-size: 13;"/>
+                        <TextArea fx:id="txtRegles" promptText="Decrivez les regles et conditions..."
                                   prefRowCount="4"
-                                  style="-fx-background-color: #133D03; -fx-text-fill: white;
-                                         -fx-border-color: #076A39; -fx-border-radius: 8;
-                                         -fx-background-radius: 8; -fx-prompt-text-fill: #848A86;"/>
+                                  style="-fx-background-color: white; -fx-text-fill: #1B5E20;
+                                         -fx-border-color: #81C784; -fx-border-radius: 12;
+                                         -fx-background-radius: 12; -fx-prompt-text-fill: #A5D6A7;
+                                         -fx-border-width: 2; -fx-padding: 10;"/>
                     </VBox>
 
                     <!-- Boutons -->
-                    <HBox alignment="CENTER" spacing="12">
+                    <HBox alignment="CENTER" spacing="15">
                         <padding>
-                            <Insets top="20"/>
+                            <Insets top="15"/>
                         </padding>
 
-                        <Button text="💾 Enregistrer" onAction="#handleAjouter" prefWidth="140"
-                                style="-fx-background-color: linear-gradient(to bottom, #089647, #076A39);
-                                       -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13;
-                                       -fx-padding: 14 25; -fx-background-radius: 25; -fx-cursor: hand;">
+                        <Button text="Enregistrer" onAction="#handleAjouter" prefWidth="150" prefHeight="50"
+                                style="-fx-background-color: linear-gradient(to bottom, #4CAF50, #388E3C);
+                                       -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14;
+                                       -fx-padding: 14 30; -fx-background-radius: 25; -fx-cursor: hand;"
+                                onMousePressed="#onButtonPressed" onMouseReleased="#onButtonReleased">
                             <effect>
-                                <DropShadow color="#133D03" offsetY="4" radius="8"/>
+                                <DropShadow color="#2E7D32" offsetY="4" radius="8"/>
                             </effect>
                         </Button>
 
-                        <Button text="✏️ Modifier" onAction="#handleModifier" prefWidth="140"
-                                style="-fx-background-color: linear-gradient(to bottom, #E1B323, #9A951F);
-                                       -fx-text-fill: #060806; -fx-font-weight: bold; -fx-font-size: 13;
-                                       -fx-padding: 14 25; -fx-background-radius: 25; -fx-cursor: hand;">
+                        <Button text="Modifier" onAction="#handleModifier" prefWidth="150" prefHeight="50"
+                                style="-fx-background-color: linear-gradient(to bottom, #FBC02D, #F9A825);
+                                       -fx-text-fill: #1B5E20; -fx-font-weight: bold; -fx-font-size: 14;
+                                       -fx-padding: 14 30; -fx-background-radius: 25; -fx-cursor: hand;"
+                                onMousePressed="#onButtonPressed" onMouseReleased="#onButtonReleased">
                             <effect>
-                                <DropShadow color="#476C1A" offsetY="4" radius="8"/>
+                                <DropShadow color="#F57F17" offsetY="4" radius="8"/>
                             </effect>
                         </Button>
 
-                        <Button text="🔄 Effacer" onAction="#handleNouveau" prefWidth="140"
-                                style="-fx-background-color: linear-gradient(to bottom, #848A86, #476C1A);
-                                       -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13;
-                                       -fx-padding: 14 25; -fx-background-radius: 25; -fx-cursor: hand;">
+                        <Button text="Effacer" onAction="#handleNouveau" prefWidth="150" prefHeight="50"
+                                style="-fx-background-color: linear-gradient(to bottom, #BDBDBD, #9E9E9E);
+                                       -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14;
+                                       -fx-padding: 14 30; -fx-background-radius: 25; -fx-cursor: hand;"
+                                onMousePressed="#onButtonPressed" onMouseReleased="#onButtonReleased">
                             <effect>
-                                <DropShadow color="#060806" offsetY="4" radius="8"/>
+                                <DropShadow color="#757575" offsetY="4" radius="8"/>
                             </effect>
                         </Button>
                     </HBox>
 
                     <!-- Conseil -->
                     <VBox alignment="CENTER" spacing="8"
-                          style="-fx-background-color: linear-gradient(to right, #B2D944, #089647);
-                                 -fx-padding: 15; -fx-background-radius: 12;">
+                          style="-fx-background-color: linear-gradient(to right, #C8E6C9, #A5D6A7, #C8E6C9);
+                                 -fx-padding: 18; -fx-background-radius: 15;
+                                 -fx-border-color: #81C784; -fx-border-width: 1; -fx-border-radius: 15;">
                         <effect>
-                            <DropShadow color="#060806" offsetY="3" radius="5"/>
+                            <DropShadow color="#81C784" offsetY="3" radius="6"/>
                         </effect>
-                        <HBox alignment="CENTER" spacing="8">
-                            <Label text="💡" style="-fx-font-size: 18;"/>
-                            <Label text="Conseil" style="-fx-text-fill: #060806; -fx-font-weight: bold; -fx-font-size: 14;"/>
-                        </HBox>
-                        <Label text="Les champs marqués (*) sont obligatoires. Vous pouvez aussi créer un nouveau type directement."
-                               style="-fx-text-fill: #133D03; -fx-font-size: 11;" wrapText="true" alignment="CENTER"/>
+                        <Label text="Conseil" style="-fx-text-fill: #1B5E20; -fx-font-weight: bold; -fx-font-size: 14;"/>
+                        <Label text="Les champs marques (*) sont obligatoires."
+                               style="-fx-text-fill: #2E7D32; -fx-font-size: 12;" wrapText="true" alignment="CENTER"/>
                     </VBox>
                 </VBox>
             </VBox>
@@ -376,22 +432,23 @@
 
     <!-- ========== FOOTER ========== -->
     <HBox alignment="CENTER_LEFT" spacing="20"
-          style="-fx-background-color: linear-gradient(to right, #060806, #133D03); -fx-padding: 12 25;">
+          style="-fx-background-color: linear-gradient(to right, #E8F5E9, #C8E6C9, #E8F5E9);
+                 -fx-padding: 12 25; -fx-border-color: #81C784; -fx-border-width: 2 0 0 0;">
 
         <HBox spacing="8" alignment="CENTER">
-            <Circle radius="5" fill="#B2D944"/>
-            <Label fx:id="lblStatus" text="✓ Prêt"
-                   style="-fx-text-fill: #B2D944; -fx-font-weight: bold; -fx-font-size: 12;"/>
+            <Circle radius="6" fill="#4CAF50"/>
+            <Label fx:id="lblStatus" text="Pret"
+                   style="-fx-text-fill: #2E7D32; -fx-font-weight: bold; -fx-font-size: 12;"/>
         </HBox>
 
-        <Separator orientation="VERTICAL" style="-fx-background-color: #476C1A;"/>
+        <Separator orientation="VERTICAL" style="-fx-background-color: #81C784;"/>
 
-        <Label fx:id="lblTypesCount" text="🏷️ Types: 0"
-               style="-fx-text-fill: #E1B323; -fx-font-size: 11; -fx-font-weight: bold;"/>
+        <Label fx:id="lblTypesCount" text="Types: 0"
+               style="-fx-text-fill: #388E3C; -fx-font-size: 12; -fx-font-weight: bold;"/>
 
         <Region HBox.hgrow="ALWAYS"/>
 
-        <Label text="AgriFund © 2024 - Financement Agricole"
-               style="-fx-text-fill: #848A86; -fx-font-size: 11;"/>
+        <Label text="AgriFund 2025 - Financement Agricole"
+               style="-fx-text-fill: #4CAF50; -fx-font-size: 12; -fx-font-weight: bold;"/>
     </HBox>
 </VBox>

@@ -2,21 +2,39 @@ package com.agrifund.view;
 
 import com.agrifund.controller.ProduitFinancierController;
 import com.agrifund.model.ProduitFinancier;
+import com.agrifund.util.DatabaseConnection;
+import com.agrifund.util.PDFGenerator;
+import javafx.animation.ScaleTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 
-import java.net.URL;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.sql.*;
+import java.util.Optional;
 
-public class ProduitFinancierViewController implements Initializable {
+public class ProduitFinancierViewController {
 
-    // ========== COMPOSANTS FXML - PRODUITS ==========
+    // FXML Elements
+    @FXML private TextField txtNom;
+    @FXML private ComboBox<String> cbType;
+    @FXML private TextField txtTaux;
+    @FXML private TextField txtMontantMin;
+    @FXML private TextField txtMontantMax;
+    @FXML private TextArea txtRegles;
+    @FXML private TextField txtRecherche;
+    @FXML private TextField txtNouveauType;
+
     @FXML private TableView<ProduitFinancier> tableView;
     @FXML private TableColumn<ProduitFinancier, Integer> colId;
     @FXML private TableColumn<ProduitFinancier, String> colNom;
@@ -25,48 +43,33 @@ public class ProduitFinancierViewController implements Initializable {
     @FXML private TableColumn<ProduitFinancier, Double> colMontantMin;
     @FXML private TableColumn<ProduitFinancier, Double> colMontantMax;
 
-    @FXML private TextField txtNom;
-    @FXML private TextField txtTaux;
-    @FXML private TextField txtMontantMin;
-    @FXML private TextField txtMontantMax;
-    @FXML private TextField txtRecherche;
-    @FXML private TextArea txtRegles;
-    @FXML private ComboBox<String> cbType;
-
-    // ========== COMPOSANTS FXML - TYPES ==========
-    @FXML private VBox panelTypes;
-    @FXML private TextField txtNouveauType;
-    @FXML private ListView<String> listTypes;
-
-    // ========== LABELS ==========
-    @FXML private Label lblStatus;
-    @FXML private Label lblCount;
-    @FXML private Label lblTypesCount;
     @FXML private Label lblTotalProduits;
     @FXML private Label lblPrets;
     @FXML private Label lblCredits;
     @FXML private Label lblAutres;
+    @FXML private Label lblCount;
+    @FXML private Label lblStatus;
+    @FXML private Label lblTypesCount;
 
-    // ========== VARIABLES ==========
-    private ProduitFinancierController controller = new ProduitFinancierController();
-    private ProduitFinancier produitSelectionne;
-    private ObservableList<String> typesDisponibles;
+    @FXML private VBox panelTypes;
+    @FXML private ListView<String> listTypes;
+    @FXML private Button btnToggleTypes;
+    @FXML private Button btnNouveau;
+    @FXML private Button btnActualiser;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("🚀 Initialisation du contrôleur...");
+    private ProduitFinancierController produitController;
+    private ObservableList<ProduitFinancier> produitsList;
+    private ObservableList<String> typesList;
 
-        configurerTableau();
-        chargerTypesExistants();
-        chargerProduits();
-        configurerListeners();
+    @FXML
+    public void initialize() {
+        System.out.println("Initialisation ProduitFinancierViewController...");
 
-        System.out.println("✅ Initialisation terminée");
-    }
+        produitController = new ProduitFinancierController();
+        produitsList = FXCollections.observableArrayList();
+        typesList = FXCollections.observableArrayList();
 
-    // ========== CONFIGURATION ==========
-
-    private void configurerTableau() {
+        // Configuration des colonnes
         colId.setCellValueFactory(new PropertyValueFactory<>("idProduit"));
         colNom.setCellValueFactory(new PropertyValueFactory<>("nomProduit"));
         colType.setCellValueFactory(new PropertyValueFactory<>("typeFinancement"));
@@ -74,215 +77,159 @@ public class ProduitFinancierViewController implements Initializable {
         colMontantMin.setCellValueFactory(new PropertyValueFactory<>("montantMin"));
         colMontantMax.setCellValueFactory(new PropertyValueFactory<>("montantMax"));
 
-        // Formater les colonnes
-        colMontantMin.setCellFactory(col -> new TableCell<>() {
-            @Override
-            protected void updateItem(Double item, boolean empty) {
-                super.updateItem(item, empty);
-                setText(empty || item == null ? null : String.format("%,.2f DH", item));
-            }
-        });
-
-        colMontantMax.setCellFactory(col -> new TableCell<>() {
-            @Override
-            protected void updateItem(Double item, boolean empty) {
-                super.updateItem(item, empty);
-                setText(empty || item == null ? null : String.format("%,.2f DH", item));
-            }
-        });
-
-        colTaux.setCellFactory(col -> new TableCell<>() {
-            @Override
-            protected void updateItem(Double item, boolean empty) {
-                super.updateItem(item, empty);
-                setText(empty || item == null ? null : String.format("%.2f%%", item));
-            }
-        });
-    }
-
-    private void configurerListeners() {
+        // Selection listener
         tableView.getSelectionModel().selectedItemProperty().addListener(
-                (obs, old, newVal) -> {
-                    if (newVal != null) afficherProduit(newVal);
+                (obs, oldVal, newVal) -> {
+                    if (newVal != null) {
+                        remplirFormulaire(newVal);
+                    }
+                });
+
+        // Charger les donnees
+        chargerDonnees();
+        chargerTypes();
+
+        System.out.println("Initialisation terminee!");
+    }
+
+    // ==================== ANIMATIONS ====================
+
+    @FXML
+    private void onButtonPressed(MouseEvent event) {
+        if (event.getSource() instanceof Button) {
+            Button button = (Button) event.getSource();
+            ScaleTransition st = new ScaleTransition(Duration.millis(100), button);
+            st.setToX(0.95);
+            st.setToY(0.95);
+            st.play();
+        }
+    }
+
+    @FXML
+    private void onButtonReleased(MouseEvent event) {
+        if (event.getSource() instanceof Button) {
+            Button button = (Button) event.getSource();
+            ScaleTransition st = new ScaleTransition(Duration.millis(100), button);
+            st.setToX(1.0);
+            st.setToY(1.0);
+            st.play();
+        }
+    }
+
+    private void animateButton(Button button) {
+        ScaleTransition pressTransition = new ScaleTransition(Duration.millis(80), button);
+        pressTransition.setToX(0.9);
+        pressTransition.setToY(0.9);
+
+        ScaleTransition releaseTransition = new ScaleTransition(Duration.millis(80), button);
+        releaseTransition.setToX(1.0);
+        releaseTransition.setToY(1.0);
+
+        pressTransition.setOnFinished(e -> releaseTransition.play());
+        pressTransition.play();
+    }
+
+    // ==================== CHARGEMENT DONNEES ====================
+
+    private void chargerDonnees() {
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DatabaseConnection.getConnection();
+            String sql = "SELECT * FROM produit_financier ORDER BY id_produit DESC";
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(sql);
+
+            produitsList.clear();
+            while (rs.next()) {
+                ProduitFinancier p = new ProduitFinancier();
+                p.setIdProduit(rs.getInt("id_produit"));
+                p.setNomProduit(rs.getString("nom_produit"));
+                p.setTypeFinancement(rs.getString("type_financement"));
+                p.setTauxInteret(rs.getDouble("taux_interet"));
+                p.setMontantMin(rs.getDouble("montant_min"));
+                p.setMontantMax(rs.getDouble("montant_max"));
+                p.setReglesFinancieres(rs.getString("regles_financieres"));
+                produitsList.add(p);
+            }
+
+            tableView.setItems(produitsList);
+            mettreAJourStats();
+            lblCount.setText(produitsList.size() + " produits");
+
+        } catch (SQLException e) {
+            showAlert("Erreur", "Erreur chargement: " + e.getMessage(), Alert.AlertType.ERROR);
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void chargerTypes() {
+        typesList.clear();
+        typesList.addAll("Pret", "Credit", "Subvention", "Leasing", "Autre");
+
+        // Ajouter les types de la base de donnees
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            String sql = "SELECT DISTINCT type_financement FROM produit_financier";
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                String type = rs.getString("type_financement");
+                if (type != null && !typesList.contains(type)) {
+                    typesList.add(type);
                 }
-        );
+            }
+
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        cbType.setItems(typesList);
+        listTypes.setItems(typesList);
+        lblTypesCount.setText("Types: " + typesList.size());
     }
 
-    // ========== GESTION DES TYPES ==========
+    private void mettreAJourStats() {
+        int total = produitsList.size();
+        int prets = 0;
+        int credits = 0;
+        int autres = 0;
 
-    private void chargerTypesExistants() {
-        ObservableList<ProduitFinancier> produits = controller.getAllProduits();
-        Set<String> typesUniques = produits.stream()
-                .map(ProduitFinancier::getTypeFinancement)
-                .filter(type -> type != null && !type.trim().isEmpty())
-                .collect(Collectors.toSet());
-
-        if (typesUniques.isEmpty()) {
-            typesUniques.addAll(Arrays.asList(
-                    "Prêt Agricole",
-                    "Crédit d'Équipement",
-                    "Subvention",
-                    "Leasing",
-                    "Microcrédit",
-                    "Crédit de Campagne"
-            ));
-        }
-
-        typesDisponibles = FXCollections.observableArrayList(typesUniques);
-        Collections.sort(typesDisponibles);
-
-        cbType.setItems(typesDisponibles);
-        listTypes.setItems(typesDisponibles);
-
-        updateTypesCount();
-    }
-
-    @FXML
-    private void handleToggleTypes() {
-        if (panelTypes != null) {
-            boolean visible = !panelTypes.isVisible();
-            panelTypes.setVisible(visible);
-            panelTypes.setManaged(visible);
-        }
-    }
-
-    @FXML
-    private void handleAjouterType() {
-        String nouveauType = txtNouveauType.getText().trim();
-
-        if (nouveauType.isEmpty()) {
-            alert("⚠️ Attention", "Entrez le nom du type!", Alert.AlertType.WARNING);
-            return;
-        }
-
-        if (typesDisponibles.contains(nouveauType)) {
-            alert("⚠️ Attention", "Ce type existe déjà!", Alert.AlertType.WARNING);
-            return;
-        }
-
-        typesDisponibles.add(nouveauType);
-        Collections.sort(typesDisponibles);
-        txtNouveauType.clear();
-        updateTypesCount();
-
-        alert("✅ Succès", "Type ajouté: " + nouveauType, Alert.AlertType.INFORMATION);
-    }
-
-    @FXML
-    private void handleModifierType() {
-        String typeSelectionne = listTypes.getSelectionModel().getSelectedItem();
-        String nouveauNom = txtNouveauType.getText().trim();
-
-        if (typeSelectionne == null) {
-            alert("⚠️ Attention", "Sélectionnez un type dans la liste!", Alert.AlertType.WARNING);
-            return;
-        }
-
-        if (nouveauNom.isEmpty()) {
-            alert("⚠️ Attention", "Entrez le nouveau nom du type!", Alert.AlertType.WARNING);
-            return;
-        }
-
-        if (typesDisponibles.contains(nouveauNom)) {
-            alert("⚠️ Attention", "Ce nom de type existe déjà!", Alert.AlertType.WARNING);
-            return;
-        }
-
-        // Vérifier si le type est utilisé
-        List<ProduitFinancier> produitsAvecType = tableView.getItems().stream()
-                .filter(p -> p.getTypeFinancement().equals(typeSelectionne))
-                .collect(Collectors.toList());
-
-        if (!produitsAvecType.isEmpty()) {
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
-                    "Ce type est utilisé par " + produitsAvecType.size() + " produit(s).\n" +
-                            "Voulez-vous renommer le type pour tous ces produits ?");
-
-            if (confirm.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
-                for (ProduitFinancier produit : produitsAvecType) {
-                    produit.setTypeFinancement(nouveauNom);
-                    controller.modifierProduit(produit);
+        for (ProduitFinancier p : produitsList) {
+            String type = p.getTypeFinancement();
+            if (type != null) {
+                if (type.toLowerCase().contains("pret")) {
+                    prets++;
+                } else if (type.toLowerCase().contains("credit")) {
+                    credits++;
+                } else {
+                    autres++;
                 }
-            } else {
-                return;
             }
         }
 
-        int index = typesDisponibles.indexOf(typeSelectionne);
-        typesDisponibles.set(index, nouveauNom);
-        Collections.sort(typesDisponibles);
-
-        txtNouveauType.clear();
-        chargerProduits();
-
-        alert("✅ Succès", "Type renommé: " + typeSelectionne + " → " + nouveauNom, Alert.AlertType.INFORMATION);
+        lblTotalProduits.setText(String.valueOf(total));
+        lblPrets.setText(String.valueOf(prets));
+        lblCredits.setText(String.valueOf(credits));
+        lblAutres.setText(String.valueOf(autres));
     }
 
-    @FXML
-    private void handleSupprimerType() {
-        String typeSelectionne = listTypes.getSelectionModel().getSelectedItem();
+    // ==================== FORMULAIRE ====================
 
-        if (typeSelectionne == null) {
-            alert("⚠️ Attention", "Sélectionnez un type!", Alert.AlertType.WARNING);
-            return;
-        }
-
-        long count = tableView.getItems().stream()
-                .filter(p -> p.getTypeFinancement().equals(typeSelectionne))
-                .count();
-
-        if (count > 0) {
-            alert("⚠️ Attention",
-                    "Ce type est utilisé par " + count + " produit(s)!\nSupprimez d'abord les produits.",
-                    Alert.AlertType.WARNING);
-            return;
-        }
-
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
-                "Supprimer le type '" + typeSelectionne + "' ?");
-
-        if (confirm.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
-            typesDisponibles.remove(typeSelectionne);
-            updateTypesCount();
-            alert("✅ Succès", "Type supprimé!", Alert.AlertType.INFORMATION);
-        }
-    }
-
-    private void updateTypesCount() {
-        if (lblTypesCount != null) {
-            lblTypesCount.setText("🏷️ Types: " + typesDisponibles.size());
-        }
-    }
-
-    // ========== GESTION DES PRODUITS ==========
-
-    private void chargerProduits() {
-        ObservableList<ProduitFinancier> produits = controller.getAllProduits();
-        tableView.setItems(produits);
-        if (lblCount != null) lblCount.setText(produits.size() + " produits");
-        updateStats(produits);
-    }
-
-    private void updateStats(ObservableList<ProduitFinancier> produits) {
-        if (lblTotalProduits != null) lblTotalProduits.setText(String.valueOf(produits.size()));
-
-        long prets = produits.stream()
-                .filter(p -> p.getTypeFinancement().toLowerCase().contains("prêt"))
-                .count();
-
-        long credits = produits.stream()
-                .filter(p -> p.getTypeFinancement().toLowerCase().contains("crédit"))
-                .count();
-
-        long autres = produits.size() - prets - credits;
-
-        if (lblPrets != null) lblPrets.setText(String.valueOf(prets));
-        if (lblCredits != null) lblCredits.setText(String.valueOf(credits));
-        if (lblAutres != null) lblAutres.setText(String.valueOf(autres));
-    }
-
-    private void afficherProduit(ProduitFinancier p) {
-        produitSelectionne = p;
+    private void remplirFormulaire(ProduitFinancier p) {
         txtNom.setText(p.getNomProduit());
         cbType.setValue(p.getTypeFinancement());
         txtTaux.setText(String.valueOf(p.getTauxInteret()));
@@ -291,152 +238,288 @@ public class ProduitFinancierViewController implements Initializable {
         txtRegles.setText(p.getReglesFinancieres());
     }
 
+    private boolean validerFormulaire() {
+        String erreurs = "";
+
+        if (txtNom.getText() == null || txtNom.getText().trim().isEmpty()) {
+            erreurs += "Le nom du produit est obligatoire\n";
+        }
+        if (cbType.getValue() == null || cbType.getValue().trim().isEmpty()) {
+            erreurs += "Le type de financement est obligatoire\n";
+        }
+        try {
+            Double.parseDouble(txtTaux.getText().trim());
+        } catch (Exception e) {
+            erreurs += "Le taux doit etre un nombre valide\n";
+        }
+        try {
+            Double.parseDouble(txtMontantMin.getText().trim());
+        } catch (Exception e) {
+            erreurs += "Le montant minimum doit etre un nombre valide\n";
+        }
+        try {
+            Double.parseDouble(txtMontantMax.getText().trim());
+        } catch (Exception e) {
+            erreurs += "Le montant maximum doit etre un nombre valide\n";
+        }
+
+        if (!erreurs.isEmpty()) {
+            showAlert("Validation", erreurs, Alert.AlertType.WARNING);
+            return false;
+        }
+        return true;
+    }
+
+    // ==================== ACTIONS CRUD ====================
+
     @FXML
     private void handleNouveau() {
         txtNom.clear();
+        cbType.setValue(null);
         txtTaux.clear();
         txtMontantMin.clear();
         txtMontantMax.clear();
         txtRegles.clear();
-        cbType.setValue(null);
-        produitSelectionne = null;
         tableView.getSelectionModel().clearSelection();
+        txtNom.requestFocus();
+        lblStatus.setText("Nouveau produit");
+        System.out.println("Formulaire vide pour nouveau produit");
     }
 
     @FXML
     private void handleAjouter() {
+        if (!validerFormulaire()) return;
+
         try {
-            if (txtNom.getText().isEmpty() || cbType.getValue() == null) {
-                alert("⚠️ Attention", "Remplissez tous les champs obligatoires!", Alert.AlertType.WARNING);
-                return;
-            }
+            ProduitFinancier p = new ProduitFinancier();
+            p.setNomProduit(txtNom.getText().trim());
+            p.setTypeFinancement(cbType.getValue().trim());
+            p.setTauxInteret(Double.parseDouble(txtTaux.getText().trim()));
+            p.setMontantMin(Double.parseDouble(txtMontantMin.getText().trim()));
+            p.setMontantMax(Double.parseDouble(txtMontantMax.getText().trim()));
+            p.setReglesFinancieres(txtRegles.getText().trim());
 
-            String type = cbType.getValue();
+            boolean success = produitController.ajouterProduit(p);
 
-            if (!typesDisponibles.contains(type)) {
-                typesDisponibles.add(type);
-                Collections.sort(typesDisponibles);
-                updateTypesCount();
-            }
-
-            ProduitFinancier p = new ProduitFinancier(
-                    txtNom.getText().trim(),
-                    type,
-                    Double.parseDouble(txtTaux.getText().trim()),
-                    Double.parseDouble(txtMontantMin.getText().trim()),
-                    Double.parseDouble(txtMontantMax.getText().trim()),
-                    txtRegles.getText().trim()
-            );
-
-            if (controller.ajouterProduit(p)) {
-                alert("✅ Succès", "Produit ajouté avec succès!", Alert.AlertType.INFORMATION);
-                chargerProduits();
+            if (success) {
+                chargerDonnees();
+                chargerTypes();
                 handleNouveau();
+                lblStatus.setText("Produit ajoute");
+                showAlert("Succes", "Produit ajoute avec succes!", Alert.AlertType.INFORMATION);
+            } else {
+                showAlert("Erreur", "Impossible d ajouter le produit", Alert.AlertType.ERROR);
             }
-        } catch (NumberFormatException e) {
-            alert("❌ Erreur", "Vérifiez les valeurs numériques!", Alert.AlertType.ERROR);
+
         } catch (Exception e) {
-            alert("❌ Erreur", "Erreur: " + e.getMessage(), Alert.AlertType.ERROR);
+            showAlert("Erreur", "Erreur: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
     @FXML
     private void handleModifier() {
-        if (produitSelectionne == null) {
-            alert("⚠️", "Sélectionnez un produit!", Alert.AlertType.WARNING);
+        ProduitFinancier selected = tableView.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("Attention", "Veuillez selectionner un produit a modifier", Alert.AlertType.WARNING);
             return;
         }
 
+        if (!validerFormulaire()) return;
+
         try {
-            String type = cbType.getValue();
+            selected.setNomProduit(txtNom.getText().trim());
+            selected.setTypeFinancement(cbType.getValue().trim());
+            selected.setTauxInteret(Double.parseDouble(txtTaux.getText().trim()));
+            selected.setMontantMin(Double.parseDouble(txtMontantMin.getText().trim()));
+            selected.setMontantMax(Double.parseDouble(txtMontantMax.getText().trim()));
+            selected.setReglesFinancieres(txtRegles.getText().trim());
 
-            if (!typesDisponibles.contains(type)) {
-                typesDisponibles.add(type);
-                Collections.sort(typesDisponibles);
-                updateTypesCount();
-            }
+            boolean success = produitController.modifierProduit(selected);
 
-            produitSelectionne.setNomProduit(txtNom.getText().trim());
-            produitSelectionne.setTypeFinancement(type);
-            produitSelectionne.setTauxInteret(Double.parseDouble(txtTaux.getText().trim()));
-            produitSelectionne.setMontantMin(Double.parseDouble(txtMontantMin.getText().trim()));
-            produitSelectionne.setMontantMax(Double.parseDouble(txtMontantMax.getText().trim()));
-            produitSelectionne.setReglesFinancieres(txtRegles.getText().trim());
-
-            if (controller.modifierProduit(produitSelectionne)) {
-                alert("✅ Succès", "Produit modifié avec succès!", Alert.AlertType.INFORMATION);
-                chargerProduits();
+            if (success) {
+                chargerDonnees();
+                chargerTypes();
                 handleNouveau();
+                lblStatus.setText("Produit modifie");
+                showAlert("Succes", "Produit modifie avec succes!", Alert.AlertType.INFORMATION);
+            } else {
+                showAlert("Erreur", "Impossible de modifier le produit", Alert.AlertType.ERROR);
             }
+
         } catch (Exception e) {
-            alert("❌ Erreur", e.getMessage(), Alert.AlertType.ERROR);
+            showAlert("Erreur", "Erreur: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
     @FXML
     private void handleSupprimer() {
-        if (produitSelectionne == null) {
-            alert("⚠️", "Sélectionnez un produit!", Alert.AlertType.WARNING);
+        ProduitFinancier selected = tableView.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("Attention", "Veuillez selectionner un produit a supprimer", Alert.AlertType.WARNING);
             return;
         }
 
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
-                "Supprimer '" + produitSelectionne.getNomProduit() + "' ?");
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Confirmation");
+        confirm.setHeaderText("Supprimer le produit?");
+        confirm.setContentText("Voulez-vous vraiment supprimer: " + selected.getNomProduit() + "?");
 
-        if (confirm.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
-            if (controller.supprimerProduit(produitSelectionne.getIdProduit())) {
-                alert("✅ Succès", "Produit supprimé avec succès!", Alert.AlertType.INFORMATION);
-                chargerProduits();
-                chargerTypesExistants();
+        Optional<ButtonType> result = confirm.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            boolean success = produitController.supprimerProduit(selected.getIdProduit());
+
+            if (success) {
+                chargerDonnees();
                 handleNouveau();
+                lblStatus.setText("Produit supprime");
+                showAlert("Succes", "Produit supprime avec succes!", Alert.AlertType.INFORMATION);
+            } else {
+                showAlert("Erreur", "Impossible de supprimer le produit", Alert.AlertType.ERROR);
             }
         }
     }
 
     @FXML
     private void handleRechercher() {
-        String critere = txtRecherche.getText().trim();
-        tableView.setItems(critere.isEmpty() ?
-                controller.getAllProduits() :
-                controller.rechercherProduits(critere));
+        String keyword = txtRecherche.getText().trim();
+        if (keyword.isEmpty()) {
+            chargerDonnees();
+            return;
+        }
+
+        ObservableList<ProduitFinancier> resultats = produitController.rechercherProduits(keyword);
+        produitsList.clear();
+        produitsList.addAll(resultats);
+        tableView.setItems(produitsList);
+        lblCount.setText(produitsList.size() + " resultats");
     }
 
     @FXML
     private void handleActualiser() {
-        chargerProduits();
-        chargerTypesExistants();
         txtRecherche.clear();
-        if (lblStatus != null) lblStatus.setText("🔄 Données actualisées");
+        chargerDonnees();
+        chargerTypes();
+        handleNouveau();
+        lblStatus.setText("Actualise");
     }
 
     @FXML
     private void handleDetails() {
-        if (produitSelectionne != null) {
-            alert("📄 Détails du Produit", String.format(
-                    "━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
-                            "📦 Nom: %s\n" +
-                            "🏷️ Type: %s\n" +
-                            "💹 Taux: %.2f%%\n" +
-                            "💰 Montant Min: %,.2f DH\n" +
-                            "💵 Montant Max: %,.2f DH\n" +
-                            "━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
-                            "📜 Règles Financières:\n%s",
-                    produitSelectionne.getNomProduit(),
-                    produitSelectionne.getTypeFinancement(),
-                    produitSelectionne.getTauxInteret(),
-                    produitSelectionne.getMontantMin(),
-                    produitSelectionne.getMontantMax(),
-                    produitSelectionne.getReglesFinancieres()
-            ), Alert.AlertType.INFORMATION);
-        } else {
-            alert("⚠️ Attention", "Sélectionnez un produit!", Alert.AlertType.WARNING);
+        ProduitFinancier selected = tableView.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("Attention", "Veuillez selectionner un produit", Alert.AlertType.WARNING);
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/agrifund/view/DetailsProduitView.fxml"));
+            Parent root = loader.load();
+
+            DetailsProduitController controller = loader.getController();
+            controller.setProduit(selected);
+
+            Stage stage = new Stage();
+            stage.setTitle("Details - " + selected.getNomProduit());
+            stage.setScene(new Scene(root, 700, 800));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible d ouvrir les details: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
-    private void alert(String title, String msg, Alert.AlertType type) {
-        Alert alert = new Alert(type, msg);
+    @FXML
+    private void handleDownloadPDF() {
+        ProduitFinancier selected = tableView.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("Attention", "Veuillez selectionner un produit", Alert.AlertType.WARNING);
+            return;
+        }
+
+        try {
+            String filePath = PDFGenerator.genererPDFProduit(selected);
+            lblStatus.setText("PDF genere");
+            showAlert("Succes", "PDF telecharge avec succes!\n\nFichier: " + filePath, Alert.AlertType.INFORMATION);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible de generer le PDF: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
+    // ==================== GESTION DES TYPES ====================
+
+    @FXML
+    private void handleToggleTypes() {
+        boolean isVisible = panelTypes.isVisible();
+        panelTypes.setVisible(!isVisible);
+        panelTypes.setManaged(!isVisible);
+        btnToggleTypes.setText(isVisible ? "Gerer Types" : "Masquer Types");
+    }
+
+    @FXML
+    private void handleAjouterType() {
+        String nouveauType = txtNouveauType.getText().trim();
+        if (nouveauType.isEmpty()) {
+            showAlert("Attention", "Veuillez entrer un nom de type", Alert.AlertType.WARNING);
+            return;
+        }
+
+        if (!typesList.contains(nouveauType)) {
+            typesList.add(nouveauType);
+            txtNouveauType.clear();
+            lblTypesCount.setText("Types: " + typesList.size());
+            showAlert("Succes", "Type ajoute: " + nouveauType, Alert.AlertType.INFORMATION);
+        } else {
+            showAlert("Attention", "Ce type existe deja", Alert.AlertType.WARNING);
+        }
+    }
+
+    @FXML
+    private void handleModifierType() {
+        String selectedType = listTypes.getSelectionModel().getSelectedItem();
+        String nouveauNom = txtNouveauType.getText().trim();
+
+        if (selectedType == null) {
+            showAlert("Attention", "Veuillez selectionner un type a renommer", Alert.AlertType.WARNING);
+            return;
+        }
+
+        if (nouveauNom.isEmpty()) {
+            showAlert("Attention", "Veuillez entrer le nouveau nom", Alert.AlertType.WARNING);
+            return;
+        }
+
+        int index = typesList.indexOf(selectedType);
+        if (index >= 0) {
+            typesList.set(index, nouveauNom);
+            txtNouveauType.clear();
+            showAlert("Succes", "Type renomme: " + selectedType + " -> " + nouveauNom, Alert.AlertType.INFORMATION);
+        }
+    }
+
+    @FXML
+    private void handleSupprimerType() {
+        String selectedType = listTypes.getSelectionModel().getSelectedItem();
+        if (selectedType == null) {
+            showAlert("Attention", "Veuillez selectionner un type a supprimer", Alert.AlertType.WARNING);
+            return;
+        }
+
+        typesList.remove(selectedType);
+        lblTypesCount.setText("Types: " + typesList.size());
+        showAlert("Succes", "Type supprime: " + selectedType, Alert.AlertType.INFORMATION);
+    }
+
+    // ==================== UTILITAIRES ====================
+
+    private void showAlert(String title, String message, Alert.AlertType type) {
+        Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
+        alert.setContentText(message);
         alert.showAndWait();
     }
 }
