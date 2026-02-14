@@ -28,8 +28,17 @@ public class ProjectAgricoleAddController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        cbStatut.getItems().addAll("en cours", "accepte", "refuse");
-        cbStatut.setValue("en cours"); // Default value
+        // ✅ IMPORTANT: Only 'en cours' is available
+        // Status can only be changed by your friend via decisionfinanciere
+        cbStatut.getItems().add("en cours");
+        cbStatut.setValue("en cours");
+
+        // ✅ Disable the combo box - status is fixed at 'en cours'
+        cbStatut.setDisable(true);
+
+        // Add a tooltip to explain why it's disabled
+        Tooltip tooltip = new Tooltip("Le statut est automatiquement 'en cours'.\nIl sera modifié par la décision financière.");
+        cbStatut.setTooltip(tooltip);
     }
 
     public void setMainController(projectagricolecontroller mainController) {
@@ -41,19 +50,23 @@ public class ProjectAgricoleAddController implements Initializable {
         if (!validateInputs()) return;
 
         try {
+            // ✅ Always create project with 'en cours' status
             projectagricole p = new projectagricole(
-                    tfNomProject.getText(),
-                    Float.parseFloat(tfSurface.getText()),
-                    new BigDecimal(tfBudget.getText()),
-                    cbStatut.getValue(),
+                    tfNomProject.getText().trim(),
+                    Float.parseFloat(tfSurface.getText().trim()),
+                    new BigDecimal(tfBudget.getText().trim()),
+                    "en cours", // ✅ FIXED: Always 'en cours'
                     Date.valueOf(dpDateSoumission.getValue())
             );
 
             service.ajouter(p);
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "Projet ajouté avec succès!");
+            showAlert(Alert.AlertType.INFORMATION, "Succès",
+                    "Projet ajouté avec succès!\n\nStatut: En cours (en attente de décision financière)");
             closeWindow();
         } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur SQL", "Erreur lors de l'ajout: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur SQL",
+                    "Erreur lors de l'ajout: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -69,16 +82,19 @@ public class ProjectAgricoleAddController implements Initializable {
 
     private boolean validateInputs() {
         // Check for empty fields
-        if (tfNomProject.getText().trim().isEmpty() || tfSurface.getText().trim().isEmpty() ||
-                tfBudget.getText().trim().isEmpty() || cbStatut.getValue() == null ||
+        if (tfNomProject.getText().trim().isEmpty() ||
+                tfSurface.getText().trim().isEmpty() ||
+                tfBudget.getText().trim().isEmpty() ||
                 dpDateSoumission.getValue() == null) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Veuillez remplir tous les champs!");
+            showAlert(Alert.AlertType.ERROR, "Erreur de saisie",
+                    "Veuillez remplir tous les champs!");
             return false;
         }
 
         // Validate project name length
         if (tfNomProject.getText().trim().length() < 3) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Le nom du projet doit contenir au moins 3 caractères!");
+            showAlert(Alert.AlertType.ERROR, "Erreur de saisie",
+                    "Le nom du projet doit contenir au moins 3 caractères!");
             return false;
         }
 
@@ -86,25 +102,25 @@ public class ProjectAgricoleAddController implements Initializable {
         try {
             float surface = Float.parseFloat(tfSurface.getText().trim());
             if (surface <= 0) {
-                showAlert(Alert.AlertType.ERROR, "Erreur de validation", "La surface doit être un nombre positif!");
+                showAlert(Alert.AlertType.ERROR, "Erreur de validation",
+                        "La surface doit être un nombre positif!");
                 return false;
             }
 
             BigDecimal budget = new BigDecimal(tfBudget.getText().trim());
             if (budget.compareTo(BigDecimal.ZERO) <= 0) {
-                showAlert(Alert.AlertType.ERROR, "Erreur de validation", "Le budget doit être un nombre positif!");
+                showAlert(Alert.AlertType.ERROR, "Erreur de validation",
+                        "Le budget doit être un nombre positif!");
                 return false;
             }
         } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de format", "Surface et Budget doivent être des nombres valides!");
+            showAlert(Alert.AlertType.ERROR, "Erreur de format",
+                    "Surface et Budget doivent être des nombres valides!");
             return false;
         }
 
-        // Validate date is not in the past
-        if (dpDateSoumission.getValue().isBefore(java.time.LocalDate.now())) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de validation", "La date de soumission ne peut pas être dans le passé!");
-            return false;
-        }
+        // ✅ REMOVED: Date validation (allow past dates for historical projects)
+        // Users can submit projects with any date
 
         return true;
     }

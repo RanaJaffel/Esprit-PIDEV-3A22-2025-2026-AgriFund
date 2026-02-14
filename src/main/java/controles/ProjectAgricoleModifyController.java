@@ -29,7 +29,22 @@ public class ProjectAgricoleModifyController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // ✅ Show all possible statuses (for display only)
         cbStatut.getItems().addAll("en cours", "accepte", "refuse");
+
+        // ✅ IMPORTANT: Disable the status field
+        // Only your friend can change status via decisionfinanciere
+        cbStatut.setDisable(true);
+
+        // Add explanation tooltip
+        Tooltip tooltip = new Tooltip(
+                "Le statut ne peut pas être modifié ici.\n" +
+                        "Il est géré automatiquement par les décisions financières."
+        );
+        cbStatut.setTooltip(tooltip);
+
+        // Visual indicator that field is read-only
+        cbStatut.setStyle("-fx-opacity: 0.7;");
     }
 
     public void setProject(projectagricole project) {
@@ -46,7 +61,10 @@ public class ProjectAgricoleModifyController implements Initializable {
             tfNomProject.setText(currentProject.getNomproject());
             tfSurface.setText(String.valueOf(currentProject.getSurface()));
             tfBudget.setText(currentProject.getBudgetdemande().toString());
+
+            // ✅ Display current status (read-only)
             cbStatut.setValue(currentProject.getStatut());
+
             dpDateSoumission.setValue(currentProject.getDatesoumission().toLocalDate());
         }
     }
@@ -56,17 +74,25 @@ public class ProjectAgricoleModifyController implements Initializable {
         if (!validateInputs()) return;
 
         try {
-            currentProject.setNomproject(tfNomProject.getText());
-            currentProject.setSurface(Float.parseFloat(tfSurface.getText()));
-            currentProject.setBudgetdemande(new BigDecimal(tfBudget.getText()));
-            currentProject.setStatut(cbStatut.getValue());
+            // ✅ Update only the fields YOU are responsible for
+            currentProject.setNomproject(tfNomProject.getText().trim());
+            currentProject.setSurface(Float.parseFloat(tfSurface.getText().trim()));
+            currentProject.setBudgetdemande(new BigDecimal(tfBudget.getText().trim()));
             currentProject.setDatesoumission(Date.valueOf(dpDateSoumission.getValue()));
 
+            // ✅ IMPORTANT: Do NOT update status - keep the current one
+            // Status is managed by your friend via decisionfinanciere triggers
+            // currentProject.setStatut() is NOT called here
+
             service.modifier(currentProject);
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "Projet modifié avec succès!");
+            showAlert(Alert.AlertType.INFORMATION, "Succès",
+                    "Projet modifié avec succès!\n\n" +
+                            "Note: Le statut reste inchangé (" + currentProject.getStatut() + ")");
             closeWindow();
         } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur SQL", "Erreur lors de la modification: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur SQL",
+                    "Erreur lors de la modification: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -82,16 +108,19 @@ public class ProjectAgricoleModifyController implements Initializable {
 
     private boolean validateInputs() {
         // Check for empty fields
-        if (tfNomProject.getText().trim().isEmpty() || tfSurface.getText().trim().isEmpty() ||
-                tfBudget.getText().trim().isEmpty() || cbStatut.getValue() == null ||
+        if (tfNomProject.getText().trim().isEmpty() ||
+                tfSurface.getText().trim().isEmpty() ||
+                tfBudget.getText().trim().isEmpty() ||
                 dpDateSoumission.getValue() == null) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Veuillez remplir tous les champs!");
+            showAlert(Alert.AlertType.ERROR, "Erreur de saisie",
+                    "Veuillez remplir tous les champs!");
             return false;
         }
 
         // Validate project name length
         if (tfNomProject.getText().trim().length() < 3) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Le nom du projet doit contenir au moins 3 caractères!");
+            showAlert(Alert.AlertType.ERROR, "Erreur de saisie",
+                    "Le nom du projet doit contenir au moins 3 caractères!");
             return false;
         }
 
@@ -99,25 +128,25 @@ public class ProjectAgricoleModifyController implements Initializable {
         try {
             float surface = Float.parseFloat(tfSurface.getText().trim());
             if (surface <= 0) {
-                showAlert(Alert.AlertType.ERROR, "Erreur de validation", "La surface doit être un nombre positif!");
+                showAlert(Alert.AlertType.ERROR, "Erreur de validation",
+                        "La surface doit être un nombre positif!");
                 return false;
             }
 
             BigDecimal budget = new BigDecimal(tfBudget.getText().trim());
             if (budget.compareTo(BigDecimal.ZERO) <= 0) {
-                showAlert(Alert.AlertType.ERROR, "Erreur de validation", "Le budget doit être un nombre positif!");
+                showAlert(Alert.AlertType.ERROR, "Erreur de validation",
+                        "Le budget doit être un nombre positif!");
                 return false;
             }
         } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de format", "Surface et Budget doivent être des nombres valides!");
+            showAlert(Alert.AlertType.ERROR, "Erreur de format",
+                    "Surface et Budget doivent être des nombres valides!");
             return false;
         }
 
-        // Validate date is not in the past
-        if (dpDateSoumission.getValue().isBefore(java.time.LocalDate.now())) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de validation", "La date de soumission ne peut pas être dans le passé!");
-            return false;
-        }
+        // ✅ REMOVED: Date validation (allow past dates for historical projects)
+        // Users can modify projects with any date
 
         return true;
     }
