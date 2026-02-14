@@ -13,9 +13,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import services.ServiceDecisionFinanciere;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import java.util.Optional;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -257,12 +254,12 @@ public class DecisionListController {
             Stage stage = new Stage();
             stage.setTitle(decision == null ? "Nouvelle Décision" : "Modifier Décision #" + decision.getIdDecision());
             stage.setScene(new Scene(root));
-            stage.setMinWidth(1200);
-            stage.setMinHeight(800);
+            stage.setMinWidth(800);
+            stage.setMinHeight(600);
 
-            stage.setOnHidden(e -> loadDecisions());
+            stage.setOnHidden(e -> loadDecisions()); // Recharge les données après la fermeture de la fenêtre
 
-            stage.show();
+            stage.showAndWait(); // Utilisez showAndWait() pour attendre la fermeture de la fenêtre
 
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir le formulaire: " + e.getMessage());

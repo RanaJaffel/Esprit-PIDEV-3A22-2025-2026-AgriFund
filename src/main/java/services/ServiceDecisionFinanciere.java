@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServiceDecisionFinanciere {
+public class ServiceDecisionFinanciere implements InterfaceCRUD<DecisionFinanciere> {
 
     private Connection connection;
 
@@ -15,9 +15,9 @@ public class ServiceDecisionFinanciere {
         this.connection = MyConnection.getInstance();
     }
 
+    @Override
     public void ajouter(DecisionFinanciere decision) throws SQLException {
-        String req = "INSERT INTO DecisionFinanciere (statut, justification, dateDecision, idProjet) " +
-                "VALUES (?, ?, ?, ?)";
+        String req = "INSERT INTO DecisionFinanciere (statut, justification, dateDecision, idProjet) VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement pst = connection.prepareStatement(req)) {
             pst.setString(1, decision.getStatut());
@@ -35,9 +35,9 @@ public class ServiceDecisionFinanciere {
         }
     }
 
+    @Override
     public void modifier(DecisionFinanciere decision) throws SQLException {
-        String req = "UPDATE DecisionFinanciere SET statut = ?, justification = ?, " +
-                "dateDecision = ?, idProjet = ? WHERE idDecision = ?";
+        String req = "UPDATE DecisionFinanciere SET statut = ?, justification = ?, dateDecision = ?, idProjet = ? WHERE idDecision = ?";
 
         try (PreparedStatement pst = connection.prepareStatement(req)) {
             pst.setString(1, decision.getStatut());
@@ -48,21 +48,24 @@ public class ServiceDecisionFinanciere {
 
             int rowsAffected = pst.executeUpdate();
             if (rowsAffected > 0) {
-                System.out.println("Décision financière modifiée avec succès!");
+                System.out.println("Décision financière modifiée avec succès! ID: " + decision.getIdDecision());
             } else {
-                System.out.println("Aucune décision trouvée avec cet ID");
+                System.out.println("Aucune décision trouvée avec cet ID: " + decision.getIdDecision());
             }
         } catch (SQLException e) {
-            System.err.println("Erreur lors de la modification de la décision");
+            System.err.println("Erreur lors de la modification de la décision: " + e.getMessage());
             throw e;
         }
     }
 
-    public void supprimer(int idDecision) throws SQLException {
+
+
+    @Override
+    public void supprimer(int id) throws SQLException {
         String req = "DELETE FROM DecisionFinanciere WHERE idDecision = ?";
 
         try (PreparedStatement pst = connection.prepareStatement(req)) {
-            pst.setInt(1, idDecision);
+            pst.setInt(1, id);
 
             int rowsAffected = pst.executeUpdate();
             if (rowsAffected > 0) {
@@ -76,12 +79,7 @@ public class ServiceDecisionFinanciere {
         }
     }
 
-    // *** NOUVELLE MÉTHODE À AJOUTER ***
-    /**
-     * Méthode pour afficher toutes les décisions financières
-     * @return List<DecisionFinanciere>
-     * @throws SQLException
-     */
+    @Override
     public List<DecisionFinanciere> afficher() throws SQLException {
         List<DecisionFinanciere> decisions = new ArrayList<>();
         String req = "SELECT * FROM DecisionFinanciere";
@@ -107,12 +105,6 @@ public class ServiceDecisionFinanciere {
         return decisions;
     }
 
-    /**
-     * Méthode pour récupérer une décision par son ID
-     * @param idDecision
-     * @return DecisionFinanciere ou null
-     * @throws SQLException
-     */
     public DecisionFinanciere getById(int idDecision) throws SQLException {
         String req = "SELECT * FROM DecisionFinanciere WHERE idDecision = ?";
 
@@ -131,10 +123,11 @@ public class ServiceDecisionFinanciere {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Erreur lors de la récupération de la décision");
+            System.err.println("Erreur lors de la récupération de la décision: " + e.getMessage());
             throw e;
         }
 
         return null;
     }
+
 }

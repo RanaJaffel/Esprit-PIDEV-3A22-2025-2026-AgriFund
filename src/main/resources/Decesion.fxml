@@ -5,8 +5,8 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="controllers.DecesionController"
-            prefWidth="1200"
-            prefHeight="800"
+            prefWidth="800"
+            prefHeight="600"
             styleClass="root"
             stylesheets="@style.css">
 
@@ -19,13 +19,13 @@
 
     <!-- Contenu principal -->
     <center>
-        <HBox spacing="25" styleClass="main-content">
+        <VBox spacing="20" styleClass="main-content">
             <padding>
                 <Insets top="30" right="30" bottom="30" left="30"/>
             </padding>
 
-            <!-- Section Formulaire (Gauche) -->
-            <VBox spacing="20" styleClass="form-section" HBox.hgrow="ALWAYS">
+            <!-- Section Formulaire -->
+            <VBox spacing="20" styleClass="form-section">
                 <Label text="INFORMATIONS DE LA DÉCISION" styleClass="section-title"/>
 
                 <GridPane hgap="20" vgap="20" styleClass="form-grid">
@@ -68,110 +68,29 @@
                               promptText="Entrez la justification de la décision..."
                               GridPane.rowIndex="4" GridPane.columnIndex="1"/>
 
-                    <!-- Ligne 6 - Boutons AVEC LE BOUTON VOIR LA LISTE -->
+                    <!-- Ligne 6 - Boutons -->
                     <HBox spacing="15" GridPane.rowIndex="5" GridPane.columnIndex="0"
                           GridPane.columnSpan="2" alignment="CENTER">
                         <padding>
                             <Insets top="20"/>
                         </padding>
-                        <Button text="📋 Voir la Liste" styleClass="button-accent" onAction="#handleViewList" prefWidth="150"/>
                         <Button text="Annuler" styleClass="button-secondary" onAction="#handleCancel" prefWidth="150"/>
                         <Button text="Enregistrer" styleClass="button-primary" onAction="#handleSave" prefWidth="150"/>
                         <Button text="Effacer" styleClass="button-accent" onAction="#handleClear" prefWidth="150"/>
                     </HBox>
                 </GridPane>
             </VBox>
-
-            <!-- Séparateur vertical -->
-            <Separator orientation="VERTICAL" styleClass="vertical-separator"/>
-
-            <!-- Section Affichage (Droite) -->
-            <VBox spacing="15" styleClass="display-section" HBox.hgrow="ALWAYS" prefWidth="450">
-                <Label text="APERÇU &amp; HISTORIQUE" styleClass="section-title"/>
-
-                <!-- Zone d'aperçu -->
-                <VBox styleClass="preview-card" spacing="10" VBox.vgrow="ALWAYS">
-                    <padding>
-                        <Insets top="20" right="20" bottom="20" left="20"/>
-                    </padding>
-
-                    <Label text="Aperçu de la décision" styleClass="preview-header"/>
-
-                    <Separator/>
-
-                    <ScrollPane fitToWidth="true" styleClass="preview-scroll" VBox.vgrow="ALWAYS">
-                        <VBox fx:id="vboxPreview" spacing="12" styleClass="preview-content">
-                            <HBox spacing="10">
-                                <Label text="📋 ID:" styleClass="preview-label"/>
-                                <Label fx:id="lblPreviewId" text="-" styleClass="preview-value"/>
-                            </HBox>
-
-                            <HBox spacing="10">
-                                <Label text="🔗 Projet:" styleClass="preview-label"/>
-                                <Label fx:id="lblPreviewProjet" text="-" styleClass="preview-value"/>
-                            </HBox>
-
-                            <HBox spacing="10">
-                                <Label text="🎯 Statut:" styleClass="preview-label"/>
-                                <Label fx:id="lblPreviewStatut" text="-" styleClass="preview-value"/>
-                            </HBox>
-
-                            <HBox spacing="10">
-                                <Label text="📅 Date:" styleClass="preview-label"/>
-                                <Label fx:id="lblPreviewDate" text="-" styleClass="preview-value"/>
-                            </HBox>
-
-                            <VBox spacing="5">
-                                <Label text="📝 Justification:" styleClass="preview-label"/>
-                                <TextArea fx:id="taPreviewJustification"
-                                          editable="false"
-                                          wrapText="true"
-                                          prefHeight="120"
-                                          styleClass="preview-text-area"/>
-                            </VBox>
-                        </VBox>
-                    </ScrollPane>
-                </VBox>
-
-                <!-- Zone d'historique/statistiques -->
-                <VBox styleClass="stats-card" spacing="10">
-                    <padding>
-                        <Insets top="15" right="15" bottom="15" left="15"/>
-                    </padding>
-
-                    <Label text="📊 Statistiques rapides" styleClass="stats-header"/>
-                    <Separator/>
-
-                    <HBox spacing="20" alignment="CENTER">
-                        <VBox alignment="CENTER" spacing="5" styleClass="stat-box">
-                            <Label fx:id="lblTotalDecisions" text="0" styleClass="stat-number"/>
-                            <Label text="Total" styleClass="stat-label"/>
-                        </VBox>
-
-                        <VBox alignment="CENTER" spacing="5" styleClass="stat-box">
-                            <Label fx:id="lblApprouves" text="0" styleClass="stat-number-success"/>
-                            <Label text="Approuvés" styleClass="stat-label"/>
-                        </VBox>
-
-                        <VBox alignment="CENTER" spacing="5" styleClass="stat-box">
-                            <Label fx:id="lblEnAttente" text="0" styleClass="stat-number-warning"/>
-                            <Label text="En attente" styleClass="stat-label"/>
-                        </VBox>
-                    </HBox>
-                </VBox>
-            </VBox>
-        </HBox>
+        </VBox>
     </center>
 
     <!-- Pied de page -->
     <bottom>
         <HBox styleClass="footer" alignment="CENTER_LEFT" spacing="20">
-            <Label styleClass="signature" text="💚 I Love You Salmoucha"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Label styleClass="signature" text="Développé par SawSaw"/>
+            <Label styleClass="signature" text="💚"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Label fx:id="lblStatus" styleClass="status-label" text="Prêt"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label styleClass="signature" text="Développé par SawSaw"/>
         </HBox>
     </bottom>
-
 </BorderPane>

@@ -96,11 +96,11 @@
     <!-- Pied de page -->
     <bottom>
         <HBox styleClass="footer" alignment="CENTER_LEFT" spacing="20">
-            <Label styleClass="signature" text="💚 I Love You Salmoucha"/>
+            <Label styleClass="signature" text=""/>
             <Region HBox.hgrow="ALWAYS"/>
             <Label fx:id="lblStatus" styleClass="status-label" text="Chargement..."/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Label styleClass="signature" text="Développé par SawSaw"/>
+            <Label styleClass="signature" text=""/>
         </HBox>
     </bottom>
 </BorderPane>

@@ -5,8 +5,8 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="controllers.RisqueController"
-            prefWidth="1200"
-            prefHeight="800"
+            prefWidth="800"
+            prefHeight="600"
             styleClass="root"
             stylesheets="@style.css">
 
@@ -19,13 +19,13 @@
 
     <!-- Contenu principal -->
     <center>
-        <HBox spacing="25" styleClass="main-content">
+        <VBox spacing="20" styleClass="main-content">
             <padding>
                 <Insets top="30" right="30" bottom="30" left="30"/>
             </padding>
 
-            <!-- Section Formulaire (Gauche) -->
-            <VBox spacing="20" styleClass="form-section" HBox.hgrow="ALWAYS">
+            <!-- Section Formulaire -->
+            <VBox spacing="20" styleClass="form-section">
                 <Label text="INFORMATIONS DE L'ÉVALUATION" styleClass="section-title"/>
 
                 <GridPane hgap="20" vgap="20" styleClass="form-grid">
@@ -90,78 +90,13 @@
                         <padding>
                             <Insets top="20"/>
                         </padding>
-                        <Button text="📋 Voir la Liste" styleClass="button-accent" onAction="#handleViewList" prefWidth="150"/>
-                        <Button text="📋 Décisions" styleClass="button-accent" onAction="#handleViewDecisionList" prefWidth="150"/>
                         <Button text="Annuler" styleClass="button-secondary" onAction="#handleCancel" prefWidth="150"/>
                         <Button text="Enregistrer" styleClass="button-primary" onAction="#handleSave" prefWidth="150"/>
                         <Button text="Effacer" styleClass="button-accent" onAction="#handleClear" prefWidth="150"/>
                     </HBox>
                 </GridPane>
             </VBox>
-
-            <!-- Séparateur vertical -->
-            <Separator orientation="VERTICAL" styleClass="vertical-separator"/>
-
-            <!-- Section Affichage (Droite) -->
-            <VBox spacing="15" styleClass="display-section" HBox.hgrow="ALWAYS" prefWidth="450">
-                <Label text="APERÇU &amp; HISTORIQUE" styleClass="section-title"/>
-
-                <!-- Zone d'aperçu -->
-                <VBox styleClass="preview-card" spacing="10" VBox.vgrow="ALWAYS">
-                    <padding>
-                        <Insets top="20" right="20" bottom="20" left="20"/>
-                    </padding>
-
-                    <Label text="Aperçu de l'évaluation" styleClass="preview-header"/>
-
-                    <Separator/>
-
-                    <ScrollPane fitToWidth="true" styleClass="preview-scroll" VBox.vgrow="ALWAYS">
-                        <VBox fx:id="vboxPreview" spacing="12" styleClass="preview-content">
-                            <HBox spacing="10">
-                                <Label text="📋 ID:" styleClass="preview-label"/>
-                                <Label fx:id="lblPreviewId" text="-" styleClass="preview-value"/>
-                            </HBox>
-
-                            <HBox spacing="10">
-                                <Label text="🔗 Projet:" styleClass="preview-label"/>
-                                <Label fx:id="lblPreviewProjet" text="-" styleClass="preview-value"/>
-                            </HBox>
-
-                            <HBox spacing="10">
-                                <Label text="📊 Score:" styleClass="preview-label"/>
-                                <Label fx:id="lblPreviewScore" text="-" styleClass="preview-value"/>
-                            </HBox>
-
-                            <HBox spacing="10">
-                                <Label text="🎯 Niveau:" styleClass="preview-label"/>
-                                <Label fx:id="lblPreviewNiveau" text="-" styleClass="preview-value"/>
-                            </HBox>
-
-                            <HBox spacing="10">
-                                <Label text="📈 Fiabilité:" styleClass="preview-label"/>
-                                <Label fx:id="lblPreviewFiabilite" text="-" styleClass="preview-value"/>
-                            </HBox>
-
-                            <HBox spacing="10">
-                                <Label text="🔍 Facteur:" styleClass="preview-label"/>
-                                <Label fx:id="lblPreviewFacteur" text="-" styleClass="preview-value"/>
-                            </HBox>
-
-                            <HBox spacing="10">
-                                <Label text="📢 Recommandation:" styleClass="preview-label"/>
-                                <Label fx:id="lblPreviewRecommandation" text="-" styleClass="preview-value"/>
-                            </HBox>
-
-                            <HBox spacing="10">
-                                <Label text="📅 Date:" styleClass="preview-label"/>
-                                <Label fx:id="lblPreviewDate" text="-" styleClass="preview-value"/>
-                            </HBox>
-                        </VBox>
-                    </ScrollPane>
-                </VBox>
-            </VBox>
-        </HBox>
+        </VBox>
     </center>
 
     <!-- Pied de page -->
@@ -169,9 +104,9 @@
         <HBox styleClass="footer" alignment="CENTER_LEFT" spacing="20">
             <Label styleClass="signature" text="💚 I Love You Salmoucha"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Label styleClass="signature" text="Développé par SawSaw"/>
-            <Region HBox.hgrow="ALWAYS"/>
             <Label fx:id="lblStatus" styleClass="status-label" text="Prêt"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label styleClass="signature" text="Développé par SawSaw"/>
         </HBox>
     </bottom>
 </BorderPane>

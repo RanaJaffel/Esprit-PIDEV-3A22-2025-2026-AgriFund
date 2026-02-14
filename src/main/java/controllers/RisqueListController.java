@@ -291,12 +291,12 @@ public class RisqueListController {
             Stage stage = new Stage();
             stage.setTitle(evaluation == null ? "Nouvelle Évaluation" : "Modifier Évaluation #" + evaluation.getIdEvaluation());
             stage.setScene(new Scene(root));
-            stage.setMinWidth(1200);
-            stage.setMinHeight(800);
+            stage.setMinWidth(800);
+            stage.setMinHeight(600);
 
-            stage.setOnHidden(e -> loadEvaluations());
+            stage.setOnHidden(e -> loadEvaluations()); // Recharge les données après la fermeture de la fenêtre
 
-            stage.show();
+            stage.showAndWait(); // Utilisez showAndWait() pour attendre la fermeture de la fenêtre
 
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir le formulaire: " + e.getMessage());

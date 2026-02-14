@@ -3,15 +3,10 @@ package controllers;
 import entities.EvaluationRisque;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import services.ServiceEvaluationRisque;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.time.ZoneId;
 import java.util.Date;
@@ -19,7 +14,6 @@ import java.util.Optional;
 
 public class RisqueController {
 
-    @FXML private VBox root;
     @FXML private TextField tfIdEvaluation;
     @FXML private TextField tfIdProjet;
     @FXML private TextField tfScoreGlobal;
@@ -28,17 +22,6 @@ public class RisqueController {
     @FXML private TextField tfFacteurPrincipal;
     @FXML private ComboBox<String> cbRecommandation;
     @FXML private DatePicker dpDateEvaluation;
-
-    @FXML private Label lblPreviewId;
-    @FXML private Label lblPreviewProjet;
-    @FXML private Label lblPreviewScore;
-    @FXML private Label lblPreviewNiveau;
-    @FXML private Label lblPreviewFiabilite;
-    @FXML private Label lblPreviewFacteur;
-    @FXML private Label lblPreviewRecommandation;
-    @FXML private Label lblPreviewDate;
-    @FXML private TextArea taPreviewFacteur;
-
     @FXML private Label lblStatus;
 
     private ServiceEvaluationRisque service;
@@ -48,37 +31,15 @@ public class RisqueController {
     public void initialize() {
         service = new ServiceEvaluationRisque();
 
-        // Initialiser les ComboBox
         cbNiveauRisque.getItems().addAll("Faible", "Moyen", "Élevé", "Critique");
         cbFiabiliteDonnees.getItems().addAll("Faible", "Moyenne", "Élevée");
         cbRecommandation.getItems().addAll("Aucune", "Surveillance", "Action immédiate");
 
-        // Ajouter des listeners pour la mise à jour en temps réel de l'aperçu
-        tfIdProjet.textProperty().addListener((obs, old, newVal) -> updatePreview());
-        tfScoreGlobal.textProperty().addListener((obs, old, newVal) -> updatePreview());
-        cbNiveauRisque.valueProperty().addListener((obs, old, newVal) -> updatePreview());
-        cbFiabiliteDonnees.valueProperty().addListener((obs, old, newVal) -> updatePreview());
-        tfFacteurPrincipal.textProperty().addListener((obs, old, newVal) -> updatePreview());
-        cbRecommandation.valueProperty().addListener((obs, old, newVal) -> updatePreview());
-        dpDateEvaluation.valueProperty().addListener((obs, old, newVal) -> updatePreview());
-
         updateStatus("Prêt");
     }
 
-    private void updatePreview() {
-        lblPreviewId.setText(tfIdEvaluation.getText().isEmpty() ? "-" : tfIdEvaluation.getText());
-        lblPreviewProjet.setText(tfIdProjet.getText().isEmpty() ? "-" : tfIdProjet.getText());
-        lblPreviewScore.setText(tfScoreGlobal.getText().isEmpty() ? "-" : tfScoreGlobal.getText());
-        lblPreviewNiveau.setText(cbNiveauRisque.getValue() == null ? "-" : cbNiveauRisque.getValue());
-        lblPreviewFiabilite.setText(cbFiabiliteDonnees.getValue() == null ? "-" : cbFiabiliteDonnees.getValue());
-        lblPreviewFacteur.setText(tfFacteurPrincipal.getText().isEmpty() ? "-" : tfFacteurPrincipal.getText());
-        lblPreviewRecommandation.setText(cbRecommandation.getValue() == null ? "-" : cbRecommandation.getValue());
-        lblPreviewDate.setText(dpDateEvaluation.getValue() == null ? "-" : dpDateEvaluation.getValue().toString());
-        taPreviewFacteur.setText(tfFacteurPrincipal.getText().isEmpty() ? "-" : tfFacteurPrincipal.getText());
-    }
-
     @FXML
-    private void handleSave() {
+    private void handleSave(ActionEvent event) {
         if (!validateFields()) {
             return;
         }
@@ -90,7 +51,7 @@ public class RisqueController {
             String fiabiliteDonnees = cbFiabiliteDonnees.getValue();
             String facteurPrincipal = tfFacteurPrincipal.getText();
             int recommandation = cbRecommandation.getSelectionModel().getSelectedIndex();
-            Date dateEvaluation = Date.from(dpDateEvaluation.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            java.util.Date dateEvaluation = java.sql.Date.valueOf(dpDateEvaluation.getValue());
 
             if (evaluationEnCours == null) {
                 EvaluationRisque nouvelleEvaluation = new EvaluationRisque(
@@ -99,7 +60,6 @@ public class RisqueController {
                 );
                 service.ajouter(nouvelleEvaluation);
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Évaluation ajoutée avec succès!");
-                updateStatus("Évaluation ajoutée");
             } else {
                 evaluationEnCours.setScoreGlobal(scoreGlobal);
                 evaluationEnCours.setNiveauRisque(niveauRisque);
@@ -110,10 +70,9 @@ public class RisqueController {
                 evaluationEnCours.setIdProjet(idProjet);
                 service.modifier(evaluationEnCours);
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Évaluation modifiée avec succès!");
-                updateStatus("Évaluation modifiée");
             }
 
-            handleClear(null);
+            closeWindow();
 
         } catch (NumberFormatException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Les champs numériques doivent être valides!");
@@ -122,6 +81,8 @@ public class RisqueController {
             e.printStackTrace();
         }
     }
+
+
 
     private boolean validateFields() {
         StringBuilder errors = new StringBuilder();
@@ -163,29 +124,12 @@ public class RisqueController {
     }
 
     @FXML
-    private void handleCancel() {
-        if (!tfIdProjet.getText().isEmpty() || !tfScoreGlobal.getText().isEmpty() ||
-                cbNiveauRisque.getValue() != null || cbFiabiliteDonnees.getValue() != null ||
-                !tfFacteurPrincipal.getText().isEmpty() || cbRecommandation.getValue() != null ||
-                dpDateEvaluation.getValue() != null) {
-
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Confirmation");
-            alert.setHeaderText("Annuler les modifications?");
-            alert.setContentText("Les données non enregistrées seront perdues.");
-
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK) {
-                handleClear(null);
-                updateStatus("Annulé");
-            }
-        } else {
-            handleClear(null);
-        }
+    private void handleCancel(ActionEvent event) {
+        closeWindow();
     }
 
     @FXML
-    public void handleClear(ActionEvent actionEvent) {
+    private void handleClear(ActionEvent event) {
         tfIdEvaluation.clear();
         tfIdProjet.clear();
         tfScoreGlobal.clear();
@@ -196,58 +140,7 @@ public class RisqueController {
         dpDateEvaluation.setValue(null);
 
         evaluationEnCours = null;
-
-        lblPreviewId.setText("-");
-        lblPreviewProjet.setText("-");
-        lblPreviewScore.setText("-");
-        lblPreviewNiveau.setText("-");
-        lblPreviewFiabilite.setText("-");
-        lblPreviewFacteur.setText("-");
-        lblPreviewRecommandation.setText("-");
-        lblPreviewDate.setText("-");
-        taPreviewFacteur.setText("-");
-
         updateStatus("Formulaire effacé");
-    }
-
-    @FXML
-    private void handleViewList() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/RisqueList.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = new Stage();
-            stage.setTitle("Liste des Évaluations de Risque");
-            stage.setScene(new Scene(root));
-            stage.setMinWidth(1400);
-            stage.setMinHeight(800);
-            stage.show();
-
-            updateStatus("Liste ouverte");
-
-        } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir la liste: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void handleViewDecisionList() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/DecisionList.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = new Stage();
-            stage.setTitle("Liste des Décisions Financières");
-            stage.setScene(new Scene(root));
-            stage.setMinWidth(1400);
-            stage.setMinHeight(800);
-            stage.show();
-
-        } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir la liste des décisions: " + e.getMessage());
-            e.printStackTrace();
-        }
     }
 
     public void loadEvaluation(int idEvaluation) {
@@ -264,16 +157,22 @@ public class RisqueController {
                 cbFiabiliteDonnees.setValue(evaluation.getFiabiliteDonnees());
                 tfFacteurPrincipal.setText(evaluation.getFacteurPrincipal());
                 cbRecommandation.setValue(getRecommandationString(evaluation.getRecommandation()));
+
+                // Conversion de java.sql.Date en LocalDate
                 java.util.Date utilDate = new java.util.Date(evaluation.getDateEvaluation().getTime());
                 dpDateEvaluation.setValue(utilDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 
                 updateStatus("Modification en cours");
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Aucune évaluation trouvée avec cet ID.");
             }
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger l'évaluation: " + e.getMessage());
             e.printStackTrace();
         }
     }
+
+
 
     private String getRecommandationString(int recommandation) {
         switch (recommandation) {
@@ -282,6 +181,11 @@ public class RisqueController {
             case 2: return "Action immédiate";
             default: return "Inconnu";
         }
+    }
+
+    private void closeWindow() {
+        Stage stage = (Stage) tfIdEvaluation.getScene().getWindow();
+        stage.close();
     }
 
     private void updateStatus(String message) {
