@@ -27,6 +27,23 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
+import com.itextpdf.kernel.colors.Color;
+import com.itextpdf.kernel.colors.ColorConstants;
+import com.itextpdf.kernel.colors.DeviceRgb;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
+import javafx.stage.FileChooser;
+import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatter;
+
 public class projectagricolecontroller implements Initializable {
 
     @FXML private TextField tfNomProject;
@@ -567,5 +584,167 @@ public class projectagricolecontroller implements Initializable {
         tfBudget.clear();
         cbStatut.getSelectionModel().clearSelection();
         dpDateSoumission.setValue(null);
+    }
+
+    @FXML
+    void exportToPDF(ActionEvent event) {
+        try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Enregistrer le PDF");
+            fileChooser.setInitialFileName("Projets_Agricoles_" +
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".pdf");
+            fileChooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("PDF Files", "*.pdf")
+            );
+
+            File file = fileChooser.showSaveDialog(projectsContainer.getScene().getWindow());
+
+            if (file != null) {
+                PdfWriter writer = new PdfWriter(file.getAbsolutePath());
+                PdfDocument pdf = new PdfDocument(writer);
+                Document document = new Document(pdf);
+
+                // CORRECTED: Use Color type instead of DeviceRgb
+                Color headerColor = new DeviceRgb(45, 106, 79);
+                Color lightGreen = new DeviceRgb(216, 243, 220);
+
+                // Title
+                Paragraph title = new Paragraph("RAPPORT DES PROJETS AGRICOLES")
+                        .setFontSize(20)
+                        .setBold()
+                        .setFontColor(headerColor)
+                        .setTextAlignment(TextAlignment.CENTER)
+                        .setMarginBottom(10);
+                document.add(title);
+
+                // Date and Statistics
+                Paragraph info = new Paragraph(
+                        "Généré le: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy à HH:mm")) +
+                                "\nTotal de projets: " + allProjects.size()
+                ).setFontSize(10)
+                        .setTextAlignment(TextAlignment.CENTER)
+                        .setMarginBottom(20);
+                document.add(info);
+
+                // Statistics Summary
+                Paragraph stats = new Paragraph("STATISTIQUES")
+                        .setFontSize(14)
+                        .setBold()
+                        .setFontColor(headerColor)
+                        .setMarginBottom(10);
+                document.add(stats);
+
+                Table statsTable = new Table(UnitValue.createPercentArray(new float[]{25, 25, 25, 25}))
+                        .useAllAvailableWidth()
+                        .setMarginBottom(20);
+
+                long acceptedCount = allProjects.stream().filter(p -> "accepte".equals(p.getStatut())).count();
+                long inProgressCount = allProjects.stream().filter(p -> "en cours".equals(p.getStatut())).count();
+                long refusedCount = allProjects.stream().filter(p -> "refuse".equals(p.getStatut())).count();
+
+                BigDecimal totalBudget = allProjects.stream()
+                        .map(projectagricole::getBudgetdemande)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+                statsTable.addCell(createStatsCell("Acceptés", String.valueOf(acceptedCount),
+                        new DeviceRgb(213, 244, 230)));
+                statsTable.addCell(createStatsCell("En Cours", String.valueOf(inProgressCount),
+                        new DeviceRgb(255, 229, 204)));
+                statsTable.addCell(createStatsCell("Refusés", String.valueOf(refusedCount),
+                        new DeviceRgb(255, 229, 229)));
+                statsTable.addCell(createStatsCell("Budget Total", String.format("%.2f DT", totalBudget),
+                        lightGreen));
+
+                document.add(statsTable);
+
+                // Projects List Title
+                Paragraph listTitle = new Paragraph("LISTE DÉTAILLÉE DES PROJETS")
+                        .setFontSize(14)
+                        .setBold()
+                        .setFontColor(headerColor)
+                        .setMarginBottom(10);
+                document.add(listTitle);
+
+                // Projects Table
+                Table table = new Table(UnitValue.createPercentArray(new float[]{8, 22, 15, 18, 18, 19}))
+                        .useAllAvailableWidth();
+
+                // Table Headers
+                String[] headers = {"ID", "Nom du Projet", "Surface (Ha)", "Budget (DT)", "Date Soumission", "Statut"};
+                for (String header : headers) {
+                    Cell headerCell = new Cell()
+                            .add(new Paragraph(header).setBold().setFontSize(10))
+                            .setBackgroundColor(headerColor)
+                            .setFontColor(ColorConstants.WHITE)
+                            .setTextAlignment(TextAlignment.CENTER)
+                            .setPadding(8);
+                    table.addHeaderCell(headerCell);
+                }
+
+                // Table Data
+                for (projectagricole p : allProjects) {
+                    Color rowColor = ColorConstants.WHITE;
+                    if ("accepte".equals(p.getStatut())) {
+                        rowColor = new DeviceRgb(213, 244, 230);
+                    } else if ("refuse".equals(p.getStatut())) {
+                        rowColor = new DeviceRgb(255, 235, 235);
+                    } else if ("en cours".equals(p.getStatut())) {
+                        rowColor = new DeviceRgb(255, 245, 230);
+                    }
+
+                    table.addCell(createDataCell(String.valueOf(p.getIdproject()), rowColor));
+                    table.addCell(createDataCell(p.getNomproject(), rowColor));
+                    table.addCell(createDataCell(String.format("%.2f", p.getSurface()), rowColor));
+                    table.addCell(createDataCell(String.format("%,.2f", p.getBudgetdemande()), rowColor));
+                    table.addCell(createDataCell(
+                            p.getDatesoumission().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                            rowColor
+                    ));
+
+                    String statutText = capitalizeStatus(p.getStatut());
+                    table.addCell(createDataCell(statutText, rowColor).setBold());
+                }
+
+                document.add(table);
+
+                // Footer
+                Paragraph footer = new Paragraph(
+                        "\n\nDocument généré automatiquement par le Système de Gestion des Projets Agricoles"
+                ).setFontSize(8)
+                        .setTextAlignment(TextAlignment.CENTER)
+                        .setFontColor(ColorConstants.GRAY);
+                document.add(footer);
+
+                document.close();
+
+                showAlert(Alert.AlertType.INFORMATION, "Succès",
+                        "Le fichier PDF a été généré avec succès !\n\nEmplacement: " + file.getAbsolutePath());
+            }
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur",
+                    "Erreur lors de la génération du PDF: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    // CORRECTED HELPER METHODS - Use Color parameter type
+    private Cell createStatsCell(String label, String value, Color bgColor) {
+        Paragraph content = new Paragraph()
+                .add(new Paragraph(label).setFontSize(9).setMarginBottom(2))
+                .add(new Paragraph(value).setBold().setFontSize(14));
+
+        return new Cell()
+                .add(content)
+                .setBackgroundColor(bgColor)
+                .setTextAlignment(TextAlignment.CENTER)
+                .setPadding(10);
+    }
+
+    private Cell createDataCell(String text, Color bgColor) {
+        return new Cell()
+                .add(new Paragraph(text).setFontSize(9))
+                .setBackgroundColor(bgColor)
+                .setTextAlignment(TextAlignment.CENTER)
+                .setPadding(6);
     }
 }

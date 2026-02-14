@@ -29,10 +29,22 @@
                     </VBox>
                 </HBox>
 
-                <!-- Right: Navigation Button -->
-                <Button text="Aller vers Ressources 🚜 ➔" styleClass="btn-nav"
-                        style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"
-                        onAction="#goToRessources" prefHeight="40" prefWidth="160"/>
+                <!-- Right: Action Buttons -->
+                <HBox spacing="10">
+                    <!-- PDF Export Button -->
+                    <Button text="📄 Exporter PDF" styleClass="btn-info"
+                            style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: 600;"
+                            onAction="#exportToPDF" prefHeight="40" prefWidth="150">
+                        <tooltip>
+                            <Tooltip text="Exporter la liste des projets en PDF"/>
+                        </tooltip>
+                    </Button>
+
+                    <!-- Navigation Button -->
+                    <Button text="📦 Ressources →" styleClass="btn-nav"
+                            style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"
+                            onAction="#goToRessources" prefHeight="40" prefWidth="170"/>
+                </HBox>
             </HBox>
 
             <!-- Toolbar Section -->
@@ -49,7 +61,7 @@
                 <Region HBox.hgrow="ALWAYS"/>
 
                 <!-- Search Field with Icon -->
-                <HBox alignment="CENTER_LEFT" spacing="8" style="-fx-background-color: #F8F9FA; -fx-background-radius: 20px; -fx-padding: 8px 16px;">
+                <HBox alignment="CENTER_LEFT" spacing="8" style="-fx-background-color: #F8F9FA; -fx-background-radius: 20; -fx-padding: 8 16;">
                     <Label text="🔍" style="-fx-font-size: 16px;"/>
                     <TextField fx:id="tfSearchProject" promptText="Rechercher un projet..."
                                prefWidth="220" style="-fx-background-color: transparent; -fx-border-width: 0;"/>
@@ -61,7 +73,10 @@
 
                 <!-- Add Button -->
                 <Button text="+ Nouveau Projet" styleClass="btn-primary"
-                        onAction="#openAddProjectForm" prefHeight="40" prefWidth="180"/>
+                        onAction="#openAddProjectForm"
+                        prefHeight="40"
+                        prefWidth="180"
+                        style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
             </HBox>
         </VBox>
     </top>
@@ -141,7 +156,7 @@
             </VBox>
 
             <!-- Separator -->
-            <Separator style="-fx-padding: 10px 0;">
+            <Separator style="-fx-padding: 10 0;">
                 <padding>
                     <Insets top="10" bottom="10"/>
                 </padding>
@@ -168,7 +183,7 @@
 
     <!-- Optional Footer with Quick Stats -->
     <bottom>
-        <HBox alignment="CENTER" spacing="30" style="-fx-background-color: white; -fx-padding: 12px 30px; -fx-border-color: #E9ECEF; -fx-border-width: 1 0 0 0;">
+        <HBox alignment="CENTER" spacing="30" style="-fx-background-color: white; -fx-padding: 12 30; -fx-border-color: #E9ECEF; -fx-border-width: 1 0 0 0;">
             <HBox spacing="8" alignment="CENTER">
                 <Label text="💰" style="-fx-font-size: 16px;"/>
                 <VBox spacing="0">

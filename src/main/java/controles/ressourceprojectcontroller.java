@@ -27,6 +27,22 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
+import com.itextpdf.kernel.colors.Color;
+import com.itextpdf.kernel.colors.ColorConstants;
+import com.itextpdf.kernel.colors.DeviceRgb;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
+import javafx.stage.FileChooser;
+import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class ressourceprojectcontroller implements Initializable {
 
     @FXML private FlowPane ressourcesContainer;
@@ -464,5 +480,187 @@ public class ressourceprojectcontroller implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    @FXML
+    void exportToPDF(ActionEvent event) {
+        try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Enregistrer le PDF");
+            fileChooser.setInitialFileName("Ressources_Agricoles_" +
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".pdf");
+            fileChooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("PDF Files", "*.pdf")
+            );
+
+            File file = fileChooser.showSaveDialog(ressourcesContainer.getScene().getWindow());
+
+            if (file != null) {
+                PdfWriter writer = new PdfWriter(file.getAbsolutePath());
+                PdfDocument pdf = new PdfDocument(writer);
+                Document document = new Document(pdf);
+
+                Color headerColor = new DeviceRgb(45, 106, 79);
+                Color lightGreen = new DeviceRgb(216, 243, 220);
+
+                // Title
+                Paragraph title = new Paragraph("INVENTAIRE DES RESSOURCES AGRICOLES")
+                        .setFontSize(20)
+                        .setBold()
+                        .setFontColor(headerColor)
+                        .setTextAlignment(TextAlignment.CENTER)
+                        .setMarginBottom(10);
+                document.add(title);
+
+                // Date and Statistics
+                Paragraph info = new Paragraph(
+                        "Généré le: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy à HH:mm")) +
+                                "\nTotal de ressources: " + allRessources.size()
+                ).setFontSize(10)
+                        .setTextAlignment(TextAlignment.CENTER)
+                        .setMarginBottom(20);
+                document.add(info);
+
+                // Statistics Summary
+                Paragraph stats = new Paragraph("STATISTIQUES PAR TYPE")
+                        .setFontSize(14)
+                        .setBold()
+                        .setFontColor(headerColor)
+                        .setMarginBottom(10);
+                document.add(stats);
+
+                Table statsTable = new Table(UnitValue.createPercentArray(new float[]{25, 25, 25, 25}))
+                        .useAllAvailableWidth()
+                        .setMarginBottom(20);
+
+                long equipmentCount = allRessources.stream()
+                        .filter(r -> "equipement".equals(r.getTyperessource())).count();
+                long materialsCount = allRessources.stream()
+                        .filter(r -> "materiaux".equals(r.getTyperessource())).count();
+                long servicesCount = allRessources.stream()
+                        .filter(r -> "service".equals(r.getTyperessource())).count();
+
+                // ✅✅✅ FINAL FIX - Convert BigDecimal to double
+                double totalCost = allRessources.stream()
+                        .filter(r -> r.getCout() != null)
+                        .mapToDouble(r -> r.getCout().doubleValue())
+                        .sum();
+
+                statsTable.addCell(createStatsCell("Total Ressources",
+                        String.valueOf(allRessources.size()), lightGreen));
+                statsTable.addCell(createStatsCell("Équipements",
+                        String.valueOf(equipmentCount), new DeviceRgb(255, 229, 204)));
+                statsTable.addCell(createStatsCell("Matériaux",
+                        String.valueOf(materialsCount), new DeviceRgb(229, 244, 255)));
+                statsTable.addCell(createStatsCell("Services",
+                        String.valueOf(servicesCount), new DeviceRgb(243, 229, 245)));
+
+                document.add(statsTable);
+
+                // Cost Summary
+                Paragraph costTitle = new Paragraph("COÛT TOTAL: " + String.format("%.2f DT", totalCost))
+                        .setFontSize(12)
+                        .setBold()
+                        .setFontColor(headerColor)
+                        .setTextAlignment(TextAlignment.CENTER)
+                        .setMarginBottom(15);
+                document.add(costTitle);
+
+                // Resources List Title
+                Paragraph listTitle = new Paragraph("LISTE DÉTAILLÉE DES RESSOURCES")
+                        .setFontSize(14)
+                        .setBold()
+                        .setFontColor(headerColor)
+                        .setMarginBottom(10);
+                document.add(listTitle);
+
+                // Resources Table
+                Table table = new Table(UnitValue.createPercentArray(new float[]{8, 20, 12, 10, 13, 18, 12, 7}))
+                        .useAllAvailableWidth();
+
+                // Table Headers
+                String[] headers = {"ID", "Nom", "Type", "Quantité", "Coût (DT)", "Fournisseur", "Projet", "Statut"};
+                for (String header : headers) {
+                    Cell headerCell = new Cell()
+                            .add(new Paragraph(header).setBold().setFontSize(9))
+                            .setBackgroundColor(headerColor)
+                            .setFontColor(ColorConstants.WHITE)
+                            .setTextAlignment(TextAlignment.CENTER)
+                            .setPadding(6);
+                    table.addHeaderCell(headerCell);
+                }
+
+                // Table Data
+                for (ressourceproject r : allRessources) {
+                    Color rowColor = ColorConstants.WHITE;
+                    if ("equipement".equals(r.getTyperessource())) {
+                        rowColor = new DeviceRgb(255, 245, 230);
+                    } else if ("materiaux".equals(r.getTyperessource())) {
+                        rowColor = new DeviceRgb(229, 244, 255);
+                    } else if ("service".equals(r.getTyperessource())) {
+                        rowColor = new DeviceRgb(243, 229, 245);
+                    }
+
+                    table.addCell(createDataCell(String.valueOf(r.getIdressource()), rowColor));
+                    table.addCell(createDataCell(r.getNomressource(), rowColor));
+                    table.addCell(createDataCell(capitalizeType(r.getTyperessource()), rowColor));
+                    table.addCell(createDataCell(String.valueOf(r.getQuantite()), rowColor));
+
+                    // Also fix the cost display in the table
+                    String costStr = r.getCout() != null ? String.format("%.2f", r.getCout()) : "0.00";
+                    table.addCell(createDataCell(costStr, rowColor));
+
+                    table.addCell(createDataCell(r.getFournisseur(), rowColor));
+                    table.addCell(createDataCell("#" + r.getIdproject(), rowColor));
+
+                    String statutText = capitalizeStatus(r.getStatut());
+                    Cell statusCell = createDataCell(statutText, rowColor).setBold();
+                    if ("achete".equals(r.getStatut())) {
+                        statusCell.setFontColor(new DeviceRgb(64, 145, 108));
+                    }
+                    table.addCell(statusCell);
+                }
+
+                document.add(table);
+
+                // Footer
+                Paragraph footer = new Paragraph(
+                        "\n\nDocument généré automatiquement par le Système de Gestion des Ressources Agricoles"
+                ).setFontSize(8)
+                        .setTextAlignment(TextAlignment.CENTER)
+                        .setFontColor(ColorConstants.GRAY);
+                document.add(footer);
+
+                document.close();
+
+                showAlert(Alert.AlertType.INFORMATION, "Succès",
+                        "Le fichier PDF a été généré avec succès !\n\nEmplacement: " + file.getAbsolutePath());
+            }
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur",
+                    "Erreur lors de la génération du PDF: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    // Helper methods remain the same
+    private Cell createStatsCell(String label, String value, Color bgColor) {
+        Paragraph content = new Paragraph()
+                .add(new Paragraph(label).setFontSize(9).setMarginBottom(2))
+                .add(new Paragraph(value).setBold().setFontSize(14));
+
+        return new Cell()
+                .add(content)
+                .setBackgroundColor(bgColor)
+                .setTextAlignment(TextAlignment.CENTER)
+                .setPadding(10);
+    }
+
+    private Cell createDataCell(String text, Color bgColor) {
+        return new Cell()
+                .add(new Paragraph(text).setFontSize(8))
+                .setBackgroundColor(bgColor)
+                .setTextAlignment(TextAlignment.CENTER)
+                .setPadding(5);
     }
 }
