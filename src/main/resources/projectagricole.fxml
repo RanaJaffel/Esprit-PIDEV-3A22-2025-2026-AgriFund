@@ -30,7 +30,7 @@
                 </HBox>
 
                 <!-- Right: Navigation Button -->
-                <Button text="📦 Ressources →" styleClass="btn-nav"
+                <Button text="Aller vers Ressources 🚜 ➔" styleClass="btn-nav"
                         style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"
                         onAction="#goToRessources" prefHeight="40" prefWidth="160"/>
             </HBox>

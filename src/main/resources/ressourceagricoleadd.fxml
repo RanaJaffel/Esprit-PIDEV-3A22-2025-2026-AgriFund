@@ -217,15 +217,6 @@
                 </GridPane>
             </VBox>
 
-            <!-- Info Banner -->
-            <HBox spacing="12" alignment="CENTER_LEFT" styleClass="alert-success">
-                <Label text="ℹ️" style="-fx-font-size: 18px;"/>
-                <VBox spacing="2">
-                    <Label text="Information" style="-fx-font-weight: bold; -fx-text-fill: #40916C;"/>
-                    <Label text="Les ressources peuvent être modifiées ultérieurement depuis la liste des ressources."
-                           style="-fx-font-size: 12px; -fx-text-fill: #1B4332;" wrapText="true"/>
-                </VBox>
-            </HBox>
 
             <!-- Action Buttons -->
             <HBox spacing="15" alignment="CENTER_RIGHT">

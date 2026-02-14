@@ -217,15 +217,7 @@
                 </GridPane>
             </VBox>
 
-            <!-- Warning Banner -->
-            <HBox spacing="12" alignment="CENTER_LEFT" styleClass="alert-warning">
-                <Label text="⚠️" style="-fx-font-size: 18px;"/>
-                <VBox spacing="2">
-                    <Label text="Attention" style="-fx-font-weight: bold; -fx-text-fill: #D4A574;"/>
-                    <Label text="Les modifications apportées seront appliquées immédiatement après la sauvegarde."
-                           style="-fx-font-size: 12px; -fx-text-fill: #8B7355;" wrapText="true"/>
-                </VBox>
-            </HBox>
+
 
             <!-- Action Buttons -->
             <HBox spacing="15" alignment="CENTER_RIGHT">

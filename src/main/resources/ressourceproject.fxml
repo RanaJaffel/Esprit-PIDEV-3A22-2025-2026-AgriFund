@@ -18,7 +18,7 @@
             </padding>
 
             <Button text="← Retour aux Projets" styleClass="btn-nav"
-                    onAction="#goToProjects" prefHeight="38" prefWidth="180"
+                    onAction="#goToProjects" prefHeight="40" prefWidth="190"
                     style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-font-size: 14px;"/>
 
             <Region HBox.hgrow="ALWAYS"/>
@@ -94,7 +94,7 @@
             <!-- Equipment Card -->
             <HBox spacing="15" alignment="CENTER_LEFT" styleClass="stat-card" HBox.hgrow="ALWAYS">
                <StackPane styleClass="icon-container" style="-fx-min-width: 55; -fx-min-height: 55; -fx-background-color: #FFE5CC;">
-                  <Label text="⚙️" style="-fx-font-size: 28px;"/>
+                  <Label text="🚜" style="-fx-font-size: 28px;"/>
                </StackPane>
                <VBox spacing="4">
                   <Label text="Équipements" styleClass="stat-label" style="-fx-font-size: 13px;"/>
@@ -105,7 +105,7 @@
             <!-- Materials Card -->
             <HBox spacing="15" alignment="CENTER_LEFT" styleClass="stat-card" HBox.hgrow="ALWAYS">
                <StackPane styleClass="icon-container" style="-fx-min-width: 55; -fx-min-height: 55; -fx-background-color: #E5F4FF;">
-                  <Label text="🧱" style="-fx-font-size: 28px;"/>
+                  <Label text="⚙" style="-fx-font-size: 28px;"/>
                </StackPane>
                <VBox spacing="4">
                   <Label text="Matériaux" styleClass="stat-label" style="-fx-font-size: 13px;"/>

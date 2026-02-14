@@ -277,28 +277,46 @@ public class projectagricolecontroller implements Initializable {
 
         statusBox.getChildren().addAll(statusLabel, badge);
 
-        // Action Buttons
-        HBox actions = new HBox(10);
+        // Action Buttons - ENHANCED
+        HBox actions = new HBox(8);
         actions.setAlignment(Pos.CENTER_RIGHT);
-        actions.setPadding(new Insets(10, 0, 0, 0));
+        actions.setPadding(new Insets(12, 0, 0, 0));
 
-        Button btnEdit = new Button("✏️");
+        // Edit Button with enhanced styling
+        Button btnEdit = new Button("✎ Modifier");
         btnEdit.getStyleClass().add("btn-secondary");
-        btnEdit.setStyle("-fx-min-width: 35; -fx-min-height: 35; -fx-font-size: 14px;");
+        btnEdit.setStyle(
+                "-fx-min-width: 95; " +
+                        "-fx-min-height: 32; " +
+                        "-fx-font-size: 12px; " +
+                        "-fx-font-weight: 600; " +
+                        "-fx-cursor: hand; " +
+                        "-fx-background-radius: 6; " +
+                        "-fx-padding: 6 12;"
+        );
         btnEdit.setOnAction(e -> {
             selectedProject = project;
             openModifyProjectForm(null);
         });
-        btnEdit.setTooltip(new Tooltip("Modifier le projet"));
+        btnEdit.setTooltip(new Tooltip("Modifier les informations du projet"));
 
-        Button btnDelete = new Button("🗑️");
+        // Delete Button with enhanced styling
+        Button btnDelete = new Button("✖ Supprimer");
         btnDelete.getStyleClass().add("btn-danger");
-        btnDelete.setStyle("-fx-min-width: 35; -fx-min-height: 35; -fx-font-size: 14px;");
+        btnDelete.setStyle(
+                "-fx-min-width: 100; " +
+                        "-fx-min-height: 32; " +
+                        "-fx-font-size: 12px; " +
+                        "-fx-font-weight: 600; " +
+                        "-fx-cursor: hand; " +
+                        "-fx-background-radius: 6; " +
+                        "-fx-padding: 6 12;"
+        );
         btnDelete.setOnAction(e -> {
             selectedProject = project;
             deleteProject(null);
         });
-        btnDelete.setTooltip(new Tooltip("Supprimer le projet"));
+        btnDelete.setTooltip(new Tooltip("Supprimer ce projet définitivement"));
 
         actions.getChildren().addAll(btnEdit, btnDelete);
 
