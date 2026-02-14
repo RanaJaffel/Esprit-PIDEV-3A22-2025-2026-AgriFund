@@ -19,9 +19,11 @@ public class ProjectAgricoleModifyController implements Initializable {
     @FXML private TextField tfNomProject;
     @FXML private TextField tfSurface;
     @FXML private TextField tfBudget;
-    @FXML private ComboBox<String> cbStatut;
     @FXML private DatePicker dpDateSoumission;
     @FXML private Button btnSave;
+
+    // ✅ NEW: Beautiful dynamic status badge (replaces ComboBox)
+    @FXML private Label lblStatusBadge;
 
     private projectagricole currentProject;
     private final projectagricoleCRUD service = new projectagricoleCRUD();
@@ -29,22 +31,7 @@ public class ProjectAgricoleModifyController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // ✅ Show all possible statuses (for display only)
-        cbStatut.getItems().addAll("en cours", "accepte", "refuse");
-
-        // ✅ IMPORTANT: Disable the status field
-        // Only your friend can change status via decisionfinanciere
-        cbStatut.setDisable(true);
-
-        // Add explanation tooltip
-        Tooltip tooltip = new Tooltip(
-                "Le statut ne peut pas être modifié ici.\n" +
-                        "Il est géré automatiquement par les décisions financières."
-        );
-        cbStatut.setTooltip(tooltip);
-
-        // Visual indicator that field is read-only
-        cbStatut.setStyle("-fx-opacity: 0.7;");
+        // Badge will be styled when project is loaded
     }
 
     public void setProject(projectagricole project) {
@@ -61,12 +48,64 @@ public class ProjectAgricoleModifyController implements Initializable {
             tfNomProject.setText(currentProject.getNomproject());
             tfSurface.setText(String.valueOf(currentProject.getSurface()));
             tfBudget.setText(currentProject.getBudgetdemande().toString());
-
-            // ✅ Display current status (read-only)
-            cbStatut.setValue(currentProject.getStatut());
-
             dpDateSoumission.setValue(currentProject.getDatesoumission().toLocalDate());
+
+            // ✅ Display current status as beautiful dynamic badge
+            updateStatusBadge(currentProject.getStatut());
         }
+    }
+
+    /**
+     * Update status badge with appropriate colors based on status
+     */
+    private void updateStatusBadge(String statut) {
+        if (lblStatusBadge == null) return;
+
+        String displayText;
+        String backgroundColor;
+        String textColor = "white";
+        String tooltipText;
+        String icon;
+
+        switch (statut.toLowerCase()) {
+            case "accepte":
+                icon = "✅";
+                displayText = icon + " Accepté";
+                backgroundColor = "linear-gradient(to right, #089647, #076A39)";
+                tooltipText = "Projet accepté par la décision financière.\nStatut géré automatiquement.";
+                break;
+
+            case "refuse":
+                icon = "❌";
+                displayText = icon + " Refusé";
+                backgroundColor = "linear-gradient(to right, #D32F2F, #B71C1C)";
+                tooltipText = "Projet refusé par la décision financière.\nStatut géré automatiquement.";
+                break;
+
+            case "en cours":
+            default:
+                icon = "📋";
+                displayText = icon + " En cours";
+                backgroundColor = "linear-gradient(to right, #E1B323, #9A951F)";
+                tooltipText = "Projet en attente de décision financière.\nStatut géré automatiquement.";
+                break;
+        }
+
+        lblStatusBadge.setText(displayText);
+        lblStatusBadge.setStyle(
+                "-fx-background-color: " + backgroundColor + ";" +
+                        "-fx-text-fill: " + textColor + ";" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-font-size: 14px;" +
+                        "-fx-padding: 10 24;" +
+                        "-fx-background-radius: 20;" +
+                        "-fx-border-radius: 20;" +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 8, 0, 0, 2);" +
+                        "-fx-cursor: hand;"
+        );
+
+        Tooltip tooltip = new Tooltip(tooltipText);
+        lblStatusBadge.setTooltip(tooltip);
     }
 
     @FXML
@@ -87,12 +126,25 @@ public class ProjectAgricoleModifyController implements Initializable {
             service.modifier(currentProject);
             showAlert(Alert.AlertType.INFORMATION, "Succès",
                     "Projet modifié avec succès!\n\n" +
-                            "Note: Le statut reste inchangé (" + currentProject.getStatut() + ")");
+                            "Note: Le statut reste inchangé (" +
+                            getStatusDisplayName(currentProject.getStatut()) + ")");
             closeWindow();
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur SQL",
                     "Erreur lors de la modification: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Get display name for status
+     */
+    private String getStatusDisplayName(String statut) {
+        switch (statut.toLowerCase()) {
+            case "accepte": return "Accepté";
+            case "refuse": return "Refusé";
+            case "en cours": return "En cours";
+            default: return statut;
         }
     }
 
@@ -144,9 +196,6 @@ public class ProjectAgricoleModifyController implements Initializable {
                     "Surface et Budget doivent être des nombres valides!");
             return false;
         }
-
-        // ✅ REMOVED: Date validation (allow past dates for historical projects)
-        // Users can modify projects with any date
 
         return true;
     }

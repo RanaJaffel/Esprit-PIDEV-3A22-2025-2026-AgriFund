@@ -19,26 +19,39 @@ public class ProjectAgricoleAddController implements Initializable {
     @FXML private TextField tfNomProject;
     @FXML private TextField tfSurface;
     @FXML private TextField tfBudget;
-    @FXML private ComboBox<String> cbStatut;
     @FXML private DatePicker dpDateSoumission;
     @FXML private Button btnSave;
+
+    // ✅ NEW: Beautiful status badge (replaces ComboBox)
+    @FXML private Label lblStatusBadge;
 
     private final projectagricoleCRUD service = new projectagricoleCRUD();
     private projectagricolecontroller mainController;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // ✅ IMPORTANT: Only 'en cours' is available
-        // Status can only be changed by your friend via decisionfinanciere
-        cbStatut.getItems().add("en cours");
-        cbStatut.setValue("en cours");
+        // ✅ Setup beautiful status badge with mustard yellow gradient
+        if (lblStatusBadge != null) {
+            lblStatusBadge.setText("📋 En cours");
+            lblStatusBadge.setStyle(
+                    "-fx-background-color: linear-gradient(to right, #E1B323, #9A951F);" +
+                            "-fx-text-fill: white;" +
+                            "-fx-font-weight: bold;" +
+                            "-fx-font-size: 14px;" +
+                            "-fx-padding: 10 24;" +
+                            "-fx-background-radius: 20;" +
+                            "-fx-border-radius: 20;" +
+                            "-fx-effect: dropshadow(three-pass-box, rgba(225, 179, 35, 0.4), 8, 0, 0, 2);" +
+                            "-fx-cursor: hand;"
+            );
 
-        // ✅ Disable the combo box - status is fixed at 'en cours'
-        cbStatut.setDisable(true);
-
-        // Add a tooltip to explain why it's disabled
-        Tooltip tooltip = new Tooltip("Le statut est automatiquement 'en cours'.\nIl sera modifié par la décision financière.");
-        cbStatut.setTooltip(tooltip);
+            // Add tooltip
+            Tooltip tooltip = new Tooltip(
+                    "Le statut initial est toujours 'En cours'.\n" +
+                            "Il sera modifié automatiquement par les décisions financières."
+            );
+            lblStatusBadge.setTooltip(tooltip);
+        }
     }
 
     public void setMainController(projectagricolecontroller mainController) {
@@ -61,7 +74,8 @@ public class ProjectAgricoleAddController implements Initializable {
 
             service.ajouter(p);
             showAlert(Alert.AlertType.INFORMATION, "Succès",
-                    "Projet ajouté avec succès!\n\nStatut: En cours (en attente de décision financière)");
+                    "Projet ajouté avec succès!\n\n" +
+                            "Statut: En cours (en attente de décision financière)");
             closeWindow();
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur SQL",
@@ -118,9 +132,6 @@ public class ProjectAgricoleAddController implements Initializable {
                     "Surface et Budget doivent être des nombres valides!");
             return false;
         }
-
-        // ✅ REMOVED: Date validation (allow past dates for historical projects)
-        // Users can submit projects with any date
 
         return true;
     }

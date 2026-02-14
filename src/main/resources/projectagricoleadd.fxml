@@ -131,14 +131,17 @@
                     <!-- Status -->
                     <VBox spacing="5" GridPane.rowIndex="0" GridPane.columnIndex="0">
                         <Label text="Statut du Projet *" styleClass="label"/>
-                        <Label text="État d'avancement" styleClass="label-small"/>
+                        <Label text="Géré automatiquement" styleClass="label-small"/>
                     </VBox>
-                    <ComboBox fx:id="cbStatut" maxWidth="Infinity" promptText="Sélectionner le statut..."
-                              GridPane.columnIndex="1" GridPane.rowIndex="0">
-                        <tooltip>
-                            <Tooltip text="Choisissez l'état actuel du projet"/>
-                        </tooltip>
-                    </ComboBox>
+                    <HBox alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <!-- Beautiful Status Badge -->
+                        <Label fx:id="lblStatusBadge" text="📋 En cours"/>
+                        <Label text="ℹ️" style="-fx-font-size: 14px; -fx-cursor: hand; -fx-text-fill: #848A86;">
+                            <tooltip>
+                                <Tooltip text="Le statut initial est toujours 'En cours'.&#10;Il sera modifié automatiquement par les décisions financières."/>
+                            </tooltip>
+                        </Label>
+                    </HBox>
 
                     <!-- Date -->
                     <VBox spacing="5" GridPane.rowIndex="1" GridPane.columnIndex="0">
