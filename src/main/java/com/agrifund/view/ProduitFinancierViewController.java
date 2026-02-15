@@ -19,6 +19,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import javafx.scene.image.Image;  // Add this import
 
 import java.sql.*;
 import java.util.Optional;
@@ -292,6 +293,7 @@ public class ProduitFinancierViewController {
     /**
      * NOUVEAU PRODUIT - Ouvre le formulaire popup avec barre de titre personnalisee
      */
+
     @FXML
     private void handleNouveau() {
         try {
@@ -307,7 +309,16 @@ public class ProduitFinancierViewController {
             });
 
             Stage stage = new Stage();
-            stage.initStyle(StageStyle.UNDECORATED);  // Custom title bar
+
+            // ✅ Add logo icon
+            try {
+                Image icon = new Image(getClass().getResourceAsStream("/com/agrifund/images/logo.png"));
+                stage.getIcons().add(icon);
+            } catch (Exception e) {
+                System.err.println("⚠️ Logo non trouve");
+            }
+
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.setScene(new Scene(root, 580, 720));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setResizable(false);
@@ -322,9 +333,6 @@ public class ProduitFinancierViewController {
         }
     }
 
-    /**
-     * MODIFIER PRODUIT - Ouvre le formulaire popup avec barre de titre personnalisee
-     */
     @FXML
     private void handleModifier() {
         ProduitFinancier selected = tableView.getSelectionModel().getSelectedItem();
@@ -346,7 +354,16 @@ public class ProduitFinancierViewController {
             });
 
             Stage stage = new Stage();
-            stage.initStyle(StageStyle.UNDECORATED);  // Custom title bar
+
+            // ✅ Add logo icon
+            try {
+                Image icon = new Image(getClass().getResourceAsStream("/com/agrifund/images/logo.png"));
+                stage.getIcons().add(icon);
+            } catch (Exception e) {
+                System.err.println("⚠️ Logo non trouve");
+            }
+
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.setScene(new Scene(root, 580, 720));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setResizable(false);
@@ -361,6 +378,44 @@ public class ProduitFinancierViewController {
         }
     }
 
+    @FXML
+    private void handleDetails() {
+        ProduitFinancier selected = tableView.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("Attention", "Veuillez selectionner un produit", Alert.AlertType.WARNING);
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/agrifund/view/DetailsProduitView.fxml"));
+            Parent root = loader.load();
+
+            DetailsProduitController controller = loader.getController();
+            controller.setProduit(selected);
+
+            Stage stage = new Stage();
+
+            // ✅ Add logo icon
+            try {
+                Image icon = new Image(getClass().getResourceAsStream("/com/agrifund/images/logo.png"));
+                stage.getIcons().add(icon);
+            } catch (Exception e) {
+                System.err.println("⚠️ Logo non trouve");
+            }
+
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.setScene(new Scene(root, 650, 800));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible d'ouvrir les details: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
     @FXML
     private void handleSupprimer() {
         ProduitFinancier selected = tableView.getSelectionModel().getSelectedItem();
@@ -413,35 +468,8 @@ public class ProduitFinancierViewController {
     }
 
 
-    @FXML
-    private void handleDetails() {
-        ProduitFinancier selected = tableView.getSelectionModel().getSelectedItem();
-        if (selected == null) {
-            showAlert("Attention", "Veuillez selectionner un produit", Alert.AlertType.WARNING);
-            return;
-        }
 
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/agrifund/view/DetailsProduitView.fxml"));
-            Parent root = loader.load();
 
-            DetailsProduitController controller = loader.getController();
-            controller.setProduit(selected);
-
-            Stage stage = new Stage();
-            stage.initStyle(StageStyle.UNDECORATED);  // Custom title bar
-            stage.setScene(new Scene(root, 650, 800));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setResizable(false);
-            stage.centerOnScreen();
-            stage.show();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Erreur", "Impossible d'ouvrir les details: " + e.getMessage(), Alert.AlertType.ERROR);
-        }
-    }
 
     @FXML
     private void handleDownloadPDF() {

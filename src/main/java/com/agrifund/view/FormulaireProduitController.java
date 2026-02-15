@@ -4,7 +4,14 @@ import com.agrifund.controller.ProduitFinancierController;
 import com.agrifund.model.ProduitFinancier;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -15,6 +22,7 @@ public class FormulaireProduitController {
     @FXML private HBox titleBar;
     @FXML private Label lblWindowTitle;
     @FXML private Button btnClose;
+    @FXML private ImageView imgLogo;
 
     // Form elements
     @FXML private Label lblTitre;
@@ -44,34 +52,52 @@ public class FormulaireProduitController {
         cbType.setItems(FXCollections.observableArrayList(
                 "Pret", "Credit", "Subvention", "Leasing", "Microfinance", "Autre"
         ));
+
+        // Charger le logo
+        try {
+            if (imgLogo != null) {
+                Image logo = new Image(getClass().getResourceAsStream("/com/agrifund/images/image_2026-01-25_212530957-removebg-preview.png"));
+                imgLogo.setImage(logo);
+            }
+        } catch (Exception e) {
+            System.err.println("⚠️ Logo non charge: " + e.getMessage());
+        }
     }
 
     // ==================== TITLE BAR CONTROLS ====================
 
     @FXML
     private void handleTitleBarPressed(MouseEvent event) {
-        Stage stage = (Stage) titleBar.getScene().getWindow();
-        xOffset = stage.getX() - event.getScreenX();
-        yOffset = stage.getY() - event.getScreenY();
+        if (titleBar != null && titleBar.getScene() != null) {
+            Stage stage = (Stage) titleBar.getScene().getWindow();
+            xOffset = stage.getX() - event.getScreenX();
+            yOffset = stage.getY() - event.getScreenY();
+        }
     }
 
     @FXML
     private void handleTitleBarDragged(MouseEvent event) {
-        Stage stage = (Stage) titleBar.getScene().getWindow();
-        stage.setX(event.getScreenX() + xOffset);
-        stage.setY(event.getScreenY() + yOffset);
+        if (titleBar != null && titleBar.getScene() != null) {
+            Stage stage = (Stage) titleBar.getScene().getWindow();
+            stage.setX(event.getScreenX() + xOffset);
+            stage.setY(event.getScreenY() + yOffset);
+        }
     }
 
     @FXML
     private void handleMinimize() {
-        Stage stage = (Stage) titleBar.getScene().getWindow();
-        stage.setIconified(true);
+        if (titleBar != null && titleBar.getScene() != null) {
+            Stage stage = (Stage) titleBar.getScene().getWindow();
+            stage.setIconified(true);
+        }
     }
 
     @FXML
     private void handleMaximize() {
-        Stage stage = (Stage) titleBar.getScene().getWindow();
-        stage.setMaximized(!stage.isMaximized());
+        if (titleBar != null && titleBar.getScene() != null) {
+            Stage stage = (Stage) titleBar.getScene().getWindow();
+            stage.setMaximized(!stage.isMaximized());
+        }
     }
 
     @FXML
@@ -81,34 +107,42 @@ public class FormulaireProduitController {
 
     @FXML
     private void onControlButtonHover(MouseEvent event) {
-        Button btn = (Button) event.getSource();
-        btn.setStyle("-fx-background-color: #DDDDDD; -fx-text-fill: #333333; " +
-                "-fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12; " +
-                "-fx-cursor: hand; -fx-background-radius: 3;");
+        if (event.getSource() instanceof Button) {
+            Button btn = (Button) event.getSource();
+            btn.setStyle("-fx-background-color: #DDDDDD; -fx-text-fill: #333333; " +
+                    "-fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12; " +
+                    "-fx-cursor: hand; -fx-background-radius: 3;");
+        }
     }
 
     @FXML
     private void onControlButtonExit(MouseEvent event) {
-        Button btn = (Button) event.getSource();
-        btn.setStyle("-fx-background-color: transparent; -fx-text-fill: #666666; " +
-                "-fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12; " +
-                "-fx-cursor: hand; -fx-background-radius: 3;");
+        if (event.getSource() instanceof Button) {
+            Button btn = (Button) event.getSource();
+            btn.setStyle("-fx-background-color: transparent; -fx-text-fill: #666666; " +
+                    "-fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12; " +
+                    "-fx-cursor: hand; -fx-background-radius: 3;");
+        }
     }
 
     @FXML
     private void onCloseButtonHover(MouseEvent event) {
-        Button btn = (Button) event.getSource();
-        btn.setStyle("-fx-background-color: #E53935; -fx-text-fill: white; " +
-                "-fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12; " +
-                "-fx-cursor: hand; -fx-background-radius: 3;");
+        if (event.getSource() instanceof Button) {
+            Button btn = (Button) event.getSource();
+            btn.setStyle("-fx-background-color: #E53935; -fx-text-fill: white; " +
+                    "-fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12; " +
+                    "-fx-cursor: hand; -fx-background-radius: 3;");
+        }
     }
 
     @FXML
     private void onCloseButtonExit(MouseEvent event) {
-        Button btn = (Button) event.getSource();
-        btn.setStyle("-fx-background-color: transparent; -fx-text-fill: #666666; " +
-                "-fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12; " +
-                "-fx-cursor: hand; -fx-background-radius: 3;");
+        if (event.getSource() instanceof Button) {
+            Button btn = (Button) event.getSource();
+            btn.setStyle("-fx-background-color: transparent; -fx-text-fill: #666666; " +
+                    "-fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12; " +
+                    "-fx-cursor: hand; -fx-background-radius: 3;");
+        }
     }
 
     // ==================== MODE CONFIGURATION ====================
@@ -118,20 +152,27 @@ public class FormulaireProduitController {
      */
     public void setModeAjout() {
         modeModification = false;
-        lblWindowTitle.setText("Nouveau Produit");
-        lblTitre.setText("NOUVEAU PRODUIT");
+
+        if (lblWindowTitle != null) {
+            lblWindowTitle.setText("Nouveau Produit");
+        }
+        if (lblTitre != null) {
+            lblTitre.setText("NOUVEAU PRODUIT");
+        }
         if (lblSousTitre != null) {
             lblSousTitre.setText("Remplissez les informations du nouveau produit");
         }
-        btnValider.setText("CREER LE PRODUIT");
+        if (btnValider != null) {
+            btnValider.setText("CREER LE PRODUIT");
+        }
 
         // Vider les champs
-        txtNom.clear();
-        cbType.setValue(null);
-        txtTaux.clear();
-        txtMontantMin.clear();
-        txtMontantMax.clear();
-        txtRegles.clear();
+        if (txtNom != null) txtNom.clear();
+        if (cbType != null) cbType.setValue(null);
+        if (txtTaux != null) txtTaux.clear();
+        if (txtMontantMin != null) txtMontantMin.clear();
+        if (txtMontantMax != null) txtMontantMax.clear();
+        if (txtRegles != null) txtRegles.clear();
     }
 
     /**
@@ -141,20 +182,26 @@ public class FormulaireProduitController {
         modeModification = true;
         produitAModifier = produit;
 
-        lblWindowTitle.setText("Modifier Produit - " + produit.getNomProduit());
-        lblTitre.setText("MODIFIER LE PRODUIT");
+        if (lblWindowTitle != null) {
+            lblWindowTitle.setText("Modifier Produit - " + produit.getNomProduit());
+        }
+        if (lblTitre != null) {
+            lblTitre.setText("MODIFIER LE PRODUIT");
+        }
         if (lblSousTitre != null) {
             lblSousTitre.setText("Modifiez les informations du produit");
         }
-        btnValider.setText("ENREGISTRER");
+        if (btnValider != null) {
+            btnValider.setText("ENREGISTRER");
+        }
 
         // Remplir les champs avec les donnees du produit
-        txtNom.setText(produit.getNomProduit());
-        cbType.setValue(produit.getTypeFinancement());
-        txtTaux.setText(String.valueOf(produit.getTauxInteret()));
-        txtMontantMin.setText(String.valueOf(produit.getMontantMin()));
-        txtMontantMax.setText(String.valueOf(produit.getMontantMax()));
-        txtRegles.setText(produit.getReglesFinancieres());
+        if (txtNom != null) txtNom.setText(produit.getNomProduit());
+        if (cbType != null) cbType.setValue(produit.getTypeFinancement());
+        if (txtTaux != null) txtTaux.setText(String.valueOf(produit.getTauxInteret()));
+        if (txtMontantMin != null) txtMontantMin.setText(String.valueOf(produit.getMontantMin()));
+        if (txtMontantMax != null) txtMontantMax.setText(String.valueOf(produit.getMontantMax()));
+        if (txtRegles != null) txtRegles.setText(produit.getReglesFinancieres());
     }
 
     /**
@@ -233,15 +280,15 @@ public class FormulaireProduitController {
     private boolean validerChamps() {
         String erreurs = "";
 
-        if (txtNom.getText() == null || txtNom.getText().trim().isEmpty()) {
+        if (txtNom == null || txtNom.getText() == null || txtNom.getText().trim().isEmpty()) {
             erreurs += "Le nom du produit est obligatoire\n";
         }
 
-        if (cbType.getValue() == null || cbType.getValue().trim().isEmpty()) {
+        if (cbType == null || cbType.getValue() == null || cbType.getValue().trim().isEmpty()) {
             erreurs += "Le type de financement est obligatoire\n";
         }
 
-        if (txtTaux.getText() == null || txtTaux.getText().trim().isEmpty()) {
+        if (txtTaux == null || txtTaux.getText() == null || txtTaux.getText().trim().isEmpty()) {
             erreurs += "Le taux d'interet est obligatoire\n";
         } else {
             try {
@@ -254,16 +301,17 @@ public class FormulaireProduitController {
             }
         }
 
-        if (txtMontantMin.getText() == null || txtMontantMin.getText().trim().isEmpty()) {
+        if (txtMontantMin == null || txtMontantMin.getText() == null || txtMontantMin.getText().trim().isEmpty()) {
             erreurs += "Le montant minimum est obligatoire\n";
         }
 
-        if (txtMontantMax.getText() == null || txtMontantMax.getText().trim().isEmpty()) {
+        if (txtMontantMax == null || txtMontantMax.getText() == null || txtMontantMax.getText().trim().isEmpty()) {
             erreurs += "Le montant maximum est obligatoire\n";
         }
 
         try {
-            if (!txtMontantMin.getText().trim().isEmpty() && !txtMontantMax.getText().trim().isEmpty()) {
+            if (txtMontantMin != null && txtMontantMax != null &&
+                    !txtMontantMin.getText().trim().isEmpty() && !txtMontantMax.getText().trim().isEmpty()) {
                 double min = Double.parseDouble(txtMontantMin.getText().trim());
                 double max = Double.parseDouble(txtMontantMax.getText().trim());
                 if (min >= max) {
@@ -286,8 +334,14 @@ public class FormulaireProduitController {
     }
 
     private void fermerFenetre() {
-        Stage stage = (Stage) txtNom.getScene().getWindow();
-        stage.close();
+        try {
+            if (txtNom != null && txtNom.getScene() != null) {
+                Stage stage = (Stage) txtNom.getScene().getWindow();
+                stage.close();
+            }
+        } catch (Exception e) {
+            System.err.println("Erreur fermeture: " + e.getMessage());
+        }
     }
 
     private void showAlert(String title, String message, Alert.AlertType type) {

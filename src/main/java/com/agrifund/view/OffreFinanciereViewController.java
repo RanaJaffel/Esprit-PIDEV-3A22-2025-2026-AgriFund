@@ -32,6 +32,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
+import javafx.scene.image.Image;  // Add this import
 
 import java.io.FileOutputStream;
 import java.sql.Connection;
@@ -225,6 +226,7 @@ public class OffreFinanciereViewController {
     }
 
 
+
     @FXML
     private void handleAjouter() {
         try {
@@ -237,7 +239,16 @@ public class OffreFinanciereViewController {
             controller.setOnSuccess(() -> chargerDonnees());
 
             Stage stage = new Stage();
-            stage.initStyle(StageStyle.UNDECORATED);  // Custom title bar
+
+            // ✅ Add logo icon
+            try {
+                Image icon = new Image(getClass().getResourceAsStream("/com/agrifund/images/logo.png"));
+                stage.getIcons().add(icon);
+            } catch (Exception e) {
+                System.err.println("⚠️ Logo non trouve");
+            }
+
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.setScene(new Scene(root, 580, 680));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setResizable(false);
@@ -268,7 +279,16 @@ public class OffreFinanciereViewController {
             controller.setOnSuccess(() -> chargerDonnees());
 
             Stage stage = new Stage();
-            stage.initStyle(StageStyle.UNDECORATED);  // Custom title bar
+
+            // ✅ Add logo icon
+            try {
+                Image icon = new Image(getClass().getResourceAsStream("/com/agrifund/images/logo.png"));
+                stage.getIcons().add(icon);
+            } catch (Exception e) {
+                System.err.println("⚠️ Logo non trouve");
+            }
+
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.setScene(new Scene(root, 580, 680));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setResizable(false);

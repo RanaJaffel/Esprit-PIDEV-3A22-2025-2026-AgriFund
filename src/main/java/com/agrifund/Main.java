@@ -8,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -40,9 +42,18 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         try {
 
+            // ==================== SET WINDOW ICON ====================
+            try {
+                Image icon = new Image(getClass().getResourceAsStream("resources/com/agrifund/images/image_2026-01-25_212530957-removebg-preview.png"));
+                primaryStage.getIcons().add(icon);
+                System.out.println("✅ Logo charge avec succes!");
+            } catch (Exception e) {
+                System.err.println("⚠️ Logo non trouve: " + e.getMessage());
+            }
+
             // ==================== NAVBAR ====================
             HBox navbar = new HBox(20);
-            navbar.setAlignment(Pos.CENTER);
+            navbar.setAlignment(Pos.CENTER_LEFT);
             navbar.setStyle("-fx-background-color: linear-gradient(to right, #076A39, #089647, #076A39);" +
                     "-fx-padding: 15 30 15 30;");
 
@@ -52,9 +63,24 @@ public class Main extends Application {
             navShadow.setRadius(15);
             navbar.setEffect(navShadow);
 
-            // Logo
+            // ==================== LOGO IN NAVBAR ====================
+            HBox logoBox = new HBox(10);
+            logoBox.setAlignment(Pos.CENTER_LEFT);
+
+            try {
+                Image logoImage = new Image(getClass().getResourceAsStream("/com/agrifund/images/image_2026-01-25_212530957-removebg-preview.png"));
+                ImageView logoView = new ImageView(logoImage);
+                logoView.setFitHeight(40);
+                logoView.setFitWidth(40);
+                logoView.setPreserveRatio(true);
+                logoBox.getChildren().add(logoView);
+            } catch (Exception e) {
+                System.err.println("⚠️ Logo pour navbar non charge");
+            }
+
             Label logo = new Label("AgriFund");
             logo.setStyle("-fx-text-fill: #FFFFFF; -fx-font-size: 24; -fx-font-weight: bold;");
+            logoBox.getChildren().add(logo);
 
             // Spacer
             HBox spacer = new HBox();
@@ -88,7 +114,7 @@ public class Main extends Application {
                 btnProduits.setStyle(inactiveStyle);
             });
 
-            navbar.getChildren().addAll(logo, spacer, btnProduits, btnOffres);
+            navbar.getChildren().addAll(logoBox, spacer, btnProduits, btnOffres);
 
             // ==================== CONTENT AREA ====================
             contentArea = new VBox();
@@ -112,10 +138,10 @@ public class Main extends Application {
             primaryStage.setMinHeight(700);
             primaryStage.show();
 
-            System.out.println("Application lancee avec succes!");
+            System.out.println("✅ Application lancee avec succes!");
 
         } catch (Exception e) {
-            System.err.println("ERREUR:");
+            System.err.println("❌ ERREUR:");
             e.printStackTrace();
         }
     }
@@ -131,10 +157,10 @@ public class Main extends Application {
             contentArea.getChildren().add(root);
             VBox.setVgrow(root, Priority.ALWAYS);
 
-            System.out.println("Interface chargee: " + fxmlFile);
+            System.out.println("✅ Interface chargee: " + fxmlFile);
 
         } catch (Exception e) {
-            System.err.println("Erreur chargement " + fxmlFile + ": " + e.getMessage());
+            System.err.println("❌ Erreur chargement " + fxmlFile + ": " + e.getMessage());
             e.printStackTrace();
         }
     }
