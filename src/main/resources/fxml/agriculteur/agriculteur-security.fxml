@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controllers.agriculteur.AgriculteurSecurityController"
+            stylesheets="@../../css/styles.css">
+
+    <!-- SIDEBAR -->
+    <left>
+        <fx:include source="agriculteur-sidebar.fxml"/>
+    </left>
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+            <VBox styleClass="content-area" spacing="30">
+                <!-- Header -->
+                <HBox alignment="CENTER">
+                    <VBox HBox.hgrow="ALWAYS">
+                        <Label text="🔐 Sécurité du compte" styleClass="page-title"/>
+                        <Label text="Protégez votre compte avec l'authentification à deux facteurs" styleClass="page-subtitle"/>
+                    </VBox>
+                </HBox>
+
+                <!-- 2FA Card -->
+                <VBox styleClass="card" spacing="20">
+                    <HBox alignment="CENTER_LEFT" spacing="20">
+                        <VBox HBox.hgrow="ALWAYS">
+                            <Label text="Authentification à Deux Facteurs (2FA)" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                            <Label text="Ajoutez une couche de sécurité supplémentaire" style="-fx-text-fill: #848A86;"/>
+                        </VBox>
+
+                        <HBox fx:id="statusBadge" alignment="CENTER" spacing="10"/>
+                    </HBox>
+
+                    <Separator/>
+
+                    <VBox fx:id="twoFAStatus" spacing="15"/>
+
+                    <HBox spacing="15">
+                        <Button fx:id="toggle2FAButton" text="Activer la 2FA" styleClass="btn, btn-primary" onAction="#toggle2FA"/>
+                        <Button fx:id="test2FAButton" text="🧪 Tester" styleClass="btn, btn-secondary" onAction="#test2FA" visible="false"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Login History -->
+                <VBox styleClass="card" spacing="20">
+                    <HBox alignment="CENTER_LEFT">
+                        <Label text="📊 Historique des connexions" style="-fx-font-size: 18px; -fx-font-weight: bold;" HBox.hgrow="ALWAYS"/>
+                        <Button text="🔄" styleClass="btn, btn-secondary, btn-small" onAction="#refreshHistory"/>
+                    </HBox>
+
+                    <TableView fx:id="historyTable" prefHeight="200">
+                        <columns>
+                            <TableColumn fx:id="colDate" text="Date" prefWidth="180"/>
+                            <TableColumn fx:id="colStatus" text="Statut" prefWidth="120"/>
+                            <TableColumn fx:id="colMethod" text="Méthode" prefWidth="150"/>
+                        </columns>
+                        <placeholder>
+                            <Label text="Aucun historique disponible"/>
+                        </placeholder>
+                    </TableView>
+                </VBox>
+
+                <!-- Security Tips -->
+                <VBox styleClass="card" spacing="15" style="-fx-background-color: linear-gradient(to right, rgba(8,150,71,0.05), rgba(178,217,68,0.1));">
+                    <Label text="💡 Conseils de sécurité" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #089647;"/>
+
+                    <VBox spacing="10">
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="✓" style="-fx-text-fill: #089647; -fx-font-weight: bold;"/>
+                            <Label text="Utilisez un mot de passe fort avec au moins 8 caractères"/>
+                        </HBox>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="✓" style="-fx-text-fill: #089647; -fx-font-weight: bold;"/>
+                            <Label text="Activez l'authentification à deux facteurs"/>
+                        </HBox>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="✓" style="-fx-text-fill: #089647; -fx-font-weight: bold;"/>
+                            <Label text="Ne partagez jamais vos codes de vérification"/>
+                        </HBox>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="✓" style="-fx-text-fill: #089647; -fx-font-weight: bold;"/>
+                            <Label text="Vérifiez régulièrement l'historique de vos connexions"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

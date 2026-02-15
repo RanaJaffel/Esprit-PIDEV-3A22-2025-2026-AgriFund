@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controllers.admin.AdminDashboardController"
+            stylesheets="@../../css/styles.css">
+
+    <!-- SIDEBAR -->
+    <left>
+        <VBox styleClass="sidebar">
+            <!-- Logo -->
+            <VBox styleClass="sidebar-header" spacing="5">
+                <Label text="🌾 AgriFund" styleClass="sidebar-logo"/>
+                <Label text="Administration" style="-fx-text-fill: #848A86; -fx-font-size: 12px;"/>
+            </VBox>
+
+            <!-- User Profile Widget -->
+            <VBox styleClass="user-profile-widget" spacing="10" alignment="CENTER">
+                <ImageView fx:id="userAvatar" styleClass="user-avatar, user-avatar-medium" fitWidth="60" fitHeight="60" preserveRatio="true">
+                    <Image url="@../../images/default-avatar.png"/>
+                </ImageView>
+                <Label fx:id="userName" text="Admin" styleClass="user-name"/>
+                <Label text="Administrateur" styleClass="user-role"/>
+            </VBox>
+
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
+                <VBox spacing="5" style="-fx-padding: 10 0;">
+                    <!-- Menu Principal -->
+                    <Label text="PRINCIPAL" styleClass="sidebar-section-title"/>
+
+                    <Button text="📊  Tableau de bord" styleClass="sidebar-menu-item, sidebar-menu-item-active"
+                            onAction="#goToDashboard"/>
+                    <Button text="👥  Utilisateurs" styleClass="sidebar-menu-item"
+                            onAction="#goToUsers"/>
+                    <Button text="🌾  Agriculteurs" styleClass="sidebar-menu-item"
+                            onAction="#goToAgriculteurs"/>
+                    <Button text="🏦  Banques" styleClass="sidebar-menu-item"
+                            onAction="#goToBanques"/>
+
+                    <!-- Menu Gestion -->
+                    <Label text="GESTION" styleClass="sidebar-section-title"/>
+
+                    <Button text="📄  Documents" styleClass="sidebar-menu-item"
+                            onAction="#goToDocuments"/>
+                    <Button text="💬  Messagerie" styleClass="sidebar-menu-item"
+                            onAction="#goToMessagerie"/>
+                    <Button text="📈  Statistiques" styleClass="sidebar-menu-item"
+                            onAction="#goToStatistics"/>
+
+                    <!-- Menu Compte -->
+                    <Label text="COMPTE" styleClass="sidebar-section-title"/>
+
+                    <Button text="👤  Mon profil" styleClass="sidebar-menu-item"
+                            onAction="#goToProfile"/>
+                    <Button text="🔐  Sécurité" styleClass="sidebar-menu-item"
+                            onAction="#goToSecurity"/>
+                    <Button text="🚪  Déconnexion" styleClass="sidebar-menu-item"
+                            onAction="#handleLogout" style="-fx-text-fill: #dc3545;"/>
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </left>
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <VBox styleClass="content-area" spacing="0">
+            <!-- Top Bar -->
+            <HBox alignment="CENTER" style="-fx-padding: 0 0 30 0;">
+                <VBox HBox.hgrow="ALWAYS">
+                    <Label text="Tableau de bord" styleClass="page-title"/>
+                    <Label text="Bienvenue dans votre espace d'administration" styleClass="page-subtitle"/>
+                </VBox>
+
+                <HBox spacing="15" alignment="CENTER_RIGHT">
+                    <!-- Notifications -->
+                    <Button text="🔔" styleClass="btn, btn-icon" style="-fx-background-color: white;"/>
+
+                    <!-- Messages non lus -->
+                    <StackPane>
+                        <Button text="💬" styleClass="btn, btn-icon" style="-fx-background-color: white;"
+                                onAction="#goToMessagerie"/>
+                        <Label fx:id="unreadBadge" text="3" styleClass="conversation-unread-badge"
+                               StackPane.alignment="TOP_RIGHT" translateX="5" translateY="-5"/>
+                    </StackPane>
+
+                    <!-- User Quick Access -->
+                    <HBox spacing="10" alignment="CENTER" style="-fx-background-color: white; -fx-background-radius: 30; -fx-padding: 8 15;">
+                        <ImageView fx:id="topBarAvatar" fitWidth="35" fitHeight="35" preserveRatio="true" styleClass="user-avatar-small"/>
+                        <Label fx:id="topBarUserName" text="Admin"/>
+                        <Label text="▼" style="-fx-text-fill: #848A86;"/>
+                    </HBox>
+                </HBox>
+            </HBox>
+
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
+                <VBox spacing="30">
+                    <!-- Stats Cards Row -->
+                    <HBox spacing="20">
+                        <VBox styleClass="stat-card, stat-card-green" HBox.hgrow="ALWAYS" spacing="10">
+                            <HBox alignment="CENTER">
+                                <VBox HBox.hgrow="ALWAYS">
+                                    <Label fx:id="totalUsers" text="0" styleClass="stat-value"/>
+                                    <Label text="Utilisateurs" styleClass="stat-label"/>
+                                </VBox>
+                                <Label text="👥" styleClass="stat-icon"/>
+                            </HBox>
+                            <HBox spacing="5">
+                                <Label text="↑ 12%" style="-fx-text-fill: #B2D944;"/>
+                                <Label text="ce mois" style="-fx-text-fill: rgba(255,255,255,0.6);"/>
+                            </HBox>
+                        </VBox>
+
+                        <VBox styleClass="stat-card, stat-card-yellow" HBox.hgrow="ALWAYS" spacing="10">
+                            <HBox alignment="CENTER">
+                                <VBox HBox.hgrow="ALWAYS">
+                                    <Label fx:id="totalAgriculteurs" text="0" styleClass="stat-value"/>
+                                    <Label text="Agriculteurs" styleClass="stat-label"/>
+                                </VBox>
+                                <Label text="🌾" styleClass="stat-icon"/>
+                            </HBox>
+                            <HBox spacing="5">
+                                <Label fx:id="pendingAgriculteurs" text="0 en attente" style="-fx-text-fill: rgba(255,255,255,0.8);"/>
+                            </HBox>
+                        </VBox>
+
+                        <VBox styleClass="stat-card, stat-card-olive" HBox.hgrow="ALWAYS" spacing="10">
+                            <HBox alignment="CENTER">
+                                <VBox HBox.hgrow="ALWAYS">
+                                    <Label fx:id="totalBanques" text="0" styleClass="stat-value"/>
+                                    <Label text="Banques" styleClass="stat-label"/>
+                                </VBox>
+                                <Label text="🏦" styleClass="stat-icon"/>
+                            </HBox>
+                            <HBox spacing="5">
+                                <Label fx:id="pendingBanques" text="0 en attente" style="-fx-text-fill: rgba(255,255,255,0.8);"/>
+                            </HBox>
+                        </VBox>
+
+                        <VBox styleClass="stat-card, stat-card-light" HBox.hgrow="ALWAYS" spacing="10">
+                            <HBox alignment="CENTER">
+                                <VBox HBox.hgrow="ALWAYS">
+                                    <Label fx:id="totalDocuments" text="0" styleClass="stat-value"/>
+                                    <Label text="Documents" styleClass="stat-label"/>
+                                </VBox>
+                                <Label text="📄" styleClass="stat-icon"/>
+                            </HBox>
+                            <HBox spacing="5">
+                                <Label fx:id="pendingDocuments" text="0 à valider" style="-fx-text-fill: rgba(0,0,0,0.6);"/>
+                            </HBox>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Quick Actions & Recent Activity -->
+                    <HBox spacing="20">
+                        <!-- Quick Actions -->
+                        <VBox styleClass="card" HBox.hgrow="ALWAYS" spacing="20">
+                            <Label text="Actions rapides" styleClass="card-header"/>
+
+                            <HBox spacing="15">
+                                <Button text="➕ Nouvel utilisateur" styleClass="btn, btn-primary"
+                                        onAction="#goToUsers"/>
+                                <Button text="📄 Valider documents" styleClass="btn, btn-accent"
+                                        onAction="#goToDocuments"/>
+                                <Button text="✓ Vérifier comptes" styleClass="btn, btn-success"
+                                        onAction="#goToAgriculteurs"/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- System Status -->
+                        <VBox styleClass="card" prefWidth="300" spacing="15">
+                            <Label text="État du système" styleClass="card-header"/>
+
+                            <HBox spacing="15" alignment="CENTER_LEFT">
+                                <Region styleClass="status-online"/>
+                                <Label text="Base de données" style="-fx-font-weight: bold;-fx-text-fill: #089647"/>
+                                <Label text="Connectée" style="-fx-text-fill: #089647;" HBox.hgrow="ALWAYS" alignment="CENTER_RIGHT"/>
+                            </HBox>
+
+                            <HBox spacing="15" alignment="CENTER_LEFT">
+                                <Region styleClass="status-online"/>
+                                <Label text="Service Email" style="-fx-font-weight: bold;-fx-text-fill: #089647"/>
+                                <Label text="Actif" style="-fx-text-fill: #089647;" HBox.hgrow="ALWAYS" alignment="CENTER_RIGHT"/>
+                            </HBox>
+
+                            <HBox spacing="15" alignment="CENTER_LEFT">
+                                <Region styleClass="status-online"/>
+                                <Label text="Stockage" style="-fx-font-weight: bold;-fx-text-fill: #089647"/>
+                                <Label fx:id="storageStatus" text="OK" style="-fx-text-fill: #089647;" HBox.hgrow="ALWAYS" alignment="CENTER_RIGHT"/>
+                            </HBox>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Recent Users & Pending Verifications -->
+                    <HBox spacing="20">
+                        <!-- Recent Users -->
+                        <VBox styleClass="card" HBox.hgrow="ALWAYS" spacing="15">
+                            <HBox alignment="CENTER">
+                                <Label text="Derniers inscrits" styleClass="card-header" HBox.hgrow="ALWAYS"/>
+                                <Button text="Voir tout →" styleClass="btn, btn-small, btn-secondary"
+                                        onAction="#goToUsers"/>
+                            </HBox>
+
+                            <VBox fx:id="recentUsersContainer" spacing="10">
+                                <!-- Rempli dynamiquement -->
+                            </VBox>
+                        </VBox>
+
+                        <!-- Pending Verifications -->
+                        <VBox styleClass="card" HBox.hgrow="ALWAYS" spacing="15">
+                            <HBox alignment="CENTER">
+                                <Label text="En attente de vérification" styleClass="card-header" HBox.hgrow="ALWAYS"/>
+                                <Button text="Voir tout →" styleClass="btn, btn-small, btn-secondary"
+                                        onAction="#goToAgriculteurs"/>
+                            </HBox>
+
+                            <VBox fx:id="pendingVerificationsContainer" spacing="10">
+                                <!-- Rempli dynamiquement -->
+                            </VBox>
+                        </VBox>
+                    </HBox>
+
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </center>
+
+</BorderPane>

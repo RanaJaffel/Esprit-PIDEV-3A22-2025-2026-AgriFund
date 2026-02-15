@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controllers.agriculteur.AgriculteurMessagerieController"
+            stylesheets="@../../css/styles.css">
+
+    <!-- SIDEBAR -->
+    <left>
+        <fx:include source="agriculteur-sidebar.fxml"/>
+    </left>
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <HBox spacing="0" VBox.vgrow="ALWAYS">
+
+            <!-- Conversations List (Left Panel) -->
+            <VBox prefWidth="350" style="-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-width: 0 1 0 0;">
+                <!-- Header -->
+                <HBox alignment="CENTER" style="-fx-padding: 20; -fx-background-color: #095032;">
+                    <Label text="💬 Messages" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;" HBox.hgrow="ALWAYS"/>
+                    <Button text="✏️" style="-fx-background-color: #B2D944; -fx-text-fill: #060806; -fx-background-radius: 50; -fx-min-width: 40; -fx-min-height: 40;"
+                            onAction="#showNewConversationDialog"/>
+                </HBox>
+
+                <!-- Search -->
+                <HBox style="-fx-padding: 10; -fx-background-color: #f5f5f5;">
+                    <TextField fx:id="searchConversation" promptText="🔍 Rechercher une conversation..."
+                               styleClass="form-control" HBox.hgrow="ALWAYS" onKeyReleased="#searchConversations"/>
+                </HBox>
+
+                <!-- Conversations -->
+                <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: white;">
+                    <VBox fx:id="conversationsList" spacing="0">
+                        <!-- Rempli dynamiquement -->
+                    </VBox>
+                </ScrollPane>
+            </VBox>
+
+            <!-- Chat Area (Right Panel) -->
+            <VBox HBox.hgrow="ALWAYS" style="-fx-background-color: #f5f5f5;">
+
+                <!-- No conversation selected -->
+                <VBox fx:id="noConversationPane" alignment="CENTER" VBox.vgrow="ALWAYS" spacing="20">
+                    <Label text="🌾" style="-fx-font-size: 80px;"/>
+                    <Label text="Bienvenue dans votre messagerie" style="-fx-font-size: 20px; -fx-text-fill: #095032; -fx-font-weight: bold;"/>
+                    <Label text="Sélectionnez une conversation ou contactez une banque" style="-fx-text-fill: #848A86;"/>
+                    <Button text="💬 Nouvelle conversation" styleClass="btn, btn-primary" onAction="#showNewConversationDialog"/>
+                </VBox>
+
+                <!-- Active conversation -->
+                <VBox fx:id="conversationPane" VBox.vgrow="ALWAYS" visible="false" managed="false">
+
+                    <!-- Chat Header -->
+                    <HBox fx:id="chatHeader" alignment="CENTER_LEFT" spacing="15"
+                          style="-fx-padding: 15 20; -fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-width: 0 0 1 0;">
+                        <ImageView fx:id="chatAvatar" fitWidth="45" fitHeight="45"/>
+                        <VBox HBox.hgrow="ALWAYS">
+                            <Label fx:id="chatUserName" text="" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                            <Label fx:id="chatUserType" text="" style="-fx-text-fill: #E1B323; -fx-font-size: 12px;"/>
+                        </VBox>
+                        <Button text="ℹ️" styleClass="btn, btn-icon" style="-fx-background-color: transparent;"/>
+                    </HBox>
+
+                    <!-- Messages Area -->
+                    <ScrollPane fx:id="messagesScrollPane" fitToWidth="true" VBox.vgrow="ALWAYS"
+                                style="-fx-background-color: transparent;">
+                        <VBox fx:id="messagesContainer" spacing="10" style="-fx-padding: 20;">
+                            <!-- Rempli dynamiquement -->
+                        </VBox>
+                    </ScrollPane>
+
+                    <!-- Input Area -->
+                    <HBox alignment="CENTER" spacing="10"
+                          style="-fx-padding: 15 20; -fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-width: 1 0 0 0;">
+                        <Button text="📎" styleClass="btn, btn-icon" style="-fx-background-color: #f5f5f5;"
+                                onAction="#attachFile"/>
+                        <Button text="😊" styleClass="btn, btn-icon" style="-fx-background-color: #f5f5f5;"
+                                onAction="#showEmojiPicker"/>
+                        <TextField fx:id="messageInput" promptText="Tapez votre message..."
+                                   styleClass="message-input" HBox.hgrow="ALWAYS" onAction="#sendMessage"/>
+                        <Button fx:id="sendButton" text="➤" onAction="#sendMessage"
+                                style="-fx-background-color: #089647; -fx-text-fill: white; -fx-background-radius: 50; -fx-min-width: 45; -fx-min-height: 45; -fx-font-size: 18px;"/>
+                    </HBox>
+                </VBox>
+            </VBox>
+        </HBox>
+    </center>
+
+</BorderPane>

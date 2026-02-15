@@ -2,10 +2,6 @@ package entities;
 
 import java.time.LocalDateTime;
 
-/**
- * Entité Message
- * Représente un message dans une conversation
- */
 public class Message {
 
     private int id;
@@ -14,10 +10,11 @@ public class Message {
     private String contenu;
     private LocalDateTime dateEnvoi;
     private LocalDateTime dateModification;
+    private LocalDateTime dateLecture;  // NOUVEAU
     private boolean estLu;
     private boolean estSupprime;
-
-    // Informations supplémentaires (non en base)
+    private boolean aPieceJointe;
+    private int nbPiecesJointes;
     private String nomExpediteur;
 
     // Constructeurs
@@ -37,93 +34,85 @@ public class Message {
     }
 
     // Getters et Setters
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public int getConversationId() { return conversationId; }
+    public void setConversationId(int conversationId) { this.conversationId = conversationId; }
 
-    public int getConversationId() {
-        return conversationId;
-    }
+    public int getExpediteurId() { return expediteurId; }
+    public void setExpediteurId(int expediteurId) { this.expediteurId = expediteurId; }
 
-    public void setConversationId(int conversationId) {
-        this.conversationId = conversationId;
-    }
+    public String getContenu() { return contenu; }
+    public void setContenu(String contenu) { this.contenu = contenu; }
 
-    public int getExpediteurId() {
-        return expediteurId;
-    }
+    public LocalDateTime getDateEnvoi() { return dateEnvoi; }
+    public void setDateEnvoi(LocalDateTime dateEnvoi) { this.dateEnvoi = dateEnvoi; }
 
-    public void setExpediteurId(int expediteurId) {
-        this.expediteurId = expediteurId;
-    }
+    public LocalDateTime getDateModification() { return dateModification; }
+    public void setDateModification(LocalDateTime dateModification) { this.dateModification = dateModification; }
 
-    public String getContenu() {
-        return contenu;
-    }
+    public LocalDateTime getDateLecture() { return dateLecture; }
+    public void setDateLecture(LocalDateTime dateLecture) { this.dateLecture = dateLecture; }
 
-    public void setContenu(String contenu) {
-        this.contenu = contenu;
-    }
+    public boolean isEstLu() { return estLu; }
+    public void setEstLu(boolean estLu) { this.estLu = estLu; }
 
-    public LocalDateTime getDateEnvoi() {
-        return dateEnvoi;
-    }
+    public boolean isEstSupprime() { return estSupprime; }
+    public void setEstSupprime(boolean estSupprime) { this.estSupprime = estSupprime; }
 
-    public void setDateEnvoi(LocalDateTime dateEnvoi) {
-        this.dateEnvoi = dateEnvoi;
-    }
+    public String getNomExpediteur() { return nomExpediteur; }
+    public void setNomExpediteur(String nomExpediteur) { this.nomExpediteur = nomExpediteur; }
 
-    public LocalDateTime getDateModification() {
-        return dateModification;
-    }
+    public boolean isaPieceJointe() { return aPieceJointe; }
+    public void setaPieceJointe(boolean aPieceJointe) { this.aPieceJointe = aPieceJointe; }
 
-    public void setDateModification(LocalDateTime dateModification) {
-        this.dateModification = dateModification;
-    }
+    public int getNbPiecesJointes() { return nbPiecesJointes; }
+    public void setNbPiecesJointes(int nbPiecesJointes) { this.nbPiecesJointes = nbPiecesJointes; }
 
-    public boolean isEstLu() {
-        return estLu;
-    }
-
-    public void setEstLu(boolean estLu) {
-        this.estLu = estLu;
-    }
-
-    public boolean isEstSupprime() {
-        return estSupprime;
-    }
-
-    public void setEstSupprime(boolean estSupprime) {
-        this.estSupprime = estSupprime;
-    }
-
-    public String getNomExpediteur() {
-        return nomExpediteur;
-    }
-
-    public void setNomExpediteur(String nomExpediteur) {
-        this.nomExpediteur = nomExpediteur;
-    }
-
-    /**
-     * Obtenir un aperçu du message (premiers 50 caractères)
-     */
     public String getApercu() {
-        if (contenu == null || contenu.isEmpty()) {
-            return "";
-        }
+        if (contenu == null || contenu.isEmpty()) return "";
         return contenu.length() > 50 ? contenu.substring(0, 50) + "..." : contenu;
     }
 
-    /**
-     * Vérifier si le message a été modifié
-     */
     public boolean estModifie() {
         return dateModification != null;
+    }
+
+    /**
+     * Obtenir l'indicateur de statut du message (style WhatsApp)
+     * ✓ = Envoyé
+     * ✓✓ = Délivré
+     * ✓✓ (bleu/vert) = Lu
+     */
+    public String getIndicateurStatut() {
+        if (estLu) {
+            return "✓✓"; // Deux coches pour lu
+        } else {
+            return "✓"; // Une coche pour envoyé
+        }
+    }
+
+    /**
+     * Obtenir la couleur de l'indicateur
+     */
+    public String getCouleurIndicateur() {
+        if (estLu) {
+            return "#089647"; // Vert pour lu
+        } else {
+            return "#848A86"; // Gris pour envoyé
+        }
+    }
+
+    /**
+     * Obtenir l'heure de lecture formatée
+     */
+    public String getHeureLecture() {
+        if (dateLecture != null) {
+            return "Lu à " + dateLecture.format(
+                    java.time.format.DateTimeFormatter.ofPattern("HH:mm"));
+        }
+        return null;
     }
 
     @Override
@@ -131,9 +120,7 @@ public class Message {
         return "Message{" +
                 "id=" + id +
                 ", conversationId=" + conversationId +
-                ", expediteurId=" + expediteurId +
                 ", contenu='" + getApercu() + '\'' +
-                ", dateEnvoi=" + dateEnvoi +
                 ", estLu=" + estLu +
                 '}';
     }

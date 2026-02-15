@@ -63,6 +63,49 @@ public class EmailService {
     }
 
     /**
+     * Envoyer un email avec code 2FA
+     */
+    public static boolean envoyerEmail2FA(String emailDestinataire, String code) {
+        try {
+            // Configuration des propriétés SMTP
+            Properties props = new Properties();
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.starttls.enable", "true");
+            props.put("mail.smtp.host", SMTP_HOST);
+            props.put("mail.smtp.port", SMTP_PORT);
+            props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+
+            // Création de la session avec authentification
+            Session session = Session.getInstance(props, new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(EMAIL_FROM, EMAIL_PASSWORD);
+                }
+            });
+
+            // Création du message
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(EMAIL_FROM));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailDestinataire));
+            message.setSubject("Code de vérification - Connexion sécurisée");
+
+            // Contenu HTML de l'email 2FA
+            String contenuHTML = creerContenuEmail2FA(code);
+            message.setContent(contenuHTML, "text/html; charset=utf-8");
+
+            // Envoi de l'email
+            Transport.send(message);
+
+            System.out.println("✓ Code 2FA envoyé par email à: " + emailDestinataire);
+            return true;
+
+        } catch (MessagingException e) {
+            System.err.println("✗ Erreur lors de l'envoi de l'email 2FA: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Créer le contenu HTML de l'email
      */
     private static String creerContenuEmail(String token) {
@@ -88,7 +131,7 @@ public class EmailService {
                 "        </div>" +
                 "        <div class='content'>" +
                 "            <p>Bonjour,</p>" +
-                "            <p>Vous avez demandé la réinitialisation de votre mot de passe pour votre compte <strong>AgriFund</strong>.</p>" +
+                "            <p>Vous avez demandé la réinitialisation de votre mot de passe pour votre compte <strong>Gestion des Utilisateurs</strong>.</p>" +
                 "            <p>Voici votre code de réinitialisation :</p>" +
                 "            <div class='token-box'>" +
                 "                <strong>Token :</strong><br>" +
@@ -113,7 +156,56 @@ public class EmailService {
                 "        </div>" +
                 "        <div class='footer'>" +
                 "            <p>Cet email a été envoyé automatiquement, merci de ne pas y répondre.</p>" +
-                "            <p>&copy; 2025-2026 AgriFund - by greencoders</p>" +
+                "            <p>&copy; 2024-2025 Gestion des Utilisateurs - ESPRIT</p>" +
+                "        </div>" +
+                "    </div>" +
+                "</body>" +
+                "</html>";
+    }
+
+    /**
+     * Créer le contenu HTML de l'email 2FA
+     */
+    private static String creerContenuEmail2FA(String code) {
+        return "<!DOCTYPE html>" +
+                "<html>" +
+                "<head>" +
+                "    <meta charset='UTF-8'>" +
+                "    <style>" +
+                "        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }" +
+                "        .container { max-width: 600px; margin: 20px auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }" +
+                "        .header { background-color: #4CAF50; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }" +
+                "        .content { padding: 30px 20px; }" +
+                "        .code-box { background-color: #f0f0f0; padding: 30px; text-align: center; margin: 20px 0; border-radius: 8px; border: 3px solid #4CAF50; }" +
+                "        .code { font-size: 42px; font-weight: bold; color: #4CAF50; letter-spacing: 8px; font-family: monospace; }" +
+                "        .warning { background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; }" +
+                "        .footer { text-align: center; color: #666; font-size: 12px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; }" +
+                "    </style>" +
+                "</head>" +
+                "<body>" +
+                "    <div class='container'>" +
+                "        <div class='header'>" +
+                "            <h1>🔐 Code de Vérification</h1>" +
+                "        </div>" +
+                "        <div class='content'>" +
+                "            <p>Bonjour,</p>" +
+                "            <p>Voici votre code de vérification pour vous connecter en toute sécurité :</p>" +
+                "            <div class='code-box'>" +
+                "                <div class='code'>" + code + "</div>" +
+                "            </div>" +
+                "            <div class='warning'>" +
+                "                ⚠️ <strong>Important :</strong>" +
+                "                <ul>" +
+                "                    <li>Ce code est valide pendant <strong>5 minutes</strong></li>" +
+                "                    <li>Ne partagez jamais ce code avec personne</li>" +
+                "                    <li>Si vous n'avez pas demandé cette connexion, changez immédiatement votre mot de passe</li>" +
+                "                </ul>" +
+                "            </div>" +
+                "            <p style='margin-top: 20px;'><strong>Conseil de sécurité :</strong> Activez toujours l'authentification à deux facteurs pour protéger votre compte.</p>" +
+                "        </div>" +
+                "        <div class='footer'>" +
+                "            <p>Cet email a été envoyé automatiquement, merci de ne pas y répondre.</p>" +
+                "            <p>&copy; 2024-2025 Gestion des Utilisateurs - ESPRIT</p>" +
                 "        </div>" +
                 "    </div>" +
                 "</body>" +

@@ -5,6 +5,7 @@ import entities.Message;
 import entities.Utilisateur;
 import Utils.DatabaseConnection;
 
+import java.io.File;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -126,8 +127,10 @@ public class MessagerieService {
 
         String sql = "SELECT c.*, " +
                 "  CASE WHEN c.utilisateur1_id = ? THEN c.utilisateur2_id ELSE c.utilisateur1_id END AS correspondant_id, " +
-                "  (SELECT COUNT(*) FROM Message m WHERE m.conversation_id = c.id AND m.expediteur_id != ? AND m.est_lu = FALSE AND m.est_supprime = FALSE) AS nb_non_lus " +
+                "  (SELECT COUNT(*) FROM Message m WHERE m.conversation_id = c.id AND m.expediteur_id != ? AND m.est_lu = FALSE AND m.est_supprime = FALSE) AS nb_non_lus, " +
+                "  u.prenom, u.nom, u.photo " +
                 "FROM Conversation c " +
+                "LEFT JOIN Utilisateur u ON u.id = CASE WHEN c.utilisateur1_id = ? THEN c.utilisateur2_id ELSE c.utilisateur1_id END " +
                 "WHERE c.utilisateur1_id = ? OR c.utilisateur2_id = ? " +
                 "ORDER BY c.derniere_activite DESC";
 
@@ -140,6 +143,7 @@ public class MessagerieService {
             pst.setInt(2, utilisateurId);
             pst.setInt(3, utilisateurId);
             pst.setInt(4, utilisateurId);
+            pst.setInt(5, utilisateurId);
 
             rs = pst.executeQuery();
 
@@ -154,11 +158,17 @@ public class MessagerieService {
                     conv.setDerniereActivite(activite.toLocalDateTime());
                 }
 
-                // Correspondant
-                int correspondantId = rs.getInt("correspondant_id");
-                Utilisateur correspondant = utilisateurService.rechercherParId(correspondantId);
-                if (correspondant != null) {
-                    conv.setNomCorrespondant(correspondant.getPrenom() + " " + correspondant.getNom());
+                // Correspondant avec photo
+                String prenom = rs.getString("prenom");
+                String nom = rs.getString("nom");
+                String photo = rs.getString("photo");
+
+                conv.setNomCorrespondant((prenom != null ? prenom : "") + " " + (nom != null ? nom : ""));
+
+                // Stocker la photo dans un attribut supplémentaire (à ajouter dans Conversation)
+                // Pour l'instant, on peut l'ajouter au nom
+                if (photo != null && !photo.isEmpty() && Utils.FileManager.fichierExiste(photo)) {
+                    conv.setNomCorrespondant("📷 " + conv.getNomCorrespondant());
                 }
 
                 // Messages non lus
@@ -352,6 +362,8 @@ public class MessagerieService {
                 msg.setExpediteurId(rs.getInt("expediteur_id"));
                 msg.setContenu(rs.getString("contenu"));
                 msg.setEstLu(rs.getBoolean("est_lu"));
+                msg.setaPieceJointe(rs.getBoolean("a_piece_jointe"));
+                msg.setNbPiecesJointes(rs.getInt("nb_pieces_jointes"));
 
                 Timestamp envoi = rs.getTimestamp("date_envoi");
                 if (envoi != null) {
@@ -485,4 +497,168 @@ public class MessagerieService {
 
         return 0;
     }
+
+    // ============================================
+    // GESTION DES PIÈCES JOINTES
+    // ============================================
+
+    /**
+     * Ajouter une pièce jointe à un message
+     */
+    public entities.PieceJointe ajouterPieceJointe(int messageId, String cheminFichier,
+                                                   String nomOriginal) throws SQLException {
+        File file = new File(cheminFichier);
+
+        if (!file.exists()) {
+            throw new SQLException("Fichier introuvable: " + cheminFichier);
+        }
+
+        String extension = getFileExtension(nomOriginal);
+        String typeFichier = Utils.MessagerieFileManager.determinerTypeFichier(nomOriginal);
+        String nomStockage = new File(cheminFichier).getName();
+        long taille = file.length();
+
+        String sql = "INSERT INTO PieceJointe (message_id, type_fichier, nom_original, " +
+                "nom_stockage, chemin_fichier, taille_octets, extension) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+
+        try {
+            pst = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            pst.setInt(1, messageId);
+            pst.setString(2, typeFichier);
+            pst.setString(3, nomOriginal);
+            pst.setString(4, nomStockage);
+            pst.setString(5, cheminFichier);
+            pst.setLong(6, taille);
+            pst.setString(7, extension);
+
+            pst.executeUpdate();
+
+            rs = pst.getGeneratedKeys();
+            if (rs.next()) {
+                entities.PieceJointe pj = new entities.PieceJointe();
+                pj.setId(rs.getInt(1));
+                pj.setMessageId(messageId);
+                pj.setTypeFichier(typeFichier);
+                pj.setNomOriginal(nomOriginal);
+                pj.setNomStockage(nomStockage);
+                pj.setCheminFichier(cheminFichier);
+                pj.setTailleOctets(taille);
+                pj.setExtension(extension);
+
+                return pj;
+            }
+
+        } finally {
+            if (rs != null) rs.close();
+            if (pst != null) pst.close();
+        }
+
+        return null;
+    }
+
+    /**
+     * Lister les pièces jointes d'un message
+     */
+    public List<entities.PieceJointe> listerPiecesJointes(int messageId) throws SQLException {
+        List<entities.PieceJointe> pieces = new ArrayList<>();
+
+        String sql = "SELECT * FROM PieceJointe WHERE message_id = ? ORDER BY date_upload ASC";
+
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+
+        try {
+            pst = connection.prepareStatement(sql);
+            pst.setInt(1, messageId);
+
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+                entities.PieceJointe pj = new entities.PieceJointe();
+                pj.setId(rs.getInt("id"));
+                pj.setMessageId(rs.getInt("message_id"));
+                pj.setTypeFichier(rs.getString("type_fichier"));
+                pj.setNomOriginal(rs.getString("nom_original"));
+                pj.setNomStockage(rs.getString("nom_stockage"));
+                pj.setCheminFichier(rs.getString("chemin_fichier"));
+                pj.setTailleOctets(rs.getLong("taille_octets"));
+                pj.setExtension(rs.getString("extension"));
+
+                Timestamp upload = rs.getTimestamp("date_upload");
+                if (upload != null) {
+                    pj.setDateUpload(upload.toLocalDateTime());
+                }
+
+                pieces.add(pj);
+            }
+
+        } finally {
+            if (rs != null) rs.close();
+            if (pst != null) pst.close();
+        }
+
+        return pieces;
+    }
+
+    /**
+     * Supprimer une pièce jointe
+     */
+    public boolean supprimerPieceJointe(int pieceJointeId) throws SQLException {
+        // Récupérer le chemin du fichier
+        String sqlSelect = "SELECT chemin_fichier FROM PieceJointe WHERE id = ?";
+        PreparedStatement pstSelect = null;
+        ResultSet rs = null;
+        String cheminFichier = null;
+
+        try {
+            pstSelect = connection.prepareStatement(sqlSelect);
+            pstSelect.setInt(1, pieceJointeId);
+            rs = pstSelect.executeQuery();
+
+            if (rs.next()) {
+                cheminFichier = rs.getString("chemin_fichier");
+            }
+        } finally {
+            if (rs != null) rs.close();
+            if (pstSelect != null) pstSelect.close();
+        }
+
+        // Supprimer de la base
+        String sqlDelete = "DELETE FROM PieceJointe WHERE id = ?";
+        PreparedStatement pstDelete = null;
+
+        try {
+            pstDelete = connection.prepareStatement(sqlDelete);
+            pstDelete.setInt(1, pieceJointeId);
+
+            int deleted = pstDelete.executeUpdate();
+
+            // Supprimer le fichier physique
+            if (deleted > 0 && cheminFichier != null) {
+                Utils.MessagerieFileManager.supprimerFichier(cheminFichier);
+                System.out.println("✓ Pièce jointe supprimée");
+                return true;
+            }
+
+        } finally {
+            if (pstDelete != null) pstDelete.close();
+        }
+
+        return false;
+    }
+
+    /**
+     * Obtenir l'extension d'un fichier
+     */
+    private String getFileExtension(String nomFichier) {
+        int lastDot = nomFichier.lastIndexOf('.');
+        if (lastDot == -1) return "";
+        return nomFichier.substring(lastDot + 1).toLowerCase();
+    }
+
+
 }

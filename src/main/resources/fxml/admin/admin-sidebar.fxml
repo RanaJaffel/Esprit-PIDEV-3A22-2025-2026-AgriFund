@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="Controllers.admin.AdminSidebarController"
+      styleClass="sidebar"
+      fx:id="sidebar">
+
+    <!-- Logo -->
+    <VBox styleClass="sidebar-header" spacing="5">
+        <Label text="🌾 AgriFund" styleClass="sidebar-logo"/>
+        <Label text="Administration" style="-fx-text-fill: #848A86; -fx-font-size: 12px;"/>
+    </VBox>
+
+    <!-- User Profile Widget -->
+    <VBox styleClass="user-profile-widget" spacing="10" alignment="CENTER">
+        <ImageView fx:id="userAvatar" styleClass="user-avatar, user-avatar-medium"
+                   fitWidth="60" fitHeight="60" preserveRatio="true"/>
+        <Label fx:id="userName" text="Admin" styleClass="user-name"/>
+        <Label text="Administrateur" styleClass="user-role"/>
+    </VBox>
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
+        <VBox spacing="5" style="-fx-padding: 10 0;">
+            <!-- Menu Principal -->
+            <Label text="PRINCIPAL" styleClass="sidebar-section-title"/>
+
+            <Button fx:id="btnDashboard" text="📊  Tableau de bord" styleClass="sidebar-menu-item"
+                    onAction="#goToDashboard" maxWidth="Infinity"/>
+            <Button fx:id="btnUsers" text="👥  Utilisateurs" styleClass="sidebar-menu-item"
+                    onAction="#goToUsers" maxWidth="Infinity"/>
+            <Button fx:id="btnAgriculteurs" text="🌾  Agriculteurs" styleClass="sidebar-menu-item"
+                    onAction="#goToAgriculteurs" maxWidth="Infinity"/>
+            <Button fx:id="btnBanques" text="🏦  Banques" styleClass="sidebar-menu-item"
+                    onAction="#goToBanques" maxWidth="Infinity"/>
+
+            <!-- Menu Gestion -->
+            <Label text="GESTION" styleClass="sidebar-section-title"/>
+
+            <Button fx:id="btnDocuments" text="📄  Documents" styleClass="sidebar-menu-item"
+                    onAction="#goToDocuments" maxWidth="Infinity"/>
+            <Button fx:id="btnMessagerie" text="💬  Messagerie" styleClass="sidebar-menu-item"
+                    onAction="#goToMessagerie" maxWidth="Infinity"/>
+
+            <!-- Menu Compte -->
+            <Label text="COMPTE" styleClass="sidebar-section-title"/>
+
+            <Button fx:id="btnProfile" text="👤  Mon profil" styleClass="sidebar-menu-item"
+                    onAction="#goToProfile" maxWidth="Infinity"/>
+            <Button fx:id="btnSecurity" text="🔐  Sécurité" styleClass="sidebar-menu-item"
+                    onAction="#goToSecurity" maxWidth="Infinity"/>
+            <Button fx:id="btnLogout" text="🚪  Déconnexion" styleClass="sidebar-menu-item"
+                    onAction="#handleLogout" maxWidth="Infinity" style="-fx-text-fill: #dc3545;"/>
+        </VBox>
+    </ScrollPane>
+</VBox>

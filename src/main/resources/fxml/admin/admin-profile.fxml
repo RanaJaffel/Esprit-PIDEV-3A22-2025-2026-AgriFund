@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controllers.admin.AdminProfileController"
+            stylesheets="@../../css/styles.css">
+
+    <!-- SIDEBAR -->
+    <left>
+        <fx:include source="admin-sidebar.fxml"/>
+    </left>
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+            <VBox styleClass="content-area" spacing="30">
+                <!-- Header -->
+                <HBox alignment="CENTER" style="-fx-padding: 0 0 20 0;">
+                    <VBox HBox.hgrow="ALWAYS">
+                        <Label text="Mon Profil" styleClass="page-title"/>
+                        <Label text="Gérer vos informations personnelles" styleClass="page-subtitle"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Profile Card -->
+                <HBox spacing="30">
+                    <!-- Left: Photo -->
+                    <VBox styleClass="card" alignment="CENTER" spacing="20" prefWidth="300">
+                        <ImageView fx:id="profilePhoto" fitWidth="150" fitHeight="150"/>
+                        <Label fx:id="userFullName" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                        <Label text="Administrateur" styleClass="badge, badge-info"/>
+
+                        <VBox spacing="10" style="-fx-padding: 20 0 0 0;">
+                            <Button text="📷 Changer la photo" styleClass="btn, btn-secondary"
+                                    onAction="#changePhoto" maxWidth="Infinity"/>
+                            <Button text="🗑️ Supprimer la photo" styleClass="btn"
+                                    style="-fx-background-color: transparent; -fx-text-fill: #dc3545;"
+                                    onAction="#deletePhoto" maxWidth="Infinity"/>
+                        </VBox>
+                    </VBox>
+
+                    <!-- Right: Form -->
+                    <VBox styleClass="card" HBox.hgrow="ALWAYS" spacing="20">
+                        <Label text="Informations personnelles" styleClass="card-header"/>
+
+                        <!-- Alert Box -->
+                        <HBox fx:id="alertBox" styleClass="alert" visible="false" managed="false">
+                            <Label fx:id="alertMessage"/>
+                        </HBox>
+
+                        <HBox spacing="20">
+                            <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                                <Label text="Nom" styleClass="form-label"/>
+                                <TextField fx:id="nomField" styleClass="form-control"/>
+                            </VBox>
+                            <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                                <Label text="Prénom" styleClass="form-label"/>
+                                <TextField fx:id="prenomField" styleClass="form-control"/>
+                            </VBox>
+                        </HBox>
+
+                        <VBox styleClass="form-group" spacing="8">
+                            <Label text="Email" styleClass="form-label"/>
+                            <TextField fx:id="emailField" styleClass="form-control"/>
+                        </VBox>
+
+                        <VBox styleClass="form-group" spacing="8">
+                            <Label text="Téléphone" styleClass="form-label"/>
+                            <TextField fx:id="telField" styleClass="form-control" promptText="+216 XX XXX XXX"/>
+                        </VBox>
+
+                        <HBox spacing="15" alignment="CENTER_RIGHT">
+                            <Button text="Annuler" styleClass="btn, btn-secondary" onAction="#cancelChanges"/>
+                            <Button text="💾 Sauvegarder" styleClass="btn, btn-primary" onAction="#saveProfile"/>
+                        </HBox>
+                    </VBox>
+                </HBox>
+
+                <!-- Change Password Card -->
+                <VBox styleClass="card" spacing="20">
+                    <Label text="🔐 Changer le mot de passe" styleClass="card-header"/>
+
+                    <HBox spacing="20">
+                        <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="Mot de passe actuel" styleClass="form-label"/>
+                            <PasswordField fx:id="currentPassword" styleClass="form-control"/>
+                        </VBox>
+                        <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="Nouveau mot de passe" styleClass="form-label"/>
+                            <PasswordField fx:id="newPassword" styleClass="form-control"/>
+                        </VBox>
+                        <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="Confirmer" styleClass="form-label"/>
+                            <PasswordField fx:id="confirmPassword" styleClass="form-control"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox alignment="CENTER_RIGHT">
+                        <Button text="🔐 Changer le mot de passe" styleClass="btn, btn-accent" onAction="#changePassword"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Account Info -->
+                <VBox styleClass="card" spacing="15">
+                    <Label text="📋 Informations du compte" styleClass="card-header"/>
+
+                    <HBox spacing="50">
+                        <VBox spacing="5">
+                            <Label text="Date d'inscription" style="-fx-text-fill: #848A86;"/>
+                            <Label fx:id="dateInscription" style="-fx-font-weight: bold;-fx-text-fill: #089647"/>
+                        </VBox>
+                        <VBox spacing="5">
+                            <Label text="ID Utilisateur" style="-fx-text-fill: #848A86;"/>
+                            <Label fx:id="userId" style="-fx-font-weight: bold;-fx-text-fill: #089647"/>
+                        </VBox>
+                        <VBox spacing="5">
+                            <Label text="Type de compte" style="-fx-text-fill: #848A86;"/>
+                            <Label text="Administrateur" style="-fx-font-weight: bold; -fx-text-fill: #089647;"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

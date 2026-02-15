@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controllers.banque.BanqueProfileController"
+            stylesheets="@../../css/styles.css">
+
+    <!-- SIDEBAR -->
+    <left>
+        <fx:include source="banque-sidebar.fxml"/>
+    </left>
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+            <VBox styleClass="content-area" spacing="30">
+                <!-- Header -->
+                <HBox alignment="CENTER">
+                    <VBox HBox.hgrow="ALWAYS">
+                        <Label text="Profil de la Banque" styleClass="page-title"/>
+                        <Label text="Gérer les informations de votre établissement" styleClass="page-subtitle"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Alert Box -->
+                <HBox fx:id="alertBox" styleClass="alert" visible="false" managed="false">
+                    <Label fx:id="alertMessage"/>
+                </HBox>
+
+                <!-- Profile Card -->
+                <HBox spacing="30">
+                    <!-- Left: Logo/Photo -->
+                    <VBox styleClass="card" alignment="CENTER" spacing="20" prefWidth="300">
+                        <ImageView fx:id="profilePhoto" fitWidth="150" fitHeight="150"/>
+                        <Label fx:id="bankName" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                        <Label fx:id="bankCode" style="-fx-text-fill: #E1B323; -fx-font-weight: bold;"/>
+
+                        <HBox fx:id="verificationBadge" alignment="CENTER"/>
+
+                        <VBox spacing="10" style="-fx-padding: 20 0 0 0;">
+                            <Button text="📷 Changer le logo" styleClass="btn, btn-secondary"
+                                    onAction="#changePhoto" maxWidth="Infinity"/>
+                            <Button text="🗑️ Supprimer" styleClass="btn"
+                                    style="-fx-background-color: transparent; -fx-text-fill: #dc3545;"
+                                    onAction="#deletePhoto" maxWidth="Infinity"/>
+                        </VBox>
+                    </VBox>
+
+                    <!-- Right: Basic Info -->
+                    <VBox styleClass="card" HBox.hgrow="ALWAYS" spacing="20">
+                        <Label text="Informations générales" styleClass="card-header"/>
+
+                        <VBox styleClass="form-group" spacing="8">
+                            <Label text="Nom de la banque" styleClass="form-label"/>
+                            <TextField fx:id="nomField" styleClass="form-control"/>
+                        </VBox>
+
+                        <HBox spacing="20">
+                            <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                                <Label text="Code banque" styleClass="form-label"/>
+                                <TextField fx:id="codeField" styleClass="form-control" editable="false"
+                                           style="-fx-background-color: #e9ecef;"/>
+                            </VBox>
+                            <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                                <Label text="Email" styleClass="form-label"/>
+                                <TextField fx:id="emailField" styleClass="form-control"/>
+                            </VBox>
+                        </HBox>
+
+                        <VBox styleClass="form-group" spacing="8">
+                            <Label text="Téléphone" styleClass="form-label"/>
+                            <TextField fx:id="telField" styleClass="form-control" promptText="+216 XX XXX XXX"/>
+                        </VBox>
+                    </VBox>
+                </HBox>
+
+                <!-- Bank Details Card -->
+                <VBox styleClass="card" spacing="20">
+                    <Label text="🏦 Informations de l'établissement" styleClass="card-header"/>
+
+                    <VBox styleClass="form-group" spacing="8">
+                        <Label text="Représentant légal" styleClass="form-label"/>
+                        <TextField fx:id="representantField" styleClass="form-control" promptText="Nom du représentant"/>
+                    </VBox>
+
+                    <VBox styleClass="form-group" spacing="8">
+                        <Label text="Adresse du siège" styleClass="form-label"/>
+                        <TextField fx:id="siegeField" styleClass="form-control" promptText="Adresse complète du siège"/>
+                    </VBox>
+
+                    <HBox spacing="20">
+                        <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="Adresse de l'agence" styleClass="form-label"/>
+                            <TextField fx:id="agenceField" styleClass="form-control" promptText="Adresse de l'agence (optionnel)"/>
+                        </VBox>
+                        <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="Site web" styleClass="form-label"/>
+                            <TextField fx:id="siteWebField" styleClass="form-control" promptText="www.banque.tn"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox spacing="15" alignment="CENTER_RIGHT">
+                        <Button text="Annuler" styleClass="btn, btn-secondary" onAction="#cancelChanges"/>
+                        <Button text="💾 Sauvegarder" styleClass="btn, btn-accent" onAction="#saveProfile"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Change Password Card -->
+                <VBox styleClass="card" spacing="20">
+                    <Label text="🔐 Changer le mot de passe" styleClass="card-header"/>
+
+                    <HBox spacing="20">
+                        <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="Mot de passe actuel" styleClass="form-label"/>
+                            <PasswordField fx:id="currentPassword" styleClass="form-control"/>
+                        </VBox>
+                        <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="Nouveau mot de passe" styleClass="form-label"/>
+                            <PasswordField fx:id="newPassword" styleClass="form-control"/>
+                        </VBox>
+                        <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="Confirmer" styleClass="form-label"/>
+                            <PasswordField fx:id="confirmPassword" styleClass="form-control"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox alignment="CENTER_RIGHT">
+                        <Button text="🔐 Changer le mot de passe" styleClass="btn, btn-primary" onAction="#changePassword"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Account Status Card -->
+                <VBox styleClass="card" spacing="15">
+                    <Label text="📋 Statut du compte" styleClass="card-header"/>
+
+                    <HBox spacing="50">
+                        <VBox spacing="5">
+                            <Label text="Date d'inscription" style="-fx-text-fill: #848A86;"/>
+                            <Label fx:id="dateInscription" style="-fx-font-weight: bold;"/>
+                        </VBox>
+                        <VBox spacing="5">
+                            <Label text="Statut" style="-fx-text-fill: #848A86;"/>
+                            <Label fx:id="statusLabel" style="-fx-font-weight: bold;"/>
+                        </VBox>
+                        <VBox spacing="5">
+                            <Label text="Vérification" style="-fx-text-fill: #848A86;"/>
+                            <HBox fx:id="verificationStatus" spacing="5"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>
