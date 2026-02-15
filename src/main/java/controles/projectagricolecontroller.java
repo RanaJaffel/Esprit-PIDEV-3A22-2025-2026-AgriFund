@@ -303,10 +303,25 @@ public class projectagricolecontroller implements Initializable {
 
         statusBox.getChildren().addAll(statusLabel, badge);
 
-        // Action Buttons - ENHANCED
+        // Action Buttons - WITH DETAILS BUTTON
         HBox actions = new HBox(8);
         actions.setAlignment(Pos.CENTER_RIGHT);
         actions.setPadding(new Insets(12, 0, 0, 0));
+
+        // Details Button
+        Button btnDetails = new Button("ℹ️ Détails");
+        btnDetails.getStyleClass().add("btn-info");
+        btnDetails.setStyle(
+                "-fx-min-width: 85; " +
+                        "-fx-min-height: 32; " +
+                        "-fx-font-size: 12px; " +
+                        "-fx-font-weight: 600; " +
+                        "-fx-cursor: hand; " +
+                        "-fx-background-radius: 6; " +
+                        "-fx-padding: 6 12;"
+        );
+        btnDetails.setOnAction(e -> showProjectDetails(project));
+        btnDetails.setTooltip(new Tooltip("Voir tous les détails du projet"));
 
         // Edit Button with enhanced styling
         Button btnEdit = new Button("✎ Modifier");
@@ -344,7 +359,7 @@ public class projectagricolecontroller implements Initializable {
         });
         btnDelete.setTooltip(new Tooltip("Supprimer ce projet définitivement"));
 
-        actions.getChildren().addAll(btnEdit, btnDelete);
+        actions.getChildren().addAll(btnDetails, btnEdit, btnDelete);
 
         // Add all elements to card
         card.getChildren().addAll(header, separator, details, statusBox, actions);
@@ -825,5 +840,338 @@ public class projectagricolecontroller implements Initializable {
                     LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))
             );
         }
+    }
+
+    /**
+     * Shows detailed information dialog for a project
+     */
+    private void showProjectDetails(projectagricole project) {
+        // Create custom dialog
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Détails du Projet");
+        dialog.setHeaderText(null);
+
+        // Create dialog content
+        VBox content = new VBox(20);
+        content.setPadding(new Insets(25));
+        content.setStyle("-fx-background-color: white;");
+        content.setPrefWidth(550);
+
+        // Header with project name and icon
+        HBox headerBox = new HBox(15);
+        headerBox.setAlignment(Pos.CENTER_LEFT);
+        headerBox.setStyle(
+                "-fx-background-color: linear-gradient(to right, #076A39, #095032);" +
+                        "-fx-padding: 20;" +
+                        "-fx-background-radius: 8;"
+        );
+
+        Label headerIcon = new Label(getProjectIcon(project.getStatut()));
+        headerIcon.setStyle("-fx-font-size: 36px;");
+
+        VBox headerText = new VBox(5);
+        Label projectName = new Label(project.getNomproject());
+        projectName.setStyle(
+                "-fx-font-size: 22px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: white;"
+        );
+
+        Label projectId = new Label("Projet #" + project.getIdproject());
+        projectId.setStyle(
+                "-fx-font-size: 13px;" +
+                        "-fx-text-fill: rgba(255,255,255,0.8);"
+        );
+
+        headerText.getChildren().addAll(projectName, projectId);
+        headerBox.getChildren().addAll(headerIcon, headerText);
+
+        // Status Badge
+        HBox statusRow = new HBox(10);
+        statusRow.setAlignment(Pos.CENTER_LEFT);
+        statusRow.setPadding(new Insets(10, 0, 0, 0));
+
+        Label statusTitleLabel = new Label("Statut:");
+        statusTitleLabel.setStyle(
+                "-fx-font-size: 14px;" +
+                        "-fx-font-weight: 600;" +
+                        "-fx-text-fill: #133D03;"
+        );
+
+        Label statusBadge = new Label(capitalizeStatus(project.getStatut()));
+        statusBadge.getStyleClass().add(getStatusBadgeClass(project.getStatut()));
+        statusBadge.setStyle(
+                statusBadge.getStyle() +
+                        "-fx-font-size: 13px;" +
+                        "-fx-padding: 6 16;"
+        );
+
+        statusRow.getChildren().addAll(statusTitleLabel, statusBadge);
+
+        // Details Grid
+        GridPane detailsGrid = new GridPane();
+        detailsGrid.setHgap(20);
+        detailsGrid.setVgap(18);
+        detailsGrid.setPadding(new Insets(15, 0, 0, 0));
+
+        // Surface
+        addDetailRow(detailsGrid, 0, "🌍 Surface",
+                String.format("%.2f Ha", project.getSurface()));
+
+        // Budget
+        addDetailRow(detailsGrid, 1, "💰 Budget Demandé",
+                String.format("%,.2f DT", project.getBudgetdemande()));
+
+        // Date de Soumission
+        addDetailRow(detailsGrid, 2, "📅 Date de Soumission",
+                project.getDatesoumission().toLocalDate().format(
+                        DateTimeFormatter.ofPattern("dd MMMM yyyy")
+                ));
+
+        // Days since submission
+        long daysSince = java.time.temporal.ChronoUnit.DAYS.between(
+                project.getDatesoumission().toLocalDate(),
+                java.time.LocalDate.now()
+        );
+        addDetailRow(detailsGrid, 3, "⏱️ Soumis depuis",
+                daysSince + " jour(s)");
+
+        // Status explanation
+        Separator sep = new Separator();
+        sep.setPadding(new Insets(10, 0, 10, 0));
+
+        VBox statusExplanation = new VBox(10);
+        statusExplanation.setPadding(new Insets(15));
+        statusExplanation.setStyle(
+                "-fx-background-color: #F5F7F6;" +
+                        "-fx-background-radius: 8;" +
+                        "-fx-border-color: #E0E4E2;" +
+                        "-fx-border-radius: 8;" +
+                        "-fx-border-width: 1;"
+        );
+
+        Label noteTitle = new Label("ℹ️ Information");
+        noteTitle.setStyle(
+                "-fx-font-size: 13px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #076A39;"
+        );
+
+        Label noteText = new Label(getStatusExplanation(project.getStatut()));
+        noteText.setWrapText(true);
+        noteText.setStyle(
+                "-fx-font-size: 12px;" +
+                        "-fx-text-fill: #133D03;"
+        );
+
+        statusExplanation.getChildren().addAll(noteTitle, noteText);
+
+        // Add all to content
+        content.getChildren().addAll(
+                headerBox,
+                statusRow,
+                detailsGrid,
+                sep,
+                statusExplanation
+        );
+
+        // Set content
+        dialog.getDialogPane().setContent(content);
+
+        // Add Close button
+        ButtonType closeButton = new ButtonType("Fermer", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().add(closeButton);
+
+        // Style the button
+        Button closeBtn = (Button) dialog.getDialogPane().lookupButton(closeButton);
+        closeBtn.setStyle(
+                "-fx-background-color: #076A39;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-padding: 10 30;" +
+                        "-fx-background-radius: 6;" +
+                        "-fx-cursor: hand;"
+        );
+
+        // Show dialog
+        dialog.showAndWait();
+    }
+
+    /**
+     * Helper method to add detail rows to grid
+     */
+    private void addDetailRow(GridPane grid, int row, String label, String value) {
+        Label lblLabel = new Label(label);
+        lblLabel.setStyle(
+                "-fx-font-size: 13px;" +
+                        "-fx-font-weight: 600;" +
+                        "-fx-text-fill: #848A86;"
+        );
+
+        Label lblValue = new Label(value);
+        lblValue.setStyle(
+                "-fx-font-size: 14px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #076A39;"
+        );
+
+        grid.add(lblLabel, 0, row);
+        grid.add(lblValue, 1, row);
+    }
+
+    /**
+     * Get status explanation text
+     */
+    private String getStatusExplanation(String statut) {
+        switch (statut.toLowerCase()) {
+            case "accepte":
+                return "Ce projet a été accepté par la décision financière. " +
+                        "Le financement a été approuvé et le projet peut démarrer.";
+            case "refuse":
+                return "Ce projet a été refusé par la décision financière. " +
+                        "Le financement n'a pas été approuvé.";
+            case "en cours":
+                return "Ce projet est en attente d'une décision financière. " +
+                        "Le statut sera mis à jour automatiquement une fois la décision prise.";
+            default:
+                return "Statut du projet: " + capitalizeStatus(statut);
+        }
+    }
+
+    /**
+     * Shows details of the currently selected project from toolbar button
+     */
+    @FXML
+    void showSelectedProjectDetails(ActionEvent event) {
+        if (selectedProject == null) {
+            // No project selected - show selection dialog
+            showProjectSelectionDialog();
+        } else {
+            // Project is already selected - show its details
+            showProjectDetails(selectedProject);
+        }
+    }
+
+    /**
+     * Shows a dialog to select a project when clicking Details without selection
+     */
+    private void showProjectSelectionDialog() {
+        if (allProjects == null || allProjects.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Aucun projet",
+                    "Aucun projet disponible. Veuillez d'abord créer un projet.");
+            return;
+        }
+
+        // Create selection dialog
+        Dialog<projectagricole> dialog = new Dialog<>();
+        dialog.setTitle("Sélectionner un Projet");
+        dialog.setHeaderText("Choisissez un projet pour voir ses détails");
+
+        // Create list view with all projects
+        ListView<projectagricole> listView = new ListView<>();
+        listView.getItems().addAll(allProjects);
+        listView.setPrefHeight(400);
+        listView.setPrefWidth(500);
+
+        // Custom cell factory to display project names nicely
+        listView.setCellFactory(param -> new ListCell<projectagricole>() {
+            @Override
+            protected void updateItem(projectagricole project, boolean empty) {
+                super.updateItem(project, empty);
+                if (empty || project == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    HBox cell = new HBox(15);
+                    cell.setAlignment(Pos.CENTER_LEFT);
+                    cell.setPadding(new Insets(10));
+
+                    // Icon based on status
+                    Label icon = new Label(getProjectIcon(project.getStatut()));
+                    icon.setStyle("-fx-font-size: 24px;");
+
+                    // Project info
+                    VBox info = new VBox(5);
+                    Label name = new Label(project.getNomproject());
+                    name.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #133D03;");
+
+                    Label details = new Label(String.format("ID: %d | Surface: %.2f Ha | Budget: %,.2f DT",
+                            project.getIdproject(), project.getSurface(), project.getBudgetdemande()));
+                    details.setStyle("-fx-font-size: 11px; -fx-text-fill: #848A86;");
+
+                    info.getChildren().addAll(name, details);
+
+                    // Status badge
+                    Label badge = new Label(capitalizeStatus(project.getStatut()));
+                    badge.getStyleClass().add(getStatusBadgeClass(project.getStatut()));
+                    badge.setStyle(badge.getStyle() + "-fx-font-size: 11px; -fx-padding: 4 12;");
+
+                    Region spacer = new Region();
+                    HBox.setHgrow(spacer, Priority.ALWAYS);
+
+                    cell.getChildren().addAll(icon, info, spacer, badge);
+                    setGraphic(cell);
+                }
+            }
+        });
+
+        // Set initial selection to first project
+        if (!allProjects.isEmpty()) {
+            listView.getSelectionModel().select(0);
+        }
+
+        // Dialog content
+        VBox content = new VBox(15);
+        content.setPadding(new Insets(20));
+
+        Label instruction = new Label("Double-cliquez sur un projet ou sélectionnez et cliquez sur OK");
+        instruction.setStyle("-fx-font-size: 12px; -fx-text-fill: #6C757D;");
+
+        content.getChildren().addAll(instruction, listView);
+        dialog.getDialogPane().setContent(content);
+
+        // Add buttons
+        ButtonType okButton = new ButtonType("Voir Détails", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButton = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(okButton, cancelButton);
+
+        // Enable OK button only when project is selected
+        Button okBtn = (Button) dialog.getDialogPane().lookupButton(okButton);
+        okBtn.setDisable(listView.getSelectionModel().getSelectedItem() == null);
+        listView.getSelectionModel().selectedItemProperty().addListener(
+                (obs, oldVal, newVal) -> okBtn.setDisable(newVal == null)
+        );
+
+        // Style OK button
+        okBtn.setStyle(
+                "-fx-background-color: #076A39;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-padding: 8 20;" +
+                        "-fx-background-radius: 6;"
+        );
+
+        // Handle double-click
+        listView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2 && listView.getSelectionModel().getSelectedItem() != null) {
+                projectagricole selected = listView.getSelectionModel().getSelectedItem();
+                dialog.setResult(selected);
+                dialog.close();
+            }
+        });
+
+        // Set result converter
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == okButton) {
+                return listView.getSelectionModel().getSelectedItem();
+            }
+            return null;
+        });
+
+        // Show dialog and handle result
+        dialog.showAndWait().ifPresent(project -> {
+            selectedProject = project;
+            showProjectDetails(project);
+        });
     }
 }
