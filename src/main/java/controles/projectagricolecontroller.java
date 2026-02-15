@@ -41,6 +41,11 @@ import com.itextpdf.layout.properties.UnitValue;
 import javafx.stage.FileChooser;
 import java.io.File;
 import java.time.LocalDateTime;
+import javafx.animation.Timeline;
+import javafx.animation.KeyFrame;
+import javafx.util.Duration;
+
+
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatter;
 
@@ -71,7 +76,8 @@ public class projectagricolecontroller implements Initializable {
     private List<projectagricole> allProjects = new ArrayList<>();
     private projectagricole selectedProject = null;
     private final projectagricoleCRUD service = new projectagricoleCRUD();
-
+    private Timeline autoRefreshTimeline;
+    private static final int REFRESH_INTERVAL_SECONDS = 5;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Initialize combo boxes if they exist
@@ -92,6 +98,9 @@ public class projectagricolecontroller implements Initializable {
         // Load data if container exists
         if (projectsContainer != null) {
             refreshDataFromDB();
+
+            // ✅ NEW: Start auto-refresh to detect status changes
+            startAutoRefresh();
         }
     }
 
@@ -746,5 +755,75 @@ public class projectagricolecontroller implements Initializable {
                 .setBackgroundColor(bgColor)
                 .setTextAlignment(TextAlignment.CENTER)
                 .setPadding(6);
+    }
+    private void startAutoRefresh() {
+        // Create a timeline that refreshes every X seconds
+        autoRefreshTimeline = new Timeline(
+                new KeyFrame(Duration.seconds(REFRESH_INTERVAL_SECONDS), event -> {
+                    refreshDataFromDBSilently();
+                })
+        );
+        autoRefreshTimeline.setCycleCount(Timeline.INDEFINITE); // Run forever
+        autoRefreshTimeline.play(); // Start the timer
+    }
+
+    /**
+     * ✅ NEW: Stops automatic refresh (call this when closing the window)
+     */
+    private void stopAutoRefresh() {
+        if (autoRefreshTimeline != null) {
+            autoRefreshTimeline.stop();
+        }
+    }
+
+    private void refreshDataFromDBSilently() {
+        try {
+            // Get fresh data from database
+            List<projectagricole> newData = service.afficher();
+
+            // Check if any status has changed
+            boolean statusChanged = hasStatusChanged(allProjects, newData);
+
+            // Update the data
+            allProjects = newData;
+            updateCardsDisplay();
+            updateStatistics();
+
+            // Optional: Show notification if status changed
+            if (statusChanged) {
+                updateLastRefreshTime();
+            }
+
+        } catch (SQLException e) {
+            // Silent error - don't show alert during auto-refresh
+            System.err.println("Auto-refresh error: " + e.getMessage());
+        }
+    }
+    private boolean hasStatusChanged(List<projectagricole> oldList, List<projectagricole> newList) {
+        if (oldList.size() != newList.size()) return true;
+
+        for (int i = 0; i < oldList.size(); i++) {
+            projectagricole oldProject = oldList.get(i);
+            projectagricole newProject = newList.stream()
+                    .filter(p -> p.getIdproject() == oldProject.getIdproject())
+                    .findFirst()
+                    .orElse(null);
+
+            if (newProject != null && !oldProject.getStatut().equals(newProject.getStatut())) {
+                return true; // Status changed!
+            }
+        }
+        return false;
+    }
+
+    /**
+     * ✅ NEW: Updates the last refresh timestamp
+     */
+    private void updateLastRefreshTime() {
+        if (lblLastUpdate != null) {
+            lblLastUpdate.setText("Mis à jour: " +
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))
+            );
+        }
     }
 }
