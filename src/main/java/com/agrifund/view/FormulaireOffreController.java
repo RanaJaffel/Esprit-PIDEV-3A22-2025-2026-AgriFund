@@ -6,12 +6,9 @@ import com.agrifund.model.ProduitFinancier;
 import com.agrifund.util.DatabaseConnection;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
@@ -23,25 +20,28 @@ import java.util.List;
 
 public class FormulaireOffreController {
 
-    @FXML
-    private Label lblTitre;
-    @FXML
-    private Label lblSousTitre;
-    @FXML
-    private TextField txtNomOffre;
-    @FXML
-    private ComboBox<ProduitFinancier> cmbProduit;
-    @FXML
-    private ComboBox<String> cmbStatut;
-    @FXML
-    private TextArea txtConditions;
-    @FXML
-    private Button btnValider;
+    // Title Bar elements
+    @FXML private HBox titleBar;
+    @FXML private Label lblWindowTitle;
+    @FXML private Button btnClose;
+
+    // Form elements
+    @FXML private Label lblTitre;
+    @FXML private Label lblSousTitre;
+    @FXML private TextField txtNomOffre;
+    @FXML private ComboBox<ProduitFinancier> cmbProduit;
+    @FXML private ComboBox<String> cmbStatut;
+    @FXML private TextArea txtConditions;
+    @FXML private Button btnValider;
 
     private OffreFinanciereController offreController;
     private OffreFinanciere offreAModifier;
     private boolean modeModification = false;
     private Runnable onSuccess;
+
+    // For dragging the window
+    private double xOffset = 0;
+    private double yOffset = 0;
 
     @FXML
     public void initialize() {
@@ -57,6 +57,8 @@ public class FormulaireOffreController {
     private void chargerProduits() {
         try {
             Connection conn = DatabaseConnection.getConnection();
+            if (conn == null) return;
+
             String sql = "SELECT * FROM produit_financier ORDER BY nom_produit";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
@@ -90,26 +92,98 @@ public class FormulaireOffreController {
 
             rs.close();
             stmt.close();
-            conn.close();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    // ==================== TITLE BAR CONTROLS ====================
+
+    @FXML
+    private void handleTitleBarPressed(MouseEvent event) {
+        Stage stage = (Stage) titleBar.getScene().getWindow();
+        xOffset = stage.getX() - event.getScreenX();
+        yOffset = stage.getY() - event.getScreenY();
+    }
+
+    @FXML
+    private void handleTitleBarDragged(MouseEvent event) {
+        Stage stage = (Stage) titleBar.getScene().getWindow();
+        stage.setX(event.getScreenX() + xOffset);
+        stage.setY(event.getScreenY() + yOffset);
+    }
+
+    @FXML
+    private void handleMinimize() {
+        Stage stage = (Stage) titleBar.getScene().getWindow();
+        stage.setIconified(true);
+    }
+
+    @FXML
+    private void handleMaximize() {
+        Stage stage = (Stage) titleBar.getScene().getWindow();
+        stage.setMaximized(!stage.isMaximized());
+    }
+
+    @FXML
+    private void handleFermer() {
+        fermerFenetre();
+    }
+
+    @FXML
+    private void onControlButtonHover(MouseEvent event) {
+        Button btn = (Button) event.getSource();
+        btn.setStyle("-fx-background-color: #DDDDDD; -fx-text-fill: #333333; " +
+                "-fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12; " +
+                "-fx-cursor: hand; -fx-background-radius: 3;");
+    }
+
+    @FXML
+    private void onControlButtonExit(MouseEvent event) {
+        Button btn = (Button) event.getSource();
+        btn.setStyle("-fx-background-color: transparent; -fx-text-fill: #666666; " +
+                "-fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12; " +
+                "-fx-cursor: hand; -fx-background-radius: 3;");
+    }
+
+    @FXML
+    private void onCloseButtonHover(MouseEvent event) {
+        Button btn = (Button) event.getSource();
+        btn.setStyle("-fx-background-color: #E53935; -fx-text-fill: white; " +
+                "-fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12; " +
+                "-fx-cursor: hand; -fx-background-radius: 3;");
+    }
+
+    @FXML
+    private void onCloseButtonExit(MouseEvent event) {
+        Button btn = (Button) event.getSource();
+        btn.setStyle("-fx-background-color: transparent; -fx-text-fill: #666666; " +
+                "-fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12; " +
+                "-fx-cursor: hand; -fx-background-radius: 3;");
+    }
+
+    // ==================== MODE CONFIGURATION ====================
+
     public void setModeAjout() {
         modeModification = false;
+        if (lblWindowTitle != null) lblWindowTitle.setText("Nouvelle Offre");
         lblTitre.setText("NOUVELLE OFFRE");
-        lblSousTitre.setText("Creez une nouvelle offre financiere");
-        btnValider.setText("CREER L OFFRE");
+        if (lblSousTitre != null) {
+            lblSousTitre.setText("Creez une nouvelle offre financiere");
+        }
+        btnValider.setText("CREER L'OFFRE");
     }
 
     public void setModeModification(OffreFinanciere offre) {
         modeModification = true;
         offreAModifier = offre;
 
-        lblTitre.setText("MODIFIER L OFFRE");
-        lblSousTitre.setText("Modifiez les informations de l offre");
+        if (lblWindowTitle != null) lblWindowTitle.setText("Modifier Offre - " + offre.getNomOffre());
+        lblTitre.setText("MODIFIER L'OFFRE");
+        if (lblSousTitre != null) {
+            lblSousTitre.setText("Modifiez les informations de l'offre");
+        }
         btnValider.setText("ENREGISTRER");
 
         // Remplir les champs
@@ -129,6 +203,8 @@ public class FormulaireOffreController {
     public void setOnSuccess(Runnable callback) {
         this.onSuccess = callback;
     }
+
+    // ==================== FORM ACTIONS ====================
 
     @FXML
     private void handleValider() {
@@ -153,7 +229,7 @@ public class FormulaireOffreController {
                     }
                     fermerFenetre();
                 } else {
-                    showAlert("Erreur", "Impossible de modifier l offre!", Alert.AlertType.ERROR);
+                    showAlert("Erreur", "Impossible de modifier l'offre!", Alert.AlertType.ERROR);
                 }
             } else {
                 // Mode ajout
@@ -172,7 +248,7 @@ public class FormulaireOffreController {
                     }
                     fermerFenetre();
                 } else {
-                    showAlert("Erreur", "Impossible de creer l offre!", Alert.AlertType.ERROR);
+                    showAlert("Erreur", "Impossible de creer l'offre!", Alert.AlertType.ERROR);
                 }
             }
         } catch (Exception e) {
@@ -190,13 +266,13 @@ public class FormulaireOffreController {
         String erreurs = "";
 
         if (txtNomOffre.getText() == null || txtNomOffre.getText().trim().isEmpty()) {
-            erreurs = erreurs + "Le nom de l offre est obligatoire\n";
+            erreurs += "Le nom de l'offre est obligatoire\n";
         }
         if (cmbProduit.getValue() == null) {
-            erreurs = erreurs + "Veuillez selectionner un produit\n";
+            erreurs += "Veuillez selectionner un produit\n";
         }
         if (cmbStatut.getValue() == null) {
-            erreurs = erreurs + "Veuillez selectionner un statut\n";
+            erreurs += "Veuillez selectionner un statut\n";
         }
 
         if (!erreurs.isEmpty()) {

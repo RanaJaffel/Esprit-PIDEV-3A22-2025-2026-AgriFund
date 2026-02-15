@@ -2,7 +2,6 @@ package com.agrifund.view;
 
 import com.agrifund.controller.OffreFinanciereController;
 import com.agrifund.model.OffreFinanciere;
-import com.agrifund.model.ProduitFinancier;
 import com.agrifund.util.DatabaseConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,8 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-
+import javafx.stage.StageStyle;  // Add this import at the top
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
@@ -47,72 +45,79 @@ import java.util.Optional;
 
 public class OffreFinanciereViewController {
 
-    @FXML
-    private TextField txtRecherche;
+    @FXML private TextField txtRecherche;
 
-    @FXML
-    private TableView<OffreFinanciere> tableOffres;
-    @FXML
-    private TableColumn<OffreFinanciere, Integer> colId;
-    @FXML
-    private TableColumn<OffreFinanciere, String> colNom;
-    @FXML
-    private TableColumn<OffreFinanciere, String> colProduit;
-    @FXML
-    private TableColumn<OffreFinanciere, String> colConditions;
-    @FXML
-    private TableColumn<OffreFinanciere, String> colStatut;
+    @FXML private TableView<OffreFinanciere> tableOffres;
+    @FXML private TableColumn<OffreFinanciere, Integer> colId;
+    @FXML private TableColumn<OffreFinanciere, String> colNom;
+    @FXML private TableColumn<OffreFinanciere, String> colProduit;
+    @FXML private TableColumn<OffreFinanciere, String> colConditions;
+    @FXML private TableColumn<OffreFinanciere, String> colStatut;
 
-    @FXML
-    private Label lblTotalOffres;
-    @FXML
-    private Label lblActives;
-    @FXML
-    private Label lblEnPause;
-    @FXML
-    private Label lblExpirees;
+    @FXML private Label lblTotalOffres;
+    @FXML private Label lblActives;
+    @FXML private Label lblEnPause;
+    @FXML private Label lblExpirees;
 
     private OffreFinanciereController offreController;
     private ObservableList<OffreFinanciere> offresList;
 
     @FXML
     public void initialize() {
-        System.out.println("Initialisation OffreFinanciereViewController...");
+        System.out.println("🚀 Initialisation OffreFinanciereViewController...");
 
-        offreController = new OffreFinanciereController();
-        offresList = FXCollections.observableArrayList();
+        try {
+            offreController = new OffreFinanciereController();
+            offresList = FXCollections.observableArrayList();
 
-        colId.setCellValueFactory(new PropertyValueFactory<>("idOffre"));
-        colNom.setCellValueFactory(new PropertyValueFactory<>("nomOffre"));
-        colProduit.setCellValueFactory(new PropertyValueFactory<>("nomProduit"));
-        colConditions.setCellValueFactory(new PropertyValueFactory<>("conditions"));
-        colStatut.setCellValueFactory(new PropertyValueFactory<>("statut"));
+            // Configuration des colonnes
+            colId.setCellValueFactory(new PropertyValueFactory<>("idOffre"));
+            colNom.setCellValueFactory(new PropertyValueFactory<>("nomOffre"));
+            colProduit.setCellValueFactory(new PropertyValueFactory<>("nomProduit"));
+            colConditions.setCellValueFactory(new PropertyValueFactory<>("conditions"));
+            colStatut.setCellValueFactory(new PropertyValueFactory<>("statut"));
 
-        colStatut.setCellFactory(column -> new TableCell<OffreFinanciere, String>() {
-            @Override
-            protected void updateItem(String statut, boolean empty) {
-                super.updateItem(statut, empty);
-                if (empty || statut == null) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    setText(statut);
-                    if (statut.equals("Active")) {
-                        setStyle("-fx-text-fill: #00ff88; -fx-font-weight: bold;");
-                    } else if (statut.equals("En pause")) {
-                        setStyle("-fx-text-fill: #E1B323; -fx-font-weight: bold;");
-                    } else if (statut.equals("Expiree")) {
-                        setStyle("-fx-text-fill: #cc6644; -fx-font-weight: bold;");
+            // Style pour la colonne statut
+            colStatut.setCellFactory(column -> new TableCell<OffreFinanciere, String>() {
+                @Override
+                protected void updateItem(String statut, boolean empty) {
+                    super.updateItem(statut, empty);
+                    if (empty || statut == null) {
+                        setText(null);
+                        setStyle("");
                     } else {
-                        setStyle("-fx-font-weight: bold;");
+                        setText(statut);
+                        if (statut.equals("Active")) {
+                            setStyle("-fx-text-fill: #2E7D32; -fx-font-weight: bold;");
+                        } else if (statut.equals("En pause")) {
+                            setStyle("-fx-text-fill: #F9A825; -fx-font-weight: bold;");
+                        } else if (statut.equals("Expiree")) {
+                            setStyle("-fx-text-fill: #C62828; -fx-font-weight: bold;");
+                        } else {
+                            setStyle("-fx-font-weight: bold;");
+                        }
                     }
                 }
-            }
-        });
+            });
 
-        chargerDonnees();
+            // Charger les donnees
+            chargerDonnees();
 
-        System.out.println("Initialisation terminee!");
+            System.out.println("✅ Initialisation terminee!");
+
+        } catch (Exception e) {
+            System.err.println("❌ Erreur lors de l'initialisation: " + e.getMessage());
+            e.printStackTrace();
+            initializeEmptyState();
+        }
+    }
+
+    private void initializeEmptyState() {
+        lblTotalOffres.setText("0");
+        lblActives.setText("0");
+        lblEnPause.setText("0");
+        lblExpirees.setText("0");
+        tableOffres.setItems(FXCollections.observableArrayList());
     }
 
     private void chargerDonnees() {
@@ -122,6 +127,12 @@ public class OffreFinanciereViewController {
 
         try {
             conn = DatabaseConnection.getConnection();
+            if (conn == null) {
+                System.err.println("⚠️ Connexion null - impossible de charger les donnees");
+                initializeEmptyState();
+                return;
+            }
+
             String sql = "SELECT o.*, p.nom_produit FROM offre_financiere o " +
                     "JOIN produit_financier p ON o.id_produit = p.id_produit " +
                     "ORDER BY o.id_offre DESC";
@@ -143,16 +154,16 @@ public class OffreFinanciereViewController {
             tableOffres.setItems(offresList);
             mettreAJourStats();
 
-            System.out.println(offresList.size() + " offres chargees");
+            System.out.println("✅ " + offresList.size() + " offres chargees");
 
         } catch (SQLException e) {
-            System.err.println("Erreur chargement: " + e.getMessage());
+            System.err.println("❌ Erreur chargement: " + e.getMessage());
             e.printStackTrace();
+            initializeEmptyState();
         } finally {
             try {
                 if (rs != null) rs.close();
                 if (stmt != null) stmt.close();
-                if (conn != null) conn.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -164,6 +175,10 @@ public class OffreFinanciereViewController {
 
         try {
             conn = DatabaseConnection.getConnection();
+            if (conn == null) {
+                initializeEmptyState();
+                return;
+            }
 
             Statement stmt1 = conn.createStatement();
             ResultSet rs1 = stmt1.executeQuery("SELECT COUNT(*) FROM offre_financiere");
@@ -204,16 +219,11 @@ public class OffreFinanciereViewController {
             ps4.close();
 
         } catch (SQLException e) {
-            System.err.println("Erreur stats: " + e.getMessage());
+            System.err.println("❌ Erreur stats: " + e.getMessage());
             e.printStackTrace();
-        } finally {
-            try {
-                if (conn != null) conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
+
 
     @FXML
     private void handleAjouter() {
@@ -227,16 +237,16 @@ public class OffreFinanciereViewController {
             controller.setOnSuccess(() -> chargerDonnees());
 
             Stage stage = new Stage();
-            stage.setTitle("Nouvelle Offre");
-            stage.setScene(new Scene(root, 600, 650));
+            stage.initStyle(StageStyle.UNDECORATED);  // Custom title bar
+            stage.setScene(new Scene(root, 580, 680));
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(StageStyle.UNDECORATED);
             stage.setResizable(false);
+            stage.centerOnScreen();
             stage.show();
 
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Erreur", "Impossible d ouvrir le formulaire:\n" + e.getMessage(), Alert.AlertType.ERROR);
+            showAlert("Erreur", "Impossible d'ouvrir le formulaire:\n" + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
@@ -258,19 +268,18 @@ public class OffreFinanciereViewController {
             controller.setOnSuccess(() -> chargerDonnees());
 
             Stage stage = new Stage();
-            stage.setTitle("Modifier Offre - " + selected.getNomOffre());
-            stage.setScene(new Scene(root, 600, 650));
+            stage.initStyle(StageStyle.UNDECORATED);  // Custom title bar
+            stage.setScene(new Scene(root, 580, 680));
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(StageStyle.UNDECORATED);
             stage.setResizable(false);
+            stage.centerOnScreen();
             stage.show();
 
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Erreur", "Impossible d ouvrir le formulaire:\n" + e.getMessage(), Alert.AlertType.ERROR);
+            showAlert("Erreur", "Impossible d'ouvrir le formulaire:\n" + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
-
     @FXML
     private void handleDownloadPDF() {
         OffreFinanciere selected = tableOffres.getSelectionModel().getSelectedItem();
@@ -289,11 +298,10 @@ public class OffreFinanciereViewController {
             PdfWriter.getInstance(document, new FileOutputStream(filePath));
             document.open();
 
-            // Couleurs AgriFund
-            BaseColor vertFonce = new BaseColor(9, 80, 50);
-            BaseColor vertClair = new BaseColor(8, 150, 71);
-            BaseColor lime = new BaseColor(178, 217, 68);
-            BaseColor gold = new BaseColor(225, 179, 35);
+            // Couleurs
+            BaseColor vertFonce = new BaseColor(46, 125, 50);
+            BaseColor vertClair = new BaseColor(76, 175, 80);
+            BaseColor lime = new BaseColor(129, 199, 132);
 
             // Fonts
             Font fontTitre = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 28, vertFonce);
@@ -312,7 +320,6 @@ public class OffreFinanciereViewController {
             sousTitre.setSpacingAfter(20);
             document.add(sousTitre);
 
-            // Ligne decorative
             LineSeparator line = new LineSeparator();
             line.setLineColor(lime);
             line.setLineWidth(3);
@@ -325,7 +332,6 @@ public class OffreFinanciereViewController {
             table.setWidths(new float[]{1, 2});
             table.setSpacingBefore(20);
 
-            // Style cellules
             addTableRow(table, "ID Offre", "#" + selected.getIdOffre(), fontLabel, fontValeur, lime);
             addTableRow(table, "Nom de l'Offre", selected.getNomOffre(), fontLabel, fontValeur, lime);
             addTableRow(table, "Produit Associe", selected.getNomProduit(), fontLabel, fontValeur, lime);
@@ -347,7 +353,7 @@ public class OffreFinanciereViewController {
                     selected.getConditions() != null ? selected.getConditions() : "Aucune condition specifiee",
                     fontValeur));
             conditionsCell.setPadding(15);
-            conditionsCell.setBackgroundColor(new BaseColor(245, 245, 245));
+            conditionsCell.setBackgroundColor(new BaseColor(241, 248, 233));
             conditionsCell.setBorderColor(vertClair);
             conditionsCell.setBorderWidth(2);
             conditionsTable.addCell(conditionsCell);
@@ -364,9 +370,9 @@ public class OffreFinanciereViewController {
             if ("Active".equals(selected.getStatut())) {
                 statutColor = vertClair;
             } else if ("En pause".equals(selected.getStatut())) {
-                statutColor = gold;
+                statutColor = new BaseColor(251, 192, 45);
             } else {
-                statutColor = new BaseColor(204, 68, 68);
+                statutColor = new BaseColor(198, 40, 40);
             }
 
             PdfPCell statutCell = new PdfPCell(new Phrase("STATUT: " + selected.getStatut().toUpperCase(), fontStatut));
@@ -402,7 +408,7 @@ public class OffreFinanciereViewController {
             document.close();
 
             showAlert("Succes", "PDF telecharge avec succes!\n\nFichier: " + filePath, Alert.AlertType.INFORMATION);
-            System.out.println("PDF genere: " + filePath);
+            System.out.println("✅ PDF genere: " + filePath);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -413,12 +419,12 @@ public class OffreFinanciereViewController {
     private void addTableRow(PdfPTable table, String label, String value, Font labelFont, Font valueFont, BaseColor borderColor) {
         PdfPCell labelCell = new PdfPCell(new Phrase(label, labelFont));
         labelCell.setPadding(12);
-        labelCell.setBackgroundColor(new BaseColor(240, 248, 240));
+        labelCell.setBackgroundColor(new BaseColor(232, 245, 233));
         labelCell.setBorderColor(borderColor);
         labelCell.setBorderWidth(1);
         table.addCell(labelCell);
 
-        PdfPCell valueCell = new PdfPCell(new Phrase(value, valueFont));
+        PdfPCell valueCell = new PdfPCell(new Phrase(value != null ? value : "", valueFont));
         valueCell.setPadding(12);
         valueCell.setBorderColor(borderColor);
         valueCell.setBorderWidth(1);
@@ -435,7 +441,7 @@ public class OffreFinanciereViewController {
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Confirmation");
-        confirm.setHeaderText("Supprimer l offre?");
+        confirm.setHeaderText("Supprimer l'offre?");
         confirm.setContentText("Voulez-vous vraiment supprimer: " + selected.getNomOffre() + "?");
 
         Optional<ButtonType> result = confirm.showAndWait();
@@ -446,7 +452,7 @@ public class OffreFinanciereViewController {
                 chargerDonnees();
                 showAlert("Succes", "Offre supprimee avec succes!", Alert.AlertType.INFORMATION);
             } else {
-                showAlert("Erreur", "Impossible de supprimer l offre!", Alert.AlertType.ERROR);
+                showAlert("Erreur", "Impossible de supprimer l'offre!", Alert.AlertType.ERROR);
             }
         }
     }
@@ -465,6 +471,11 @@ public class OffreFinanciereViewController {
             }
 
             conn = DatabaseConnection.getConnection();
+            if (conn == null) {
+                showAlert("Erreur", "Connexion a la base de donnees impossible", Alert.AlertType.ERROR);
+                return;
+            }
+
             String sql = "SELECT o.*, p.nom_produit FROM offre_financiere o " +
                     "JOIN produit_financier p ON o.id_produit = p.id_produit " +
                     "WHERE o.nom_offre LIKE ? OR o.statut LIKE ? OR p.nom_produit LIKE ? " +
@@ -499,7 +510,6 @@ public class OffreFinanciereViewController {
             try {
                 if (rs != null) rs.close();
                 if (ps != null) ps.close();
-                if (conn != null) conn.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -510,7 +520,7 @@ public class OffreFinanciereViewController {
     private void handleActualiser() {
         txtRecherche.clear();
         chargerDonnees();
-        System.out.println("Donnees actualisees");
+        System.out.println("✅ Donnees actualisees");
     }
 
     @FXML

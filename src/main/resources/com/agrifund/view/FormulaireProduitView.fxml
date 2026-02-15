@@ -5,108 +5,167 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.effect.*?>
 
-<VBox spacing="25" alignment="CENTER" prefWidth="550"
-      style="-fx-padding: 40; -fx-background-color: linear-gradient(to bottom, #FFFFFF, #E8F5E9, #C8E6C9);"
+<VBox spacing="0"
+      style="-fx-background-color: #FFFFFF;"
       xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.agrifund.view.FormulaireProduitController">
 
-    <!-- HEADER -->
-    <VBox alignment="CENTER" spacing="8"
-          style="-fx-background-color: linear-gradient(to right, #4CAF50, #66BB6A, #4CAF50);
-                 -fx-padding: 25 50; -fx-background-radius: 25;">
-        <effect>
-            <DropShadow color="#2E7D32" offsetY="5" radius="15"/>
-        </effect>
-        <Label fx:id="lblTitre" text="NOUVEAU PRODUIT"
-               style="-fx-text-fill: white; -fx-font-size: 26; -fx-font-weight: bold;"/>
-        <Label fx:id="lblSousTitre" text="Remplissez les informations ci-dessous"
-               style="-fx-text-fill: #E8F5E9; -fx-font-size: 13;"/>
-    </VBox>
+    <!-- ========== CUSTOM TITLE BAR ========== -->
+    <HBox fx:id="titleBar" alignment="CENTER_LEFT" spacing="10"
+          style="-fx-background-color: linear-gradient(to right, #E8E8E8, #F5F5F5, #E8E8E8);
+                 -fx-padding: 8 15; -fx-border-color: #CCCCCC; -fx-border-width: 0 0 1 0;"
+          onMousePressed="#handleTitleBarPressed"
+          onMouseDragged="#handleTitleBarDragged">
 
-    <!-- FORMULAIRE -->
-    <VBox spacing="18"
-          style="-fx-background-color: white; -fx-padding: 30; -fx-background-radius: 20;
-                 -fx-border-color: #81C784; -fx-border-width: 2; -fx-border-radius: 20;">
-        <effect>
-            <DropShadow color="#A5D6A7" offsetY="5" radius="12"/>
-        </effect>
+        <!-- App Icon and Title -->
+        <Label text="🌿" style="-fx-font-size: 18;"/>
+        <Label fx:id="lblWindowTitle" text="Nouveau Produit"
+               style="-fx-text-fill: #333333; -fx-font-size: 14; -fx-font-weight: bold;"/>
 
-        <!-- Nom -->
-        <VBox spacing="8">
-            <Label text="NOM DU PRODUIT *" style="-fx-text-fill: #2E7D32; -fx-font-weight: bold; -fx-font-size: 12;"/>
-            <TextField fx:id="txtNom" promptText="Ex: Pret Agricole Premium"
-                       style="-fx-background-color: #F1F8E9; -fx-text-fill: #1B5E20;
-                              -fx-border-color: #4CAF50; -fx-border-width: 2; -fx-border-radius: 12;
-                              -fx-background-radius: 12; -fx-padding: 14; -fx-font-size: 14;"/>
-        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
 
-        <!-- Type -->
-        <VBox spacing="8">
-            <Label text="TYPE DE FINANCEMENT *" style="-fx-text-fill: #2E7D32; -fx-font-weight: bold; -fx-font-size: 12;"/>
-            <ComboBox fx:id="cmbType" promptText="Selectionnez le type" maxWidth="Infinity"
-                      style="-fx-background-color: #F1F8E9; -fx-border-color: #4CAF50;
-                             -fx-border-width: 2; -fx-border-radius: 12; -fx-background-radius: 12;"/>
-        </VBox>
+        <!-- Window Control Buttons -->
+        <Button text="─" onAction="#handleMinimize"
+                style="-fx-background-color: transparent; -fx-text-fill: #666666;
+                       -fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12;
+                       -fx-cursor: hand; -fx-background-radius: 3;"
+                onMouseEntered="#onControlButtonHover" onMouseExited="#onControlButtonExit"/>
 
-        <!-- Taux -->
-        <VBox spacing="8">
-            <Label text="TAUX D INTERET (%) *" style="-fx-text-fill: #2E7D32; -fx-font-weight: bold; -fx-font-size: 12;"/>
-            <TextField fx:id="txtTaux" promptText="Ex: 5.5"
-                       style="-fx-background-color: #F1F8E9; -fx-text-fill: #1B5E20;
-                              -fx-border-color: #66BB6A; -fx-border-width: 2; -fx-border-radius: 12;
-                              -fx-background-radius: 12; -fx-padding: 14; -fx-font-size: 14;"/>
-        </VBox>
+        <Button text="□" onAction="#handleMaximize"
+                style="-fx-background-color: transparent; -fx-text-fill: #666666;
+                       -fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12;
+                       -fx-cursor: hand; -fx-background-radius: 3;"
+                onMouseEntered="#onControlButtonHover" onMouseExited="#onControlButtonExit"/>
 
-        <!-- Montants -->
-        <HBox spacing="20">
-            <VBox spacing="8" HBox.hgrow="ALWAYS">
-                <Label text="MONTANT MIN (DH) *" style="-fx-text-fill: #388E3C; -fx-font-weight: bold; -fx-font-size: 12;"/>
-                <TextField fx:id="txtMontantMin" promptText="10000"
-                           style="-fx-background-color: #F1F8E9; -fx-text-fill: #1B5E20;
-                                  -fx-border-color: #81C784; -fx-border-width: 2; -fx-border-radius: 12;
-                                  -fx-background-radius: 12; -fx-padding: 14;"/>
-            </VBox>
-
-            <VBox spacing="8" HBox.hgrow="ALWAYS">
-                <Label text="MONTANT MAX (DH) *" style="-fx-text-fill: #388E3C; -fx-font-weight: bold; -fx-font-size: 12;"/>
-                <TextField fx:id="txtMontantMax" promptText="500000"
-                           style="-fx-background-color: #F1F8E9; -fx-text-fill: #1B5E20;
-                                  -fx-border-color: #81C784; -fx-border-width: 2; -fx-border-radius: 12;
-                                  -fx-background-radius: 12; -fx-padding: 14;"/>
-            </VBox>
-        </HBox>
-
-        <!-- Regles -->
-        <VBox spacing="8">
-            <Label text="REGLES FINANCIERES" style="-fx-text-fill: #388E3C; -fx-font-weight: bold; -fx-font-size: 12;"/>
-            <TextArea fx:id="txtRegles" promptText="Decrivez les regles et conditions..."
-                      prefRowCount="4" wrapText="true"
-                      style="-fx-background-color: #F1F8E9; -fx-text-fill: #1B5E20;
-                             -fx-border-color: #81C784; -fx-border-radius: 12;
-                             -fx-background-radius: 12; -fx-border-width: 2;"/>
-        </VBox>
-    </VBox>
-
-    <!-- BOUTONS -->
-    <HBox spacing="20" alignment="CENTER">
-        <Button fx:id="btnValider" text="ENREGISTRER" onAction="#handleValider" prefWidth="180" prefHeight="50"
-                style="-fx-background-color: linear-gradient(to bottom, #4CAF50, #388E3C);
-                       -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 15;
-                       -fx-background-radius: 25; -fx-cursor: hand;">
-            <effect>
-                <DropShadow color="#2E7D32" offsetY="5" radius="10"/>
-            </effect>
-        </Button>
-
-        <Button text="ANNULER" onAction="#handleAnnuler" prefWidth="150" prefHeight="50"
-                style="-fx-background-color: transparent; -fx-text-fill: #4CAF50;
-                       -fx-font-weight: bold; -fx-font-size: 15;
-                       -fx-border-color: #4CAF50; -fx-border-width: 2;
-                       -fx-background-radius: 25; -fx-border-radius: 25; -fx-cursor: hand;">
-        </Button>
+        <Button fx:id="btnClose" text="✕" onAction="#handleFermer"
+                style="-fx-background-color: transparent; -fx-text-fill: #666666;
+                       -fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12;
+                       -fx-cursor: hand; -fx-background-radius: 3;"
+                onMouseEntered="#onCloseButtonHover" onMouseExited="#onCloseButtonExit"/>
     </HBox>
 
-    <!-- Info -->
-    <Label text="* Champs obligatoires" style="-fx-text-fill: #81C784; -fx-font-size: 11;"/>
+    <!-- ========== MAIN CONTENT WITH SCROLL ========== -->
+    <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS"
+                style="-fx-background-color: transparent; -fx-background: transparent;">
+
+        <VBox spacing="25" alignment="CENTER"
+              style="-fx-padding: 30; -fx-background-color: linear-gradient(to bottom, #FFFFFF, #E8F5E9, #C8E6C9);">
+
+            <!-- HEADER -->
+            <VBox alignment="CENTER" spacing="8"
+                  style="-fx-background-color: linear-gradient(to right, #4CAF50, #388E3C, #4CAF50);
+                         -fx-padding: 25 60 25 60; -fx-background-radius: 20;">
+                <effect>
+                    <DropShadow color="#2E7D32" offsetY="5" radius="15"/>
+                </effect>
+                <Label fx:id="lblTitre" text="NOUVEAU PRODUIT"
+                       style="-fx-text-fill: white; -fx-font-size: 24; -fx-font-weight: bold;"/>
+                <Label fx:id="lblSousTitre" text="Remplissez les informations ci-dessous"
+                       style="-fx-text-fill: #C8E6C9; -fx-font-size: 12;"/>
+            </VBox>
+
+            <!-- FORMULAIRE -->
+            <VBox spacing="18"
+                  style="-fx-background-color: white;
+                         -fx-padding: 25; -fx-background-radius: 15;
+                         -fx-border-color: #4CAF50; -fx-border-width: 2; -fx-border-radius: 15;">
+                <effect>
+                    <DropShadow color="#81C784" offsetY="5" radius="12"/>
+                </effect>
+
+                <!-- Nom du produit -->
+                <VBox spacing="8">
+                    <Label text="NOM DU PRODUIT *" style="-fx-text-fill: #2E7D32; -fx-font-size: 12; -fx-font-weight: bold;"/>
+                    <TextField fx:id="txtNom" promptText="Ex: Pret Agricole Premium"
+                               style="-fx-background-color: #F1F8E9;
+                                      -fx-text-fill: #1B5E20; -fx-prompt-text-fill: #81C784;
+                                      -fx-background-radius: 10; -fx-padding: 12;
+                                      -fx-border-color: #4CAF50; -fx-border-radius: 10; -fx-border-width: 2;
+                                      -fx-font-size: 14;"/>
+                </VBox>
+
+                <!-- Type de financement -->
+                <VBox spacing="8">
+                    <Label text="TYPE DE FINANCEMENT *" style="-fx-text-fill: #388E3C; -fx-font-size: 12; -fx-font-weight: bold;"/>
+                    <ComboBox fx:id="cbType" promptText="Selectionner un type" maxWidth="Infinity"
+                              style="-fx-background-color: #F1F8E9;
+                                     -fx-background-radius: 10; -fx-padding: 5;
+                                     -fx-border-color: #66BB6A; -fx-border-radius: 10; -fx-border-width: 2;"/>
+                </VBox>
+
+                <!-- Taux d'interet -->
+                <VBox spacing="8">
+                    <Label text="TAUX D'INTERET (%) *" style="-fx-text-fill: #F9A825; -fx-font-size: 12; -fx-font-weight: bold;"/>
+                    <TextField fx:id="txtTaux" promptText="Ex: 5.5"
+                               style="-fx-background-color: #FFFDE7;
+                                      -fx-text-fill: #F57F17; -fx-prompt-text-fill: #FBC02D;
+                                      -fx-background-radius: 10; -fx-padding: 12;
+                                      -fx-border-color: #FBC02D; -fx-border-radius: 10; -fx-border-width: 2;
+                                      -fx-font-size: 14; -fx-font-weight: bold;"/>
+                </VBox>
+
+                <!-- Montants Min et Max -->
+                <HBox spacing="15">
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Label text="MONTANT MIN (DH) *" style="-fx-text-fill: #388E3C; -fx-font-size: 12; -fx-font-weight: bold;"/>
+                        <TextField fx:id="txtMontantMin" promptText="Ex: 10000"
+                                   style="-fx-background-color: #F1F8E9;
+                                          -fx-text-fill: #1B5E20; -fx-prompt-text-fill: #81C784;
+                                          -fx-background-radius: 10; -fx-padding: 12;
+                                          -fx-border-color: #81C784; -fx-border-radius: 10; -fx-border-width: 2;
+                                          -fx-font-size: 14;"/>
+                    </VBox>
+
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Label text="MONTANT MAX (DH) *" style="-fx-text-fill: #388E3C; -fx-font-size: 12; -fx-font-weight: bold;"/>
+                        <TextField fx:id="txtMontantMax" promptText="Ex: 500000"
+                                   style="-fx-background-color: #F1F8E9;
+                                          -fx-text-fill: #1B5E20; -fx-prompt-text-fill: #81C784;
+                                          -fx-background-radius: 10; -fx-padding: 12;
+                                          -fx-border-color: #81C784; -fx-border-radius: 10; -fx-border-width: 2;
+                                          -fx-font-size: 14;"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Regles financieres -->
+                <VBox spacing="8">
+                    <Label text="REGLES FINANCIERES" style="-fx-text-fill: #388E3C; -fx-font-size: 12; -fx-font-weight: bold;"/>
+                    <TextArea fx:id="txtRegles" promptText="Decrivez les regles, conditions et avantages..."
+                              prefHeight="80" wrapText="true"
+                              style="-fx-background-color: #F1F8E9;
+                                     -fx-text-fill: #1B5E20; -fx-prompt-text-fill: #81C784;
+                                     -fx-background-radius: 10; -fx-padding: 10;
+                                     -fx-border-color: #81C784; -fx-border-radius: 10; -fx-border-width: 2;
+                                     -fx-font-size: 13;"/>
+                </VBox>
+            </VBox>
+
+            <!-- BOUTONS -->
+            <HBox spacing="15" alignment="CENTER">
+                <Button fx:id="btnValider" text="CREER LE PRODUIT" onAction="#handleValider"
+                        prefWidth="200" prefHeight="50"
+                        style="-fx-background-color: linear-gradient(to bottom, #4CAF50, #388E3C);
+                               -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14;
+                               -fx-background-radius: 25; -fx-cursor: hand;">
+                    <effect>
+                        <DropShadow color="#2E7D32" offsetY="4" radius="10"/>
+                    </effect>
+                </Button>
+
+                <Button text="ANNULER" onAction="#handleAnnuler"
+                        prefWidth="150" prefHeight="50"
+                        style="-fx-background-color: transparent;
+                               -fx-text-fill: #4CAF50; -fx-font-weight: bold; -fx-font-size: 14;
+                               -fx-border-color: #4CAF50; -fx-border-width: 2;
+                               -fx-background-radius: 25; -fx-border-radius: 25; -fx-cursor: hand;">
+                </Button>
+            </HBox>
+
+            <!-- INFO -->
+            <Label text="* Les champs marques sont obligatoires"
+                   style="-fx-text-fill: #81C784; -fx-font-size: 11;"/>
+
+        </VBox>
+    </ScrollPane>
 </VBox>

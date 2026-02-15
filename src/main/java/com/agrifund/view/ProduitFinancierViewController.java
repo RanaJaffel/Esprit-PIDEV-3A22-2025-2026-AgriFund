@@ -15,9 +15,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Circle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.sql.*;
@@ -25,13 +25,6 @@ import java.util.Optional;
 
 public class ProduitFinancierViewController {
 
-    // FXML Elements
-    @FXML private TextField txtNom;
-    @FXML private ComboBox<String> cbType;
-    @FXML private TextField txtTaux;
-    @FXML private TextField txtMontantMin;
-    @FXML private TextField txtMontantMax;
-    @FXML private TextArea txtRegles;
     @FXML private TextField txtRecherche;
     @FXML private TextField txtNouveauType;
 
@@ -63,33 +56,43 @@ public class ProduitFinancierViewController {
 
     @FXML
     public void initialize() {
-        System.out.println("Initialisation ProduitFinancierViewController...");
+        System.out.println("🚀 Initialisation ProduitFinancierViewController...");
 
-        produitController = new ProduitFinancierController();
-        produitsList = FXCollections.observableArrayList();
-        typesList = FXCollections.observableArrayList();
+        try {
+            produitController = new ProduitFinancierController();
+            produitsList = FXCollections.observableArrayList();
+            typesList = FXCollections.observableArrayList();
 
-        // Configuration des colonnes
-        colId.setCellValueFactory(new PropertyValueFactory<>("idProduit"));
-        colNom.setCellValueFactory(new PropertyValueFactory<>("nomProduit"));
-        colType.setCellValueFactory(new PropertyValueFactory<>("typeFinancement"));
-        colTaux.setCellValueFactory(new PropertyValueFactory<>("tauxInteret"));
-        colMontantMin.setCellValueFactory(new PropertyValueFactory<>("montantMin"));
-        colMontantMax.setCellValueFactory(new PropertyValueFactory<>("montantMax"));
+            // Configuration des colonnes
+            colId.setCellValueFactory(new PropertyValueFactory<>("idProduit"));
+            colNom.setCellValueFactory(new PropertyValueFactory<>("nomProduit"));
+            colType.setCellValueFactory(new PropertyValueFactory<>("typeFinancement"));
+            colTaux.setCellValueFactory(new PropertyValueFactory<>("tauxInteret"));
+            colMontantMin.setCellValueFactory(new PropertyValueFactory<>("montantMin"));
+            colMontantMax.setCellValueFactory(new PropertyValueFactory<>("montantMax"));
 
-        // Selection listener
-        tableView.getSelectionModel().selectedItemProperty().addListener(
-                (obs, oldVal, newVal) -> {
-                    if (newVal != null) {
-                        remplirFormulaire(newVal);
-                    }
-                });
+            // Charger les donnees
+            chargerDonnees();
+            chargerTypes();
 
-        // Charger les donnees
-        chargerDonnees();
-        chargerTypes();
+            System.out.println("✅ Initialisation terminee!");
 
-        System.out.println("Initialisation terminee!");
+        } catch (Exception e) {
+            System.err.println("❌ Erreur lors de l'initialisation: " + e.getMessage());
+            e.printStackTrace();
+            initializeEmptyState();
+        }
+    }
+
+    private void initializeEmptyState() {
+        lblTotalProduits.setText("0");
+        lblPrets.setText("0");
+        lblCredits.setText("0");
+        lblAutres.setText("0");
+        lblCount.setText("0 produits");
+        lblStatus.setText("Non connecte");
+        lblTypesCount.setText("Types: 0");
+        tableView.setItems(FXCollections.observableArrayList());
     }
 
     // ==================== ANIMATIONS ====================
@@ -116,19 +119,6 @@ public class ProduitFinancierViewController {
         }
     }
 
-    private void animateButton(Button button) {
-        ScaleTransition pressTransition = new ScaleTransition(Duration.millis(80), button);
-        pressTransition.setToX(0.9);
-        pressTransition.setToY(0.9);
-
-        ScaleTransition releaseTransition = new ScaleTransition(Duration.millis(80), button);
-        releaseTransition.setToX(1.0);
-        releaseTransition.setToY(1.0);
-
-        pressTransition.setOnFinished(e -> releaseTransition.play());
-        pressTransition.play();
-    }
-
     // ==================== CHARGEMENT DONNEES ====================
 
     private void chargerDonnees() {
@@ -138,6 +128,12 @@ public class ProduitFinancierViewController {
 
         try {
             conn = DatabaseConnection.getConnection();
+            if (conn == null) {
+                System.err.println("⚠️ Connexion null - impossible de charger les donnees");
+                initializeEmptyState();
+                return;
+            }
+
             String sql = "SELECT * FROM produit_financier ORDER BY id_produit DESC";
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
@@ -158,14 +154,15 @@ public class ProduitFinancierViewController {
             tableView.setItems(produitsList);
             mettreAJourStats();
             lblCount.setText(produitsList.size() + " produits");
+            lblStatus.setText("Connecte");
 
         } catch (SQLException e) {
             showAlert("Erreur", "Erreur chargement: " + e.getMessage(), Alert.AlertType.ERROR);
+            initializeEmptyState();
         } finally {
             try {
                 if (rs != null) rs.close();
                 if (stmt != null) stmt.close();
-                if (conn != null) conn.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -176,9 +173,10 @@ public class ProduitFinancierViewController {
         typesList.clear();
         typesList.addAll("Pret", "Credit", "Subvention", "Leasing", "Autre");
 
-        // Ajouter les types de la base de donnees
         try {
             Connection conn = DatabaseConnection.getConnection();
+            if (conn == null) return;
+
             String sql = "SELECT DISTINCT type_financement FROM produit_financier";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
@@ -192,12 +190,10 @@ public class ProduitFinancierViewController {
 
             rs.close();
             stmt.close();
-            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        cbType.setItems(typesList);
         listTypes.setItems(typesList);
         lblTypesCount.setText("Types: " + typesList.size());
     }
@@ -225,228 +221,6 @@ public class ProduitFinancierViewController {
         lblPrets.setText(String.valueOf(prets));
         lblCredits.setText(String.valueOf(credits));
         lblAutres.setText(String.valueOf(autres));
-    }
-
-    // ==================== FORMULAIRE ====================
-
-    private void remplirFormulaire(ProduitFinancier p) {
-        txtNom.setText(p.getNomProduit());
-        cbType.setValue(p.getTypeFinancement());
-        txtTaux.setText(String.valueOf(p.getTauxInteret()));
-        txtMontantMin.setText(String.valueOf(p.getMontantMin()));
-        txtMontantMax.setText(String.valueOf(p.getMontantMax()));
-        txtRegles.setText(p.getReglesFinancieres());
-    }
-
-    private boolean validerFormulaire() {
-        String erreurs = "";
-
-        if (txtNom.getText() == null || txtNom.getText().trim().isEmpty()) {
-            erreurs += "Le nom du produit est obligatoire\n";
-        }
-        if (cbType.getValue() == null || cbType.getValue().trim().isEmpty()) {
-            erreurs += "Le type de financement est obligatoire\n";
-        }
-        try {
-            Double.parseDouble(txtTaux.getText().trim());
-        } catch (Exception e) {
-            erreurs += "Le taux doit etre un nombre valide\n";
-        }
-        try {
-            Double.parseDouble(txtMontantMin.getText().trim());
-        } catch (Exception e) {
-            erreurs += "Le montant minimum doit etre un nombre valide\n";
-        }
-        try {
-            Double.parseDouble(txtMontantMax.getText().trim());
-        } catch (Exception e) {
-            erreurs += "Le montant maximum doit etre un nombre valide\n";
-        }
-
-        if (!erreurs.isEmpty()) {
-            showAlert("Validation", erreurs, Alert.AlertType.WARNING);
-            return false;
-        }
-        return true;
-    }
-
-    // ==================== ACTIONS CRUD ====================
-
-    @FXML
-    private void handleNouveau() {
-        txtNom.clear();
-        cbType.setValue(null);
-        txtTaux.clear();
-        txtMontantMin.clear();
-        txtMontantMax.clear();
-        txtRegles.clear();
-        tableView.getSelectionModel().clearSelection();
-        txtNom.requestFocus();
-        lblStatus.setText("Nouveau produit");
-        System.out.println("Formulaire vide pour nouveau produit");
-    }
-
-    @FXML
-    private void handleAjouter() {
-        if (!validerFormulaire()) return;
-
-        try {
-            ProduitFinancier p = new ProduitFinancier();
-            p.setNomProduit(txtNom.getText().trim());
-            p.setTypeFinancement(cbType.getValue().trim());
-            p.setTauxInteret(Double.parseDouble(txtTaux.getText().trim()));
-            p.setMontantMin(Double.parseDouble(txtMontantMin.getText().trim()));
-            p.setMontantMax(Double.parseDouble(txtMontantMax.getText().trim()));
-            p.setReglesFinancieres(txtRegles.getText().trim());
-
-            boolean success = produitController.ajouterProduit(p);
-
-            if (success) {
-                chargerDonnees();
-                chargerTypes();
-                handleNouveau();
-                lblStatus.setText("Produit ajoute");
-                showAlert("Succes", "Produit ajoute avec succes!", Alert.AlertType.INFORMATION);
-            } else {
-                showAlert("Erreur", "Impossible d ajouter le produit", Alert.AlertType.ERROR);
-            }
-
-        } catch (Exception e) {
-            showAlert("Erreur", "Erreur: " + e.getMessage(), Alert.AlertType.ERROR);
-        }
-    }
-
-    @FXML
-    private void handleModifier() {
-        ProduitFinancier selected = tableView.getSelectionModel().getSelectedItem();
-        if (selected == null) {
-            showAlert("Attention", "Veuillez selectionner un produit a modifier", Alert.AlertType.WARNING);
-            return;
-        }
-
-        if (!validerFormulaire()) return;
-
-        try {
-            selected.setNomProduit(txtNom.getText().trim());
-            selected.setTypeFinancement(cbType.getValue().trim());
-            selected.setTauxInteret(Double.parseDouble(txtTaux.getText().trim()));
-            selected.setMontantMin(Double.parseDouble(txtMontantMin.getText().trim()));
-            selected.setMontantMax(Double.parseDouble(txtMontantMax.getText().trim()));
-            selected.setReglesFinancieres(txtRegles.getText().trim());
-
-            boolean success = produitController.modifierProduit(selected);
-
-            if (success) {
-                chargerDonnees();
-                chargerTypes();
-                handleNouveau();
-                lblStatus.setText("Produit modifie");
-                showAlert("Succes", "Produit modifie avec succes!", Alert.AlertType.INFORMATION);
-            } else {
-                showAlert("Erreur", "Impossible de modifier le produit", Alert.AlertType.ERROR);
-            }
-
-        } catch (Exception e) {
-            showAlert("Erreur", "Erreur: " + e.getMessage(), Alert.AlertType.ERROR);
-        }
-    }
-
-    @FXML
-    private void handleSupprimer() {
-        ProduitFinancier selected = tableView.getSelectionModel().getSelectedItem();
-        if (selected == null) {
-            showAlert("Attention", "Veuillez selectionner un produit a supprimer", Alert.AlertType.WARNING);
-            return;
-        }
-
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Confirmation");
-        confirm.setHeaderText("Supprimer le produit?");
-        confirm.setContentText("Voulez-vous vraiment supprimer: " + selected.getNomProduit() + "?");
-
-        Optional<ButtonType> result = confirm.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean success = produitController.supprimerProduit(selected.getIdProduit());
-
-            if (success) {
-                chargerDonnees();
-                handleNouveau();
-                lblStatus.setText("Produit supprime");
-                showAlert("Succes", "Produit supprime avec succes!", Alert.AlertType.INFORMATION);
-            } else {
-                showAlert("Erreur", "Impossible de supprimer le produit", Alert.AlertType.ERROR);
-            }
-        }
-    }
-
-    @FXML
-    private void handleRechercher() {
-        String keyword = txtRecherche.getText().trim();
-        if (keyword.isEmpty()) {
-            chargerDonnees();
-            return;
-        }
-
-        ObservableList<ProduitFinancier> resultats = produitController.rechercherProduits(keyword);
-        produitsList.clear();
-        produitsList.addAll(resultats);
-        tableView.setItems(produitsList);
-        lblCount.setText(produitsList.size() + " resultats");
-    }
-
-    @FXML
-    private void handleActualiser() {
-        txtRecherche.clear();
-        chargerDonnees();
-        chargerTypes();
-        handleNouveau();
-        lblStatus.setText("Actualise");
-    }
-
-    @FXML
-    private void handleDetails() {
-        ProduitFinancier selected = tableView.getSelectionModel().getSelectedItem();
-        if (selected == null) {
-            showAlert("Attention", "Veuillez selectionner un produit", Alert.AlertType.WARNING);
-            return;
-        }
-
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/agrifund/view/DetailsProduitView.fxml"));
-            Parent root = loader.load();
-
-            DetailsProduitController controller = loader.getController();
-            controller.setProduit(selected);
-
-            Stage stage = new Stage();
-            stage.setTitle("Details - " + selected.getNomProduit());
-            stage.setScene(new Scene(root, 700, 800));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Erreur", "Impossible d ouvrir les details: " + e.getMessage(), Alert.AlertType.ERROR);
-        }
-    }
-
-    @FXML
-    private void handleDownloadPDF() {
-        ProduitFinancier selected = tableView.getSelectionModel().getSelectedItem();
-        if (selected == null) {
-            showAlert("Attention", "Veuillez selectionner un produit", Alert.AlertType.WARNING);
-            return;
-        }
-
-        try {
-            String filePath = PDFGenerator.genererPDFProduit(selected);
-            lblStatus.setText("PDF genere");
-            showAlert("Succes", "PDF telecharge avec succes!\n\nFichier: " + filePath, Alert.AlertType.INFORMATION);
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Erreur", "Impossible de generer le PDF: " + e.getMessage(), Alert.AlertType.ERROR);
-        }
     }
 
     // ==================== GESTION DES TYPES ====================
@@ -511,6 +285,180 @@ public class ProduitFinancierViewController {
         typesList.remove(selectedType);
         lblTypesCount.setText("Types: " + typesList.size());
         showAlert("Succes", "Type supprime: " + selectedType, Alert.AlertType.INFORMATION);
+    }
+
+    // ==================== ACTIONS CRUD AVEC POPUP ====================
+
+    /**
+     * NOUVEAU PRODUIT - Ouvre le formulaire popup avec barre de titre personnalisee
+     */
+    @FXML
+    private void handleNouveau() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/agrifund/view/FormulaireProduitView.fxml"));
+            Parent root = loader.load();
+
+            FormulaireProduitController controller = loader.getController();
+            controller.setModeAjout();
+            controller.setOnSuccess(() -> {
+                chargerDonnees();
+                chargerTypes();
+            });
+
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.UNDECORATED);  // Custom title bar
+            stage.setScene(new Scene(root, 580, 720));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.show();
+
+            System.out.println("✅ Formulaire Nouveau Produit ouvert");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible d'ouvrir le formulaire:\n" + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
+    /**
+     * MODIFIER PRODUIT - Ouvre le formulaire popup avec barre de titre personnalisee
+     */
+    @FXML
+    private void handleModifier() {
+        ProduitFinancier selected = tableView.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("Attention", "Veuillez selectionner un produit a modifier!", Alert.AlertType.WARNING);
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/agrifund/view/FormulaireProduitView.fxml"));
+            Parent root = loader.load();
+
+            FormulaireProduitController controller = loader.getController();
+            controller.setModeModification(selected);
+            controller.setOnSuccess(() -> {
+                chargerDonnees();
+                chargerTypes();
+            });
+
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.UNDECORATED);  // Custom title bar
+            stage.setScene(new Scene(root, 580, 720));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.show();
+
+            System.out.println("✅ Formulaire Modifier Produit ouvert pour: " + selected.getNomProduit());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible d'ouvrir le formulaire:\n" + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
+    @FXML
+    private void handleSupprimer() {
+        ProduitFinancier selected = tableView.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("Attention", "Veuillez selectionner un produit a supprimer", Alert.AlertType.WARNING);
+            return;
+        }
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Confirmation");
+        confirm.setHeaderText("Supprimer le produit?");
+        confirm.setContentText("Voulez-vous vraiment supprimer: " + selected.getNomProduit() + "?");
+
+        Optional<ButtonType> result = confirm.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            boolean success = produitController.supprimerProduit(selected.getIdProduit());
+
+            if (success) {
+                chargerDonnees();
+                chargerTypes();
+                lblStatus.setText("Produit supprime");
+                showAlert("Succes", "Produit supprime avec succes!", Alert.AlertType.INFORMATION);
+            } else {
+                showAlert("Erreur", "Impossible de supprimer le produit.\nIl est peut-etre lie a des offres.", Alert.AlertType.ERROR);
+            }
+        }
+    }
+
+    @FXML
+    private void handleRechercher() {
+        String keyword = txtRecherche.getText().trim();
+        if (keyword.isEmpty()) {
+            chargerDonnees();
+            return;
+        }
+
+        ObservableList<ProduitFinancier> resultats = produitController.rechercherProduits(keyword);
+        produitsList.clear();
+        produitsList.addAll(resultats);
+        tableView.setItems(produitsList);
+        lblCount.setText(produitsList.size() + " resultats");
+    }
+
+    @FXML
+    private void handleActualiser() {
+        txtRecherche.clear();
+        chargerDonnees();
+        chargerTypes();
+        lblStatus.setText("Actualise");
+    }
+
+
+    @FXML
+    private void handleDetails() {
+        ProduitFinancier selected = tableView.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("Attention", "Veuillez selectionner un produit", Alert.AlertType.WARNING);
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/agrifund/view/DetailsProduitView.fxml"));
+            Parent root = loader.load();
+
+            DetailsProduitController controller = loader.getController();
+            controller.setProduit(selected);
+
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.UNDECORATED);  // Custom title bar
+            stage.setScene(new Scene(root, 650, 800));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible d'ouvrir les details: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
+    @FXML
+    private void handleDownloadPDF() {
+        ProduitFinancier selected = tableView.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("Attention", "Veuillez selectionner un produit", Alert.AlertType.WARNING);
+            return;
+        }
+
+        try {
+            String filePath = PDFGenerator.genererPDFProduit(selected);
+            lblStatus.setText("PDF genere");
+            showAlert("Succes", "PDF telecharge avec succes!\n\nFichier: " + filePath, Alert.AlertType.INFORMATION);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible de generer le PDF: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
     }
 
     // ==================== UTILITAIRES ====================
