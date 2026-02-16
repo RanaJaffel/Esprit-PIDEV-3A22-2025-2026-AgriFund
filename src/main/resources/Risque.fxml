@@ -41,9 +41,9 @@
 
                     <!-- Ligne 2 -->
                     <Label text="ID Projet :" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
-                    <TextField fx:id="tfIdProjet"
-                               GridPane.rowIndex="1" GridPane.columnIndex="1"
-                               prefWidth="350" promptText="Entrez l'ID du projet"/>
+                    <ComboBox fx:id="cbIdProjet"
+                              GridPane.rowIndex="1" GridPane.columnIndex="1"
+                              prefWidth="350" promptText="Sélectionner un projet"/>
 
                     <!-- Ligne 3 -->
                     <Label text="Score Global :" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
@@ -54,14 +54,14 @@
                     <!-- Ligne 4 -->
                     <Label text="Niveau de Risque :" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label"/>
                     <ComboBox fx:id="cbNiveauRisque"
-                              promptText="Sélectionner un niveau"
+                              promptText="Sélectionner un niveau de risque"
                               GridPane.rowIndex="3" GridPane.columnIndex="1"
                               prefWidth="350"/>
 
                     <!-- Ligne 5 -->
                     <Label text="Fiabilité des Données :" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="form-label"/>
                     <ComboBox fx:id="cbFiabiliteDonnees"
-                              promptText="Sélectionner la fiabilité"
+                              promptText="Sélectionner la fiabilité des données"
                               GridPane.rowIndex="4" GridPane.columnIndex="1"
                               prefWidth="350"/>
 
@@ -102,7 +102,7 @@
     <!-- Pied de page -->
     <bottom>
         <HBox styleClass="footer" alignment="CENTER_LEFT" spacing="20">
-            <Label styleClass="signature" text=""/>
+            <Label styleClass="signature" text="💚"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Label fx:id="lblStatus" styleClass="status-label" text="Prêt"/>
             <Region HBox.hgrow="ALWAYS"/>

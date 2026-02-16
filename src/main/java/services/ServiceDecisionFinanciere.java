@@ -17,13 +17,13 @@ public class ServiceDecisionFinanciere implements InterfaceCRUD<DecisionFinancie
 
     @Override
     public void ajouter(DecisionFinanciere decision) throws SQLException {
-        String req = "INSERT INTO DecisionFinanciere (statut, justification, dateDecision, idProjet) VALUES (?, ?, ?, ?)";
+        String req = "INSERT INTO decisionfinanciere (statut, justification, dateDecision, idEvaluation) VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement pst = connection.prepareStatement(req)) {
             pst.setString(1, decision.getStatut());
             pst.setString(2, decision.getJustification());
             pst.setDate(3, new java.sql.Date(decision.getDateDecision().getTime()));
-            pst.setInt(4, decision.getIdProjet());
+            pst.setInt(4, decision.getIdEvaluation());
 
             int rowsAffected = pst.executeUpdate();
             if (rowsAffected > 0) {
@@ -37,13 +37,13 @@ public class ServiceDecisionFinanciere implements InterfaceCRUD<DecisionFinancie
 
     @Override
     public void modifier(DecisionFinanciere decision) throws SQLException {
-        String req = "UPDATE DecisionFinanciere SET statut = ?, justification = ?, dateDecision = ?, idProjet = ? WHERE idDecision = ?";
+        String req = "UPDATE decisionfinanciere SET statut = ?, justification = ?, dateDecision = ?, idEvaluation = ? WHERE idDecision = ?";
 
         try (PreparedStatement pst = connection.prepareStatement(req)) {
             pst.setString(1, decision.getStatut());
             pst.setString(2, decision.getJustification());
             pst.setDate(3, new java.sql.Date(decision.getDateDecision().getTime()));
-            pst.setInt(4, decision.getIdProjet());
+            pst.setInt(4, decision.getIdEvaluation());
             pst.setInt(5, decision.getIdDecision());
 
             int rowsAffected = pst.executeUpdate();
@@ -58,11 +58,9 @@ public class ServiceDecisionFinanciere implements InterfaceCRUD<DecisionFinancie
         }
     }
 
-
-
     @Override
     public void supprimer(int id) throws SQLException {
-        String req = "DELETE FROM DecisionFinanciere WHERE idDecision = ?";
+        String req = "DELETE FROM decisionfinanciere WHERE idDecision = ?";
 
         try (PreparedStatement pst = connection.prepareStatement(req)) {
             pst.setInt(1, id);
@@ -82,7 +80,7 @@ public class ServiceDecisionFinanciere implements InterfaceCRUD<DecisionFinancie
     @Override
     public List<DecisionFinanciere> afficher() throws SQLException {
         List<DecisionFinanciere> decisions = new ArrayList<>();
-        String req = "SELECT * FROM DecisionFinanciere";
+        String req = "SELECT * FROM decisionfinanciere";
 
         try (Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(req)) {
@@ -93,7 +91,7 @@ public class ServiceDecisionFinanciere implements InterfaceCRUD<DecisionFinancie
                         rs.getString("statut"),
                         rs.getString("justification"),
                         rs.getDate("dateDecision"),
-                        rs.getInt("idProjet")
+                        rs.getInt("idEvaluation")
                 );
                 decisions.add(decision);
             }
@@ -106,7 +104,7 @@ public class ServiceDecisionFinanciere implements InterfaceCRUD<DecisionFinancie
     }
 
     public DecisionFinanciere getById(int idDecision) throws SQLException {
-        String req = "SELECT * FROM DecisionFinanciere WHERE idDecision = ?";
+        String req = "SELECT * FROM decisionfinanciere WHERE idDecision = ?";
 
         try (PreparedStatement pst = connection.prepareStatement(req)) {
             pst.setInt(1, idDecision);
@@ -118,7 +116,7 @@ public class ServiceDecisionFinanciere implements InterfaceCRUD<DecisionFinancie
                             rs.getString("statut"),
                             rs.getString("justification"),
                             rs.getDate("dateDecision"),
-                            rs.getInt("idProjet")
+                            rs.getInt("idEvaluation")
                     );
                 }
             }
@@ -129,5 +127,4 @@ public class ServiceDecisionFinanciere implements InterfaceCRUD<DecisionFinancie
 
         return null;
     }
-
 }

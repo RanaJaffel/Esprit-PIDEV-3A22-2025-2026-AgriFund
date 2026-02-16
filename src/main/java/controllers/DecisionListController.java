@@ -24,10 +24,10 @@ public class DecisionListController {
 
     @FXML private TableView<DecisionFinanciere> tableDecisions;
     @FXML private TableColumn<DecisionFinanciere, Integer> colId;
-    @FXML private TableColumn<DecisionFinanciere, Integer> colIdProjet;
     @FXML private TableColumn<DecisionFinanciere, String> colStatut;
     @FXML private TableColumn<DecisionFinanciere, Date> colDate;
     @FXML private TableColumn<DecisionFinanciere, String> colJustification;
+    @FXML private TableColumn<DecisionFinanciere, Integer> colIdEvaluation;
     @FXML private TableColumn<DecisionFinanciere, Void> colActions;
 
     @FXML private TextField tfSearch;
@@ -53,9 +53,6 @@ public class DecisionListController {
     private void setupTableColumns() {
         colId.setCellValueFactory(new PropertyValueFactory<>("idDecision"));
         colId.setStyle("-fx-alignment: CENTER;");
-
-        colIdProjet.setCellValueFactory(new PropertyValueFactory<>("idProjet"));
-        colIdProjet.setStyle("-fx-alignment: CENTER;");
 
         colStatut.setCellValueFactory(new PropertyValueFactory<>("statut"));
         colStatut.setCellFactory(column -> new TableCell<DecisionFinanciere, String>() {
@@ -121,6 +118,9 @@ public class DecisionListController {
                 }
             }
         });
+
+        colIdEvaluation.setCellValueFactory(new PropertyValueFactory<>("idEvaluation"));
+        colIdEvaluation.setStyle("-fx-alignment: CENTER;");
 
         colActions.setCellFactory(column -> new TableCell<DecisionFinanciere, Void>() {
             private final Button btnEdit = new Button("✏️ Modifier");
@@ -195,9 +195,9 @@ public class DecisionListController {
             filteredData.clear();
             for (DecisionFinanciere d : decisionsData) {
                 if (String.valueOf(d.getIdDecision()).contains(searchText) ||
-                        String.valueOf(d.getIdProjet()).contains(searchText) ||
                         d.getStatut().toLowerCase().contains(searchText) ||
-                        d.getJustification().toLowerCase().contains(searchText)) {
+                        d.getJustification().toLowerCase().contains(searchText) ||
+                        String.valueOf(d.getIdEvaluation()).contains(searchText)) {
                     filteredData.add(d);
                 }
             }
@@ -209,11 +209,48 @@ public class DecisionListController {
 
     @FXML
     private void handleNewDecision() {
-        openDecisionForm(null);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Decesion.fxml"));
+            Parent root = loader.load();
+
+            DecesionController controller = loader.getController();
+
+            Stage stage = new Stage();
+            stage.setTitle("Nouvelle Décision");
+            stage.setScene(new Scene(root));
+            stage.setMinWidth(800);
+            stage.setMinHeight(600);
+
+            stage.setOnHidden(e -> loadDecisions());
+
+            stage.showAndWait();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir le formulaire: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void handleEdit(DecisionFinanciere decision) {
-        openDecisionForm(decision);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Decesion.fxml"));
+            Parent root = loader.load();
+
+            DecesionController controller = loader.getController();
+            controller.loadDecision(decision.getIdDecision());
+
+            Stage stage = new Stage();
+            stage.setTitle("Modifier Décision #" + decision.getIdDecision());
+            stage.setScene(new Scene(root));
+            stage.setMinWidth(800);
+            stage.setMinHeight(600);
+
+            stage.setOnHidden(e -> loadDecisions());
+
+            stage.showAndWait();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir le formulaire: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void handleDelete(DecisionFinanciere decision) {
@@ -237,33 +274,6 @@ public class DecisionListController {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de supprimer: " + e.getMessage());
                 e.printStackTrace();
             }
-        }
-    }
-
-    private void openDecisionForm(DecisionFinanciere decision) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Decesion.fxml"));
-            Parent root = loader.load();
-
-            DecesionController controller = loader.getController();
-
-            if (decision != null) {
-                controller.loadDecision(decision.getIdDecision());
-            }
-
-            Stage stage = new Stage();
-            stage.setTitle(decision == null ? "Nouvelle Décision" : "Modifier Décision #" + decision.getIdDecision());
-            stage.setScene(new Scene(root));
-            stage.setMinWidth(800);
-            stage.setMinHeight(600);
-
-            stage.setOnHidden(e -> loadDecisions()); // Recharge les données après la fermeture de la fenêtre
-
-            stage.showAndWait(); // Utilisez showAndWait() pour attendre la fermeture de la fenêtre
-
-        } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir le formulaire: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 

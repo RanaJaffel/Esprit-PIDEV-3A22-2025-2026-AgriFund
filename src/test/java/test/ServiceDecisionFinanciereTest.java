@@ -3,6 +3,7 @@ package test;
 import entities.DecisionFinanciere;
 import org.junit.jupiter.api.*;
 import services.ServiceDecisionFinanciere;
+import services.ServiceEvaluationRisque;
 
 import java.sql.SQLException;
 import java.util.Date;
@@ -24,11 +25,16 @@ public class ServiceDecisionFinanciereTest {
     @Test
     @Order(1)
     void testAjouterDecision() throws SQLException {
+        // Assurez-vous qu'il y a au moins une évaluation dans la base de données
+        ServiceEvaluationRisque evaluationService = new ServiceEvaluationRisque();
+        List<Integer> evaluationIds = evaluationService.getAllEvaluationIds();
+        assertFalse(evaluationIds.isEmpty(), "Il doit y avoir au moins une évaluation dans la base de données pour le test");
+
         DecisionFinanciere decision = new DecisionFinanciere();
         decision.setStatut("En attente");
         decision.setJustification("Test unitaire : Ajout d'une décision");
         decision.setDateDecision(new Date());
-        decision.setIdProjet(999);
+        decision.setIdEvaluation(evaluationIds.get(0)); // Utilise le premier ID d'évaluation disponible
 
         service.ajouter(decision);
 
@@ -50,7 +56,11 @@ public class ServiceDecisionFinanciereTest {
         decision.setStatut("Approuvé");
         decision.setJustification("Test unitaire : Décision modifiée");
         decision.setDateDecision(new Date());
-        decision.setIdProjet(999);
+
+        // Récupère à nouveau un ID d'évaluation valide
+        ServiceEvaluationRisque evaluationService = new ServiceEvaluationRisque();
+        List<Integer> evaluationIds = evaluationService.getAllEvaluationIds();
+        decision.setIdEvaluation(evaluationIds.get(0));
 
         service.modifier(decision);
 

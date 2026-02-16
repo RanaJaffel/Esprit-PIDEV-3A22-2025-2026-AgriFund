@@ -6,19 +6,20 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import services.ServiceDecisionFinanciere;
+import services.ServiceEvaluationRisque;
 
 import java.sql.SQLException;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.Optional;
+import java.util.List;
 
 public class DecesionController {
 
     @FXML private TextField tfIdDecision;
-    @FXML private TextField tfIdProjet;
     @FXML private ComboBox<String> cbStatut;
     @FXML private DatePicker dpDateDecision;
     @FXML private TextArea taJustification;
+    @FXML private ComboBox<Integer> cbIdEvaluation;
     @FXML private Label lblStatus;
 
     private ServiceDecisionFinanciere service;
@@ -28,7 +29,18 @@ public class DecesionController {
     public void initialize() {
         service = new ServiceDecisionFinanciere();
         cbStatut.getItems().addAll("En attente", "Approuvé", "Rejeté");
+        loadEvaluationIds();
         updateStatus("Prêt");
+    }
+
+    private void loadEvaluationIds() {
+        try {
+            List<Integer> evaluationIds = new ServiceEvaluationRisque().getAllEvaluationIds();
+            cbIdEvaluation.getItems().setAll(evaluationIds);
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger les évaluations: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -38,42 +50,33 @@ public class DecesionController {
         }
 
         try {
-            int idProjet = Integer.parseInt(tfIdProjet.getText());
             String statut = cbStatut.getValue();
-            java.util.Date dateDecision = java.sql.Date.valueOf(dpDateDecision.getValue());
             String justification = taJustification.getText();
+            java.util.Date dateDecision = java.sql.Date.valueOf(dpDateDecision.getValue());
+            int idEvaluation = cbIdEvaluation.getValue();
 
             if (decisionEnCours == null) {
-                DecisionFinanciere nouvelleDecision = new DecisionFinanciere(statut, justification, dateDecision, idProjet);
+                DecisionFinanciere nouvelleDecision = new DecisionFinanciere(statut, justification, dateDecision, idEvaluation);
                 service.ajouter(nouvelleDecision);
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Décision ajoutée avec succès!");
             } else {
-                decisionEnCours.setIdProjet(idProjet);
                 decisionEnCours.setStatut(statut);
-                decisionEnCours.setDateDecision(dateDecision);
                 decisionEnCours.setJustification(justification);
+                decisionEnCours.setDateDecision(dateDecision);
+                decisionEnCours.setIdEvaluation(idEvaluation);
                 service.modifier(decisionEnCours);
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Décision modifiée avec succès!");
             }
 
             closeWindow();
-
-        } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "L'ID Projet doit être un nombre valide!");
-        } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de base de données", "Erreur lors de l'enregistrement: " + e.getMessage());
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de l'enregistrement: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-
-
     private boolean validateFields() {
         StringBuilder errors = new StringBuilder();
-
-        if (tfIdProjet.getText().isEmpty()) {
-            errors.append("- L'ID Projet est obligatoire\n");
-        }
 
         if (cbStatut.getValue() == null) {
             errors.append("- Le statut est obligatoire\n");
@@ -85,6 +88,10 @@ public class DecesionController {
 
         if (taJustification.getText().isEmpty()) {
             errors.append("- La justification est obligatoire\n");
+        }
+
+        if (cbIdEvaluation.getValue() == null) {
+            errors.append("- L'évaluation est obligatoire\n");
         }
 
         if (errors.length() > 0) {
@@ -103,10 +110,10 @@ public class DecesionController {
     @FXML
     public void handleClear(ActionEvent event) {
         tfIdDecision.clear();
-        tfIdProjet.clear();
         cbStatut.setValue(null);
         dpDateDecision.setValue(null);
         taJustification.clear();
+        cbIdEvaluation.setValue(null);
 
         decisionEnCours = null;
         updateStatus("Formulaire effacé");
@@ -120,14 +127,13 @@ public class DecesionController {
                 decisionEnCours = decision;
 
                 tfIdDecision.setText(String.valueOf(decision.getIdDecision()));
-                tfIdProjet.setText(String.valueOf(decision.getIdProjet()));
                 cbStatut.setValue(decision.getStatut());
 
-                // Conversion de java.sql.Date en LocalDate
                 java.util.Date utilDate = new java.util.Date(decision.getDateDecision().getTime());
                 dpDateDecision.setValue(utilDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 
                 taJustification.setText(decision.getJustification());
+                cbIdEvaluation.setValue(decision.getIdEvaluation());
 
                 updateStatus("Modification en cours");
             } else {
@@ -138,8 +144,6 @@ public class DecesionController {
             e.printStackTrace();
         }
     }
-
-
 
     private void closeWindow() {
         Stage stage = (Stage) tfIdDecision.getScene().getWindow();

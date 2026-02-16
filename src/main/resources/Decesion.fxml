@@ -40,10 +40,11 @@
                                prefWidth="350" styleClass="text-field-readonly"/>
 
                     <!-- Ligne 2 -->
-                    <Label text="ID Projet :" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
-                    <TextField fx:id="tfIdProjet"
-                               GridPane.rowIndex="1" GridPane.columnIndex="1"
-                               prefWidth="350" promptText="Entrez l'ID du projet"/>
+                    <Label text="ID Évaluation :" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+                    <ComboBox fx:id="cbIdEvaluation"
+                              promptText="Sélectionner une évaluation"
+                              GridPane.rowIndex="1" GridPane.columnIndex="1"
+                              prefWidth="350"/>
 
                     <!-- Ligne 3 -->
                     <Label text="Statut :" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>

@@ -32,75 +32,34 @@
                 <padding>
                     <Insets top="10" right="15" bottom="10" left="15"/>
                 </padding>
-
                 <Label text="🔍 Rechercher:" styleClass="form-label"/>
-                <TextField fx:id="tfSearch" promptText="Rechercher par ID, Statut, Justification..." prefWidth="350" onKeyReleased="#handleSearch"/>
-
-                <Region HBox.hgrow="ALWAYS"/>
-
-                <Button text="🔄 Actualiser" styleClass="button-secondary" onAction="#handleRefresh"/>
-                <Button text="📊 Statistiques" styleClass="button-accent" onAction="#handleStats"/>
+                <TextField fx:id="tfSearch" promptText="Rechercher..." onKeyReleased="#handleSearch" prefWidth="300"/>
+                <Button text="🔄 Rafraîchir" styleClass="button-accent" onAction="#handleRefresh"/>
             </HBox>
 
-            <!-- TableView -->
-            <TableView fx:id="tableDecisions" VBox.vgrow="ALWAYS" styleClass="table-view">
+            <!-- Tableau des décisions -->
+            <TableView fx:id="tableDecisions" prefHeight="500">
                 <columns>
-                    <TableColumn fx:id="colId" text="ID" prefWidth="80" styleClass="table-column"/>
-                    <TableColumn fx:id="colIdProjet" text="ID Projet" prefWidth="100" styleClass="table-column"/>
-                    <TableColumn fx:id="colStatut" text="Statut" prefWidth="150" styleClass="table-column"/>
-                    <TableColumn fx:id="colDate" text="Date Décision" prefWidth="180" styleClass="table-column"/>
-                    <TableColumn fx:id="colJustification" text="Justification" prefWidth="450" styleClass="table-column"/>
-                    <TableColumn fx:id="colActions" text="Actions" prefWidth="240" styleClass="table-column"/>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="50" />
+                    <TableColumn fx:id="colStatut" text="Statut" prefWidth="100" />
+                    <TableColumn fx:id="colDate" text="Date" prefWidth="150" />
+                    <TableColumn fx:id="colJustification" text="Justification" prefWidth="300" />
+                    <TableColumn fx:id="colIdEvaluation" text="ID Évaluation" prefWidth="100" />
+                    <TableColumn fx:id="colActions" text="Actions" prefWidth="150" />
                 </columns>
-
-                <placeholder>
-                    <VBox alignment="CENTER" spacing="10">
-                        <padding>
-                            <Insets top="50" bottom="50"/>
-                        </padding>
-                        <Label text="📭" style="-fx-font-size: 48px;"/>
-                        <Label text="Aucune décision financière" styleClass="preview-header"/>
-                        <Label text="Cliquez sur 'Nouvelle Décision' pour ajouter" styleClass="preview-label"/>
-                    </VBox>
-                </placeholder>
             </TableView>
 
-            <!-- Statistiques en bas -->
-            <HBox spacing="30" alignment="CENTER" styleClass="stats-card">
-                <padding>
-                    <Insets top="15" right="20" bottom="15" left="20"/>
-                </padding>
-
-                <VBox alignment="CENTER" spacing="5" styleClass="stat-box">
-                    <Label fx:id="lblTotal" text="0" styleClass="stat-number"/>
-                    <Label text="Total" styleClass="stat-label"/>
-                </VBox>
-
-                <Separator orientation="VERTICAL"/>
-
-                <VBox alignment="CENTER" spacing="5" styleClass="stat-box">
-                    <Label fx:id="lblApprouves" text="0" styleClass="stat-number-success"/>
-                    <Label text="Approuvés" styleClass="stat-label"/>
-                </VBox>
-
-                <Separator orientation="VERTICAL"/>
-
-                <VBox alignment="CENTER" spacing="5" styleClass="stat-box">
-                    <Label fx:id="lblEnAttente" text="0" styleClass="stat-number-warning"/>
-                    <Label text="En attente" styleClass="stat-label"/>
-                </VBox>
+            <!-- Statistiques -->
+            <HBox spacing="20" alignment="CENTER_LEFT">
+                <Label text="Total: " styleClass="stats-label"/>
+                <Label fx:id="lblTotal" text="0" styleClass="stats-value"/>
+                <Label text="Approuvés: " styleClass="stats-label"/>
+                <Label fx:id="lblApprouves" text="0" styleClass="stats-value"/>
+                <Label text="En Attente: " styleClass="stats-label"/>
+                <Label fx:id="lblEnAttente" text="0" styleClass="stats-value"/>
             </HBox>
+
+            <Label fx:id="lblStatus" styleClass="status-label" text="Prêt"/>
         </VBox>
     </center>
-
-    <!-- Pied de page -->
-    <bottom>
-        <HBox styleClass="footer" alignment="CENTER_LEFT" spacing="20">
-            <Label styleClass="signature" text=""/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Label fx:id="lblStatus" styleClass="status-label" text="Chargement..."/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Label styleClass="signature" text=""/>
-        </HBox>
-    </bottom>
 </BorderPane>

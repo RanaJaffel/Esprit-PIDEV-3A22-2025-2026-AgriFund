@@ -2,36 +2,32 @@ package entities;
 
 import java.util.Date;
 
-
 public class DecisionFinanciere {
-
     private int idDecision;
     private String statut;
     private String justification;
     private Date dateDecision;
-    private int idProjet;
+    private int idEvaluation;
 
+    // Constructeurs
+    public DecisionFinanciere() {}
 
-    public DecisionFinanciere() {
-    }
-
-
-    public DecisionFinanciere(String statut, String justification, Date dateDecision, int idProjet) {
-        this.statut = statut;
-        this.justification = justification;
-        this.dateDecision = dateDecision;
-        this.idProjet = idProjet;
-    }
-
-
-    public DecisionFinanciere(int idDecision, String statut, String justification, Date dateDecision, int idProjet) {
+    public DecisionFinanciere(int idDecision, String statut, String justification, Date dateDecision, int idEvaluation) {
         this.idDecision = idDecision;
         this.statut = statut;
         this.justification = justification;
         this.dateDecision = dateDecision;
-        this.idProjet = idProjet;
+        this.idEvaluation = idEvaluation;
     }
 
+    public DecisionFinanciere(String statut, String justification, Date dateDecision, int idEvaluation) {
+        this.statut = statut;
+        this.justification = justification;
+        this.dateDecision = dateDecision;
+        this.idEvaluation = idEvaluation;
+    }
+
+    // Getters et Setters
     public int getIdDecision() {
         return idDecision;
     }
@@ -64,14 +60,13 @@ public class DecisionFinanciere {
         this.dateDecision = dateDecision;
     }
 
-    public int getIdProjet() {
-        return idProjet;
+    public int getIdEvaluation() {
+        return idEvaluation;
     }
 
-    public void setIdProjet(int idProjet) {
-        this.idProjet = idProjet;
+    public void setIdEvaluation(int idEvaluation) {
+        this.idEvaluation = idEvaluation;
     }
-
 
     @Override
     public String toString() {
@@ -80,7 +75,7 @@ public class DecisionFinanciere {
                 ", statut='" + statut + '\'' +
                 ", justification='" + justification + '\'' +
                 ", dateDecision=" + dateDecision +
-                ", idProjet=" + idProjet +
+                ", idEvaluation=" + idEvaluation +
                 '}';
     }
 }

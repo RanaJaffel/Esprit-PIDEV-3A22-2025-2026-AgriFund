@@ -6,16 +6,17 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import services.ServiceEvaluationRisque;
+import services.ServiceProjectAgricole;
 
 import java.sql.SQLException;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.Optional;
+import java.util.List;
 
 public class RisqueController {
 
     @FXML private TextField tfIdEvaluation;
-    @FXML private TextField tfIdProjet;
+    @FXML private ComboBox<Integer> cbIdProjet;
     @FXML private TextField tfScoreGlobal;
     @FXML private ComboBox<String> cbNiveauRisque;
     @FXML private ComboBox<String> cbFiabiliteDonnees;
@@ -34,8 +35,18 @@ public class RisqueController {
         cbNiveauRisque.getItems().addAll("Faible", "Moyen", "Élevé", "Critique");
         cbFiabiliteDonnees.getItems().addAll("Faible", "Moyenne", "Élevée");
         cbRecommandation.getItems().addAll("Aucune", "Surveillance", "Action immédiate");
-
+        loadProjetIds();
         updateStatus("Prêt");
+    }
+
+    private void loadProjetIds() {
+        try {
+            List<Integer> projetIds = new ServiceProjectAgricole().getAllProjectIds();
+            cbIdProjet.getItems().setAll(projetIds);
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger les projets: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -45,13 +56,13 @@ public class RisqueController {
         }
 
         try {
-            int idProjet = Integer.parseInt(tfIdProjet.getText());
             int scoreGlobal = Integer.parseInt(tfScoreGlobal.getText());
             String niveauRisque = cbNiveauRisque.getValue();
             String fiabiliteDonnees = cbFiabiliteDonnees.getValue();
             String facteurPrincipal = tfFacteurPrincipal.getText();
             int recommandation = cbRecommandation.getSelectionModel().getSelectedIndex();
             java.util.Date dateEvaluation = java.sql.Date.valueOf(dpDateEvaluation.getValue());
+            int idProjet = cbIdProjet.getValue();
 
             if (evaluationEnCours == null) {
                 EvaluationRisque nouvelleEvaluation = new EvaluationRisque(
@@ -73,7 +84,6 @@ public class RisqueController {
             }
 
             closeWindow();
-
         } catch (NumberFormatException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Les champs numériques doivent être valides!");
         } catch (SQLException e) {
@@ -82,14 +92,8 @@ public class RisqueController {
         }
     }
 
-
-
     private boolean validateFields() {
         StringBuilder errors = new StringBuilder();
-
-        if (tfIdProjet.getText().isEmpty()) {
-            errors.append("- L'ID Projet est obligatoire\n");
-        }
 
         if (tfScoreGlobal.getText().isEmpty()) {
             errors.append("- Le score global est obligatoire\n");
@@ -115,6 +119,10 @@ public class RisqueController {
             errors.append("- La date d'évaluation est obligatoire\n");
         }
 
+        if (cbIdProjet.getValue() == null) {
+            errors.append("- Le projet est obligatoire\n");
+        }
+
         if (errors.length() > 0) {
             showAlert(Alert.AlertType.WARNING, "Champs incomplets", errors.toString());
             return false;
@@ -131,13 +139,13 @@ public class RisqueController {
     @FXML
     private void handleClear(ActionEvent event) {
         tfIdEvaluation.clear();
-        tfIdProjet.clear();
         tfScoreGlobal.clear();
         cbNiveauRisque.setValue(null);
         cbFiabiliteDonnees.setValue(null);
         tfFacteurPrincipal.clear();
         cbRecommandation.setValue(null);
         dpDateEvaluation.setValue(null);
+        cbIdProjet.setValue(null);
 
         evaluationEnCours = null;
         updateStatus("Formulaire effacé");
@@ -151,14 +159,13 @@ public class RisqueController {
                 evaluationEnCours = evaluation;
 
                 tfIdEvaluation.setText(String.valueOf(evaluation.getIdEvaluation()));
-                tfIdProjet.setText(String.valueOf(evaluation.getIdProjet()));
                 tfScoreGlobal.setText(String.valueOf(evaluation.getScoreGlobal()));
                 cbNiveauRisque.setValue(evaluation.getNiveauRisque());
                 cbFiabiliteDonnees.setValue(evaluation.getFiabiliteDonnees());
                 tfFacteurPrincipal.setText(evaluation.getFacteurPrincipal());
                 cbRecommandation.setValue(getRecommandationString(evaluation.getRecommandation()));
+                cbIdProjet.setValue(evaluation.getIdProjet());
 
-                // Conversion de java.sql.Date en LocalDate
                 java.util.Date utilDate = new java.util.Date(evaluation.getDateEvaluation().getTime());
                 dpDateEvaluation.setValue(utilDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 
@@ -171,8 +178,6 @@ public class RisqueController {
             e.printStackTrace();
         }
     }
-
-
 
     private String getRecommandationString(int recommandation) {
         switch (recommandation) {

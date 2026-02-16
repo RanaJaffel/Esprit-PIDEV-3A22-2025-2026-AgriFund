@@ -246,11 +246,46 @@ public class RisqueListController {
 
     @FXML
     private void handleNewEvaluation() {
-        openEvaluationForm(null);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Risque.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Nouvelle Évaluation");
+            stage.setScene(new Scene(root));
+            stage.setMinWidth(800);
+            stage.setMinHeight(600);
+
+            stage.setOnHidden(e -> loadEvaluations());
+
+            stage.showAndWait();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir le formulaire: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void handleEdit(EvaluationRisque evaluation) {
-        openEvaluationForm(evaluation);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Risque.fxml"));
+            Parent root = loader.load();
+
+            RisqueController controller = loader.getController();
+            controller.loadEvaluation(evaluation.getIdEvaluation());
+
+            Stage stage = new Stage();
+            stage.setTitle("Modifier Évaluation #" + evaluation.getIdEvaluation());
+            stage.setScene(new Scene(root));
+            stage.setMinWidth(800);
+            stage.setMinHeight(600);
+
+            stage.setOnHidden(e -> loadEvaluations());
+
+            stage.showAndWait();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir le formulaire: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void handleDelete(EvaluationRisque evaluation) {
@@ -274,33 +309,6 @@ public class RisqueListController {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de supprimer: " + e.getMessage());
                 e.printStackTrace();
             }
-        }
-    }
-
-    private void openEvaluationForm(EvaluationRisque evaluation) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Risque.fxml"));
-            Parent root = loader.load();
-
-            RisqueController controller = loader.getController();
-
-            if (evaluation != null) {
-                controller.loadEvaluation(evaluation.getIdEvaluation());
-            }
-
-            Stage stage = new Stage();
-            stage.setTitle(evaluation == null ? "Nouvelle Évaluation" : "Modifier Évaluation #" + evaluation.getIdEvaluation());
-            stage.setScene(new Scene(root));
-            stage.setMinWidth(800);
-            stage.setMinHeight(600);
-
-            stage.setOnHidden(e -> loadEvaluations()); // Recharge les données après la fermeture de la fenêtre
-
-            stage.showAndWait(); // Utilisez showAndWait() pour attendre la fermeture de la fenêtre
-
-        } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir le formulaire: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 

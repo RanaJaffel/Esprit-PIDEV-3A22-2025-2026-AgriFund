@@ -2,10 +2,7 @@ package entities;
 
 import java.util.Date;
 
-
 public class EvaluationRisque {
-
-
     private int idEvaluation;
     private int scoreGlobal;
     private String niveauRisque;
@@ -15,26 +12,10 @@ public class EvaluationRisque {
     private Date dateEvaluation;
     private int idProjet;
 
+    // Constructeurs
+    public EvaluationRisque() {}
 
-    public EvaluationRisque() {
-    }
-
-
-    public EvaluationRisque(int scoreGlobal, String niveauRisque, String fiabiliteDonnees,
-                            String facteurPrincipal, int recommandation, Date dateEvaluation, int idProjet) {
-        this.scoreGlobal = scoreGlobal;
-        this.niveauRisque = niveauRisque;
-        this.fiabiliteDonnees = fiabiliteDonnees;
-        this.facteurPrincipal = facteurPrincipal;
-        this.recommandation = recommandation;
-        this.dateEvaluation = dateEvaluation;
-        this.idProjet = idProjet;
-    }
-
-
-    public EvaluationRisque(int idEvaluation, int scoreGlobal, String niveauRisque,
-                            String fiabiliteDonnees, String facteurPrincipal, int recommandation,
-                            Date dateEvaluation, int idProjet) {
+    public EvaluationRisque(int idEvaluation, int scoreGlobal, String niveauRisque, String fiabiliteDonnees, String facteurPrincipal, int recommandation, Date dateEvaluation, int idProjet) {
         this.idEvaluation = idEvaluation;
         this.scoreGlobal = scoreGlobal;
         this.niveauRisque = niveauRisque;
@@ -45,7 +26,17 @@ public class EvaluationRisque {
         this.idProjet = idProjet;
     }
 
+    public EvaluationRisque(int scoreGlobal, String niveauRisque, String fiabiliteDonnees, String facteurPrincipal, int recommandation, Date dateEvaluation, int idProjet) {
+        this.scoreGlobal = scoreGlobal;
+        this.niveauRisque = niveauRisque;
+        this.fiabiliteDonnees = fiabiliteDonnees;
+        this.facteurPrincipal = facteurPrincipal;
+        this.recommandation = recommandation;
+        this.dateEvaluation = dateEvaluation;
+        this.idProjet = idProjet;
+    }
 
+    // Getters et Setters
     public int getIdEvaluation() {
         return idEvaluation;
     }
@@ -109,7 +100,6 @@ public class EvaluationRisque {
     public void setIdProjet(int idProjet) {
         this.idProjet = idProjet;
     }
-
 
     @Override
     public String toString() {
