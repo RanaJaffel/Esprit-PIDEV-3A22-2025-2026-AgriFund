@@ -566,22 +566,33 @@ public class projectagricolecontroller implements Initializable {
         addCardDetailRow(detailsGrid, 2, "📅 Date:", project.getDatesoumission().toString());
 
         // Action buttons
-        HBox actions = new HBox(10);
-        actions.setAlignment(Pos.CENTER_RIGHT);
+        HBox actions = new HBox(8);
+        actions.setAlignment(Pos.CENTER);
+        actions.setPadding(new Insets(5, 0, 0, 0));
 
-        Button btnView = new Button("👁 Voir");
+        Button btnView = new Button("👁");
         btnView.getStyleClass().add("btn-view");
         btnView.setOnAction(e -> showProjectDetails(project));
+        btnView.setTooltip(new Tooltip("Voir les détails"));
+        btnView.setMinWidth(40);
+        btnView.setPrefWidth(40);
 
-        Button btnEdit = new Button("✏ Modifier");
+        Button btnEdit = new Button("✏");
         btnEdit.getStyleClass().add("btn-edit");
         btnEdit.setOnAction(e -> openModifyDialog(project));
+        btnEdit.setTooltip(new Tooltip("Modifier"));
+        btnEdit.setMinWidth(40);
+        btnEdit.setPrefWidth(40);
 
-        Button btnDelete = new Button("🗑 Supprimer");
+        Button btnDelete = new Button("🗑");
         btnDelete.getStyleClass().add("btn-delete");
         btnDelete.setOnAction(e -> handleDelete(project));
+        btnDelete.setTooltip(new Tooltip("Supprimer"));
+        btnDelete.setMinWidth(40);
+        btnDelete.setPrefWidth(40);
 
         actions.getChildren().addAll(btnView, btnEdit, btnDelete);
+        HBox.setHgrow(actions, Priority.ALWAYS);
 
         // Assemble card
         card.getChildren().addAll(header, statusBadge, new Separator(), detailsGrid, actions);

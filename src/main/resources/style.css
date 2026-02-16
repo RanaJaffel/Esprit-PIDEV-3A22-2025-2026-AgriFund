@@ -446,3 +446,132 @@
 .border-primary {
     -fx-border-color: #089647;
 }
+
+/* ============================================================================
+   CARD-SPECIFIC STYLES (Type Badges, Status Badges, Action Buttons)
+   ============================================================================ */
+
+/* Type Badges for Cards */
+.badge-equipment {
+    -fx-background-color: #FFE5CC;
+    -fx-text-fill: #E67E22;
+    -fx-padding: 6 14;
+    -fx-background-radius: 16;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.badge-materials {
+    -fx-background-color: #E5F4FF;
+    -fx-text-fill: #457B9D;
+    -fx-padding: 6 14;
+    -fx-background-radius: 16;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.badge-service {
+    -fx-background-color: #F3E5F5;
+    -fx-text-fill: #8B7355;
+    -fx-padding: 6 14;
+    -fx-background-radius: 16;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.badge-default {
+    -fx-background-color: #E0E4E2;
+    -fx-text-fill: #133D03;
+    -fx-padding: 6 14;
+    -fx-background-radius: 16;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+/* Status Badges for Cards */
+.status-accepted {
+    -fx-background-color: #089647;
+    -fx-text-fill: white;
+    -fx-padding: 6 14;
+    -fx-background-radius: 16;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.status-progress {
+    -fx-background-color: #E1B323;
+    -fx-text-fill: white;
+    -fx-padding: 6 14;
+    -fx-background-radius: 16;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+/* Card Action Buttons */
+.btn-view {
+    -fx-background-color: #476C1A;
+    -fx-text-fill: white;
+    -fx-font-weight: 600;
+    -fx-font-size: 18px;
+    -fx-background-radius: 8;
+    -fx-padding: 10;
+    -fx-cursor: hand;
+    -fx-min-width: 40px;
+    -fx-pref-width: 40px;
+    -fx-min-height: 40px;
+    -fx-pref-height: 40px;
+}
+
+.btn-view:hover {
+    -fx-background-color: #9A951F;
+    -fx-effect: dropshadow(three-pass-box, rgba(71, 108, 26, 0.4), 6, 0, 0, 2);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.btn-edit {
+    -fx-background-color: #089647;
+    -fx-text-fill: white;
+    -fx-font-weight: 600;
+    -fx-font-size: 18px;
+    -fx-background-radius: 8;
+    -fx-padding: 10;
+    -fx-cursor: hand;
+    -fx-min-width: 40px;
+    -fx-pref-width: 40px;
+    -fx-min-height: 40px;
+    -fx-pref-height: 40px;
+}
+
+.btn-edit:hover {
+    -fx-background-color: #076A39;
+    -fx-effect: dropshadow(three-pass-box, rgba(8, 150, 71, 0.4), 6, 0, 0, 2);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.btn-delete {
+    -fx-background-color: transparent;
+    -fx-border-color: #D32F2F;
+    -fx-border-width: 2;
+    -fx-text-fill: #D32F2F;
+    -fx-font-weight: 600;
+    -fx-font-size: 18px;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-padding: 9;
+    -fx-cursor: hand;
+    -fx-min-width: 40px;
+    -fx-pref-width: 40px;
+    -fx-min-height: 40px;
+    -fx-pref-height: 40px;
+}
+
+.btn-delete:hover {
+    -fx-background-color: #D32F2F;
+    -fx-text-fill: white;
+    -fx-border-color: #D32F2F;
+    -fx-effect: dropshadow(three-pass-box, rgba(211, 47, 47, 0.4), 6, 0, 0, 2);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
