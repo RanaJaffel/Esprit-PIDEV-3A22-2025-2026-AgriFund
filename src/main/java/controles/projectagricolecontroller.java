@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.stage.Modality;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -45,12 +46,11 @@ import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.util.Duration;
 
-
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatter;
-
 public class projectagricolecontroller implements Initializable {
 
+    // ============================================================================
+    // MAIN VIEW FIELDS (List View)
+    // ============================================================================
     @FXML private TextField tfNomProject;
     @FXML private TextField tfSurface;
     @FXML private TextField tfBudget;
@@ -68,18 +68,43 @@ public class projectagricolecontroller implements Initializable {
     @FXML private Label lblInProgressProjects;
     @FXML private Label lblRefusedProjects;
 
-    // Footer Statistics (Optional)
+    // Footer Statistics
     @FXML private Label lblTotalBudget;
     @FXML private Label lblTotalSurface;
     @FXML private Label lblLastUpdate;
 
+    // ============================================================================
+    // ADD/MODIFY DIALOG FIELDS
+    // ============================================================================
+    @FXML private TextField tfNomProjectDialog;
+    @FXML private TextField tfSurfaceDialog;
+    @FXML private TextField tfBudgetDialog;
+    @FXML private DatePicker dpDateSoumissionDialog;
+    @FXML private Button btnSave;
+    @FXML private Label lblStatusBadge;
+
+    // ============================================================================
+    // SHARED FIELDS
+    // ============================================================================
     private List<projectagricole> allProjects = new ArrayList<>();
     private projectagricole selectedProject = null;
+    private projectagricole currentProject = null; // For modify operation
     private final projectagricoleCRUD service = new projectagricoleCRUD();
     private Timeline autoRefreshTimeline;
     private static final int REFRESH_INTERVAL_SECONDS = 5;
+
+    // Reference to main controller for dialog callbacks
+    private projectagricolecontroller mainController;
+
+    // Mode: "add" or "modify"
+    private String dialogMode = "list";
+
+    // ============================================================================
+    // INITIALIZATION
+    // ============================================================================
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Initialize based on which view is loaded
         if (cbStatut != null) {
             cbStatut.getItems().addAll("en cours", "accepte", "refuse");
         }
@@ -87,13 +112,289 @@ public class projectagricolecontroller implements Initializable {
             cbFilterStatutList.getItems().addAll("Tous les statuts", "en cours", "accepte", "refuse");
             cbFilterStatutList.setValue("Tous les statuts");
         }
-        setupSearchListener();
-        setupFilterListener();
+
+        // Setup for main list view
         if (projectsContainer != null) {
-            refreshDataFromDB();
-            startAutoRefresh();
+            setupSearchListener();
+            setupFilterListener();
+
+            // Load data with comprehensive error handling
+            try {
+                refreshDataFromDB();
+                startAutoRefresh();
+            } catch (Exception e) {
+                System.err.println("Error loading initial data: " + e.getMessage());
+                e.printStackTrace();
+
+                // Initialize with empty data to prevent crashes
+                allProjects = new ArrayList<>();
+                updateCardsDisplay();
+                updateStatistics();
+
+                // Show user-friendly error
+                showAlert(Alert.AlertType.ERROR, "Erreur de connexion",
+                        "Impossible de se connecter à la base de données.\n\n" +
+                                "Vérifiez que :\n" +
+                                "1. Le serveur de base de données est démarré\n" +
+                                "2. Les identifiants de connexion sont corrects\n" +
+                                "3. La base de données existe\n\n" +
+                                "Détails: " + e.getMessage());
+            }
+        }
+
+        // Setup for add dialog
+        if (lblStatusBadge != null && btnSave != null && dpDateSoumissionDialog != null) {
+            setupAddDialog();
         }
     }
+
+    /**
+     * Setup for Add Dialog
+     */
+    private void setupAddDialog() {
+        if (lblStatusBadge != null) {
+            lblStatusBadge.setText("📋 En cours");
+            lblStatusBadge.setStyle(
+                    "-fx-background-color: linear-gradient(to right, #E1B323, #9A951F);" +
+                            "-fx-text-fill: white;" +
+                            "-fx-font-weight: bold;" +
+                            "-fx-font-size: 14px;" +
+                            "-fx-padding: 10 24;" +
+                            "-fx-background-radius: 20;" +
+                            "-fx-border-radius: 20;" +
+                            "-fx-effect: dropshadow(three-pass-box, rgba(225, 179, 35, 0.4), 8, 0, 0, 2);" +
+                            "-fx-cursor: hand;"
+            );
+
+            Tooltip tooltip = new Tooltip(
+                    "Le statut initial est toujours 'En cours'.\n" +
+                            "Il sera modifié automatiquement par les décisions financières."
+            );
+            lblStatusBadge.setTooltip(tooltip);
+        }
+    }
+
+    /**
+     * Setup for Modify Dialog
+     */
+    public void setProject(projectagricole project) {
+        this.currentProject = project;
+        this.dialogMode = "modify";
+        populateFields();
+    }
+
+    public void setMainController(projectagricolecontroller mainController) {
+        this.mainController = mainController;
+    }
+
+    private void populateFields() {
+        if (currentProject != null) {
+            // Use dialog fields
+            if (tfNomProjectDialog != null) {
+                tfNomProjectDialog.setText(currentProject.getNomproject());
+                tfSurfaceDialog.setText(String.valueOf(currentProject.getSurface()));
+                tfBudgetDialog.setText(currentProject.getBudgetdemande().toString());
+                dpDateSoumissionDialog.setValue(currentProject.getDatesoumission().toLocalDate());
+                updateStatusBadge(currentProject.getStatut());
+            }
+        }
+    }
+
+    /**
+     * Update status badge with appropriate colors based on status
+     */
+    private void updateStatusBadge(String statut) {
+        if (lblStatusBadge == null) return;
+
+        String displayText;
+        String backgroundColor;
+        String textColor = "white";
+        String tooltipText;
+        String icon;
+
+        switch (statut.toLowerCase()) {
+            case "accepte":
+                icon = "✓";
+                displayText = icon + " Accepté";
+                backgroundColor = "linear-gradient(to right, #089647, #076A39)";
+                tooltipText = "Projet accepté par la décision financière.\nStatut géré automatiquement.";
+                break;
+
+            case "refuse":
+                icon = "✗";
+                displayText = icon + " Refusé";
+                backgroundColor = "linear-gradient(to right, #D32F2F, #B71C1C)";
+                tooltipText = "Projet refusé par la décision financière.\nStatut géré automatiquement.";
+                break;
+
+            case "en cours":
+            default:
+                icon = "📋";
+                displayText = icon + " En cours";
+                backgroundColor = "linear-gradient(to right, #E1B323, #9A951F)";
+                tooltipText = "Projet en attente de décision financière.\nStatut géré automatiquement.";
+                break;
+        }
+
+        lblStatusBadge.setText(displayText);
+        lblStatusBadge.setStyle(
+                "-fx-background-color: " + backgroundColor + ";" +
+                        "-fx-text-fill: " + textColor + ";" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-font-size: 14px;" +
+                        "-fx-padding: 10 24;" +
+                        "-fx-background-radius: 20;" +
+                        "-fx-border-radius: 20;" +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 8, 0, 0, 2);" +
+                        "-fx-cursor: hand;"
+        );
+
+        Tooltip tooltip = new Tooltip(tooltipText);
+        lblStatusBadge.setTooltip(tooltip);
+    }
+
+    // ============================================================================
+    // ADD/MODIFY DIALOG HANDLERS
+    // ============================================================================
+
+    /**
+     * Handle Save button for both Add and Modify modes
+     */
+    @FXML
+    void handleSave(ActionEvent event) {
+        if (!validateDialogInputs()) return;
+
+        try {
+            if ("modify".equals(dialogMode)) {
+                // MODIFY MODE
+                currentProject.setNomproject(getDialogFieldValue(tfNomProjectDialog));
+                currentProject.setSurface(Float.parseFloat(getDialogFieldValue(tfSurfaceDialog)));
+                currentProject.setBudgetdemande(new BigDecimal(getDialogFieldValue(tfBudgetDialog)));
+                currentProject.setDatesoumission(Date.valueOf(dpDateSoumissionDialog.getValue()));
+                // Do NOT update status - it's managed by financial decisions
+
+                service.modifier(currentProject);
+                showAlert(Alert.AlertType.INFORMATION, "Succès",
+                        "Projet modifié avec succès!\n\n" +
+                                "Note: Le statut reste inchangé (" +
+                                getStatusDisplayName(currentProject.getStatut()) + ")");
+            } else {
+                // ADD MODE
+                projectagricole p = new projectagricole(
+                        getDialogFieldValue(tfNomProjectDialog),
+                        Float.parseFloat(getDialogFieldValue(tfSurfaceDialog)),
+                        new BigDecimal(getDialogFieldValue(tfBudgetDialog)),
+                        "en cours",
+                        Date.valueOf(dpDateSoumissionDialog.getValue())
+                );
+
+                service.ajouter(p);
+                showAlert(Alert.AlertType.INFORMATION, "Succès",
+                        "Projet ajouté avec succès!\n\n" +
+                                "Statut: En cours (en attente de décision financière)");
+            }
+
+            // Refresh main controller if available
+            if (mainController != null) {
+                mainController.refreshDataFromDB();
+            }
+
+            closeDialogWindow();
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur SQL",
+                    "Erreur lors de l'opération: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void handleCancel(ActionEvent event) {
+        closeDialogWindow();
+    }
+
+    private void closeDialogWindow() {
+        Stage stage = (Stage) btnSave.getScene().getWindow();
+        stage.close();
+    }
+
+    private String getDialogFieldValue(TextField field) {
+        return field != null ? field.getText().trim() : "";
+    }
+
+    private boolean validateDialogInputs() {
+        // Check for empty fields
+        if (getDialogFieldValue(tfNomProjectDialog).isEmpty() ||
+                getDialogFieldValue(tfSurfaceDialog).isEmpty() ||
+                getDialogFieldValue(tfBudgetDialog).isEmpty() ||
+                dpDateSoumissionDialog.getValue() == null) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de saisie",
+                    "Veuillez remplir tous les champs!");
+            return false;
+        }
+
+        // Validate project name length
+        if (getDialogFieldValue(tfNomProjectDialog).length() < 3) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de saisie",
+                    "Le nom du projet doit contenir au moins 3 caractères!");
+            return false;
+        }
+
+        // Validate date based on mode
+        if ("add".equals(dialogMode)) {
+            // Add mode: only today's date allowed
+            if (!dpDateSoumissionDialog.getValue().isEqual(java.time.LocalDate.now())) {
+                showAlert(Alert.AlertType.ERROR, "Erreur de date",
+                        "La date de soumission doit être la date d'aujourd'hui uniquement!\n" +
+                                "Date actuelle: " + java.time.LocalDate.now());
+                return false;
+            }
+        } else if ("modify".equals(dialogMode)) {
+            // Modify mode: no future dates allowed
+            if (dpDateSoumissionDialog.getValue().isAfter(java.time.LocalDate.now())) {
+                showAlert(Alert.AlertType.ERROR, "Erreur de date",
+                        "La date de soumission ne peut pas être dans le futur!\n" +
+                                "Veuillez sélectionner la date d'aujourd'hui ou une date passée.");
+                return false;
+            }
+        }
+
+        // Validate numeric fields
+        try {
+            float surface = Float.parseFloat(getDialogFieldValue(tfSurfaceDialog));
+            if (surface <= 0) {
+                showAlert(Alert.AlertType.ERROR, "Erreur de validation",
+                        "La surface doit être un nombre positif!");
+                return false;
+            }
+
+            BigDecimal budget = new BigDecimal(getDialogFieldValue(tfBudgetDialog));
+            if (budget.compareTo(BigDecimal.ZERO) <= 0) {
+                showAlert(Alert.AlertType.ERROR, "Erreur de validation",
+                        "Le budget doit être un nombre positif!");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de format",
+                    "Surface et Budget doivent être des nombres valides!");
+            return false;
+        }
+
+        return true;
+    }
+
+    private String getStatusDisplayName(String statut) {
+        switch (statut.toLowerCase()) {
+            case "accepte": return "Accepté";
+            case "refuse": return "Refusé";
+            case "en cours": return "En cours";
+            default: return statut;
+        }
+    }
+
+    // ============================================================================
+    // MAIN VIEW - LIST OPERATIONS
+    // ============================================================================
+
     private void setupSearchListener() {
         if (tfSearchProject != null) {
             tfSearchProject.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -101,6 +402,7 @@ public class projectagricolecontroller implements Initializable {
             });
         }
     }
+
     private void setupFilterListener() {
         if (cbFilterStatutList != null) {
             cbFilterStatutList.setOnAction(event -> {
@@ -108,17 +410,42 @@ public class projectagricolecontroller implements Initializable {
             });
         }
     }
+
     public void refreshDataFromDB() {
         try {
             allProjects = service.afficher();
+            if (allProjects == null) {
+                allProjects = new ArrayList<>();
+            }
             updateCardsDisplay();
             updateStatistics();
         } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur Base de données",
-                    "Impossible de charger les projets : " + e.getMessage());
+            System.err.println("Database error: " + e.getMessage());
             e.printStackTrace();
+
+            // Initialize with empty list to prevent crashes
+            if (allProjects == null) {
+                allProjects = new ArrayList<>();
+            }
+
+            showAlert(Alert.AlertType.ERROR, "Erreur Base de données",
+                    "Impossible de charger les projets.\n" +
+                            "Vérifiez votre connexion à la base de données.\n\n" +
+                            "Détails: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Unexpected error: " + e.getMessage());
+            e.printStackTrace();
+
+            if (allProjects == null) {
+                allProjects = new ArrayList<>();
+            }
+
+            showAlert(Alert.AlertType.ERROR, "Erreur inattendue",
+                    "Une erreur inattendue s'est produite.\n\n" +
+                            "Détails: " + e.getMessage());
         }
     }
+
     private void updateStatistics() {
         try {
             int totalCount = allProjects.size();
@@ -131,6 +458,7 @@ public class projectagricolecontroller implements Initializable {
             long refusedCount = allProjects.stream()
                     .filter(p -> "refuse".equals(p.getStatut()))
                     .count();
+
             if (lblTotalProjects != null) {
                 lblTotalProjects.setText(String.valueOf(totalCount));
             }
@@ -155,7 +483,6 @@ public class projectagricolecontroller implements Initializable {
     private void updateFooterStats() {
         if (allProjects.isEmpty()) return;
 
-        // Calculate total budget
         BigDecimal totalBudget = allProjects.stream()
                 .map(projectagricole::getBudgetdemande)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -185,17 +512,12 @@ public class projectagricolecontroller implements Initializable {
         String searchText = tfSearchProject != null ? tfSearchProject.getText().toLowerCase() : "";
         String filterStatut = cbFilterStatutList != null ? cbFilterStatutList.getValue() : "Tous les statuts";
 
-        // Filter projects using streams
         List<projectagricole> filteredList = allProjects.stream()
                 .filter(p -> {
-
                     boolean matchesSearch = searchText.isEmpty()
                             || p.getNomproject().toLowerCase().contains(searchText);
-
-
                     boolean matchesStatus = filterStatut.equals("Tous les statuts")
                             || p.getStatut().equals(filterStatut);
-
                     return matchesSearch && matchesStatus;
                 })
                 .collect(Collectors.toList());
@@ -205,713 +527,296 @@ public class projectagricolecontroller implements Initializable {
         }
     }
 
-
     private VBox createEnhancedProjectCard(projectagricole project) {
         VBox card = new VBox(12);
         card.getStyleClass().add("project-card");
-        card.setPrefWidth(280);
-        card.setMaxWidth(280);
-        card.setPadding(new Insets(18));
+        card.setPadding(new Insets(20));
+        card.setMaxWidth(380);
+        card.setPrefWidth(380);
 
-
-        HBox header = new HBox(10);
+        // Header with icon and title
+        HBox header = new HBox(12);
         header.setAlignment(Pos.CENTER_LEFT);
 
         Label icon = new Label(getProjectIcon(project.getStatut()));
-        icon.setStyle("-fx-font-size: 24px;");
+        icon.setStyle("-fx-font-size: 32px;");
 
+        VBox titleBox = new VBox(4);
         Label title = new Label(project.getNomproject());
-        title.getStyleClass().add("card-title");
+        title.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #133D03;");
         title.setWrapText(true);
-        title.setMaxWidth(220);
 
-        header.getChildren().addAll(icon, title);
+        Label id = new Label("ID: " + project.getIdproject());
+        id.setStyle("-fx-font-size: 11px; -fx-text-fill: #848A86;");
 
+        titleBox.getChildren().addAll(title, id);
+        header.getChildren().addAll(icon, titleBox);
 
-        Separator separator = new Separator();
-        separator.setPadding(new Insets(5, 0, 5, 0));
+        // Status badge
+        Label statusBadge = new Label(capitalizeStatus(project.getStatut()));
+        statusBadge.getStyleClass().add(getStatusBadgeClass(project.getStatut()));
 
+        // Details grid
+        GridPane detailsGrid = new GridPane();
+        detailsGrid.setHgap(10);
+        detailsGrid.setVgap(8);
 
-        VBox details = new VBox(8);
+        addCardDetailRow(detailsGrid, 0, "🌾 Surface:", String.format("%.2f Ha", project.getSurface()));
+        addCardDetailRow(detailsGrid, 1, "💰 Budget:", String.format("%,.2f DT", project.getBudgetdemande()));
+        addCardDetailRow(detailsGrid, 2, "📅 Date:", project.getDatesoumission().toString());
 
-
-        HBox idRow = createInfoRow("🔖", "ID Projet", "#" + project.getIdproject());
-
-
-        HBox surfaceBox = createInfoRow("🌍", "Surface",
-                String.format("%.2f Ha", project.getSurface()));
-
-
-        HBox budgetBox = createInfoRow("💰", "Budget",
-                String.format("%,.2f DT", project.getBudgetdemande()));
-
-
-        HBox dateBox = createInfoRow("📅", "Date",
-                project.getDatesoumission().toLocalDate().format(
-                        DateTimeFormatter.ofPattern("dd/MM/yyyy")
-                ));
-
-        details.getChildren().addAll(idRow, surfaceBox, budgetBox, dateBox);
-
-
-        HBox statusBox = new HBox(5);
-        statusBox.setAlignment(Pos.CENTER_LEFT);
-        Label statusLabel = new Label("Statut:");
-        statusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #6C757D; -fx-font-weight: 600;");
-
-        Label badge = new Label(capitalizeStatus(project.getStatut()));
-        badge.getStyleClass().add(getStatusBadgeClass(project.getStatut()));
-
-        statusBox.getChildren().addAll(statusLabel, badge);
-
-
-        HBox actions = new HBox(8);
+        // Action buttons
+        HBox actions = new HBox(10);
         actions.setAlignment(Pos.CENTER_RIGHT);
-        actions.setPadding(new Insets(12, 0, 0, 0));
 
+        Button btnView = new Button("👁 Voir");
+        btnView.getStyleClass().add("btn-view");
+        btnView.setOnAction(e -> showProjectDetails(project));
 
-        Button btnDetails = new Button("ℹ️ Détails");
-        btnDetails.getStyleClass().add("btn-info");
-        btnDetails.setStyle(
-                "-fx-min-width: 85; " +
-                        "-fx-min-height: 32; " +
-                        "-fx-font-size: 12px; " +
-                        "-fx-font-weight: 600; " +
-                        "-fx-cursor: hand; " +
-                        "-fx-background-radius: 6; " +
-                        "-fx-padding: 6 12;"
-        );
-        btnDetails.setOnAction(e -> showProjectDetails(project));
-        btnDetails.setTooltip(new Tooltip("Voir tous les détails du projet"));
+        Button btnEdit = new Button("✏ Modifier");
+        btnEdit.getStyleClass().add("btn-edit");
+        btnEdit.setOnAction(e -> openModifyDialog(project));
 
+        Button btnDelete = new Button("🗑 Supprimer");
+        btnDelete.getStyleClass().add("btn-delete");
+        btnDelete.setOnAction(e -> handleDelete(project));
 
-        Button btnEdit = new Button("✎ Modifier");
-        btnEdit.getStyleClass().add("btn-secondary");
-        btnEdit.setStyle(
-                "-fx-min-width: 95; " +
-                        "-fx-min-height: 32; " +
-                        "-fx-font-size: 12px; " +
-                        "-fx-font-weight: 600; " +
-                        "-fx-cursor: hand; " +
-                        "-fx-background-radius: 6; " +
-                        "-fx-padding: 6 12;"
-        );
-        btnEdit.setOnAction(e -> {
-            selectedProject = project;
-            openModifyProjectForm(null);
-        });
-        btnEdit.setTooltip(new Tooltip("Modifier les informations du projet"));
+        actions.getChildren().addAll(btnView, btnEdit, btnDelete);
 
-
-        Button btnDelete = new Button("✖ Supprimer");
-        btnDelete.getStyleClass().add("btn-danger");
-        btnDelete.setStyle(
-                "-fx-min-width: 100; " +
-                        "-fx-min-height: 32; " +
-                        "-fx-font-size: 12px; " +
-                        "-fx-font-weight: 600; " +
-                        "-fx-cursor: hand; " +
-                        "-fx-background-radius: 6; " +
-                        "-fx-padding: 6 12;"
-        );
-        btnDelete.setOnAction(e -> {
-            selectedProject = project;
-            deleteProject(null);
-        });
-        btnDelete.setTooltip(new Tooltip("Supprimer ce projet définitivement"));
-
-        actions.getChildren().addAll(btnDetails, btnEdit, btnDelete);
-
-
-        card.getChildren().addAll(header, separator, details, statusBox, actions);
+        // Assemble card
+        card.getChildren().addAll(header, statusBadge, new Separator(), detailsGrid, actions);
 
         return card;
     }
 
+    private void addCardDetailRow(GridPane grid, int row, String label, String value) {
+        Label lblLabel = new Label(label);
+        lblLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #848A86;");
 
-    private HBox createInfoRow(String emoji, String label, String value) {
-        HBox row = new HBox(8);
-        row.setAlignment(Pos.CENTER_LEFT);
+        Label lblValue = new Label(value);
+        lblValue.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #076A39;");
 
-        Label icon = new Label(emoji);
-        icon.setStyle("-fx-font-size: 16px;");
-
-        Label labelText = new Label(label + ":");
-        labelText.getStyleClass().add("card-info-label");
-
-        Label valueText = new Label(value);
-        valueText.getStyleClass().add("card-info-value");
-
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-
-        row.getChildren().addAll(icon, labelText, spacer, valueText);
-
-        return row;
+        grid.add(lblLabel, 0, row);
+        grid.add(lblValue, 1, row);
     }
 
-
-    private String getProjectIcon(String status) {
-        switch (status.toLowerCase()) {
+    private String getProjectIcon(String statut) {
+        switch (statut.toLowerCase()) {
             case "accepte": return "✅";
-            case "en cours": return "⏳";
             case "refuse": return "❌";
-            default: return "📁";
+            case "en cours": return "⏳";
+            default: return "📋";
         }
     }
 
-
-    private String getStatusBadgeClass(String status) {
-        switch (status.toLowerCase()) {
-            case "accepte": return "status-badge-accepte";
-            case "en cours": return "status-badge-encours";
-            case "refuse": return "status-badge-refuse";
-            default: return "status-badge-encours";
-        }
-    }
-
-
-    private String capitalizeStatus(String status) {
-        switch (status.toLowerCase()) {
+    private String capitalizeStatus(String statut) {
+        switch (statut.toLowerCase()) {
             case "accepte": return "Accepté";
-            case "en cours": return "En Cours";
             case "refuse": return "Refusé";
-            default: return status;
+            case "en cours": return "En cours";
+            default: return statut;
         }
     }
 
+    private String getStatusBadgeClass(String statut) {
+        switch (statut.toLowerCase()) {
+            case "accepte": return "status-accepted";
+            case "refuse": return "status-refused";
+            case "en cours": return "status-progress";
+            default: return "status-progress";
+        }
+    }
+
+    // ============================================================================
+    // CRUD OPERATIONS FROM MAIN VIEW
+    // ============================================================================
 
     @FXML
-    public void openAddProjectForm(ActionEvent event) {
+    void handleAdd(ActionEvent event) {
+        openAddDialog();
+    }
+
+    @FXML
+    void handleModify(ActionEvent event) {
+        if (selectedProject == null) {
+            showAlert(Alert.AlertType.WARNING, "Aucune sélection",
+                    "Veuillez sélectionner un projet à modifier!");
+            return;
+        }
+        openModifyDialog(selectedProject);
+    }
+
+    @FXML
+    void handleDelete(ActionEvent event) {
+        if (selectedProject == null) {
+            showAlert(Alert.AlertType.WARNING, "Aucune sélection",
+                    "Veuillez sélectionner un projet à supprimer!");
+            return;
+        }
+        handleDelete(selectedProject);
+    }
+
+    private void handleDelete(projectagricole project) {
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setTitle("Confirmation de suppression");
+        confirmAlert.setHeaderText("Supprimer le projet: " + project.getNomproject());
+        confirmAlert.setContentText("Êtes-vous sûr de vouloir supprimer ce projet?\nCette action est irréversible.");
+
+        confirmAlert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                try {
+                    service.supprimer(project.getIdproject());
+                    showAlert(Alert.AlertType.INFORMATION, "Succès",
+                            "Projet supprimé avec succès!");
+                    refreshDataFromDB();
+                    selectedProject = null;
+                } catch (SQLException e) {
+                    showAlert(Alert.AlertType.ERROR, "Erreur SQL",
+                            "Erreur lors de la suppression: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    // ============================================================================
+    // DIALOG OPENERS
+    // ============================================================================
+
+    private void openAddDialog() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/projectagricoleadd.fxml"));
             Parent root = loader.load();
 
-            // Get the controller of the add form
-            ProjectAgricoleAddController addController = loader.getController();
-            addController.setMainController(this);
+            projectagricolecontroller controller = loader.getController();
+            controller.dialogMode = "add";
+            controller.setMainController(this);
 
             Stage stage = new Stage();
-            stage.setTitle("Ajouter un Nouveau Projet");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Nouveau Projet Agricole");
             stage.setScene(new Scene(root));
-            stage.setResizable(false);
             stage.showAndWait();
 
-
-            refreshDataFromDB();
         } catch (IOException e) {
+            e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Erreur",
                     "Impossible d'ouvrir le formulaire d'ajout: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
-
-    @FXML
-    void openModifyProjectForm(ActionEvent event) {
-        if (selectedProject == null) {
-            showAlert(Alert.AlertType.WARNING, "Attention",
-                    "Veuillez sélectionner un projet à modifier.");
-            return;
-        }
-
+    private void openModifyDialog(projectagricole project) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/projectagricolemodify.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/projectagricoleadd.fxml"));
             Parent root = loader.load();
 
-
-            ProjectAgricoleModifyController modifyController = loader.getController();
-            modifyController.setProject(selectedProject);
-            modifyController.setMainController(this);
+            projectagricolecontroller controller = loader.getController();
+            controller.dialogMode = "modify";
+            controller.setProject(project);
+            controller.setMainController(this);
 
             Stage stage = new Stage();
-            stage.setTitle("Modifier le Projet");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Modifier Projet Agricole");
             stage.setScene(new Scene(root));
-            stage.setResizable(false);
             stage.showAndWait();
 
-
-            refreshDataFromDB();
-            selectedProject = null;
         } catch (IOException e) {
+            e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Erreur",
                     "Impossible d'ouvrir le formulaire de modification: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
+    // ============================================================================
+    // AUTO-REFRESH & UTILITY METHODS
+    // ============================================================================
 
-    @FXML
-    void deleteProject(ActionEvent event) {
-        if (selectedProject == null) {
-            showAlert(Alert.AlertType.WARNING, "Attention",
-                    "Veuillez sélectionner un projet à supprimer.");
-            return;
-        }
-
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Confirmation de suppression");
-        confirm.setHeaderText("Supprimer le projet");
-        confirm.setContentText("Voulez-vous vraiment supprimer le projet \"" +
-                selectedProject.getNomproject() + "\" ?\n\nCette action est irréversible.");
-
-        confirm.showAndWait();
-        if (confirm.getResult() == ButtonType.OK) {
-            try {
-                service.supprimer(selectedProject.getIdproject());
-                showAlert(Alert.AlertType.INFORMATION, "Succès",
-                        "Projet supprimé avec succès !");
-                selectedProject = null;
-                refreshDataFromDB();
-            } catch (SQLException e) {
-                showAlert(Alert.AlertType.ERROR, "Erreur SQL",
-                        "Impossible de supprimer : " + e.getMessage());
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
-     * Navigates to Resources view
-     */
-    @FXML
-    void goToRessources(ActionEvent event) {
-        try {
-            Parent root = FXMLLoader.load(Objects.requireNonNull(
-                    getClass().getResource("/ressourceproject.fxml")));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.getScene().setRoot(root);
-            stage.setTitle("Gestion des Ressources");
-        } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur",
-                    "Impossible de charger la vue des ressources: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Validates form inputs
-     */
-    private boolean validateInputs() {
-        if (tfNomProject == null || tfSurface == null || tfBudget == null ||
-                cbStatut == null || dpDateSoumission == null) {
-            return false;
-        }
-
-        if (tfNomProject.getText().trim().isEmpty() ||
-                tfSurface.getText().trim().isEmpty() ||
-                tfBudget.getText().trim().isEmpty() ||
-                cbStatut.getValue() == null ||
-                dpDateSoumission.getValue() == null) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de saisie",
-                    "Veuillez remplir tous les champs !");
-            return false;
-        }
-
-        try {
-            float surface = Float.parseFloat(tfSurface.getText().trim());
-            if (surface <= 0) {
-                showAlert(Alert.AlertType.ERROR, "Erreur de validation",
-                        "La surface doit être un nombre positif !");
-                return false;
-            }
-
-            BigDecimal budget = new BigDecimal(tfBudget.getText().trim());
-            if (budget.compareTo(BigDecimal.ZERO) <= 0) {
-                showAlert(Alert.AlertType.ERROR, "Erreur de validation",
-                        "Le budget doit être un nombre positif !");
-                return false;
-            }
-        } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de format",
-                    "Surface et Budget doivent être des nombres valides !");
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Displays an alert dialog
-     */
-    private void showAlert(Alert.AlertType type, String title, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-
-    /**
-     * Clears all form fields
-     */
-    @FXML
-    void clearFields(ActionEvent event) {
-        if (tfNomProject == null) return;
-
-        selectedProject = null;
-        tfNomProject.clear();
-        tfSurface.clear();
-        tfBudget.clear();
-        cbStatut.getSelectionModel().clearSelection();
-        dpDateSoumission.setValue(null);
-    }
-
-    @FXML
-    void exportToPDF(ActionEvent event) {
-        try {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Enregistrer le PDF");
-            fileChooser.setInitialFileName("Projets_Agricoles_" +
-                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".pdf");
-            fileChooser.getExtensionFilters().add(
-                    new FileChooser.ExtensionFilter("PDF Files", "*.pdf")
-            );
-
-            File file = fileChooser.showSaveDialog(projectsContainer.getScene().getWindow());
-
-            if (file != null) {
-                PdfWriter writer = new PdfWriter(file.getAbsolutePath());
-                PdfDocument pdf = new PdfDocument(writer);
-                Document document = new Document(pdf);
-
-                // CORRECTED: Use Color type instead of DeviceRgb
-                Color headerColor = new DeviceRgb(45, 106, 79);
-                Color lightGreen = new DeviceRgb(216, 243, 220);
-
-                // Title
-                Paragraph title = new Paragraph("RAPPORT DES PROJETS AGRICOLES")
-                        .setFontSize(20)
-                        .setBold()
-                        .setFontColor(headerColor)
-                        .setTextAlignment(TextAlignment.CENTER)
-                        .setMarginBottom(10);
-                document.add(title);
-
-                // Date and Statistics
-                Paragraph info = new Paragraph(
-                        "Généré le: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy à HH:mm")) +
-                                "\nTotal de projets: " + allProjects.size()
-                ).setFontSize(10)
-                        .setTextAlignment(TextAlignment.CENTER)
-                        .setMarginBottom(20);
-                document.add(info);
-
-                // Statistics Summary
-                Paragraph stats = new Paragraph("STATISTIQUES")
-                        .setFontSize(14)
-                        .setBold()
-                        .setFontColor(headerColor)
-                        .setMarginBottom(10);
-                document.add(stats);
-
-                Table statsTable = new Table(UnitValue.createPercentArray(new float[]{25, 25, 25, 25}))
-                        .useAllAvailableWidth()
-                        .setMarginBottom(20);
-
-                long acceptedCount = allProjects.stream().filter(p -> "accepte".equals(p.getStatut())).count();
-                long inProgressCount = allProjects.stream().filter(p -> "en cours".equals(p.getStatut())).count();
-                long refusedCount = allProjects.stream().filter(p -> "refuse".equals(p.getStatut())).count();
-
-                BigDecimal totalBudget = allProjects.stream()
-                        .map(projectagricole::getBudgetdemande)
-                        .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-                statsTable.addCell(createStatsCell("Acceptés", String.valueOf(acceptedCount),
-                        new DeviceRgb(213, 244, 230)));
-                statsTable.addCell(createStatsCell("En Cours", String.valueOf(inProgressCount),
-                        new DeviceRgb(255, 229, 204)));
-                statsTable.addCell(createStatsCell("Refusés", String.valueOf(refusedCount),
-                        new DeviceRgb(255, 229, 229)));
-                statsTable.addCell(createStatsCell("Budget Total", String.format("%.2f DT", totalBudget),
-                        lightGreen));
-
-                document.add(statsTable);
-
-                // Projects List Title
-                Paragraph listTitle = new Paragraph("LISTE DÉTAILLÉE DES PROJETS")
-                        .setFontSize(14)
-                        .setBold()
-                        .setFontColor(headerColor)
-                        .setMarginBottom(10);
-                document.add(listTitle);
-
-                // Projects Table
-                Table table = new Table(UnitValue.createPercentArray(new float[]{8, 22, 15, 18, 18, 19}))
-                        .useAllAvailableWidth();
-
-                // Table Headers
-                String[] headers = {"ID", "Nom du Projet", "Surface (Ha)", "Budget (DT)", "Date Soumission", "Statut"};
-                for (String header : headers) {
-                    Cell headerCell = new Cell()
-                            .add(new Paragraph(header).setBold().setFontSize(10))
-                            .setBackgroundColor(headerColor)
-                            .setFontColor(ColorConstants.WHITE)
-                            .setTextAlignment(TextAlignment.CENTER)
-                            .setPadding(8);
-                    table.addHeaderCell(headerCell);
-                }
-
-                // Table Data
-                for (projectagricole p : allProjects) {
-                    Color rowColor = ColorConstants.WHITE;
-                    if ("accepte".equals(p.getStatut())) {
-                        rowColor = new DeviceRgb(213, 244, 230);
-                    } else if ("refuse".equals(p.getStatut())) {
-                        rowColor = new DeviceRgb(255, 235, 235);
-                    } else if ("en cours".equals(p.getStatut())) {
-                        rowColor = new DeviceRgb(255, 245, 230);
-                    }
-
-                    table.addCell(createDataCell(String.valueOf(p.getIdproject()), rowColor));
-                    table.addCell(createDataCell(p.getNomproject(), rowColor));
-                    table.addCell(createDataCell(String.format("%.2f", p.getSurface()), rowColor));
-                    table.addCell(createDataCell(String.format("%,.2f", p.getBudgetdemande()), rowColor));
-                    table.addCell(createDataCell(
-                            p.getDatesoumission().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                            rowColor
-                    ));
-
-                    String statutText = capitalizeStatus(p.getStatut());
-                    table.addCell(createDataCell(statutText, rowColor).setBold());
-                }
-
-                document.add(table);
-
-                // Footer
-                Paragraph footer = new Paragraph(
-                        "\n\nDocument généré automatiquement par le Système de Gestion des Projets Agricoles"
-                ).setFontSize(8)
-                        .setTextAlignment(TextAlignment.CENTER)
-                        .setFontColor(ColorConstants.GRAY);
-                document.add(footer);
-
-                document.close();
-
-                showAlert(Alert.AlertType.INFORMATION, "Succès",
-                        "Le fichier PDF a été généré avec succès !\n\nEmplacement: " + file.getAbsolutePath());
-            }
-        } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur",
-                    "Erreur lors de la génération du PDF: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    // CORRECTED HELPER METHODS - Use Color parameter type
-    private Cell createStatsCell(String label, String value, Color bgColor) {
-        Paragraph content = new Paragraph()
-                .add(new Paragraph(label).setFontSize(9).setMarginBottom(2))
-                .add(new Paragraph(value).setBold().setFontSize(14));
-
-        return new Cell()
-                .add(content)
-                .setBackgroundColor(bgColor)
-                .setTextAlignment(TextAlignment.CENTER)
-                .setPadding(10);
-    }
-
-    private Cell createDataCell(String text, Color bgColor) {
-        return new Cell()
-                .add(new Paragraph(text).setFontSize(9))
-                .setBackgroundColor(bgColor)
-                .setTextAlignment(TextAlignment.CENTER)
-                .setPadding(6);
-    }
     private void startAutoRefresh() {
-        // Create a timeline that refreshes every X seconds
-        autoRefreshTimeline = new Timeline(
-                new KeyFrame(Duration.seconds(REFRESH_INTERVAL_SECONDS), event -> {
-                    refreshDataFromDBSilently();
-                })
-        );
-        autoRefreshTimeline.setCycleCount(Timeline.INDEFINITE); // Run forever
-        autoRefreshTimeline.play(); // Start the timer
-    }
-
-    /**
-     * ✅ NEW: Stops automatic refresh (call this when closing the window)
-     */
-    private void stopAutoRefresh() {
         if (autoRefreshTimeline != null) {
             autoRefreshTimeline.stop();
         }
+
+        autoRefreshTimeline = new Timeline(new KeyFrame(
+                Duration.seconds(REFRESH_INTERVAL_SECONDS),
+                event -> refreshDataFromDB()
+        ));
+        autoRefreshTimeline.setCycleCount(Timeline.INDEFINITE);
+        autoRefreshTimeline.play();
     }
 
-    private void refreshDataFromDBSilently() {
-        try {
-            // Get fresh data from database
-            List<projectagricole> newData = service.afficher();
-
-            // Check if any status has changed
-            boolean statusChanged = hasStatusChanged(allProjects, newData);
-
-            // Update the data
-            allProjects = newData;
-            updateCardsDisplay();
-            updateStatistics();
-
-            // Optional: Show notification if status changed
-            if (statusChanged) {
-                updateLastRefreshTime();
-            }
-
-        } catch (SQLException e) {
-            // Silent error - don't show alert during auto-refresh
-            System.err.println("Auto-refresh error: " + e.getMessage());
-        }
-    }
-    private boolean hasStatusChanged(List<projectagricole> oldList, List<projectagricole> newList) {
-        if (oldList.size() != newList.size()) return true;
-
-        for (int i = 0; i < oldList.size(); i++) {
-            projectagricole oldProject = oldList.get(i);
-            projectagricole newProject = newList.stream()
-                    .filter(p -> p.getIdproject() == oldProject.getIdproject())
-                    .findFirst()
-                    .orElse(null);
-
-            if (newProject != null && !oldProject.getStatut().equals(newProject.getStatut())) {
-                return true; // Status changed!
-            }
-        }
-        return false;
+    @FXML
+    void handleRefresh(ActionEvent event) {
+        refreshDataFromDB();
+        showAlert(Alert.AlertType.INFORMATION, "Actualisation",
+                "Les données ont été actualisées!");
     }
 
-    /**
-     * ✅ NEW: Updates the last refresh timestamp
-     */
-    private void updateLastRefreshTime() {
-        if (lblLastUpdate != null) {
-            lblLastUpdate.setText("Mis à jour: " +
-                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))
-            );
-        }
-    }
+    // ============================================================================
+    // PROJECT DETAILS DISPLAY
+    // ============================================================================
 
-    /**
-     * Shows detailed information dialog for a project
-     */
     private void showProjectDetails(projectagricole project) {
-        // Create custom dialog
         Dialog<Void> dialog = new Dialog<>();
         dialog.setTitle("Détails du Projet");
         dialog.setHeaderText(null);
 
-        // Create dialog content
         VBox content = new VBox(20);
         content.setPadding(new Insets(25));
         content.setStyle("-fx-background-color: white;");
-        content.setPrefWidth(550);
 
-        // Header with project name and icon
+        // Header with icon and title
         HBox headerBox = new HBox(15);
         headerBox.setAlignment(Pos.CENTER_LEFT);
-        headerBox.setStyle(
-                "-fx-background-color: linear-gradient(to right, #076A39, #095032);" +
-                        "-fx-padding: 20;" +
-                        "-fx-background-radius: 8;"
-        );
 
-        Label headerIcon = new Label(getProjectIcon(project.getStatut()));
-        headerIcon.setStyle("-fx-font-size: 36px;");
+        Label iconLarge = new Label(getProjectIcon(project.getStatut()));
+        iconLarge.setStyle("-fx-font-size: 48px;");
 
-        VBox headerText = new VBox(5);
-        Label projectName = new Label(project.getNomproject());
-        projectName.setStyle(
-                "-fx-font-size: 22px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: white;"
-        );
+        VBox titleBox = new VBox(5);
+        Label titleLabel = new Label(project.getNomproject());
+        titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #133D03;");
 
-        Label projectId = new Label("Projet #" + project.getIdproject());
-        projectId.setStyle(
-                "-fx-font-size: 13px;" +
-                        "-fx-text-fill: rgba(255,255,255,0.8);"
-        );
+        Label idLabel = new Label("Projet #" + project.getIdproject());
+        idLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #848A86;");
 
-        headerText.getChildren().addAll(projectName, projectId);
-        headerBox.getChildren().addAll(headerIcon, headerText);
+        titleBox.getChildren().addAll(titleLabel, idLabel);
+        headerBox.getChildren().addAll(iconLarge, titleBox);
 
-        // Status Badge
+        // Status row
         HBox statusRow = new HBox(10);
         statusRow.setAlignment(Pos.CENTER_LEFT);
-        statusRow.setPadding(new Insets(10, 0, 0, 0));
-
-        Label statusTitleLabel = new Label("Statut:");
-        statusTitleLabel.setStyle(
-                "-fx-font-size: 14px;" +
-                        "-fx-font-weight: 600;" +
-                        "-fx-text-fill: #133D03;"
-        );
+        Label statusLabel = new Label("Statut:");
+        statusLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: 600; -fx-text-fill: #848A86;");
 
         Label statusBadge = new Label(capitalizeStatus(project.getStatut()));
         statusBadge.getStyleClass().add(getStatusBadgeClass(project.getStatut()));
-        statusBadge.setStyle(
-                statusBadge.getStyle() +
-                        "-fx-font-size: 13px;" +
-                        "-fx-padding: 6 16;"
-        );
+        statusBadge.setStyle(statusBadge.getStyle() + "-fx-font-size: 14px; -fx-padding: 8 20;");
 
-        statusRow.getChildren().addAll(statusTitleLabel, statusBadge);
+        statusRow.getChildren().addAll(statusLabel, statusBadge);
 
-        // Details Grid
+        // Details grid
         GridPane detailsGrid = new GridPane();
         detailsGrid.setHgap(20);
-        detailsGrid.setVgap(18);
-        detailsGrid.setPadding(new Insets(15, 0, 0, 0));
+        detailsGrid.setVgap(15);
+        detailsGrid.setPadding(new Insets(10, 0, 10, 0));
 
-        // Surface
-        addDetailRow(detailsGrid, 0, "🌍 Surface",
-                String.format("%.2f Ha", project.getSurface()));
+        addDetailRow(detailsGrid, 0, "🌾 Surface:", String.format("%.2f Hectares", project.getSurface()));
+        addDetailRow(detailsGrid, 1, "💰 Budget demandé:", String.format("%,.2f DT", project.getBudgetdemande()));
+        addDetailRow(detailsGrid, 2, "📅 Date de soumission:", project.getDatesoumission().toString());
 
-        // Budget
-        addDetailRow(detailsGrid, 1, "💰 Budget Demandé",
-                String.format("%,.2f DT", project.getBudgetdemande()));
-
-        // Date de Soumission
-        addDetailRow(detailsGrid, 2, "📅 Date de Soumission",
-                project.getDatesoumission().toLocalDate().format(
-                        DateTimeFormatter.ofPattern("dd MMMM yyyy")
-                ));
-
-        // Days since submission
-        long daysSince = java.time.temporal.ChronoUnit.DAYS.between(
-                project.getDatesoumission().toLocalDate(),
-                java.time.LocalDate.now()
-        );
-        addDetailRow(detailsGrid, 3, "⏱️ Soumis depuis",
-                daysSince + " jour(s)");
+        Separator sep = new Separator();
 
         // Status explanation
-        Separator sep = new Separator();
-        sep.setPadding(new Insets(10, 0, 10, 0));
+        VBox statusExplanation = new VBox(8);
+        Label explanationTitle = new Label("ℹ️ À propos du statut");
+        explanationTitle.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #133D03;");
 
-        VBox statusExplanation = new VBox(10);
-        statusExplanation.setPadding(new Insets(15));
-        statusExplanation.setStyle(
-                "-fx-background-color: #F5F7F6;" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-border-color: #E0E4E2;" +
-                        "-fx-border-radius: 8;" +
-                        "-fx-border-width: 1;"
-        );
+        Label explanationText = new Label(getStatusExplanation(project.getStatut()));
+        explanationText.setWrapText(true);
+        explanationText.setMaxWidth(450);
+        explanationText.setStyle("-fx-font-size: 12px; -fx-text-fill: #6C757D; -fx-line-spacing: 2px;");
 
-        Label noteTitle = new Label("ℹ️ Information");
-        noteTitle.setStyle(
-                "-fx-font-size: 13px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: #076A39;"
-        );
-
-        Label noteText = new Label(getStatusExplanation(project.getStatut()));
-        noteText.setWrapText(true);
-        noteText.setStyle(
-                "-fx-font-size: 12px;" +
-                        "-fx-text-fill: #133D03;"
-        );
-
-        statusExplanation.getChildren().addAll(noteTitle, noteText);
+        statusExplanation.getChildren().addAll(explanationTitle, explanationText);
 
         // Add all to content
         content.getChildren().addAll(
@@ -922,14 +827,11 @@ public class projectagricolecontroller implements Initializable {
                 statusExplanation
         );
 
-        // Set content
         dialog.getDialogPane().setContent(content);
 
-        // Add Close button
         ButtonType closeButton = new ButtonType("Fermer", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().add(closeButton);
 
-        // Style the button
         Button closeBtn = (Button) dialog.getDialogPane().lookupButton(closeButton);
         closeBtn.setStyle(
                 "-fx-background-color: #076A39;" +
@@ -940,35 +842,20 @@ public class projectagricolecontroller implements Initializable {
                         "-fx-cursor: hand;"
         );
 
-        // Show dialog
         dialog.showAndWait();
     }
 
-    /**
-     * Helper method to add detail rows to grid
-     */
     private void addDetailRow(GridPane grid, int row, String label, String value) {
         Label lblLabel = new Label(label);
-        lblLabel.setStyle(
-                "-fx-font-size: 13px;" +
-                        "-fx-font-weight: 600;" +
-                        "-fx-text-fill: #848A86;"
-        );
+        lblLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #848A86;");
 
         Label lblValue = new Label(value);
-        lblValue.setStyle(
-                "-fx-font-size: 14px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: #076A39;"
-        );
+        lblValue.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #076A39;");
 
         grid.add(lblLabel, 0, row);
         grid.add(lblValue, 1, row);
     }
 
-    /**
-     * Get status explanation text
-     */
     private String getStatusExplanation(String statut) {
         switch (statut.toLowerCase()) {
             case "accepte":
@@ -985,23 +872,15 @@ public class projectagricolecontroller implements Initializable {
         }
     }
 
-    /**
-     * Shows details of the currently selected project from toolbar button
-     */
     @FXML
     void showSelectedProjectDetails(ActionEvent event) {
         if (selectedProject == null) {
-            // No project selected - show selection dialog
             showProjectSelectionDialog();
         } else {
-            // Project is already selected - show its details
             showProjectDetails(selectedProject);
         }
     }
 
-    /**
-     * Shows a dialog to select a project when clicking Details without selection
-     */
     private void showProjectSelectionDialog() {
         if (allProjects == null || allProjects.isEmpty()) {
             showAlert(Alert.AlertType.WARNING, "Aucun projet",
@@ -1009,18 +888,15 @@ public class projectagricolecontroller implements Initializable {
             return;
         }
 
-        // Create selection dialog
         Dialog<projectagricole> dialog = new Dialog<>();
         dialog.setTitle("Sélectionner un Projet");
         dialog.setHeaderText("Choisissez un projet pour voir ses détails");
 
-        // Create list view with all projects
         ListView<projectagricole> listView = new ListView<>();
         listView.getItems().addAll(allProjects);
         listView.setPrefHeight(400);
         listView.setPrefWidth(500);
 
-        // Custom cell factory to display project names nicely
         listView.setCellFactory(param -> new ListCell<projectagricole>() {
             @Override
             protected void updateItem(projectagricole project, boolean empty) {
@@ -1033,11 +909,9 @@ public class projectagricolecontroller implements Initializable {
                     cell.setAlignment(Pos.CENTER_LEFT);
                     cell.setPadding(new Insets(10));
 
-                    // Icon based on status
                     Label icon = new Label(getProjectIcon(project.getStatut()));
                     icon.setStyle("-fx-font-size: 24px;");
 
-                    // Project info
                     VBox info = new VBox(5);
                     Label name = new Label(project.getNomproject());
                     name.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #133D03;");
@@ -1048,7 +922,6 @@ public class projectagricolecontroller implements Initializable {
 
                     info.getChildren().addAll(name, details);
 
-                    // Status badge
                     Label badge = new Label(capitalizeStatus(project.getStatut()));
                     badge.getStyleClass().add(getStatusBadgeClass(project.getStatut()));
                     badge.setStyle(badge.getStyle() + "-fx-font-size: 11px; -fx-padding: 4 12;");
@@ -1062,12 +935,10 @@ public class projectagricolecontroller implements Initializable {
             }
         });
 
-        // Set initial selection to first project
         if (!allProjects.isEmpty()) {
             listView.getSelectionModel().select(0);
         }
 
-        // Dialog content
         VBox content = new VBox(15);
         content.setPadding(new Insets(20));
 
@@ -1077,19 +948,16 @@ public class projectagricolecontroller implements Initializable {
         content.getChildren().addAll(instruction, listView);
         dialog.getDialogPane().setContent(content);
 
-        // Add buttons
         ButtonType okButton = new ButtonType("Voir Détails", ButtonBar.ButtonData.OK_DONE);
         ButtonType cancelButton = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
         dialog.getDialogPane().getButtonTypes().addAll(okButton, cancelButton);
 
-        // Enable OK button only when project is selected
         Button okBtn = (Button) dialog.getDialogPane().lookupButton(okButton);
         okBtn.setDisable(listView.getSelectionModel().getSelectedItem() == null);
         listView.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldVal, newVal) -> okBtn.setDisable(newVal == null)
         );
 
-        // Style OK button
         okBtn.setStyle(
                 "-fx-background-color: #076A39;" +
                         "-fx-text-fill: white;" +
@@ -1098,7 +966,6 @@ public class projectagricolecontroller implements Initializable {
                         "-fx-background-radius: 6;"
         );
 
-        // Handle double-click
         listView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2 && listView.getSelectionModel().getSelectedItem() != null) {
                 projectagricole selected = listView.getSelectionModel().getSelectedItem();
@@ -1107,7 +974,6 @@ public class projectagricolecontroller implements Initializable {
             }
         });
 
-        // Set result converter
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == okButton) {
                 return listView.getSelectionModel().getSelectedItem();
@@ -1115,10 +981,167 @@ public class projectagricolecontroller implements Initializable {
             return null;
         });
 
-        // Show dialog and handle result
         dialog.showAndWait().ifPresent(project -> {
             selectedProject = project;
             showProjectDetails(project);
         });
+    }
+
+    // ============================================================================
+    // NAVIGATION METHODS
+    // ============================================================================
+
+    /**
+     * Navigate to Ressources view (called from FXML)
+     */
+    @FXML
+    void goToRessources(ActionEvent event) {
+        try {
+            // Load the ressources FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ressourceproject.fxml"));
+            Parent root = loader.load();
+
+            // Get current stage
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            stage.getScene().setRoot(root);
+            stage.setTitle("Gestion des Ressources");
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur de Navigation",
+                    "Impossible de charger la page Ressources: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Open Add Project Form (called from FXML toolbar button)
+     */
+    @FXML
+    void openAddProjectForm(ActionEvent event) {
+        openAddDialog();
+    }
+
+    // ============================================================================
+    // EXPORT OPERATIONS (PDF, etc.)
+    // ============================================================================
+
+    /**
+     * Export to PDF (called from FXML)
+     */
+    @FXML
+    void exportToPDF(ActionEvent event) {
+        handleExportPDF(event);
+    }
+
+    @FXML
+    void handleExportPDF(ActionEvent event) {
+        if (allProjects == null || allProjects.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Aucune donnée",
+                    "Aucun projet à exporter!");
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Sauvegarder le rapport PDF");
+        fileChooser.setInitialFileName("rapport_projets_" +
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".pdf");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("PDF Files", "*.pdf")
+        );
+
+        File file = fileChooser.showSaveDialog(projectsContainer.getScene().getWindow());
+        if (file != null) {
+            try {
+                generatePDFReport(file.getAbsolutePath());
+                showAlert(Alert.AlertType.INFORMATION, "Succès",
+                        "Rapport PDF généré avec succès!\n" + file.getAbsolutePath());
+            } catch (Exception e) {
+                showAlert(Alert.AlertType.ERROR, "Erreur",
+                        "Erreur lors de la génération du PDF: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void generatePDFReport(String filePath) throws Exception {
+        PdfWriter writer = new PdfWriter(filePath);
+        PdfDocument pdf = new PdfDocument(writer);
+        Document document = new Document(pdf);
+
+        // Title
+        Paragraph title = new Paragraph("Rapport des Projets Agricoles")
+                .setFontSize(20)
+                .setBold()
+                .setTextAlignment(TextAlignment.CENTER);
+        document.add(title);
+
+        Paragraph date = new Paragraph("Généré le: " +
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")))
+                .setFontSize(10)
+                .setTextAlignment(TextAlignment.CENTER);
+        document.add(date);
+
+        document.add(new Paragraph("\n"));
+
+        // Statistics summary
+        document.add(new Paragraph("Statistiques Générales").setFontSize(14).setBold());
+        document.add(new Paragraph("Total de projets: " + allProjects.size()));
+        document.add(new Paragraph("Projets acceptés: " +
+                allProjects.stream().filter(p -> "accepte".equals(p.getStatut())).count()));
+        document.add(new Paragraph("Projets en cours: " +
+                allProjects.stream().filter(p -> "en cours".equals(p.getStatut())).count()));
+        document.add(new Paragraph("Projets refusés: " +
+                allProjects.stream().filter(p -> "refuse".equals(p.getStatut())).count()));
+
+        document.add(new Paragraph("\n"));
+
+        // Table
+        float[] columnWidths = {1, 3, 2, 2, 2, 2};
+        Table table = new Table(UnitValue.createPercentArray(columnWidths));
+        table.setWidth(UnitValue.createPercentValue(100));
+
+        // Header
+        Color headerColor = new DeviceRgb(7, 106, 57);
+        String[] headers = {"ID", "Nom", "Surface", "Budget", "Statut", "Date"};
+
+        for (String header : headers) {
+            table.addHeaderCell(new Cell()
+                    .add(new Paragraph(header))
+                    .setBackgroundColor(headerColor)
+                    .setFontColor(ColorConstants.WHITE)
+                    .setBold()
+                    .setTextAlignment(TextAlignment.CENTER));
+        }
+
+        // Data rows
+        for (projectagricole p : allProjects) {
+            table.addCell(new Cell().add(new Paragraph(String.valueOf(p.getIdproject()))));
+            table.addCell(new Cell().add(new Paragraph(p.getNomproject())));
+            table.addCell(new Cell().add(new Paragraph(String.format("%.2f Ha", p.getSurface()))));
+            table.addCell(new Cell().add(new Paragraph(String.format("%,.2f DT", p.getBudgetdemande()))));
+            table.addCell(new Cell().add(new Paragraph(capitalizeStatus(p.getStatut()))));
+            table.addCell(new Cell().add(new Paragraph(p.getDatesoumission().toString())));
+        }
+
+        document.add(table);
+        document.close();
+    }
+
+    // ============================================================================
+    // UTILITY METHODS
+    // ============================================================================
+
+    private void showAlert(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    public void cleanup() {
+        if (autoRefreshTimeline != null) {
+            autoRefreshTimeline.stop();
+        }
     }
 }

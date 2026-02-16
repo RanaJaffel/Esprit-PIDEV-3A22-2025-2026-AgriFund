@@ -7,7 +7,7 @@
 
 <VBox prefHeight="600.0" prefWidth="500.0" spacing="0" stylesheets="@style.css"
       xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="controles.ProjectAgricoleAddController">
+      fx:controller="controles.projectagricolecontroller">
 
 
     <HBox alignment="CENTER_LEFT" spacing="15" styleClass="page-header">
@@ -52,7 +52,7 @@
                         <Label text="Nom du Projet *" styleClass="label"/>
                         <Label text="Identifiant unique" styleClass="label-small"/>
                     </VBox>
-                    <TextField fx:id="tfNomProject" promptText="Ex: Culture de Blé Bio 2026"
+                    <TextField fx:id="tfNomProjectDialog" promptText="Ex: Culture de Blé Bio 2026"
                                GridPane.columnIndex="1" GridPane.rowIndex="0">
                         <tooltip>
                             <Tooltip text="Entrez un nom descriptif pour votre projet"/>
@@ -65,7 +65,7 @@
                         <Label text="Surface cultivable" styleClass="label-small"/>
                     </VBox>
                     <HBox spacing="10" alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                        <TextField fx:id="tfSurface" promptText="Ex: 25.5" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="tfSurfaceDialog" promptText="Ex: 25.5" HBox.hgrow="ALWAYS">
                             <tooltip>
                                 <Tooltip text="Surface en hectares"/>
                             </tooltip>
@@ -100,7 +100,7 @@
                         <Label text="Montant total requis" styleClass="label-small"/>
                     </VBox>
                     <HBox spacing="10" alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                        <TextField fx:id="tfBudget" promptText="Ex: 45000.00" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="tfBudgetDialog" promptText="Ex: 45000.00" HBox.hgrow="ALWAYS">
                             <tooltip>
                                 <Tooltip text="Budget en dinars tunisiens"/>
                             </tooltip>
@@ -148,7 +148,7 @@
                         <Label text="Date de Soumission *" styleClass="label"/>
                         <Label text="Date de dépôt" styleClass="label-small"/>
                     </VBox>
-                    <DatePicker fx:id="dpDateSoumission" maxWidth="Infinity"
+                    <DatePicker fx:id="dpDateSoumissionDialog" maxWidth="Infinity"
                                 promptText="Sélectionner la date..."
                                 GridPane.columnIndex="1" GridPane.rowIndex="1">
                         <tooltip>

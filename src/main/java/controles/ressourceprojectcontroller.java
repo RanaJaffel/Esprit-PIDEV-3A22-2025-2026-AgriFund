@@ -16,9 +16,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.stage.Modality;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -41,10 +44,12 @@ import com.itextpdf.layout.properties.UnitValue;
 import javafx.stage.FileChooser;
 import java.io.File;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class ressourceprojectcontroller implements Initializable {
 
+    // ============================================================================
+    // MAIN VIEW FIELDS (List View)
+    // ============================================================================
     @FXML private FlowPane ressourcesContainer;
     @FXML private TextField tfSearchRessource;
     @FXML private ComboBox<String> cbFilterTypeList;
@@ -55,32 +60,248 @@ public class ressourceprojectcontroller implements Initializable {
     @FXML private Label lblMaterials;
     @FXML private Label lblServices;
 
+    // ============================================================================
+    // ADD/MODIFY DIALOG FIELDS
+    // ============================================================================
+    @FXML private ComboBox<Integer> cbIdProjectDialog;
+    @FXML private TextField tfNomRessourceDialog;
+    @FXML private ComboBox<String> cbTypeRessourceDialog;
+    @FXML private TextField tfQuantiteDialog;
+    @FXML private TextField tfCoutDialog;
+    @FXML private TextField tfFournisseurDialog;
+    @FXML private ComboBox<String> cbStatutRessourceDialog;
+    @FXML private DatePicker dpDateAjoutDialog;
+    @FXML private Button btnSave;
+
+    // ============================================================================
+    // SHARED FIELDS
+    // ============================================================================
     private List<ressourceproject> allRessources = new ArrayList<>();
     private ressourceproject selectedRessource = null;
+    private ressourceproject currentRessource = null; // For modify operation
     private final ressourceprojectCRUD rService = new ressourceprojectCRUD();
     private final projectagricoleCRUD pService = new projectagricoleCRUD();
 
+    // Reference to main controller for dialog callbacks
+    private ressourceprojectcontroller mainController;
+
+    // Mode: "list", "add" or "modify"
+    private String dialogMode = "list";
+
+    // ============================================================================
+    // INITIALIZATION
+    // ============================================================================
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Initialize filter combo if it exists
+        // Initialize filter combo for main view
         if (cbFilterTypeList != null) {
             cbFilterTypeList.getItems().addAll("Tous les types", "equipement", "materiaux", "service");
             cbFilterTypeList.setValue("Tous les types");
         }
 
-        // Setup listeners
-        setupSearchListener();
-        setupFilterListener();
-
-        // Load data if container exists
+        // Setup for main list view
         if (ressourcesContainer != null) {
+            setupSearchListener();
+            setupFilterListener();
             refreshDataFromDB();
+        }
+
+        // Setup for add/modify dialog
+        if (cbTypeRessourceDialog != null && cbStatutRessourceDialog != null) {
+            setupDialog();
         }
     }
 
     /**
-     * Sets up real-time search functionality
+     * Setup for Add/Modify Dialog
      */
+    private void setupDialog() {
+        // Initialize combo boxes for dialog
+        if (cbTypeRessourceDialog != null) {
+            cbTypeRessourceDialog.getItems().addAll("equipement", "materiaux", "service");
+        }
+        if (cbStatutRessourceDialog != null) {
+            cbStatutRessourceDialog.getItems().addAll("prevu", "achete");
+            cbStatutRessourceDialog.setValue("prevu"); // Default value for add mode
+        }
+
+        // Load project IDs
+        try {
+            if (cbIdProjectDialog != null) {
+                for (projectagricole p : pService.afficher()) {
+                    cbIdProjectDialog.getItems().add(p.getIdproject());
+                }
+            }
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger les ID des projets.");
+        }
+    }
+
+    /**
+     * Setup for Modify Dialog
+     */
+    public void setRessource(ressourceproject ressource) {
+        this.currentRessource = ressource;
+        this.dialogMode = "modify";
+        populateFields();
+    }
+
+    public void setMainController(ressourceprojectcontroller mainController) {
+        this.mainController = mainController;
+    }
+
+    private void populateFields() {
+        if (currentRessource != null && cbIdProjectDialog != null) {
+            cbIdProjectDialog.setValue(currentRessource.getIdproject());
+            tfNomRessourceDialog.setText(currentRessource.getNomressource());
+            cbTypeRessourceDialog.setValue(currentRessource.getTyperessource());
+            tfQuantiteDialog.setText(String.valueOf(currentRessource.getQuantite()));
+            tfCoutDialog.setText(currentRessource.getCout().toString());
+            tfFournisseurDialog.setText(currentRessource.getFournisseur());
+            cbStatutRessourceDialog.setValue(currentRessource.getStatut());
+            dpDateAjoutDialog.setValue(currentRessource.getDateajout().toLocalDate());
+        }
+    }
+
+    // ============================================================================
+    // ADD/MODIFY DIALOG HANDLERS
+    // ============================================================================
+
+    /**
+     * Handle Save button for both Add and Modify modes
+     */
+    @FXML
+    void handleSave(ActionEvent event) {
+        if (!validateDialogInputs()) return;
+
+        try {
+            if ("modify".equals(dialogMode)) {
+                // MODIFY MODE
+                currentRessource.setIdproject(cbIdProjectDialog.getValue());
+                currentRessource.setNomressource(tfNomRessourceDialog.getText().trim());
+                currentRessource.setTyperessource(cbTypeRessourceDialog.getValue());
+                currentRessource.setQuantite(Integer.parseInt(tfQuantiteDialog.getText().trim()));
+                currentRessource.setCout(new BigDecimal(tfCoutDialog.getText().trim()));
+                currentRessource.setFournisseur(tfFournisseurDialog.getText().trim());
+                currentRessource.setStatut(cbStatutRessourceDialog.getValue());
+                currentRessource.setDateajout(Date.valueOf(dpDateAjoutDialog.getValue()));
+
+                rService.modifier(currentRessource);
+                showAlert(Alert.AlertType.INFORMATION, "Succès", "Ressource modifiée avec succès!");
+            } else {
+                // ADD MODE
+                ressourceproject r = new ressourceproject(
+                        tfNomRessourceDialog.getText().trim(),
+                        cbTypeRessourceDialog.getValue(),
+                        Integer.parseInt(tfQuantiteDialog.getText().trim()),
+                        new BigDecimal(tfCoutDialog.getText().trim()),
+                        tfFournisseurDialog.getText().trim(),
+                        cbStatutRessourceDialog.getValue(),
+                        Date.valueOf(dpDateAjoutDialog.getValue()),
+                        cbIdProjectDialog.getValue()
+                );
+
+                rService.ajouter(r);
+                showAlert(Alert.AlertType.INFORMATION, "Succès", "Ressource ajoutée avec succès!");
+            }
+
+            // Refresh main controller if available
+            if (mainController != null) {
+                mainController.refreshDataFromDB();
+            }
+
+            closeDialogWindow();
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur SQL",
+                    "Erreur lors de l'opération: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void handleCancel(ActionEvent event) {
+        closeDialogWindow();
+    }
+
+    private void closeDialogWindow() {
+        Stage stage = (Stage) btnSave.getScene().getWindow();
+        stage.close();
+    }
+
+    private boolean validateDialogInputs() {
+        // Check for empty fields
+        if (tfNomRessourceDialog.getText().trim().isEmpty() ||
+                tfQuantiteDialog.getText().trim().isEmpty() ||
+                tfCoutDialog.getText().trim().isEmpty() ||
+                tfFournisseurDialog.getText().trim().isEmpty() ||
+                cbIdProjectDialog.getValue() == null ||
+                cbTypeRessourceDialog.getValue() == null ||
+                cbStatutRessourceDialog.getValue() == null ||
+                dpDateAjoutDialog.getValue() == null) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Veuillez remplir tous les champs!");
+            return false;
+        }
+
+        // Validate resource name length
+        if (tfNomRessourceDialog.getText().trim().length() < 2) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de saisie",
+                    "Le nom de la ressource doit contenir au moins 2 caractères!");
+            return false;
+        }
+
+        // Validate supplier name length
+        if (tfFournisseurDialog.getText().trim().length() < 2) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de saisie",
+                    "Le nom du fournisseur doit contenir au moins 2 caractères!");
+            return false;
+        }
+
+        // Validate date based on mode
+        if ("add".equals(dialogMode)) {
+            // Add mode: only today's date allowed
+            if (!dpDateAjoutDialog.getValue().isEqual(java.time.LocalDate.now())) {
+                showAlert(Alert.AlertType.ERROR, "Erreur de date",
+                        "La date d'ajout doit être la date d'aujourd'hui uniquement!\n" +
+                                "Date actuelle: " + java.time.LocalDate.now());
+                return false;
+            }
+        } else if ("modify".equals(dialogMode)) {
+            // Modify mode: date cannot be in the past
+            if (dpDateAjoutDialog.getValue().isBefore(java.time.LocalDate.now())) {
+                showAlert(Alert.AlertType.ERROR, "Erreur de validation",
+                        "La date d'ajout ne peut pas être dans le passé!");
+                return false;
+            }
+        }
+
+        // Validate numeric fields
+        try {
+            int quantite = Integer.parseInt(tfQuantiteDialog.getText().trim());
+            if (quantite <= 0) {
+                showAlert(Alert.AlertType.ERROR, "Erreur de validation",
+                        "La quantité doit être un nombre positif!");
+                return false;
+            }
+
+            BigDecimal cout = new BigDecimal(tfCoutDialog.getText().trim());
+            if (cout.compareTo(BigDecimal.ZERO) <= 0) {
+                showAlert(Alert.AlertType.ERROR, "Erreur de validation",
+                        "Le coût doit être un nombre positif!");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de format",
+                    "La quantité et le coût doivent être des nombres valides!");
+            return false;
+        }
+
+        return true;
+    }
+
+    // ============================================================================
+    // MAIN VIEW - LIST OPERATIONS
+    // ============================================================================
+
     private void setupSearchListener() {
         if (tfSearchRessource != null) {
             tfSearchRessource.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -89,9 +310,6 @@ public class ressourceprojectcontroller implements Initializable {
         }
     }
 
-    /**
-     * Sets up filter dropdown functionality
-     */
     private void setupFilterListener() {
         if (cbFilterTypeList != null) {
             cbFilterTypeList.setOnAction(event -> {
@@ -100,9 +318,6 @@ public class ressourceprojectcontroller implements Initializable {
         }
     }
 
-    /**
-     * Load data from database and update display
-     */
     public void refreshDataFromDB() {
         try {
             allRessources = rService.afficher();
@@ -115,9 +330,6 @@ public class ressourceprojectcontroller implements Initializable {
         }
     }
 
-    /**
-     * Updates all statistics displayed in the dashboard
-     */
     private void updateStatistics() {
         try {
             int totalCount = allRessources.size();
@@ -131,7 +343,6 @@ public class ressourceprojectcontroller implements Initializable {
                     .filter(r -> "service".equals(r.getTyperessource()))
                     .count();
 
-            // Update stat labels if they exist
             if (lblTotalRessources != null) {
                 lblTotalRessources.setText(String.valueOf(totalCount));
             }
@@ -151,9 +362,6 @@ public class ressourceprojectcontroller implements Initializable {
         }
     }
 
-    /**
-     * Filter and display cards
-     */
     private void updateCardsDisplay() {
         if (ressourcesContainer == null) return;
 
@@ -164,14 +372,10 @@ public class ressourceprojectcontroller implements Initializable {
 
         List<ressourceproject> filteredList = allRessources.stream()
                 .filter(r -> {
-                    // Search filter
                     boolean matchesSearch = searchText.isEmpty()
                             || r.getNomressource().toLowerCase().contains(searchText);
-
-                    // Type filter
                     boolean matchesType = filterType.equals("Tous les types")
                             || r.getTyperessource().equals(filterType);
-
                     return matchesSearch && matchesType;
                 })
                 .collect(Collectors.toList());
@@ -181,9 +385,6 @@ public class ressourceprojectcontroller implements Initializable {
         }
     }
 
-    /**
-     * Create an enhanced visual card for a resource
-     */
     private VBox createEnhancedResourceCard(ressourceproject resource) {
         VBox card = new VBox(12);
         card.getStyleClass().add("project-card");
@@ -195,177 +396,86 @@ public class ressourceprojectcontroller implements Initializable {
         HBox header = new HBox(10);
         header.setAlignment(Pos.CENTER_LEFT);
 
-        Label icon = new Label(getResourceIcon(resource.getTyperessource()));
-        icon.setStyle("-fx-font-size: 24px;");
+        Label icon = new Label(getTypeIcon(resource.getTyperessource()));
+        icon.setStyle("-fx-font-size: 28px;");
 
+        VBox titleBox = new VBox(4);
         Label title = new Label(resource.getNomressource());
-        title.getStyleClass().add("card-title");
+        title.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2D6A4F;");
         title.setWrapText(true);
-        title.setMaxWidth(220);
 
-        header.getChildren().addAll(icon, title);
+        Label id = new Label("ID: " + resource.getIdressource());
+        id.setStyle("-fx-font-size: 10px; -fx-text-fill: #848A86;");
 
-        // Separator
-        Separator separator = new Separator();
-        separator.setPadding(new Insets(5, 0, 5, 0));
+        titleBox.getChildren().addAll(title, id);
+        header.getChildren().addAll(icon, titleBox);
 
-        // Resource Details
-        VBox details = new VBox(8);
-
-        // Project ID
-        HBox projectRow = createInfoRow("🔗", "Projet", "#" + resource.getIdproject());
-
-        // Type
-        HBox typeBox = createInfoRow("📦", "Type", capitalizeType(resource.getTyperessource()));
-
-        // Quantity
-        HBox quantityBox = createInfoRow("🔢", "Quantité", resource.getQuantite() + " unités");
-
-        // Cost
-        HBox costBox = createInfoRow("💰", "Coût",
-                String.format("%,.2f DT", resource.getCout()));
-
-        // Supplier
-        HBox supplierBox = createInfoRow("🏢", "Fournisseur", resource.getFournisseur());
-
-        details.getChildren().addAll(projectRow, typeBox, quantityBox, costBox, supplierBox);
+        // Type Badge
+        Label typeBadge = new Label(capitalizeType(resource.getTyperessource()));
+        typeBadge.getStyleClass().add(getTypeBadgeClass(resource.getTyperessource()));
 
         // Status Badge
-        HBox statusBox = new HBox(5);
-        statusBox.setAlignment(Pos.CENTER_LEFT);
-        Label statusLabel = new Label("Statut:");
-        statusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #6C757D; -fx-font-weight: 600;");
+        Label statusBadge = new Label(capitalizeStatus(resource.getStatut()));
+        statusBadge.getStyleClass().add(getStatusBadgeClass(resource.getStatut()));
 
-        Label badge = new Label(capitalizeStatus(resource.getStatut()));
-        badge.getStyleClass().add(getStatusBadgeClass(resource.getStatut()));
+        HBox badges = new HBox(8);
+        badges.getChildren().addAll(typeBadge, statusBadge);
 
-        statusBox.getChildren().addAll(statusLabel, badge);
+        // Details Grid
+        GridPane detailsGrid = new GridPane();
+        detailsGrid.setHgap(10);
+        detailsGrid.setVgap(8);
 
-        // Action Buttons - ENHANCED
-        HBox actions = new HBox(8);
+        addCardDetailRow(detailsGrid, 0, "📦 Quantité:", String.valueOf(resource.getQuantite()));
+        addCardDetailRow(detailsGrid, 1, "💰 Coût:", String.format("%.2f DT", resource.getCout()));
+        addCardDetailRow(detailsGrid, 2, "🏭 Fournisseur:", resource.getFournisseur());
+        addCardDetailRow(detailsGrid, 3, "🔗 Projet:", "#" + resource.getIdproject());
+
+        // Action buttons
+        HBox actions = new HBox(10);
         actions.setAlignment(Pos.CENTER_RIGHT);
-        actions.setPadding(new Insets(12, 0, 0, 0));
 
-        // Details Button
-        Button btnDetails = new Button("ℹ️ Détails");
-        btnDetails.getStyleClass().add("btn-info");
-        btnDetails.setStyle(
-                "-fx-min-width: 85; " +
-                        "-fx-min-height: 32; " +
-                        "-fx-font-size: 12px; " +
-                        "-fx-font-weight: 600; " +
-                        "-fx-cursor: hand; " +
-                        "-fx-background-radius: 6; " +
-                        "-fx-padding: 6 12;"
-        );
-        btnDetails.setOnAction(e -> showResourceDetails(resource));
-        btnDetails.setTooltip(new Tooltip("Voir tous les détails de la ressource"));
+        Button btnView = new Button("👁 Voir");
+        btnView.getStyleClass().add("btn-view");
+        btnView.setOnAction(e -> showResourceDetails(resource));
 
-        // Edit Button with enhanced styling
-        Button btnEdit = new Button("✎ Modifier");
-        btnEdit.getStyleClass().add("btn-secondary");
-        btnEdit.setStyle(
-                "-fx-min-width: 95; " +
-                        "-fx-min-height: 32; " +
-                        "-fx-font-size: 12px; " +
-                        "-fx-font-weight: 600; " +
-                        "-fx-cursor: hand; " +
-                        "-fx-background-radius: 6; " +
-                        "-fx-padding: 6 12;"
-        );
-        btnEdit.setOnAction(e -> {
-            selectedRessource = resource;
-            openModifyRessourceForm(null);
-        });
-        btnEdit.setTooltip(new Tooltip("Modifier les informations de la ressource"));
+        Button btnEdit = new Button("✏ Modifier");
+        btnEdit.getStyleClass().add("btn-edit");
+        btnEdit.setOnAction(e -> openModifyDialog(resource));
 
-        // Delete Button with enhanced styling
-        Button btnDelete = new Button("✖ Supprimer");
-        btnDelete.getStyleClass().add("btn-danger");
-        btnDelete.setStyle(
-                "-fx-min-width: 100; " +
-                        "-fx-min-height: 32; " +
-                        "-fx-font-size: 12px; " +
-                        "-fx-font-weight: 600; " +
-                        "-fx-cursor: hand; " +
-                        "-fx-background-radius: 6; " +
-                        "-fx-padding: 6 12;"
-        );
-        btnDelete.setOnAction(e -> {
-            selectedRessource = resource;
-            deleteRessource(null);
-        });
-        btnDelete.setTooltip(new Tooltip("Supprimer cette ressource définitivement"));
+        Button btnDelete = new Button("🗑 Supprimer");
+        btnDelete.getStyleClass().add("btn-delete");
+        btnDelete.setOnAction(e -> handleDelete(resource));
 
-        actions.getChildren().addAll(btnDetails, btnEdit, btnDelete);
+        actions.getChildren().addAll(btnView, btnEdit, btnDelete);
 
-        // Add all elements to card
-        card.getChildren().addAll(header, separator, details, statusBox, actions);
+        // Assemble card
+        card.getChildren().addAll(header, badges, new Separator(), detailsGrid, actions);
 
         return card;
     }
 
-    /**
-     * Creates an info row with icon, label, and value
-     */
-    private HBox createInfoRow(String emoji, String label, String value) {
-        HBox row = new HBox(8);
-        row.setAlignment(Pos.CENTER_LEFT);
+    private void addCardDetailRow(GridPane grid, int row, String label, String value) {
+        Label lblLabel = new Label(label);
+        lblLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #848A86;");
 
-        Label icon = new Label(emoji);
-        icon.setStyle("-fx-font-size: 16px;");
+        Label lblValue = new Label(value);
+        lblValue.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #2D6A4F;");
+        lblValue.setWrapText(true);
 
-        Label labelText = new Label(label + ":");
-        labelText.getStyleClass().add("card-info-label");
-
-        Label valueText = new Label(value);
-        valueText.getStyleClass().add("card-info-value");
-
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-
-        row.getChildren().addAll(icon, labelText, spacer, valueText);
-
-        return row;
+        grid.add(lblLabel, 0, row);
+        grid.add(lblValue, 1, row);
     }
 
-    /**
-     * Returns appropriate icon based on resource type
-     */
-    private String getResourceIcon(String type) {
+    private String getTypeIcon(String type) {
         switch (type.toLowerCase()) {
             case "equipement": return "🚜";
-            case "materiaux": return "⚙";
-            case "service": return "🔧";
+            case "materiaux": return "🧱";
+            case "service": return "⚙️";
             default: return "📦";
         }
     }
 
-    /**
-     * Returns CSS class for status badge
-     */
-    private String getStatusBadgeClass(String status) {
-        switch (status.toLowerCase()) {
-            case "achete": return "status-badge-achete";
-            case "prevu": return "status-badge-prevu";
-            default: return "status-badge-prevu";
-        }
-    }
-
-    /**
-     * Capitalizes status text for display
-     */
-    private String capitalizeStatus(String status) {
-        switch (status.toLowerCase()) {
-            case "achete": return "Acheté";
-            case "prevu": return "Prévu";
-            default: return status;
-        }
-    }
-
-    /**
-     * Capitalizes type text for display
-     */
     private String capitalizeType(String type) {
         switch (type.toLowerCase()) {
             case "equipement": return "Équipement";
@@ -375,440 +485,264 @@ public class ressourceprojectcontroller implements Initializable {
         }
     }
 
-    /**
-     * Open the Add Resource form
-     */
+    private String capitalizeStatus(String statut) {
+        switch (statut.toLowerCase()) {
+            case "prevu": return "Prévu";
+            case "achete": return "Acheté";
+            default: return statut;
+        }
+    }
+
+    private String getTypeBadgeClass(String type) {
+        switch (type.toLowerCase()) {
+            case "equipement": return "badge-equipment";
+            case "materiaux": return "badge-materials";
+            case "service": return "badge-service";
+            default: return "badge-default";
+        }
+    }
+
+    private String getStatusBadgeClass(String statut) {
+        switch (statut.toLowerCase()) {
+            case "achete": return "status-accepted";
+            case "prevu": return "status-progress";
+            default: return "status-progress";
+        }
+    }
+
+    // ============================================================================
+    // CRUD OPERATIONS FROM MAIN VIEW
+    // ============================================================================
+
     @FXML
-    public void openAddRessourceForm(ActionEvent event) {
+    void handleAdd(ActionEvent event) {
+        openAddDialog();
+    }
+
+    @FXML
+    void handleModify(ActionEvent event) {
+        if (selectedRessource == null) {
+            showAlert(Alert.AlertType.WARNING, "Aucune sélection",
+                    "Veuillez sélectionner une ressource à modifier!");
+            return;
+        }
+        openModifyDialog(selectedRessource);
+    }
+
+    @FXML
+    void handleDelete(ActionEvent event) {
+        if (selectedRessource == null) {
+            showAlert(Alert.AlertType.WARNING, "Aucune sélection",
+                    "Veuillez sélectionner une ressource à supprimer!");
+            return;
+        }
+        handleDelete(selectedRessource);
+    }
+
+    private void handleDelete(ressourceproject resource) {
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setTitle("Confirmation de suppression");
+        confirmAlert.setHeaderText("Supprimer la ressource: " + resource.getNomressource());
+        confirmAlert.setContentText("Êtes-vous sûr de vouloir supprimer cette ressource?\nCette action est irréversible.");
+
+        confirmAlert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                try {
+                    rService.supprimer(resource.getIdressource());
+                    showAlert(Alert.AlertType.INFORMATION, "Succès",
+                            "Ressource supprimée avec succès!");
+                    refreshDataFromDB();
+                    selectedRessource = null;
+                } catch (SQLException e) {
+                    showAlert(Alert.AlertType.ERROR, "Erreur SQL",
+                            "Erreur lors de la suppression: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    // ============================================================================
+    // DIALOG OPENERS
+    // ============================================================================
+
+    @FXML
+    void openAddResourceForm(ActionEvent event) {
+        openAddDialog();
+    }
+
+    private void openAddDialog() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ressourceagricoleadd.fxml"));
             Parent root = loader.load();
 
-            ressourceprojectaddcontroller addController = loader.getController();
-            addController.setMainController(this);
+            ressourceprojectcontroller controller = loader.getController();
+            controller.dialogMode = "add";
+            controller.setMainController(this);
 
             Stage stage = new Stage();
-            stage.setTitle("Ajouter une Nouvelle Ressource");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Nouvelle Ressource");
             stage.setScene(new Scene(root));
-            stage.setResizable(false);
             stage.showAndWait();
 
-            refreshDataFromDB();
         } catch (IOException e) {
+            e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Erreur",
                     "Impossible d'ouvrir le formulaire d'ajout: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
-    /**
-     * Open the Modify Resource form
-     */
-    @FXML
-    void openModifyRessourceForm(ActionEvent event) {
-        if (selectedRessource == null) {
-            showAlert(Alert.AlertType.WARNING, "Attention",
-                    "Veuillez sélectionner une ressource à modifier.");
-            return;
-        }
-
+    private void openModifyDialog(ressourceproject resource) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ressourceagricolemodify.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ressourceagricoleadd.fxml"));
             Parent root = loader.load();
 
-            ressourceprojectmodifycontroller modifyController = loader.getController();
-            modifyController.setRessource(selectedRessource);
-            modifyController.setMainController(this);
+            ressourceprojectcontroller controller = loader.getController();
+            controller.dialogMode = "modify";
+            controller.setRessource(resource);
+            controller.setMainController(this);
 
             Stage stage = new Stage();
-            stage.setTitle("Modifier la Ressource");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Modifier Ressource");
             stage.setScene(new Scene(root));
-            stage.setResizable(false);
-            stage.centerOnScreen();
             stage.showAndWait();
 
-            refreshDataFromDB();
-            selectedRessource = null;
         } catch (IOException e) {
+            e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Erreur",
                     "Impossible d'ouvrir le formulaire de modification: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
-    /**
-     * Delete a resource
-     */
-    @FXML
-    void deleteRessource(ActionEvent event) {
-        if (selectedRessource == null) {
-            showAlert(Alert.AlertType.WARNING, "Attention",
-                    "Veuillez sélectionner une ressource à supprimer.");
-            return;
-        }
+    // ============================================================================
+    // RESOURCE DETAILS DISPLAY
+    // ============================================================================
 
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Confirmation de suppression");
-        confirm.setHeaderText("Supprimer la ressource");
-        confirm.setContentText("Voulez-vous vraiment supprimer la ressource \"" +
-                selectedRessource.getNomressource() + "\" ?\n\nCette action est irréversible.");
-
-        confirm.showAndWait();
-        if (confirm.getResult() == ButtonType.OK) {
-            try {
-                rService.supprimer(selectedRessource.getIdressource());
-                showAlert(Alert.AlertType.INFORMATION, "Succès",
-                        "Ressource supprimée avec succès !");
-                selectedRessource = null;
-                refreshDataFromDB();
-            } catch (SQLException e) {
-                showAlert(Alert.AlertType.ERROR, "Erreur SQL",
-                        "Impossible de supprimer : " + e.getMessage());
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
-     * Navigate to Projects view
-     */
-    @FXML
-    void goToProjects(ActionEvent event) {
-        try {
-            Parent root = FXMLLoader.load(Objects.requireNonNull(
-                    getClass().getResource("/projectagricole.fxml")));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.getScene().setRoot(root);
-            stage.setTitle("Gestion des Projets Agricoles");
-        } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur",
-                    "Impossible de charger la vue des projets: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Shows detailed information about a resource in a dialog
-     */
     private void showResourceDetails(ressourceproject resource) {
         Dialog<Void> dialog = new Dialog<>();
         dialog.setTitle("Détails de la Ressource");
-        dialog.setResizable(true);
+        dialog.setHeaderText(null);
 
-        // Main content container
-        VBox content = new VBox(15);
-        content.setPadding(new Insets(20));
-        content.setStyle("-fx-background-color: #F8F9FA;");
-        content.setPrefWidth(500);
+        VBox content = new VBox(20);
+        content.setPadding(new Insets(25));
+        content.setStyle("-fx-background-color: white;");
 
-        // Header Section
+        // Header
         HBox headerBox = new HBox(15);
         headerBox.setAlignment(Pos.CENTER_LEFT);
-        headerBox.setStyle(
-                "-fx-background-color: linear-gradient(to right, #2D6A4F, #40916C);" +
-                        "-fx-padding: 20;" +
-                        "-fx-background-radius: 8;"
-        );
 
-        Label headerIcon = new Label(getResourceIcon(resource.getTyperessource()));
-        headerIcon.setStyle("-fx-font-size: 36px;");
+        Label iconLarge = new Label(getTypeIcon(resource.getTyperessource()));
+        iconLarge.setStyle("-fx-font-size: 48px;");
 
-        VBox headerText = new VBox(3);
-        Label resourceName = new Label(resource.getNomressource());
-        resourceName.setStyle(
-                "-fx-font-size: 20px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: white;"
-        );
+        VBox titleBox = new VBox(5);
+        Label titleLabel = new Label(resource.getNomressource());
+        titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2D6A4F;");
 
-        Label resourceId = new Label("ID: " + resource.getIdressource());
-        resourceId.setStyle("-fx-font-size: 13px; -fx-text-fill: rgba(255,255,255,0.85);");
+        Label idLabel = new Label("Ressource #" + resource.getIdressource());
+        idLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #848A86;");
 
-        headerText.getChildren().addAll(resourceName, resourceId);
-        headerBox.getChildren().addAll(headerIcon, headerText);
+        titleBox.getChildren().addAll(titleLabel, idLabel);
+        headerBox.getChildren().addAll(iconLarge, titleBox);
 
-        // Status Row with Badge
-        HBox statusRow = new HBox(10);
-        statusRow.setAlignment(Pos.CENTER_LEFT);
-        statusRow.setPadding(new Insets(15, 0, 10, 0));
+        // Badges row
+        HBox badgesRow = new HBox(10);
+        badgesRow.setAlignment(Pos.CENTER_LEFT);
 
-        Label statusTitle = new Label("Statut actuel:");
-        statusTitle.setStyle("-fx-font-size: 14px; -fx-font-weight: 600; -fx-text-fill: #6C757D;");
+        Label typeBadge = new Label(capitalizeType(resource.getTyperessource()));
+        typeBadge.getStyleClass().add(getTypeBadgeClass(resource.getTyperessource()));
 
         Label statusBadge = new Label(capitalizeStatus(resource.getStatut()));
         statusBadge.getStyleClass().add(getStatusBadgeClass(resource.getStatut()));
-        statusBadge.setStyle(statusBadge.getStyle() + "-fx-font-size: 13px; -fx-padding: 6 16;");
 
-        statusRow.getChildren().addAll(statusTitle, statusBadge);
+        badgesRow.getChildren().addAll(typeBadge, statusBadge);
 
-        // Details Grid
+        // Details grid
         GridPane detailsGrid = new GridPane();
-        detailsGrid.setHgap(15);
-        detailsGrid.setVgap(12);
+        detailsGrid.setHgap(20);
+        detailsGrid.setVgap(15);
         detailsGrid.setPadding(new Insets(10, 0, 10, 0));
-        detailsGrid.setStyle(
-                "-fx-background-color: white;" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-padding: 20;"
-        );
 
-        // Add detail rows
-        addDetailRow(detailsGrid, 0, "🔗 Projet associé", "#" + resource.getIdproject());
-        addDetailRow(detailsGrid, 1, "📦 Type de ressource", capitalizeType(resource.getTyperessource()));
-        addDetailRow(detailsGrid, 2, "🔢 Quantité", resource.getQuantite() + " unités");
-        addDetailRow(detailsGrid, 3, "💰 Coût unitaire", String.format("%,.2f DT", resource.getCout()));
-        addDetailRow(detailsGrid, 4, "💵 Coût total", String.format("%,.2f DT",
-                resource.getCout().multiply(new java.math.BigDecimal(resource.getQuantite()))));
-        addDetailRow(detailsGrid, 5, "🏢 Fournisseur", resource.getFournisseur());
+        addDetailRow(detailsGrid, 0, "📦 Quantité:", String.valueOf(resource.getQuantite()));
+        addDetailRow(detailsGrid, 1, "💰 Coût unitaire:", String.format("%.2f DT", resource.getCout()));
+        addDetailRow(detailsGrid, 2, "🏭 Fournisseur:", resource.getFournisseur());
+        addDetailRow(detailsGrid, 3, "🔗 Projet associé:", "Projet #" + resource.getIdproject());
+        addDetailRow(detailsGrid, 4, "📅 Date d'ajout:", resource.getDateajout().toString());
 
-        // Separator
         Separator sep = new Separator();
-        sep.setPadding(new Insets(5, 0, 5, 0));
 
-        // Status Explanation Box
-        VBox statusExplanation = new VBox(8);
-        statusExplanation.setStyle(
-                "-fx-background-color: #E8F5E9;" +
-                        "-fx-border-color: #81C784;" +
-                        "-fx-border-width: 2;" +
-                        "-fx-border-radius: 6;" +
-                        "-fx-background-radius: 6;" +
-                        "-fx-padding: 15;"
-        );
+        // Total cost calculation
+        BigDecimal totalCost = resource.getCout().multiply(new BigDecimal(resource.getQuantite()));
+        VBox costBox = new VBox(8);
+        Label costTitle = new Label("💵 Coût Total");
+        costTitle.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2D6A4F;");
 
-        Label noteTitle = new Label("ℹ️ Information");
-        noteTitle.setStyle(
-                "-fx-font-size: 14px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: #2D6A4F;"
-        );
+        Label costValue = new Label(String.format("%.2f DT", totalCost));
+        costValue.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #40916C;");
 
-        Label noteText = new Label(getStatusExplanation(resource.getStatut()));
-        noteText.setWrapText(true);
-        noteText.setStyle(
-                "-fx-font-size: 12px;" +
-                        "-fx-text-fill: #133D03;"
-        );
+        costBox.getChildren().addAll(costTitle, costValue);
 
-        statusExplanation.getChildren().addAll(noteTitle, noteText);
-
-        // Add all to content
-        content.getChildren().addAll(
-                headerBox,
-                statusRow,
-                detailsGrid,
-                sep,
-                statusExplanation
-        );
-
-        // Set content
+        content.getChildren().addAll(headerBox, badgesRow, detailsGrid, sep, costBox);
         dialog.getDialogPane().setContent(content);
 
-        // Add Close button
         ButtonType closeButton = new ButtonType("Fermer", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().add(closeButton);
 
-        // Style the button
         Button closeBtn = (Button) dialog.getDialogPane().lookupButton(closeButton);
         closeBtn.setStyle(
-                "-fx-background-color: #076A39;" +
+                "-fx-background-color: #2D6A4F;" +
                         "-fx-text-fill: white;" +
                         "-fx-font-weight: bold;" +
                         "-fx-padding: 10 30;" +
-                        "-fx-background-radius: 6;" +
-                        "-fx-cursor: hand;"
+                        "-fx-background-radius: 6;"
         );
 
-        // Show dialog
         dialog.showAndWait();
     }
 
-    /**
-     * Helper method to add detail rows to grid
-     */
     private void addDetailRow(GridPane grid, int row, String label, String value) {
         Label lblLabel = new Label(label);
-        lblLabel.setStyle(
-                "-fx-font-size: 13px;" +
-                        "-fx-font-weight: 600;" +
-                        "-fx-text-fill: #848A86;"
-        );
+        lblLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #848A86;");
 
         Label lblValue = new Label(value);
-        lblValue.setStyle(
-                "-fx-font-size: 14px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: #076A39;"
-        );
+        lblValue.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2D6A4F;");
 
         grid.add(lblLabel, 0, row);
         grid.add(lblValue, 1, row);
     }
 
-    /**
-     * Get status explanation text
-     */
-    private String getStatusExplanation(String statut) {
-        switch (statut.toLowerCase()) {
-            case "achete":
-                return "Cette ressource a été achetée et est disponible pour utilisation dans le projet.";
-            case "prevu":
-                return "Cette ressource est prévue pour achat. Elle n'a pas encore été acquise.";
-            default:
-                return "Statut de la ressource: " + capitalizeStatus(statut);
-        }
-    }
+    // ============================================================================
+    // NAVIGATION METHODS
+    // ============================================================================
 
-    /**
-     * Shows details of the currently selected resource from toolbar button
-     */
     @FXML
-    void showSelectedResourceDetails(ActionEvent event) {
-        if (selectedRessource == null) {
-            // No resource selected - show selection dialog
-            showResourceSelectionDialog();
-        } else {
-            // Resource is already selected - show its details
-            showResourceDetails(selectedRessource);
+    void goToProjects(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/projectagricole.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.getScene().setRoot(root);
+            stage.setTitle("Gestion des Projets Agricoles");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur de Navigation",
+                    "Impossible de charger la page Projets: " + e.getMessage());
         }
     }
 
-    /**
-     * Shows a dialog to select a resource when clicking Details without selection
-     */
-    private void showResourceSelectionDialog() {
-        if (allRessources == null || allRessources.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Aucune ressource",
-                    "Aucune ressource disponible. Veuillez d'abord créer une ressource.");
-            return;
-        }
-
-        // Create selection dialog
-        Dialog<ressourceproject> dialog = new Dialog<>();
-        dialog.setTitle("Sélectionner une Ressource");
-        dialog.setHeaderText("Choisissez une ressource pour voir ses détails");
-
-        // Create list view with all resources
-        ListView<ressourceproject> listView = new ListView<>();
-        listView.getItems().addAll(allRessources);
-        listView.setPrefHeight(400);
-        listView.setPrefWidth(550);
-
-        // Custom cell factory to display resource info nicely
-        listView.setCellFactory(param -> new ListCell<ressourceproject>() {
-            @Override
-            protected void updateItem(ressourceproject resource, boolean empty) {
-                super.updateItem(resource, empty);
-                if (empty || resource == null) {
-                    setText(null);
-                    setGraphic(null);
-                } else {
-                    HBox cell = new HBox(15);
-                    cell.setAlignment(Pos.CENTER_LEFT);
-                    cell.setPadding(new Insets(10));
-
-                    // Icon based on type
-                    Label icon = new Label(getResourceIcon(resource.getTyperessource()));
-                    icon.setStyle("-fx-font-size: 24px;");
-
-                    // Resource info
-                    VBox info = new VBox(5);
-                    Label name = new Label(resource.getNomressource());
-                    name.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #133D03;");
-
-                    Label details = new Label(String.format("ID: %d | Type: %s | Quantité: %d | Coût: %,.2f DT",
-                            resource.getIdressource(),
-                            capitalizeType(resource.getTyperessource()),
-                            resource.getQuantite(),
-                            resource.getCout()));
-                    details.setStyle("-fx-font-size: 11px; -fx-text-fill: #848A86;");
-
-                    info.getChildren().addAll(name, details);
-
-                    // Status badge
-                    Label badge = new Label(capitalizeStatus(resource.getStatut()));
-                    badge.getStyleClass().add(getStatusBadgeClass(resource.getStatut()));
-                    badge.setStyle(badge.getStyle() + "-fx-font-size: 11px; -fx-padding: 4 12;");
-
-                    Region spacer = new Region();
-                    HBox.setHgrow(spacer, Priority.ALWAYS);
-
-                    cell.getChildren().addAll(icon, info, spacer, badge);
-                    setGraphic(cell);
-                }
-            }
-        });
-
-        // Set initial selection to first resource
-        if (!allRessources.isEmpty()) {
-            listView.getSelectionModel().select(0);
-        }
-
-        // Dialog content
-        VBox content = new VBox(15);
-        content.setPadding(new Insets(20));
-
-        Label instruction = new Label("Double-cliquez sur une ressource ou sélectionnez et cliquez sur OK");
-        instruction.setStyle("-fx-font-size: 12px; -fx-text-fill: #6C757D;");
-
-        content.getChildren().addAll(instruction, listView);
-        dialog.getDialogPane().setContent(content);
-
-        // Add buttons
-        ButtonType okButton = new ButtonType("Voir Détails", ButtonBar.ButtonData.OK_DONE);
-        ButtonType cancelButton = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
-        dialog.getDialogPane().getButtonTypes().addAll(okButton, cancelButton);
-
-        // Enable OK button only when resource is selected
-        Button okBtn = (Button) dialog.getDialogPane().lookupButton(okButton);
-        okBtn.setDisable(listView.getSelectionModel().getSelectedItem() == null);
-        listView.getSelectionModel().selectedItemProperty().addListener(
-                (obs, oldVal, newVal) -> okBtn.setDisable(newVal == null)
-        );
-
-        // Style OK button
-        okBtn.setStyle(
-                "-fx-background-color: #076A39;" +
-                        "-fx-text-fill: white;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-padding: 8 20;" +
-                        "-fx-background-radius: 6;"
-        );
-
-        // Handle double-click
-        listView.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2 && listView.getSelectionModel().getSelectedItem() != null) {
-                ressourceproject selected = listView.getSelectionModel().getSelectedItem();
-                dialog.setResult(selected);
-                dialog.close();
-            }
-        });
-
-        // Set result converter
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == okButton) {
-                return listView.getSelectionModel().getSelectedItem();
-            }
-            return null;
-        });
-
-        // Show dialog and handle result
-        dialog.showAndWait().ifPresent(resource -> {
-            selectedRessource = resource;
-            showResourceDetails(resource);
-        });
+    @FXML
+    void handleRefresh(ActionEvent event) {
+        refreshDataFromDB();
+        showAlert(Alert.AlertType.INFORMATION, "Actualisation",
+                "Les données ont été actualisées!");
     }
 
-    /**
-     * Displays an alert dialog
-     */
-    private void showAlert(Alert.AlertType type, String title, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
+    // ============================================================================
+    // PDF EXPORT
+    // ============================================================================
 
     @FXML
     void exportToPDF(ActionEvent event) {
@@ -868,7 +802,6 @@ public class ressourceprojectcontroller implements Initializable {
                 long servicesCount = allRessources.stream()
                         .filter(r -> "service".equals(r.getTyperessource())).count();
 
-                // ✅✅✅ FINAL FIX - Convert BigDecimal to double
                 double totalCost = allRessources.stream()
                         .filter(r -> r.getCout() != null)
                         .mapToDouble(r -> r.getCout().doubleValue())
@@ -934,7 +867,6 @@ public class ressourceprojectcontroller implements Initializable {
                     table.addCell(createDataCell(capitalizeType(r.getTyperessource()), rowColor));
                     table.addCell(createDataCell(String.valueOf(r.getQuantite()), rowColor));
 
-                    // Also fix the cost display in the table
                     String costStr = r.getCout() != null ? String.format("%.2f", r.getCout()) : "0.00";
                     table.addCell(createDataCell(costStr, rowColor));
 
@@ -971,7 +903,6 @@ public class ressourceprojectcontroller implements Initializable {
         }
     }
 
-    // Helper methods remain the same
     private Cell createStatsCell(String label, String value, Color bgColor) {
         Paragraph content = new Paragraph()
                 .add(new Paragraph(label).setFontSize(9).setMarginBottom(2))
@@ -990,5 +921,17 @@ public class ressourceprojectcontroller implements Initializable {
                 .setBackgroundColor(bgColor)
                 .setTextAlignment(TextAlignment.CENTER)
                 .setPadding(5);
+    }
+
+    // ============================================================================
+    // UTILITY METHODS
+    // ============================================================================
+
+    private void showAlert(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

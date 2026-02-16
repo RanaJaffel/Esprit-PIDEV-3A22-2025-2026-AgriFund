@@ -71,7 +71,7 @@
 
 
             <Button text="+ Nouvelle Ressource" styleClass="btn-primary"
-                    onAction="#openAddRessourceForm"
+                    onAction="#openAddResourceForm"
                     prefHeight="40"
                     prefWidth="190"
                     style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
