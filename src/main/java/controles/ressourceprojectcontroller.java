@@ -470,8 +470,8 @@ public class ressourceprojectcontroller implements Initializable {
     private String getTypeIcon(String type) {
         switch (type.toLowerCase()) {
             case "equipement": return "🚜";
-            case "materiaux": return "🧱";
-            case "service": return "⚙️";
+            case "materiaux": return "⚙";
+            case "service": return "🔧";
             default: return "📦";
         }
     }
