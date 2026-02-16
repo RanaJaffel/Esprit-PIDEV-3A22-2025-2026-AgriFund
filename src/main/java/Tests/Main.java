@@ -16,7 +16,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // ✅ Test Singleton (connection)
+
         MyDatabase db = MyDatabase.getInstance();
 
         Mainjavafx.main(args);

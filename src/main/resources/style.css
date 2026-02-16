@@ -1,16 +1,3 @@
-/* Agricultural Project Management - New Green Palette */
-/* Color Palette:
-   Vert vif #089647
-   Vert foncé #076A39
-   Vert forêt #095032
-   Gris #848A86
-   Vert très foncé (olive foncé) #133D03
-   Jaune moutarde #E1B323
-   Vert clair / vert citron #B2D944
-   Olive #9A951F
-   Vert olive foncé #476C1A
-*/
-
 .root {
     -fx-background-color: #F5F7F6;
     -fx-font-family: "Segoe UI", "Arial", sans-serif;

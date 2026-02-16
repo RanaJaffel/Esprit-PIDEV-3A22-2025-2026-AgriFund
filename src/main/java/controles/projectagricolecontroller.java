@@ -80,33 +80,20 @@ public class projectagricolecontroller implements Initializable {
     private static final int REFRESH_INTERVAL_SECONDS = 5;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Initialize combo boxes if they exist
         if (cbStatut != null) {
             cbStatut.getItems().addAll("en cours", "accepte", "refuse");
         }
-
-        // Initialize filter combo
         if (cbFilterStatutList != null) {
             cbFilterStatutList.getItems().addAll("Tous les statuts", "en cours", "accepte", "refuse");
             cbFilterStatutList.setValue("Tous les statuts");
         }
-
-        // Setup listeners
         setupSearchListener();
         setupFilterListener();
-
-        // Load data if container exists
         if (projectsContainer != null) {
             refreshDataFromDB();
-
-            // ✅ NEW: Start auto-refresh to detect status changes
             startAutoRefresh();
         }
     }
-
-    /**
-     * Sets up real-time search functionality
-     */
     private void setupSearchListener() {
         if (tfSearchProject != null) {
             tfSearchProject.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -114,10 +101,6 @@ public class projectagricolecontroller implements Initializable {
             });
         }
     }
-
-    /**
-     * Sets up filter dropdown functionality
-     */
     private void setupFilterListener() {
         if (cbFilterStatutList != null) {
             cbFilterStatutList.setOnAction(event -> {
@@ -125,10 +108,6 @@ public class projectagricolecontroller implements Initializable {
             });
         }
     }
-
-    /**
-     * Refreshes data from database and updates all displays
-     */
     public void refreshDataFromDB() {
         try {
             allProjects = service.afficher();
@@ -140,10 +119,6 @@ public class projectagricolecontroller implements Initializable {
             e.printStackTrace();
         }
     }
-
-    /**
-     * Updates all statistics displayed in the dashboard
-     */
     private void updateStatistics() {
         try {
             int totalCount = allProjects.size();
@@ -156,8 +131,6 @@ public class projectagricolecontroller implements Initializable {
             long refusedCount = allProjects.stream()
                     .filter(p -> "refuse".equals(p.getStatut()))
                     .count();
-
-            // Update stat labels if they exist
             if (lblTotalProjects != null) {
                 lblTotalProjects.setText(String.valueOf(totalCount));
             }
@@ -171,7 +144,6 @@ public class projectagricolecontroller implements Initializable {
                 lblRefusedProjects.setText(String.valueOf(refusedCount));
             }
 
-            // Update footer stats
             updateFooterStats();
 
         } catch (Exception e) {
@@ -180,9 +152,6 @@ public class projectagricolecontroller implements Initializable {
         }
     }
 
-    /**
-     * Updates the footer statistics (total budget, surface, etc.)
-     */
     private void updateFooterStats() {
         if (allProjects.isEmpty()) return;
 
@@ -191,12 +160,10 @@ public class projectagricolecontroller implements Initializable {
                 .map(projectagricole::getBudgetdemande)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        // Calculate total surface
         double totalSurface = allProjects.stream()
                 .mapToDouble(projectagricole::getSurface)
                 .sum();
 
-        // Update footer labels if they exist
         if (lblTotalBudget != null) {
             lblTotalBudget.setText(String.format("%,.2f DT", totalBudget));
         }
@@ -210,9 +177,6 @@ public class projectagricolecontroller implements Initializable {
         }
     }
 
-    /**
-     * Filters and displays projects based on search text and status filter
-     */
     private void updateCardsDisplay() {
         if (projectsContainer == null) return;
 
@@ -224,11 +188,11 @@ public class projectagricolecontroller implements Initializable {
         // Filter projects using streams
         List<projectagricole> filteredList = allProjects.stream()
                 .filter(p -> {
-                    // Search filter
+
                     boolean matchesSearch = searchText.isEmpty()
                             || p.getNomproject().toLowerCase().contains(searchText);
 
-                    // Status filter
+
                     boolean matchesStatus = filterStatut.equals("Tous les statuts")
                             || p.getStatut().equals(filterStatut);
 
@@ -236,15 +200,12 @@ public class projectagricolecontroller implements Initializable {
                 })
                 .collect(Collectors.toList());
 
-        // Create and display cards
         for (projectagricole p : filteredList) {
             projectsContainer.getChildren().add(createEnhancedProjectCard(p));
         }
     }
 
-    /**
-     * Creates an enhanced project card with professional styling
-     */
+
     private VBox createEnhancedProjectCard(projectagricole project) {
         VBox card = new VBox(12);
         card.getStyleClass().add("project-card");
@@ -252,7 +213,7 @@ public class projectagricolecontroller implements Initializable {
         card.setMaxWidth(280);
         card.setPadding(new Insets(18));
 
-        // Card Header with Icon and Project Name
+
         HBox header = new HBox(10);
         header.setAlignment(Pos.CENTER_LEFT);
 
@@ -266,25 +227,25 @@ public class projectagricolecontroller implements Initializable {
 
         header.getChildren().addAll(icon, title);
 
-        // Separator
+
         Separator separator = new Separator();
         separator.setPadding(new Insets(5, 0, 5, 0));
 
-        // Project Details
+
         VBox details = new VBox(8);
 
-        // ID Row
+
         HBox idRow = createInfoRow("🔖", "ID Projet", "#" + project.getIdproject());
 
-        // Surface
+
         HBox surfaceBox = createInfoRow("🌍", "Surface",
                 String.format("%.2f Ha", project.getSurface()));
 
-        // Budget
+
         HBox budgetBox = createInfoRow("💰", "Budget",
                 String.format("%,.2f DT", project.getBudgetdemande()));
 
-        // Date
+
         HBox dateBox = createInfoRow("📅", "Date",
                 project.getDatesoumission().toLocalDate().format(
                         DateTimeFormatter.ofPattern("dd/MM/yyyy")
@@ -292,7 +253,7 @@ public class projectagricolecontroller implements Initializable {
 
         details.getChildren().addAll(idRow, surfaceBox, budgetBox, dateBox);
 
-        // Status Badge
+
         HBox statusBox = new HBox(5);
         statusBox.setAlignment(Pos.CENTER_LEFT);
         Label statusLabel = new Label("Statut:");
@@ -303,12 +264,12 @@ public class projectagricolecontroller implements Initializable {
 
         statusBox.getChildren().addAll(statusLabel, badge);
 
-        // Action Buttons - WITH DETAILS BUTTON
+
         HBox actions = new HBox(8);
         actions.setAlignment(Pos.CENTER_RIGHT);
         actions.setPadding(new Insets(12, 0, 0, 0));
 
-        // Details Button
+
         Button btnDetails = new Button("ℹ️ Détails");
         btnDetails.getStyleClass().add("btn-info");
         btnDetails.setStyle(
@@ -323,7 +284,7 @@ public class projectagricolecontroller implements Initializable {
         btnDetails.setOnAction(e -> showProjectDetails(project));
         btnDetails.setTooltip(new Tooltip("Voir tous les détails du projet"));
 
-        // Edit Button with enhanced styling
+
         Button btnEdit = new Button("✎ Modifier");
         btnEdit.getStyleClass().add("btn-secondary");
         btnEdit.setStyle(
@@ -341,7 +302,7 @@ public class projectagricolecontroller implements Initializable {
         });
         btnEdit.setTooltip(new Tooltip("Modifier les informations du projet"));
 
-        // Delete Button with enhanced styling
+
         Button btnDelete = new Button("✖ Supprimer");
         btnDelete.getStyleClass().add("btn-danger");
         btnDelete.setStyle(
@@ -361,15 +322,13 @@ public class projectagricolecontroller implements Initializable {
 
         actions.getChildren().addAll(btnDetails, btnEdit, btnDelete);
 
-        // Add all elements to card
+
         card.getChildren().addAll(header, separator, details, statusBox, actions);
 
         return card;
     }
 
-    /**
-     * Creates an info row with icon, label, and value
-     */
+
     private HBox createInfoRow(String emoji, String label, String value) {
         HBox row = new HBox(8);
         row.setAlignment(Pos.CENTER_LEFT);
@@ -391,9 +350,7 @@ public class projectagricolecontroller implements Initializable {
         return row;
     }
 
-    /**
-     * Returns appropriate icon based on project status
-     */
+
     private String getProjectIcon(String status) {
         switch (status.toLowerCase()) {
             case "accepte": return "✅";
@@ -403,9 +360,7 @@ public class projectagricolecontroller implements Initializable {
         }
     }
 
-    /**
-     * Returns CSS class for status badge
-     */
+
     private String getStatusBadgeClass(String status) {
         switch (status.toLowerCase()) {
             case "accepte": return "status-badge-accepte";
@@ -415,9 +370,7 @@ public class projectagricolecontroller implements Initializable {
         }
     }
 
-    /**
-     * Capitalizes status text for display
-     */
+
     private String capitalizeStatus(String status) {
         switch (status.toLowerCase()) {
             case "accepte": return "Accepté";
@@ -427,9 +380,7 @@ public class projectagricolecontroller implements Initializable {
         }
     }
 
-    /**
-     * Opens the Add Project form
-     */
+
     @FXML
     public void openAddProjectForm(ActionEvent event) {
         try {
@@ -446,7 +397,7 @@ public class projectagricolecontroller implements Initializable {
             stage.setResizable(false);
             stage.showAndWait();
 
-            // Refresh the list after closing the add window
+
             refreshDataFromDB();
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur",
@@ -455,9 +406,7 @@ public class projectagricolecontroller implements Initializable {
         }
     }
 
-    /**
-     * Opens the Modify Project form
-     */
+
     @FXML
     void openModifyProjectForm(ActionEvent event) {
         if (selectedProject == null) {
@@ -470,7 +419,7 @@ public class projectagricolecontroller implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/projectagricolemodify.fxml"));
             Parent root = loader.load();
 
-            // Get the controller and pass the selected project
+
             ProjectAgricoleModifyController modifyController = loader.getController();
             modifyController.setProject(selectedProject);
             modifyController.setMainController(this);
@@ -481,7 +430,7 @@ public class projectagricolecontroller implements Initializable {
             stage.setResizable(false);
             stage.showAndWait();
 
-            // Refresh the list after closing
+
             refreshDataFromDB();
             selectedProject = null;
         } catch (IOException e) {
@@ -491,9 +440,7 @@ public class projectagricolecontroller implements Initializable {
         }
     }
 
-    /**
-     * Deletes the selected project
-     */
+
     @FXML
     void deleteProject(ActionEvent event) {
         if (selectedProject == null) {
@@ -533,7 +480,7 @@ public class projectagricolecontroller implements Initializable {
             Parent root = FXMLLoader.load(Objects.requireNonNull(
                     getClass().getResource("/ressourceproject.fxml")));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root, 1000, 600));
+            stage.getScene().setRoot(root);
             stage.setTitle("Gestion des Ressources");
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur",

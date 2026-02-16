@@ -9,13 +9,13 @@
       xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="controles.ProjectAgricoleAddController">
 
-    <!-- Header Section with Gradient -->
+
     <HBox alignment="CENTER_LEFT" spacing="15" styleClass="page-header">
         <padding>
             <Insets top="20" right="25" bottom="20" left="25"/>
         </padding>
 
-        <!-- Icon Container -->
+
         <StackPane styleClass="icon-container" style="-fx-min-width: 50; -fx-min-height: 50;">
             <Label text="🌱" style="-fx-font-size: 28px;"/>
         </StackPane>
@@ -26,14 +26,14 @@
         </VBox>
     </HBox>
 
-    <!-- Form Content -->
+
     <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="scroll-pane" VBox.vgrow="ALWAYS">
         <VBox spacing="25" styleClass="form-container">
             <padding>
                 <Insets top="30" right="30" bottom="30" left="30"/>
             </padding>
 
-            <!-- Basic Information Section -->
+
             <VBox spacing="15">
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label text="📋" style="-fx-font-size: 20px;"/>
@@ -47,7 +47,7 @@
                         <ColumnConstraints percentWidth="65"/>
                     </columnConstraints>
 
-                    <!-- Project Name -->
+
                     <VBox spacing="5" GridPane.rowIndex="0" GridPane.columnIndex="0">
                         <Label text="Nom du Projet *" styleClass="label"/>
                         <Label text="Identifiant unique" styleClass="label-small"/>
@@ -59,7 +59,7 @@
                         </tooltip>
                     </TextField>
 
-                    <!-- Surface -->
+
                     <VBox spacing="5" GridPane.rowIndex="1" GridPane.columnIndex="0">
                         <Label text="Surface (Hectares) *" styleClass="label"/>
                         <Label text="Surface cultivable" styleClass="label-small"/>
@@ -80,7 +80,7 @@
                 </GridPane>
             </VBox>
 
-            <!-- Financial Information Section -->
+
             <VBox spacing="15">
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label text="💰" style="-fx-font-size: 20px;"/>
@@ -94,7 +94,7 @@
                         <ColumnConstraints percentWidth="65"/>
                     </columnConstraints>
 
-                    <!-- Budget -->
+
                     <VBox spacing="5" GridPane.rowIndex="0" GridPane.columnIndex="0">
                         <Label text="Budget Demandé *" styleClass="label"/>
                         <Label text="Montant total requis" styleClass="label-small"/>
@@ -128,13 +128,13 @@
                         <ColumnConstraints percentWidth="65"/>
                     </columnConstraints>
 
-                    <!-- Status -->
+
                     <VBox spacing="5" GridPane.rowIndex="0" GridPane.columnIndex="0">
                         <Label text="Statut du Projet *" styleClass="label"/>
                         <Label text="Géré automatiquement" styleClass="label-small"/>
                     </VBox>
                     <HBox alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                        <!-- Beautiful Status Badge -->
+
                         <Label fx:id="lblStatusBadge" text="📋 En cours"/>
                         <Label text="ℹ️" style="-fx-font-size: 14px; -fx-cursor: hand; -fx-text-fill: #848A86;">
                             <tooltip>
@@ -143,7 +143,7 @@
                         </Label>
                     </HBox>
 
-                    <!-- Date -->
+
                     <VBox spacing="5" GridPane.rowIndex="1" GridPane.columnIndex="0">
                         <Label text="Date de Soumission *" styleClass="label"/>
                         <Label text="Date de dépôt" styleClass="label-small"/>
@@ -165,7 +165,7 @@
 
 
 
-            <!-- Action Buttons -->
+
             <HBox spacing="15" alignment="CENTER_RIGHT">
                 <padding>
                     <Insets top="10"/>

@@ -8,13 +8,13 @@
       xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="controles.ressourceprojectaddcontroller">
 
-    <!-- Header Section with Gradient -->
+
     <HBox alignment="CENTER_LEFT" spacing="15" styleClass="page-header">
         <padding>
             <Insets top="20" right="25" bottom="20" left="25"/>
         </padding>
 
-        <!-- Icon Container -->
+
         <StackPane styleClass="icon-container" style="-fx-min-width: 50; -fx-min-height: 50;">
             <Label text="📦" style="-fx-font-size: 28px;"/>
         </StackPane>
@@ -25,14 +25,14 @@
         </VBox>
     </HBox>
 
-    <!-- Form Content -->
+
     <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="scroll-pane" VBox.vgrow="ALWAYS">
         <VBox spacing="25" styleClass="form-container">
             <padding>
                 <Insets top="30" right="30" bottom="30" left="30"/>
             </padding>
 
-            <!-- Project Link Section -->
+
             <VBox spacing="15">
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label text="🔗" style="-fx-font-size: 20px;"/>
@@ -46,7 +46,7 @@
                         <ColumnConstraints percentWidth="65"/>
                     </columnConstraints>
 
-                    <!-- Project Selection -->
+
                     <VBox spacing="5" GridPane.rowIndex="0" GridPane.columnIndex="0">
                         <Label text="Projet Associé *" styleClass="label"/>
                         <Label text="Sélectionner le projet" styleClass="label-small"/>
@@ -64,7 +64,7 @@
                 </GridPane>
             </VBox>
 
-            <!-- Resource Information Section -->
+
             <VBox spacing="15">
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label text="📋" style="-fx-font-size: 20px;"/>
@@ -78,7 +78,7 @@
                         <ColumnConstraints percentWidth="65"/>
                     </columnConstraints>
 
-                    <!-- Resource Name -->
+
                     <VBox spacing="5" GridPane.rowIndex="0" GridPane.columnIndex="0">
                         <Label text="Nom de la Ressource *" styleClass="label"/>
                         <Label text="Désignation exacte" styleClass="label-small"/>
@@ -90,7 +90,7 @@
                         </tooltip>
                     </TextField>
 
-                    <!-- Resource Type -->
+
                     <VBox spacing="5" GridPane.rowIndex="1" GridPane.columnIndex="0">
                         <Label text="Type de Ressource *" styleClass="label"/>
                         <Label text="Catégorie" styleClass="label-small"/>
@@ -102,7 +102,7 @@
                         </tooltip>
                     </ComboBox>
 
-                    <!-- Quantity -->
+
                     <VBox spacing="5" GridPane.rowIndex="2" GridPane.columnIndex="0">
                         <Label text="Quantité *" styleClass="label"/>
                         <Label text="Nombre d'unités" styleClass="label-small"/>
@@ -124,7 +124,7 @@
                 </GridPane>
             </VBox>
 
-            <!-- Financial and Supplier Section -->
+
             <VBox spacing="15">
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label text="💰" style="-fx-font-size: 20px;"/>
@@ -138,7 +138,7 @@
                         <ColumnConstraints percentWidth="65"/>
                     </columnConstraints>
 
-                    <!-- Cost -->
+
                     <VBox spacing="5" GridPane.rowIndex="0" GridPane.columnIndex="0">
                         <Label text="Coût Total *" styleClass="label"/>
                         <Label text="Prix global" styleClass="label-small"/>
@@ -152,7 +152,7 @@
                         <Label text="DT" style="-fx-font-weight: bold; -fx-text-fill: #2D6A4F;"/>
                     </HBox>
 
-                    <!-- Supplier -->
+
                     <VBox spacing="5" GridPane.rowIndex="1" GridPane.columnIndex="0">
                         <Label text="Fournisseur *" styleClass="label"/>
                         <Label text="Nom du fournisseur" styleClass="label-small"/>
@@ -171,7 +171,7 @@
                 </GridPane>
             </VBox>
 
-            <!-- Status and Timeline Section -->
+
             <VBox spacing="15">
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label text="📊" style="-fx-font-size: 20px;"/>
@@ -185,7 +185,7 @@
                         <ColumnConstraints percentWidth="65"/>
                     </columnConstraints>
 
-                    <!-- Status -->
+
                     <VBox spacing="5" GridPane.rowIndex="0" GridPane.columnIndex="0">
                         <Label text="Statut de la Ressource *" styleClass="label"/>
                         <Label text="État d'acquisition" styleClass="label-small"/>
@@ -197,7 +197,7 @@
                         </tooltip>
                     </ComboBox>
 
-                    <!-- Date -->
+
                     <VBox spacing="5" GridPane.rowIndex="1" GridPane.columnIndex="0">
                         <Label text="Date d'Ajout *" styleClass="label"/>
                         <Label text="Date d'enregistrement" styleClass="label-small"/>
@@ -218,7 +218,7 @@
             </VBox>
 
 
-            <!-- Action Buttons -->
+
             <HBox spacing="15" alignment="CENTER_RIGHT">
                 <padding>
                     <Insets top="10"/>

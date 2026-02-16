@@ -22,7 +22,7 @@ public class ProjectAgricoleModifyController implements Initializable {
     @FXML private DatePicker dpDateSoumission;
     @FXML private Button btnSave;
 
-    // ✅ NEW: Beautiful dynamic status badge (replaces ComboBox)
+    // âœ… NEW: Beautiful dynamic status badge (replaces ComboBox)
     @FXML private Label lblStatusBadge;
 
     private projectagricole currentProject;
@@ -50,7 +50,7 @@ public class ProjectAgricoleModifyController implements Initializable {
             tfBudget.setText(currentProject.getBudgetdemande().toString());
             dpDateSoumission.setValue(currentProject.getDatesoumission().toLocalDate());
 
-            // ✅ Display current status as beautiful dynamic badge
+            // âœ… Display current status as beautiful dynamic badge
             updateStatusBadge(currentProject.getStatut());
         }
     }
@@ -69,25 +69,25 @@ public class ProjectAgricoleModifyController implements Initializable {
 
         switch (statut.toLowerCase()) {
             case "accepte":
-                icon = "✅";
-                displayText = icon + " Accepté";
+                icon = "âœ…";
+                displayText = icon + " AcceptÃ©";
                 backgroundColor = "linear-gradient(to right, #089647, #076A39)";
-                tooltipText = "Projet accepté par la décision financière.\nStatut géré automatiquement.";
+                tooltipText = "Projet acceptÃ© par la dÃ©cision financiÃ¨re.\nStatut gÃ©rÃ© automatiquement.";
                 break;
 
             case "refuse":
-                icon = "❌";
-                displayText = icon + " Refusé";
+                icon = "âŒ";
+                displayText = icon + " RefusÃ©";
                 backgroundColor = "linear-gradient(to right, #D32F2F, #B71C1C)";
-                tooltipText = "Projet refusé par la décision financière.\nStatut géré automatiquement.";
+                tooltipText = "Projet refusÃ© par la dÃ©cision financiÃ¨re.\nStatut gÃ©rÃ© automatiquement.";
                 break;
 
             case "en cours":
             default:
-                icon = "📋";
+                icon = "ðŸ“‹";
                 displayText = icon + " En cours";
                 backgroundColor = "linear-gradient(to right, #E1B323, #9A951F)";
-                tooltipText = "Projet en attente de décision financière.\nStatut géré automatiquement.";
+                tooltipText = "Projet en attente de dÃ©cision financiÃ¨re.\nStatut gÃ©rÃ© automatiquement.";
                 break;
         }
 
@@ -113,20 +113,20 @@ public class ProjectAgricoleModifyController implements Initializable {
         if (!validateInputs()) return;
 
         try {
-            // ✅ Update only the fields YOU are responsible for
+            // âœ… Update only the fields YOU are responsible for
             currentProject.setNomproject(tfNomProject.getText().trim());
             currentProject.setSurface(Float.parseFloat(tfSurface.getText().trim()));
             currentProject.setBudgetdemande(new BigDecimal(tfBudget.getText().trim()));
             currentProject.setDatesoumission(Date.valueOf(dpDateSoumission.getValue()));
 
-            // ✅ IMPORTANT: Do NOT update status - keep the current one
+            // âœ… IMPORTANT: Do NOT update status - keep the current one
             // Status is managed by your friend via decisionfinanciere triggers
             // currentProject.setStatut() is NOT called here
 
             service.modifier(currentProject);
-            showAlert(Alert.AlertType.INFORMATION, "Succès",
-                    "Projet modifié avec succès!\n\n" +
-                            "Note: Le statut reste inchangé (" +
+            showAlert(Alert.AlertType.INFORMATION, "SuccÃ¨s",
+                    "Projet modifiÃ© avec succÃ¨s!\n\n" +
+                            "Note: Le statut reste inchangÃ© (" +
                             getStatusDisplayName(currentProject.getStatut()) + ")");
             closeWindow();
         } catch (SQLException e) {
@@ -141,8 +141,8 @@ public class ProjectAgricoleModifyController implements Initializable {
      */
     private String getStatusDisplayName(String statut) {
         switch (statut.toLowerCase()) {
-            case "accepte": return "Accepté";
-            case "refuse": return "Refusé";
+            case "accepte": return "AcceptÃ©";
+            case "refuse": return "RefusÃ©";
             case "en cours": return "En cours";
             default: return statut;
         }
@@ -172,7 +172,15 @@ public class ProjectAgricoleModifyController implements Initializable {
         // Validate project name length
         if (tfNomProject.getText().trim().length() < 3) {
             showAlert(Alert.AlertType.ERROR, "Erreur de saisie",
-                    "Le nom du projet doit contenir au moins 3 caractères!");
+                    "Le nom du projet doit contenir au moins 3 caractÃ¨res!");
+            return false;
+        }
+
+        // âœ… NEW: Validate date - only current date or past dates allowed (no future dates)
+        if (dpDateSoumission.getValue().isAfter(java.time.LocalDate.now())) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de date",
+                    "La date de soumission ne peut pas Ãªtre dans le futur!\n" +
+                            "Veuillez sÃ©lectionner la date d'aujourd'hui ou une date passÃ©e.");
             return false;
         }
 
@@ -181,25 +189,24 @@ public class ProjectAgricoleModifyController implements Initializable {
             float surface = Float.parseFloat(tfSurface.getText().trim());
             if (surface <= 0) {
                 showAlert(Alert.AlertType.ERROR, "Erreur de validation",
-                        "La surface doit être un nombre positif!");
+                        "La surface doit Ãªtre un nombre positif!");
                 return false;
             }
 
             BigDecimal budget = new BigDecimal(tfBudget.getText().trim());
             if (budget.compareTo(BigDecimal.ZERO) <= 0) {
                 showAlert(Alert.AlertType.ERROR, "Erreur de validation",
-                        "Le budget doit être un nombre positif!");
+                        "Le budget doit Ãªtre un nombre positif!");
                 return false;
             }
         } catch (NumberFormatException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur de format",
-                    "Surface et Budget doivent être des nombres valides!");
+                    "Surface et Budget doivent Ãªtre des nombres valides!");
             return false;
         }
 
         return true;
     }
-
     private void showAlert(Alert.AlertType type, String title, String content) {
         Alert alert = new Alert(type);
         alert.setTitle(title);

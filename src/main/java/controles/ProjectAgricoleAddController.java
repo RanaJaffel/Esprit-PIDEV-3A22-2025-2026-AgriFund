@@ -22,7 +22,7 @@ public class ProjectAgricoleAddController implements Initializable {
     @FXML private DatePicker dpDateSoumission;
     @FXML private Button btnSave;
 
-    // ✅ NEW: Beautiful status badge (replaces ComboBox)
+    // âœ… NEW: Beautiful status badge (replaces ComboBox)
     @FXML private Label lblStatusBadge;
 
     private final projectagricoleCRUD service = new projectagricoleCRUD();
@@ -30,9 +30,9 @@ public class ProjectAgricoleAddController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // ✅ Setup beautiful status badge with mustard yellow gradient
+        // âœ… Setup beautiful status badge with mustard yellow gradient
         if (lblStatusBadge != null) {
-            lblStatusBadge.setText("📋 En cours");
+            lblStatusBadge.setText("ðŸ“‹ En cours");
             lblStatusBadge.setStyle(
                     "-fx-background-color: linear-gradient(to right, #E1B323, #9A951F);" +
                             "-fx-text-fill: white;" +
@@ -48,7 +48,7 @@ public class ProjectAgricoleAddController implements Initializable {
             // Add tooltip
             Tooltip tooltip = new Tooltip(
                     "Le statut initial est toujours 'En cours'.\n" +
-                            "Il sera modifié automatiquement par les décisions financières."
+                            "Il sera modifiÃ© automatiquement par les dÃ©cisions financiÃ¨res."
             );
             lblStatusBadge.setTooltip(tooltip);
         }
@@ -63,19 +63,19 @@ public class ProjectAgricoleAddController implements Initializable {
         if (!validateInputs()) return;
 
         try {
-            // ✅ Always create project with 'en cours' status
+            // âœ… Always create project with 'en cours' status
             projectagricole p = new projectagricole(
                     tfNomProject.getText().trim(),
                     Float.parseFloat(tfSurface.getText().trim()),
                     new BigDecimal(tfBudget.getText().trim()),
-                    "en cours", // ✅ FIXED: Always 'en cours'
+                    "en cours", // âœ… FIXED: Always 'en cours'
                     Date.valueOf(dpDateSoumission.getValue())
             );
 
             service.ajouter(p);
-            showAlert(Alert.AlertType.INFORMATION, "Succès",
-                    "Projet ajouté avec succès!\n\n" +
-                            "Statut: En cours (en attente de décision financière)");
+            showAlert(Alert.AlertType.INFORMATION, "SuccÃ¨s",
+                    "Projet ajoutÃ© avec succÃ¨s!\n\n" +
+                            "Statut: En cours (en attente de dÃ©cision financiÃ¨re)");
             closeWindow();
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur SQL",
@@ -108,7 +108,15 @@ public class ProjectAgricoleAddController implements Initializable {
         // Validate project name length
         if (tfNomProject.getText().trim().length() < 3) {
             showAlert(Alert.AlertType.ERROR, "Erreur de saisie",
-                    "Le nom du projet doit contenir au moins 3 caractères!");
+                    "Le nom du projet doit contenir au moins 3 caractÃ¨res!");
+            return false;
+        }
+
+        // âœ… NEW: Validate date - only current date allowed
+        if (!dpDateSoumission.getValue().isEqual(java.time.LocalDate.now())) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de date",
+                    "La date de soumission doit Ãªtre la date d'aujourd'hui uniquement!\n" +
+                            "Date actuelle: " + java.time.LocalDate.now());
             return false;
         }
 
@@ -117,25 +125,24 @@ public class ProjectAgricoleAddController implements Initializable {
             float surface = Float.parseFloat(tfSurface.getText().trim());
             if (surface <= 0) {
                 showAlert(Alert.AlertType.ERROR, "Erreur de validation",
-                        "La surface doit être un nombre positif!");
+                        "La surface doit Ãªtre un nombre positif!");
                 return false;
             }
 
             BigDecimal budget = new BigDecimal(tfBudget.getText().trim());
             if (budget.compareTo(BigDecimal.ZERO) <= 0) {
                 showAlert(Alert.AlertType.ERROR, "Erreur de validation",
-                        "Le budget doit être un nombre positif!");
+                        "Le budget doit Ãªtre un nombre positif!");
                 return false;
             }
         } catch (NumberFormatException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur de format",
-                    "Surface et Budget doivent être des nombres valides!");
+                    "Surface et Budget doivent Ãªtre des nombres valides!");
             return false;
         }
 
         return true;
     }
-
     private void showAlert(Alert.AlertType type, String title, String content) {
         Alert alert = new Alert(type);
         alert.setTitle(title);

@@ -6,7 +6,7 @@ import java.sql.Date;
 public class ressourceproject {
     private int idressource;
     private String nomressource;
-    private String typeressource; // 'equipement','materiaux','service'
+    private String typeressource;
     private int quantite;
     private BigDecimal cout;
     private String fournisseur;

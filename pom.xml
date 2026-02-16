@@ -27,7 +27,7 @@
             <artifactId>javafx-controls</artifactId>
             <version>20.0.2</version>
         </dependency>
-        <!-- AJOUT DE JAVAFX-FXML OBLIGATOIRE -->
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>

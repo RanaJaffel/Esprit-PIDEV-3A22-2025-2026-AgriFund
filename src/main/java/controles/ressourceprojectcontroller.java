@@ -246,6 +246,21 @@ public class ressourceprojectcontroller implements Initializable {
         actions.setAlignment(Pos.CENTER_RIGHT);
         actions.setPadding(new Insets(12, 0, 0, 0));
 
+        // Details Button
+        Button btnDetails = new Button("ℹ️ Détails");
+        btnDetails.getStyleClass().add("btn-info");
+        btnDetails.setStyle(
+                "-fx-min-width: 85; " +
+                        "-fx-min-height: 32; " +
+                        "-fx-font-size: 12px; " +
+                        "-fx-font-weight: 600; " +
+                        "-fx-cursor: hand; " +
+                        "-fx-background-radius: 6; " +
+                        "-fx-padding: 6 12;"
+        );
+        btnDetails.setOnAction(e -> showResourceDetails(resource));
+        btnDetails.setTooltip(new Tooltip("Voir tous les détails de la ressource"));
+
         // Edit Button with enhanced styling
         Button btnEdit = new Button("✎ Modifier");
         btnEdit.getStyleClass().add("btn-secondary");
@@ -282,7 +297,7 @@ public class ressourceprojectcontroller implements Initializable {
         });
         btnDelete.setTooltip(new Tooltip("Supprimer cette ressource définitivement"));
 
-        actions.getChildren().addAll(btnEdit, btnDelete);
+        actions.getChildren().addAll(btnDetails, btnEdit, btnDelete);
 
         // Add all elements to card
         card.getChildren().addAll(header, separator, details, statusBox, actions);
@@ -409,6 +424,7 @@ public class ressourceprojectcontroller implements Initializable {
             stage.setTitle("Modifier la Ressource");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
+            stage.centerOnScreen();
             stage.showAndWait();
 
             refreshDataFromDB();
@@ -462,13 +478,325 @@ public class ressourceprojectcontroller implements Initializable {
             Parent root = FXMLLoader.load(Objects.requireNonNull(
                     getClass().getResource("/projectagricole.fxml")));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root, 1000, 600));
+            stage.getScene().setRoot(root);
             stage.setTitle("Gestion des Projets Agricoles");
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur",
                     "Impossible de charger la vue des projets: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Shows detailed information about a resource in a dialog
+     */
+    private void showResourceDetails(ressourceproject resource) {
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Détails de la Ressource");
+        dialog.setResizable(true);
+
+        // Main content container
+        VBox content = new VBox(15);
+        content.setPadding(new Insets(20));
+        content.setStyle("-fx-background-color: #F8F9FA;");
+        content.setPrefWidth(500);
+
+        // Header Section
+        HBox headerBox = new HBox(15);
+        headerBox.setAlignment(Pos.CENTER_LEFT);
+        headerBox.setStyle(
+                "-fx-background-color: linear-gradient(to right, #2D6A4F, #40916C);" +
+                        "-fx-padding: 20;" +
+                        "-fx-background-radius: 8;"
+        );
+
+        Label headerIcon = new Label(getResourceIcon(resource.getTyperessource()));
+        headerIcon.setStyle("-fx-font-size: 36px;");
+
+        VBox headerText = new VBox(3);
+        Label resourceName = new Label(resource.getNomressource());
+        resourceName.setStyle(
+                "-fx-font-size: 20px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: white;"
+        );
+
+        Label resourceId = new Label("ID: " + resource.getIdressource());
+        resourceId.setStyle("-fx-font-size: 13px; -fx-text-fill: rgba(255,255,255,0.85);");
+
+        headerText.getChildren().addAll(resourceName, resourceId);
+        headerBox.getChildren().addAll(headerIcon, headerText);
+
+        // Status Row with Badge
+        HBox statusRow = new HBox(10);
+        statusRow.setAlignment(Pos.CENTER_LEFT);
+        statusRow.setPadding(new Insets(15, 0, 10, 0));
+
+        Label statusTitle = new Label("Statut actuel:");
+        statusTitle.setStyle("-fx-font-size: 14px; -fx-font-weight: 600; -fx-text-fill: #6C757D;");
+
+        Label statusBadge = new Label(capitalizeStatus(resource.getStatut()));
+        statusBadge.getStyleClass().add(getStatusBadgeClass(resource.getStatut()));
+        statusBadge.setStyle(statusBadge.getStyle() + "-fx-font-size: 13px; -fx-padding: 6 16;");
+
+        statusRow.getChildren().addAll(statusTitle, statusBadge);
+
+        // Details Grid
+        GridPane detailsGrid = new GridPane();
+        detailsGrid.setHgap(15);
+        detailsGrid.setVgap(12);
+        detailsGrid.setPadding(new Insets(10, 0, 10, 0));
+        detailsGrid.setStyle(
+                "-fx-background-color: white;" +
+                        "-fx-background-radius: 8;" +
+                        "-fx-padding: 20;"
+        );
+
+        // Add detail rows
+        addDetailRow(detailsGrid, 0, "🔗 Projet associé", "#" + resource.getIdproject());
+        addDetailRow(detailsGrid, 1, "📦 Type de ressource", capitalizeType(resource.getTyperessource()));
+        addDetailRow(detailsGrid, 2, "🔢 Quantité", resource.getQuantite() + " unités");
+        addDetailRow(detailsGrid, 3, "💰 Coût unitaire", String.format("%,.2f DT", resource.getCout()));
+        addDetailRow(detailsGrid, 4, "💵 Coût total", String.format("%,.2f DT",
+                resource.getCout().multiply(new java.math.BigDecimal(resource.getQuantite()))));
+        addDetailRow(detailsGrid, 5, "🏢 Fournisseur", resource.getFournisseur());
+
+        // Separator
+        Separator sep = new Separator();
+        sep.setPadding(new Insets(5, 0, 5, 0));
+
+        // Status Explanation Box
+        VBox statusExplanation = new VBox(8);
+        statusExplanation.setStyle(
+                "-fx-background-color: #E8F5E9;" +
+                        "-fx-border-color: #81C784;" +
+                        "-fx-border-width: 2;" +
+                        "-fx-border-radius: 6;" +
+                        "-fx-background-radius: 6;" +
+                        "-fx-padding: 15;"
+        );
+
+        Label noteTitle = new Label("ℹ️ Information");
+        noteTitle.setStyle(
+                "-fx-font-size: 14px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #2D6A4F;"
+        );
+
+        Label noteText = new Label(getStatusExplanation(resource.getStatut()));
+        noteText.setWrapText(true);
+        noteText.setStyle(
+                "-fx-font-size: 12px;" +
+                        "-fx-text-fill: #133D03;"
+        );
+
+        statusExplanation.getChildren().addAll(noteTitle, noteText);
+
+        // Add all to content
+        content.getChildren().addAll(
+                headerBox,
+                statusRow,
+                detailsGrid,
+                sep,
+                statusExplanation
+        );
+
+        // Set content
+        dialog.getDialogPane().setContent(content);
+
+        // Add Close button
+        ButtonType closeButton = new ButtonType("Fermer", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().add(closeButton);
+
+        // Style the button
+        Button closeBtn = (Button) dialog.getDialogPane().lookupButton(closeButton);
+        closeBtn.setStyle(
+                "-fx-background-color: #076A39;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-padding: 10 30;" +
+                        "-fx-background-radius: 6;" +
+                        "-fx-cursor: hand;"
+        );
+
+        // Show dialog
+        dialog.showAndWait();
+    }
+
+    /**
+     * Helper method to add detail rows to grid
+     */
+    private void addDetailRow(GridPane grid, int row, String label, String value) {
+        Label lblLabel = new Label(label);
+        lblLabel.setStyle(
+                "-fx-font-size: 13px;" +
+                        "-fx-font-weight: 600;" +
+                        "-fx-text-fill: #848A86;"
+        );
+
+        Label lblValue = new Label(value);
+        lblValue.setStyle(
+                "-fx-font-size: 14px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #076A39;"
+        );
+
+        grid.add(lblLabel, 0, row);
+        grid.add(lblValue, 1, row);
+    }
+
+    /**
+     * Get status explanation text
+     */
+    private String getStatusExplanation(String statut) {
+        switch (statut.toLowerCase()) {
+            case "achete":
+                return "Cette ressource a été achetée et est disponible pour utilisation dans le projet.";
+            case "prevu":
+                return "Cette ressource est prévue pour achat. Elle n'a pas encore été acquise.";
+            default:
+                return "Statut de la ressource: " + capitalizeStatus(statut);
+        }
+    }
+
+    /**
+     * Shows details of the currently selected resource from toolbar button
+     */
+    @FXML
+    void showSelectedResourceDetails(ActionEvent event) {
+        if (selectedRessource == null) {
+            // No resource selected - show selection dialog
+            showResourceSelectionDialog();
+        } else {
+            // Resource is already selected - show its details
+            showResourceDetails(selectedRessource);
+        }
+    }
+
+    /**
+     * Shows a dialog to select a resource when clicking Details without selection
+     */
+    private void showResourceSelectionDialog() {
+        if (allRessources == null || allRessources.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Aucune ressource",
+                    "Aucune ressource disponible. Veuillez d'abord créer une ressource.");
+            return;
+        }
+
+        // Create selection dialog
+        Dialog<ressourceproject> dialog = new Dialog<>();
+        dialog.setTitle("Sélectionner une Ressource");
+        dialog.setHeaderText("Choisissez une ressource pour voir ses détails");
+
+        // Create list view with all resources
+        ListView<ressourceproject> listView = new ListView<>();
+        listView.getItems().addAll(allRessources);
+        listView.setPrefHeight(400);
+        listView.setPrefWidth(550);
+
+        // Custom cell factory to display resource info nicely
+        listView.setCellFactory(param -> new ListCell<ressourceproject>() {
+            @Override
+            protected void updateItem(ressourceproject resource, boolean empty) {
+                super.updateItem(resource, empty);
+                if (empty || resource == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    HBox cell = new HBox(15);
+                    cell.setAlignment(Pos.CENTER_LEFT);
+                    cell.setPadding(new Insets(10));
+
+                    // Icon based on type
+                    Label icon = new Label(getResourceIcon(resource.getTyperessource()));
+                    icon.setStyle("-fx-font-size: 24px;");
+
+                    // Resource info
+                    VBox info = new VBox(5);
+                    Label name = new Label(resource.getNomressource());
+                    name.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #133D03;");
+
+                    Label details = new Label(String.format("ID: %d | Type: %s | Quantité: %d | Coût: %,.2f DT",
+                            resource.getIdressource(),
+                            capitalizeType(resource.getTyperessource()),
+                            resource.getQuantite(),
+                            resource.getCout()));
+                    details.setStyle("-fx-font-size: 11px; -fx-text-fill: #848A86;");
+
+                    info.getChildren().addAll(name, details);
+
+                    // Status badge
+                    Label badge = new Label(capitalizeStatus(resource.getStatut()));
+                    badge.getStyleClass().add(getStatusBadgeClass(resource.getStatut()));
+                    badge.setStyle(badge.getStyle() + "-fx-font-size: 11px; -fx-padding: 4 12;");
+
+                    Region spacer = new Region();
+                    HBox.setHgrow(spacer, Priority.ALWAYS);
+
+                    cell.getChildren().addAll(icon, info, spacer, badge);
+                    setGraphic(cell);
+                }
+            }
+        });
+
+        // Set initial selection to first resource
+        if (!allRessources.isEmpty()) {
+            listView.getSelectionModel().select(0);
+        }
+
+        // Dialog content
+        VBox content = new VBox(15);
+        content.setPadding(new Insets(20));
+
+        Label instruction = new Label("Double-cliquez sur une ressource ou sélectionnez et cliquez sur OK");
+        instruction.setStyle("-fx-font-size: 12px; -fx-text-fill: #6C757D;");
+
+        content.getChildren().addAll(instruction, listView);
+        dialog.getDialogPane().setContent(content);
+
+        // Add buttons
+        ButtonType okButton = new ButtonType("Voir Détails", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButton = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(okButton, cancelButton);
+
+        // Enable OK button only when resource is selected
+        Button okBtn = (Button) dialog.getDialogPane().lookupButton(okButton);
+        okBtn.setDisable(listView.getSelectionModel().getSelectedItem() == null);
+        listView.getSelectionModel().selectedItemProperty().addListener(
+                (obs, oldVal, newVal) -> okBtn.setDisable(newVal == null)
+        );
+
+        // Style OK button
+        okBtn.setStyle(
+                "-fx-background-color: #076A39;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-padding: 8 20;" +
+                        "-fx-background-radius: 6;"
+        );
+
+        // Handle double-click
+        listView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2 && listView.getSelectionModel().getSelectedItem() != null) {
+                ressourceproject selected = listView.getSelectionModel().getSelectedItem();
+                dialog.setResult(selected);
+                dialog.close();
+            }
+        });
+
+        // Set result converter
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == okButton) {
+                return listView.getSelectionModel().getSelectedItem();
+            }
+            return null;
+        });
+
+        // Show dialog and handle result
+        dialog.showAndWait().ifPresent(resource -> {
+            selectedRessource = resource;
+            showResourceDetails(resource);
+        });
     }
 
     /**

@@ -8,16 +8,16 @@
             xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="controles.projectagricolecontroller">
 
-    <!-- Top Navigation Header -->
+
     <top>
         <VBox spacing="0">
-            <!-- Main Header Bar -->
+
             <HBox alignment="CENTER" spacing="20" styleClass="page-header">
                 <padding>
                     <Insets top="20" right="30" bottom="20" left="30"/>
                 </padding>
 
-                <!-- Left: Logo and Title -->
+
                 <HBox alignment="CENTER_LEFT" spacing="15" HBox.hgrow="ALWAYS">
                     <StackPane styleClass="icon-container" style="-fx-min-width: 55; -fx-min-height: 55; -fx-background-color: rgba(255,255,255,0.2);">
                         <Label text="🌿" style="-fx-font-size: 32px;"/>
@@ -29,9 +29,9 @@
                     </VBox>
                 </HBox>
 
-                <!-- Right: Action Buttons -->
+
                 <HBox spacing="10">
-                    <!-- PDF Export Button -->
+
                     <Button text="📄 Exporter PDF" styleClass="btn-info"
                             style="-fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: 600;"
                             onAction="#exportToPDF" prefHeight="40" prefWidth="150">
@@ -40,14 +40,14 @@
                         </tooltip>
                     </Button>
 
-                    <!-- Navigation Button -->
+
                     <Button text="📦 Ressources →" styleClass="btn-nav"
                             style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"
                             onAction="#goToRessources" prefHeight="40" prefWidth="170"/>
                 </HBox>
             </HBox>
 
-            <!-- Toolbar Section -->
+
             <HBox alignment="CENTER_LEFT" spacing="15" styleClass="toolbar">
                 <padding>
                     <Insets top="15" right="30" bottom="15" left="30"/>
@@ -60,18 +60,18 @@
 
                 <Region HBox.hgrow="ALWAYS"/>
 
-                <!-- Search Field with Icon -->
+
                 <HBox alignment="CENTER_LEFT" spacing="8" style="-fx-background-color: #F8F9FA; -fx-background-radius: 20; -fx-padding: 8 16;">
                     <Label text="🔍" style="-fx-font-size: 16px;"/>
                     <TextField fx:id="tfSearchProject" promptText="Rechercher un projet..."
                                prefWidth="220" style="-fx-background-color: transparent; -fx-border-width: 0;"/>
                 </HBox>
 
-                <!-- Filter ComboBox -->
+
                 <ComboBox fx:id="cbFilterStatutList" promptText="Filtrer par statut"
                           prefWidth="160" style="-fx-font-size: 13px;"/>
 
-                <!-- Add Button -->
+
                 <Button text="+ Nouveau Projet" styleClass="btn-primary"
                         onAction="#openAddProjectForm"
                         prefHeight="40"
@@ -81,14 +81,14 @@
         </VBox>
     </top>
 
-    <!-- Main Content Area -->
+
     <center>
         <VBox spacing="0" VBox.vgrow="ALWAYS">
             <padding>
                 <Insets top="25" right="30" bottom="25" left="30"/>
             </padding>
 
-            <!-- Statistics Dashboard -->
+
             <VBox spacing="15">
                 <padding>
                     <Insets bottom="15"/>
@@ -100,7 +100,7 @@
                     <Label text="Tableau de Bord" styleClass="section-header" style="-fx-font-size: 17px;"/>
                 </HBox>
 
-                <!-- Stats Cards Grid -->
+
                 <GridPane hgap="20" vgap="20">
                     <columnConstraints>
                         <ColumnConstraints percentWidth="25"/>
@@ -109,7 +109,7 @@
                         <ColumnConstraints percentWidth="25"/>
                     </columnConstraints>
 
-                    <!-- Total Projects Card -->
+
                     <HBox spacing="15" alignment="CENTER_LEFT" styleClass="stat-card" GridPane.columnIndex="0">
                         <StackPane styleClass="icon-container" style="-fx-min-width: 55; -fx-min-height: 55; -fx-background-color: #D8F3DC;">
                             <Label text="📁" style="-fx-font-size: 28px;"/>
@@ -120,7 +120,7 @@
                         </VBox>
                     </HBox>
 
-                    <!-- Accepted Projects Card -->
+
                     <HBox spacing="15" alignment="CENTER_LEFT" styleClass="stat-card" GridPane.columnIndex="1">
                         <StackPane styleClass="icon-container" style="-fx-min-width: 55; -fx-min-height: 55; -fx-background-color: #D5F4E6;">
                             <Label text="✓" style="-fx-font-size: 32px; -fx-text-fill: #40916C; -fx-font-weight: bold;"/>
@@ -131,7 +131,7 @@
                         </VBox>
                     </HBox>
 
-                    <!-- In Progress Projects Card -->
+
                     <HBox spacing="15" alignment="CENTER_LEFT" styleClass="stat-card" GridPane.columnIndex="2">
                         <StackPane styleClass="icon-container" style="-fx-min-width: 55; -fx-min-height: 55; -fx-background-color: #FFE5CC;">
                             <Label text="⏳" style="-fx-font-size: 28px;"/>
@@ -142,7 +142,7 @@
                         </VBox>
                     </HBox>
 
-                    <!-- Refused Projects Card -->
+
                     <HBox spacing="15" alignment="CENTER_LEFT" styleClass="stat-card" GridPane.columnIndex="3">
                         <StackPane styleClass="icon-container" style="-fx-min-width: 55; -fx-min-height: 55; -fx-background-color: #FFE5E5;">
                             <Label text="✗" style="-fx-font-size: 32px; -fx-text-fill: #E76F51; -fx-font-weight: bold;"/>
@@ -155,23 +155,23 @@
                 </GridPane>
             </VBox>
 
-            <!-- Separator -->
+
             <Separator style="-fx-padding: 10 0;">
                 <padding>
                     <Insets top="10" bottom="10"/>
                 </padding>
             </Separator>
 
-            <!-- Projects Grid Section -->
+
             <VBox spacing="15" VBox.vgrow="ALWAYS">
-                <!-- Section Header -->
+
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label text="📋" style="-fx-font-size: 18px;"/>
                     <Label text="Tous les Projets" styleClass="section-header" style="-fx-font-size: 16px;"/>
                     <Region HBox.hgrow="ALWAYS"/>
                 </HBox>
 
-                <!-- Projects Container with Enhanced Cards -->
+
                 <ScrollPane fitToWidth="true" styleClass="scroll-pane" VBox.vgrow="ALWAYS"
                             style="-fx-background-color: transparent; -fx-border-width: 0;">
                     <FlowPane fx:id="projectsContainer" hgap="20" vgap="20"
@@ -181,7 +181,7 @@
         </VBox>
     </center>
 
-    <!-- Optional Footer with Quick Stats -->
+
     <bottom>
         <HBox alignment="CENTER" spacing="30" style="-fx-background-color: white; -fx-padding: 12 30; -fx-border-color: #E9ECEF; -fx-border-width: 1 0 0 0;">
             <HBox spacing="8" alignment="CENTER">

@@ -86,7 +86,7 @@ public class ressourceprojectmodifycontroller implements Initializable {
             currentRessource.setDateajout(Date.valueOf(dpDateAjout.getValue()));
 
             rService.modifier(currentRessource);
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "Ressource modifiée avec succès!");
+            showAlert(Alert.AlertType.INFORMATION, "SuccÃ¨s", "Ressource modifiÃ©e avec succÃ¨s!");
             closeWindow();
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur SQL", "Erreur lors de la modification: " + e.getMessage());
@@ -115,13 +115,13 @@ public class ressourceprojectmodifycontroller implements Initializable {
 
         // Validate resource name length
         if (tfNomRessource.getText().trim().length() < 2) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Le nom de la ressource doit contenir au moins 2 caractères!");
+            showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Le nom de la ressource doit contenir au moins 2 caractÃ¨res!");
             return false;
         }
 
         // Validate supplier name length
         if (tfFournisseur.getText().trim().length() < 2) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Le nom du fournisseur doit contenir au moins 2 caractères!");
+            showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Le nom du fournisseur doit contenir au moins 2 caractÃ¨res!");
             return false;
         }
 
@@ -129,23 +129,23 @@ public class ressourceprojectmodifycontroller implements Initializable {
         try {
             int quantite = Integer.parseInt(tfQuantite.getText().trim());
             if (quantite <= 0) {
-                showAlert(Alert.AlertType.ERROR, "Erreur de validation", "La quantité doit être un nombre positif!");
+                showAlert(Alert.AlertType.ERROR, "Erreur de validation", "La quantitÃ© doit Ãªtre un nombre positif!");
                 return false;
             }
 
             BigDecimal cout = new BigDecimal(tfCout.getText().trim());
             if (cout.compareTo(BigDecimal.ZERO) <= 0) {
-                showAlert(Alert.AlertType.ERROR, "Erreur de validation", "Le coût doit être un nombre positif!");
+                showAlert(Alert.AlertType.ERROR, "Erreur de validation", "Le coÃ»t doit Ãªtre un nombre positif!");
                 return false;
             }
         } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de format", "La quantité et le coût doivent être des nombres valides!");
+            showAlert(Alert.AlertType.ERROR, "Erreur de format", "La quantitÃ© et le coÃ»t doivent Ãªtre des nombres valides!");
             return false;
         }
 
         // Validate date is not in the past
         if (dpDateAjout.getValue().isBefore(java.time.LocalDate.now())) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de validation", "La date d'ajout ne peut pas être dans le passé!");
+            showAlert(Alert.AlertType.ERROR, "Erreur de validation", "La date d'ajout ne peut pas Ãªtre dans le passÃ©!");
             return false;
         }
 
