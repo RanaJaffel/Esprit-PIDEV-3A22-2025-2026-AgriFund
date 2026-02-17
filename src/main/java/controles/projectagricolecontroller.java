@@ -23,10 +23,16 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
+import javafx.animation.FadeTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.SequentialTransition;
+import javafx.animation.PauseTransition;
 
 import com.itextpdf.kernel.colors.Color;
 import com.itextpdf.kernel.colors.ColorConstants;
@@ -91,7 +97,11 @@ public class projectagricolecontroller implements Initializable {
     private projectagricole currentProject = null; // For modify operation
     private final projectagricoleCRUD service = new projectagricoleCRUD();
     private Timeline autoRefreshTimeline;
-    private static final int REFRESH_INTERVAL_SECONDS = 5;
+    private static final int REFRESH_INTERVAL_SECONDS = 3; // Faster polling for near-real-time updates
+
+    // Tracks the last known status of each project (idproject -> statut)
+    // Used to detect status changes triggered by decisionfinanciere inserts
+    private Map<Integer, String> previousStatuses = new HashMap<>();
 
     // Reference to main controller for dialog callbacks
     private projectagricolecontroller mainController;
@@ -121,6 +131,11 @@ public class projectagricolecontroller implements Initializable {
             // Load data with comprehensive error handling
             try {
                 refreshDataFromDB();
+                // Seed the previousStatuses snapshot so the first auto-refresh
+                // can detect any status changes made while the app was closed
+                for (projectagricole p : allProjects) {
+                    previousStatuses.put(p.getIdproject(), p.getStatut());
+                }
                 startAutoRefresh();
             } catch (Exception e) {
                 System.err.println("Error loading initial data: " + e.getMessage());
@@ -413,21 +428,46 @@ public class projectagricolecontroller implements Initializable {
 
     public void refreshDataFromDB() {
         try {
-            allProjects = service.afficher();
-            if (allProjects == null) {
-                allProjects = new ArrayList<>();
+            List<projectagricole> freshProjects = service.afficher();
+            if (freshProjects == null) {
+                freshProjects = new ArrayList<>();
             }
+
+            // Detect which projects had their status changed by a decisionfinanciere trigger
+            List<Integer> changedProjectIds = new ArrayList<>();
+            if (!previousStatuses.isEmpty()) {
+                for (projectagricole p : freshProjects) {
+                    String oldStatut = previousStatuses.get(p.getIdproject());
+                    if (oldStatut != null && !oldStatut.equals(p.getStatut())) {
+                        changedProjectIds.add(p.getIdproject());
+                        System.out.println("[Refresh] Status changed for project #"
+                                + p.getIdproject() + ": " + oldStatut + " → " + p.getStatut());
+                    }
+                }
+            }
+
+            // Update snapshot
+            previousStatuses.clear();
+            for (projectagricole p : freshProjects) {
+                previousStatuses.put(p.getIdproject(), p.getStatut());
+            }
+
+            allProjects = freshProjects;
             updateCardsDisplay();
             updateStatistics();
+
+            // After cards are rendered, flash the ones that changed
+            if (!changedProjectIds.isEmpty()) {
+                highlightChangedCards(changedProjectIds);
+                showStatusChangeToast(changedProjectIds, freshProjects);
+            }
+
         } catch (SQLException e) {
             System.err.println("Database error: " + e.getMessage());
             e.printStackTrace();
-
-            // Initialize with empty list to prevent crashes
             if (allProjects == null) {
                 allProjects = new ArrayList<>();
             }
-
             showAlert(Alert.AlertType.ERROR, "Erreur Base de données",
                     "Impossible de charger les projets.\n" +
                             "Vérifiez votre connexion à la base de données.\n\n" +
@@ -435,15 +475,120 @@ public class projectagricolecontroller implements Initializable {
         } catch (Exception e) {
             System.err.println("Unexpected error: " + e.getMessage());
             e.printStackTrace();
-
             if (allProjects == null) {
                 allProjects = new ArrayList<>();
             }
-
             showAlert(Alert.AlertType.ERROR, "Erreur inattendue",
                     "Une erreur inattendue s'est produite.\n\n" +
                             "Détails: " + e.getMessage());
         }
+    }
+
+    /**
+     * Flashes (scale pulse + glow border) each card whose project id is in changedIds.
+     * Cards are identified by the userData tag set in createEnhancedProjectCard.
+     */
+    private void highlightChangedCards(List<Integer> changedIds) {
+        if (projectsContainer == null) return;
+        for (javafx.scene.Node node : projectsContainer.getChildren()) {
+            if (node.getUserData() instanceof Integer) {
+                int cardProjectId = (Integer) node.getUserData();
+                if (changedIds.contains(cardProjectId)) {
+                    playCardChangedAnimation((VBox) node);
+                }
+            }
+        }
+    }
+
+    /**
+     * Short scale-pulse + golden border flash to draw attention to a status-changed card.
+     */
+    private void playCardChangedAnimation(VBox card) {
+        // Save original style then apply highlight border
+        String originalStyle = card.getStyle();
+        card.setStyle(originalStyle +
+                "-fx-border-color: #E1B323; -fx-border-width: 3; -fx-border-radius: 12;" +
+                "-fx-effect: dropshadow(three-pass-box, rgba(225,179,35,0.7), 16, 0, 0, 0);");
+
+        // Scale up slightly then back
+        ScaleTransition scaleUp = new ScaleTransition(javafx.util.Duration.millis(180), card);
+        scaleUp.setToX(1.04);
+        scaleUp.setToY(1.04);
+
+        ScaleTransition scaleDown = new ScaleTransition(javafx.util.Duration.millis(180), card);
+        scaleDown.setToX(1.0);
+        scaleDown.setToY(1.0);
+
+        PauseTransition hold = new PauseTransition(javafx.util.Duration.seconds(2.5));
+
+        SequentialTransition seq = new SequentialTransition(scaleUp, scaleDown, hold);
+        seq.setOnFinished(e -> card.setStyle(originalStyle)); // restore
+        seq.play();
+    }
+
+    /**
+     * Shows a brief non-blocking status-change notification at the top of the card container.
+     */
+    private void showStatusChangeToast(List<Integer> changedIds, List<projectagricole> projects) {
+        if (projectsContainer == null) return;
+
+        StringBuilder msg = new StringBuilder("🔔 Statut mis à jour par décision financière:\n");
+        for (int id : changedIds) {
+            projects.stream()
+                    .filter(p -> p.getIdproject() == id)
+                    .findFirst()
+                    .ifPresent(p -> msg.append("  • ").append(p.getNomproject())
+                            .append(" → ").append(capitalizeStatus(p.getStatut())).append("\n"));
+        }
+
+        Label toast = new Label(msg.toString().trim());
+        toast.setStyle(
+                "-fx-background-color: #076A39;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-size: 13px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-padding: 12 20;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.35), 10, 0, 0, 3);" +
+                        "-fx-wrap-text: true;"
+        );
+        toast.setWrapText(true);
+        toast.setMaxWidth(500);
+
+        // Insert toast at top of container (index 0) so it's visible
+        javafx.scene.layout.Pane parent = (javafx.scene.layout.Pane) projectsContainer.getParent();
+        if (parent == null) return;
+
+        // Use a dedicated overlay StackPane if available, otherwise use an Alert-free approach
+        // We repurpose the projectsContainer's scene root to overlay a floating label
+        javafx.scene.layout.StackPane overlay = new javafx.scene.layout.StackPane(toast);
+        overlay.setAlignment(javafx.geometry.Pos.TOP_CENTER);
+        overlay.setPadding(new javafx.geometry.Insets(12));
+        overlay.setMouseTransparent(true);
+        overlay.setStyle("-fx-background-color: transparent;");
+
+        javafx.scene.layout.BorderPane sceneRoot;
+        try {
+            sceneRoot = (javafx.scene.layout.BorderPane) projectsContainer.getScene().getRoot();
+        } catch (ClassCastException ex) {
+            // If the root is not a BorderPane, fall back to a simple alert
+            showAlert(Alert.AlertType.INFORMATION, "Décision financière reçue", msg.toString().trim());
+            return;
+        }
+
+        // Add overlay on top and remove it after 3.5 seconds with a fade-out
+        sceneRoot.getChildren().add(overlay);
+        javafx.scene.layout.BorderPane.setAlignment(overlay, javafx.geometry.Pos.TOP_CENTER);
+
+        FadeTransition fadeOut = new FadeTransition(javafx.util.Duration.seconds(1.2), toast);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+
+        PauseTransition wait = new PauseTransition(javafx.util.Duration.seconds(2.5));
+        SequentialTransition toastAnim = new SequentialTransition(wait, fadeOut);
+        toastAnim.setOnFinished(e -> sceneRoot.getChildren().remove(overlay));
+        toastAnim.play();
     }
 
     private void updateStatistics() {
@@ -533,6 +678,8 @@ public class projectagricolecontroller implements Initializable {
         card.setPadding(new Insets(20));
         card.setMaxWidth(380);
         card.setPrefWidth(380);
+        // Tag card with project ID so highlight animation can locate it after refresh
+        card.setUserData(project.getIdproject());
 
         // Header with icon and title
         HBox header = new HBox(12);
