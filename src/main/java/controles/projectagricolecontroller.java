@@ -354,6 +354,27 @@ public class projectagricolecontroller implements Initializable {
             return false;
         }
 
+        // Check uniqueness of project name
+        String newName = getDialogFieldValue(tfNomProjectDialog);
+        try {
+            List<projectagricole> existingProjects = service.afficher();
+            boolean nameExistsOnOtherProject = existingProjects.stream()
+                    .filter(p -> "modify".equals(dialogMode) && currentProject != null
+                            ? p.getIdproject() != currentProject.getIdproject()
+                            : true)
+                    .anyMatch(p -> p.getNomproject().equalsIgnoreCase(newName));
+            if (nameExistsOnOtherProject) {
+                showAlert(Alert.AlertType.ERROR, "Nom déjà utilisé",
+                        "Un projet avec le nom \"" + newName + "\" existe déjà.\n" +
+                                "Le nom du projet doit être unique!");
+                return false;
+            }
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de validation",
+                    "Impossible de vérifier l'unicité du nom: " + e.getMessage());
+            return false;
+        }
+
         // Validate date based on mode
         if ("add".equals(dialogMode)) {
             // Add mode: only today's date allowed

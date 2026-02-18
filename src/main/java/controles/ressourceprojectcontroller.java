@@ -63,7 +63,9 @@ public class ressourceprojectcontroller implements Initializable {
     // ============================================================================
     // ADD/MODIFY DIALOG FIELDS
     // ============================================================================
-    @FXML private ComboBox<Integer> cbIdProjectDialog;
+    @FXML private ComboBox<String> cbIdProjectDialog;
+    // Maps project name -> project id, used when saving
+    private java.util.Map<String, Integer> projectNameToIdMap = new java.util.HashMap<>();
     @FXML private TextField tfNomRessourceDialog;
     @FXML private ComboBox<String> cbTypeRessourceDialog;
     @FXML private TextField tfQuantiteDialog;
@@ -125,15 +127,17 @@ public class ressourceprojectcontroller implements Initializable {
             cbStatutRessourceDialog.setValue("prevu"); // Default value for add mode
         }
 
-        // Load project IDs
+        // Load project names
         try {
             if (cbIdProjectDialog != null) {
+                projectNameToIdMap.clear();
                 for (projectagricole p : pService.afficher()) {
-                    cbIdProjectDialog.getItems().add(p.getIdproject());
+                    projectNameToIdMap.put(p.getNomproject(), p.getIdproject());
+                    cbIdProjectDialog.getItems().add(p.getNomproject());
                 }
             }
         } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger les ID des projets.");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger les projets.");
         }
     }
 
@@ -152,7 +156,13 @@ public class ressourceprojectcontroller implements Initializable {
 
     private void populateFields() {
         if (currentRessource != null && cbIdProjectDialog != null) {
-            cbIdProjectDialog.setValue(currentRessource.getIdproject());
+            // Find project name from the id stored in the ressource
+            String projectName = projectNameToIdMap.entrySet().stream()
+                    .filter(e -> e.getValue() == currentRessource.getIdproject())
+                    .map(java.util.Map.Entry::getKey)
+                    .findFirst()
+                    .orElse(null);
+            cbIdProjectDialog.setValue(projectName);
             tfNomRessourceDialog.setText(currentRessource.getNomressource());
             cbTypeRessourceDialog.setValue(currentRessource.getTyperessource());
             tfQuantiteDialog.setText(String.valueOf(currentRessource.getQuantite()));
@@ -175,9 +185,17 @@ public class ressourceprojectcontroller implements Initializable {
         if (!validateDialogInputs()) return;
 
         try {
+            // Resolve selected project name to id
+            String selectedProjectName = cbIdProjectDialog.getValue();
+            Integer resolvedProjectId = projectNameToIdMap.get(selectedProjectName);
+            if (resolvedProjectId == null) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Projet sélectionné introuvable!");
+                return;
+            }
+
             if ("modify".equals(dialogMode)) {
                 // MODIFY MODE
-                currentRessource.setIdproject(cbIdProjectDialog.getValue());
+                currentRessource.setIdproject(resolvedProjectId);
                 currentRessource.setNomressource(tfNomRessourceDialog.getText().trim());
                 currentRessource.setTyperessource(cbTypeRessourceDialog.getValue());
                 currentRessource.setQuantite(Integer.parseInt(tfQuantiteDialog.getText().trim()));
@@ -198,7 +216,7 @@ public class ressourceprojectcontroller implements Initializable {
                         tfFournisseurDialog.getText().trim(),
                         cbStatutRessourceDialog.getValue(),
                         Date.valueOf(dpDateAjoutDialog.getValue()),
-                        cbIdProjectDialog.getValue()
+                        resolvedProjectId
                 );
 
                 rService.ajouter(r);

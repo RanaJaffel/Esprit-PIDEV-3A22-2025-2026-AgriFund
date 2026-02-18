@@ -51,10 +51,10 @@
                         <Label text="Projet Associé *" styleClass="label"/>
                         <Label text="Sélectionner le projet" styleClass="label-small"/>
                     </VBox>
-                    <ComboBox fx:id="cbIdProjectDialog" maxWidth="Infinity" promptText="Choisir un projet..."
+                    <ComboBox fx:id="cbIdProjectDialog" maxWidth="Infinity" promptText="Choisir un projet par nom..."
                               GridPane.columnIndex="1" GridPane.rowIndex="0">
                         <tooltip>
-                            <Tooltip text="Sélectionnez le projet auquel cette ressource sera liée"/>
+                            <Tooltip text="Sélectionnez le projet par son nom. Chaque nom de projet est unique."/>
                         </tooltip>
                     </ComboBox>
 
