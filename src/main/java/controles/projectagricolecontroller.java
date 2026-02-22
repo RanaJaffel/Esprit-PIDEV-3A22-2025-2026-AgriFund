@@ -58,6 +58,13 @@ import javafx.scene.web.WebEngine;
 import netscape.javascript.JSObject;
 import javafx.scene.layout.StackPane;
 
+// Agromonitoring / HTTP
+import java.net.HttpURLConnection;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+
 public class projectagricolecontroller implements Initializable {
 
     // ============================================================================
@@ -886,16 +893,6 @@ public class projectagricolecontroller implements Initializable {
         addCardDetailRow(detailsGrid, 1, "💰 Budget:", String.format("%,.2f DT", project.getBudgetdemande()));
         addCardDetailRow(detailsGrid, 2, "📅 Date:", project.getDatesoumission().toString());
 
-        // Latitude & Longitude
-        if (project.getLatitude() != null && project.getLongitude() != null) {
-            addCardDetailRow(detailsGrid, 3, "📍 Latitude:",
-                    String.format(java.util.Locale.US, "%.6f", project.getLatitude()));
-            addCardDetailRow(detailsGrid, 4, "📍 Longitude:",
-                    String.format(java.util.Locale.US, "%.6f", project.getLongitude()));
-        } else {
-            addCardDetailRow(detailsGrid, 3, "📍 Localisation:", "Non définie");
-        }
-
         // Action buttons
         HBox actions = new HBox(8);
         actions.setAlignment(Pos.CENTER);
@@ -925,8 +922,25 @@ public class projectagricolecontroller implements Initializable {
         actions.getChildren().addAll(btnView, btnEdit, btnDelete);
         HBox.setHgrow(actions, Priority.ALWAYS);
 
+        // Conseils button — full width, below icon buttons
+        Button btnConseils = new Button("🌱 Conseils du projet");
+        btnConseils.setMaxWidth(Double.MAX_VALUE);
+        btnConseils.setStyle(
+                "-fx-background-color: linear-gradient(to right, #076A39, #089647);" +
+                        "-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13px;" +
+                        "-fx-padding: 9 0; -fx-background-radius: 10; -fx-cursor: hand;");
+        btnConseils.setTooltip(new Tooltip("Données Agromonitoring + conseils agricoles IA"));
+        btnConseils.setOnAction(e -> handleAgroAdvice(project));
+        if (project.getLatitude() == null || project.getLongitude() == null) {
+            btnConseils.setDisable(true);
+            btnConseils.setStyle(
+                    "-fx-background-color: #ccc; -fx-text-fill: #888; -fx-font-size: 13px;" +
+                            "-fx-padding: 9 0; -fx-background-radius: 10;");
+            btnConseils.setTooltip(new Tooltip("Localisation non définie — modifiez le projet pour ajouter une position GPS"));
+        }
+
         // Assemble card
-        card.getChildren().addAll(header, statusBadge, new Separator(), detailsGrid, actions);
+        card.getChildren().addAll(header, statusBadge, new Separator(), detailsGrid, actions, btnConseils);
 
         return card;
     }
@@ -1591,6 +1605,405 @@ public class projectagricolecontroller implements Initializable {
 
         document.add(table);
         document.close();
+    }
+
+    // ============================================================================
+    // AGROMONITORING + AI CONSEILS
+    // ============================================================================
+
+    private static final String AGRO_API_KEY  = "15ec96f6a29c1d2c59280c84a585bb66";
+    private static final String CLAUDE_API_KEY = ""; // optional — leave empty to skip AI advice
+
+    /**
+     * Entry point for the "Conseils du projet" button.
+     * Runs HTTP calls on a background thread then updates the UI on FX thread.
+     */
+    private void handleAgroAdvice(projectagricole project) {
+        if (project.getLatitude() == null || project.getLongitude() == null) {
+            showAlert(Alert.AlertType.WARNING, "Localisation manquante",
+                    "Ce projet n'a pas de coordonnées GPS.\nModifiez le projet pour ajouter une localisation.");
+            return;
+        }
+
+        // Loading dialog
+        Stage loadingStage = new Stage();
+        loadingStage.initModality(Modality.APPLICATION_MODAL);
+        loadingStage.setTitle("Chargement des données...");
+        Label loadingLabel = new Label("🌐 Récupération des données Agromonitoring...");
+        loadingLabel.setStyle("-fx-font-size: 14px; -fx-padding: 30 40;");
+        javafx.scene.control.ProgressIndicator spinner = new javafx.scene.control.ProgressIndicator();
+        VBox loadingBox = new VBox(15, spinner, loadingLabel);
+        loadingBox.setAlignment(Pos.CENTER);
+        loadingBox.setPadding(new Insets(30));
+        loadingStage.setScene(new Scene(loadingBox, 340, 160));
+        loadingStage.show();
+
+        double lat = project.getLatitude();
+        double lng = project.getLongitude();
+
+        // Run API calls off the FX thread
+        Thread thread = new Thread(() -> {
+            try {
+                // ── 1. Current weather ────────────────────────────────
+                String weatherJson = httpGet(
+                        "http://api.agromonitoring.com/agro/1.0/weather?lat=" + lat
+                                + "&lon=" + lng + "&appid=" + AGRO_API_KEY);
+
+                // ── 2. Soil data ──────────────────────────────────────
+                String soilJson = httpGet(
+                        "http://api.agromonitoring.com/agro/1.0/soil?polyid=&lat=" + lat
+                                + "&lon=" + lng + "&appid=" + AGRO_API_KEY);
+
+                // ── 3. UV index ───────────────────────────────────────
+                String uvJson = httpGet(
+                        "http://api.agromonitoring.com/agro/1.0/uvi?lat=" + lat
+                                + "&lon=" + lng + "&appid=" + AGRO_API_KEY);
+
+                final String w = weatherJson;
+                final String s = soilJson;
+                final String u = uvJson;
+
+                javafx.application.Platform.runLater(() -> {
+                    loadingStage.close();
+                    showAdviceDialog(project, w, s, u);
+                });
+
+            } catch (Exception ex) {
+                javafx.application.Platform.runLater(() -> {
+                    loadingStage.close();
+                    showAlert(Alert.AlertType.ERROR, "Erreur API",
+                            "Impossible de récupérer les données Agromonitoring.\n\n" + ex.getMessage());
+                });
+            }
+        });
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+    /** Simple HTTP GET returning the response body as a String. */
+    private String httpGet(String urlStr) throws Exception {
+        java.net.URL url = new java.net.URL(urlStr);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setConnectTimeout(8000);
+        conn.setReadTimeout(8000);
+        conn.setRequestProperty("Accept", "application/json");
+
+        int code = conn.getResponseCode();
+        java.io.InputStream stream = (code >= 200 && code < 300)
+                ? conn.getInputStream() : conn.getErrorStream();
+        if (stream == null) return "{\"error\":\"" + code + "\"}";
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = br.readLine()) != null) sb.append(line);
+        br.close();
+        return sb.toString();
+    }
+
+    /** Parse a numeric value from a simple JSON string by key name. */
+    private String parseJson(String json, String key) {
+        if (json == null || json.isEmpty()) return "—";
+        try {
+            // Match  "key":value  or  "key":"value"
+            int idx = json.indexOf("\"" + key + "\"");
+            if (idx < 0) return "—";
+            int colon = json.indexOf(":", idx);
+            if (colon < 0) return "—";
+            // skip whitespace
+            int start = colon + 1;
+            while (start < json.length() && Character.isWhitespace(json.charAt(start))) start++;
+            if (start >= json.length()) return "—";
+            char first = json.charAt(start);
+            if (first == '"') {
+                // string value
+                int end = json.indexOf('"', start + 1);
+                return end > start ? json.substring(start + 1, end) : "—";
+            } else {
+                // numeric / boolean / null
+                int end = start;
+                while (end < json.length() && ",}]\n\r".indexOf(json.charAt(end)) < 0) end++;
+                return json.substring(start, end).trim();
+            }
+        } catch (Exception e) { return "—"; }
+    }
+
+    /** Parse a nested value like  "main":{"temp":...} */
+    private String parseNestedJson(String json, String parent, String key) {
+        if (json == null) return "—";
+        try {
+            int parentIdx = json.indexOf("\"" + parent + "\"");
+            if (parentIdx < 0) return "—";
+            int braceOpen = json.indexOf("{", parentIdx);
+            if (braceOpen < 0) return "—";
+            int braceClose = json.indexOf("}", braceOpen);
+            String sub = json.substring(braceOpen, braceClose + 1);
+            return parseJson(sub, key);
+        } catch (Exception e) { return "—"; }
+    }
+
+    /**
+     * Converts Kelvin to Celsius string.
+     */
+    private String kelvinToCelsius(String kelvinStr) {
+        try {
+            double k = Double.parseDouble(kelvinStr);
+            return String.format("%.1f°C", k - 273.15);
+        } catch (Exception e) { return kelvinStr; }
+    }
+
+    /**
+     * Builds and shows the full advice dialog from parsed API data.
+     */
+    private void showAdviceDialog(projectagricole project,
+                                  String weatherJson, String soilJson, String uvJson) {
+
+        // ── Parse weather ─────────────────────────────────────────
+        String tempK      = parseNestedJson(weatherJson, "main", "temp");
+        String humidity   = parseNestedJson(weatherJson, "main", "humidity");
+        String windSpeed  = parseNestedJson(weatherJson, "wind", "speed");
+        String pressure   = parseNestedJson(weatherJson, "main", "pressure");
+        String cloudiness = parseNestedJson(weatherJson, "clouds", "all");
+        String weatherDesc= parseNestedJson(weatherJson, "weather", "description");
+        String cityName   = parseJson(weatherJson, "name");
+        String tempC      = kelvinToCelsius(tempK);
+
+        // ── Parse soil ────────────────────────────────────────────
+        String soilMoisture = parseJson(soilJson, "moisture");
+        String soilTempK    = parseJson(soilJson, "t0");   // surface temp
+        String soilTempC    = kelvinToCelsius(soilTempK);
+
+        // ── Parse UV ─────────────────────────────────────────────
+        String uvIndex = parseJson(uvJson, "value");
+        if ("—".equals(uvIndex)) uvIndex = parseJson(uvJson, "uvi");
+
+        // ── Generate advice text locally ──────────────────────────
+        String advice = generateAgriculturalAdvice(
+                project, tempK, humidity, windSpeed, soilMoisture, uvIndex, cloudiness);
+
+        // ── Build dialog ──────────────────────────────────────────
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("🌱 Conseils — " + project.getNomproject());
+        stage.setWidth(720);
+        stage.setHeight(700);
+
+        // Scrollable content
+        VBox content = new VBox(18);
+        content.setPadding(new Insets(28));
+        content.setStyle("-fx-background-color: #F8FFF9;");
+
+        // ── Header ────────────────────────────────────────────────
+        VBox headerBox = new VBox(4);
+        headerBox.setStyle(
+                "-fx-background-color: linear-gradient(to right,#076A39,#089647);" +
+                        "-fx-padding: 18 24; -fx-background-radius: 12;");
+        Label hTitle = new Label("🌱 Conseils Agricoles — " + project.getNomproject());
+        hTitle.setStyle("-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: white;");
+        Label hSub = new Label("📍 " + String.format("%.4f, %.4f", project.getLatitude(), project.getLongitude())
+                + (cityName.equals("—") ? "" : "   🏙 " + cityName));
+        hSub.setStyle("-fx-font-size: 12px; -fx-text-fill: rgba(255,255,255,0.85);");
+        headerBox.getChildren().addAll(hTitle, hSub);
+
+        // ── Weather card ──────────────────────────────────────────
+        VBox weatherCard = buildInfoCard("🌦 Météo Actuelle", new String[][]{
+                {"🌡 Température",    tempC},
+                {"💧 Humidité",       humidity + "%"},
+                {"💨 Vent",           windSpeed + " m/s"},
+                {"🌫 Pression",       pressure + " hPa"},
+                {"☁ Nébulosité",     cloudiness + "%"},
+                {"📝 Conditions",     weatherDesc}
+        }, "#E8F5E9", "#2E7D32");
+
+        // ── Soil card ─────────────────────────────────────────────
+        VBox soilCard = buildInfoCard("🌍 Données du Sol", new String[][]{
+                {"💧 Humidité sol",   soilMoisture.equals("—") ? "—" : String.format("%.3f m³/m³", safeDouble(soilMoisture))},
+                {"🌡 Temp. surface",  soilTempC}
+        }, "#FFF8E1", "#F57F17");
+
+        // ── UV card ───────────────────────────────────────────────
+        String uvLevel = uvLevel(uvIndex);
+        VBox uvCard = buildInfoCard("☀ Rayonnement UV", new String[][]{
+                {"🔆 Indice UV",  uvIndex},
+                {"⚠ Niveau",     uvLevel}
+        }, "#E3F2FD", "#1565C0");
+
+        // ── Advice card ───────────────────────────────────────────
+        VBox adviceCard = new VBox(10);
+        adviceCard.setStyle(
+                "-fx-background-color: white; -fx-padding: 16; -fx-background-radius: 10;" +
+                        "-fx-border-color: #076A39; -fx-border-width: 2; -fx-border-radius: 10;" +
+                        "-fx-effect: dropshadow(three-pass-box,rgba(7,106,57,0.15),8,0,0,2);");
+        Label adviceTitle = new Label("🤖 Recommandations Agricoles");
+        adviceTitle.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #076A39;");
+        Label adviceText = new Label(advice);
+        adviceText.setWrapText(true);
+        adviceText.setStyle("-fx-font-size: 13px; -fx-text-fill: #2C3E50; -fx-line-spacing: 3px;");
+        adviceCard.getChildren().addAll(adviceTitle, adviceText);
+
+        // ── Satellite note ────────────────────────────────────────
+        Label satNote = new Label(
+                "🛰 Données satellitaires via Agromonitoring API  •  Surface: "
+                        + String.format("%.2f Ha", project.getSurface())
+                        + "  •  Projet: " + capitalizeStatus(project.getStatut()));
+        satNote.setStyle("-fx-font-size: 11px; -fx-text-fill: #888; -fx-font-style: italic;");
+
+        // ── Close button ──────────────────────────────────────────
+        Button closeBtn = new Button("✖  Fermer");
+        closeBtn.setStyle(
+                "-fx-background-color: #076A39; -fx-text-fill: white; -fx-font-weight: bold;" +
+                        "-fx-padding: 10 30; -fx-background-radius: 8; -fx-cursor: hand; -fx-font-size: 13px;");
+        closeBtn.setOnAction(e -> stage.close());
+        HBox btnRow = new HBox(closeBtn);
+        btnRow.setAlignment(Pos.CENTER_RIGHT);
+
+        content.getChildren().addAll(
+                headerBox, weatherCard, soilCard, uvCard, adviceCard, satNote, btnRow);
+
+        javafx.scene.control.ScrollPane scroll = new javafx.scene.control.ScrollPane(content);
+        scroll.setFitToWidth(true);
+        scroll.setStyle("-fx-background-color: #F8FFF9; -fx-border-width: 0;");
+
+        stage.setScene(new Scene(scroll));
+        stage.show();
+    }
+
+    /** Builds a styled info card with a list of label→value rows. */
+    private VBox buildInfoCard(String title, String[][] rows, String bgColor, String accentColor) {
+        VBox card = new VBox(8);
+        card.setStyle(
+                "-fx-background-color: " + bgColor + "; -fx-padding: 14 18;" +
+                        "-fx-background-radius: 10; -fx-border-color: " + accentColor + "33;" +
+                        "-fx-border-width: 1; -fx-border-radius: 10;");
+        Label lbl = new Label(title);
+        lbl.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: " + accentColor + ";");
+        card.getChildren().add(lbl);
+        card.getChildren().add(new Separator());
+
+        GridPane grid = new GridPane();
+        grid.setHgap(20); grid.setVgap(6);
+        ColumnConstraints c1 = new ColumnConstraints(); c1.setMinWidth(150);
+        ColumnConstraints c2 = new ColumnConstraints(); c2.setMinWidth(200);
+        grid.getColumnConstraints().addAll(c1, c2);
+
+        int row = 0;
+        for (String[] pair : rows) {
+            Label k = new Label(pair[0]);
+            k.setStyle("-fx-font-size: 12px; -fx-text-fill: #555;");
+            Label v = new Label(pair.length > 1 ? pair[1] : "—");
+            v.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;");
+            grid.add(k, 0, row); grid.add(v, 1, row); row++;
+        }
+        card.getChildren().add(grid);
+        return card;
+    }
+
+    private double safeDouble(String s) {
+        try { return Double.parseDouble(s); } catch (Exception e) { return 0; }
+    }
+
+    private String uvLevel(String uvStr) {
+        try {
+            double uv = Double.parseDouble(uvStr);
+            if (uv < 3)  return "Faible — Travail normal";
+            if (uv < 6)  return "Modéré — Protection recommandée";
+            if (uv < 8)  return "Élevé — Éviter 11h-16h";
+            if (uv < 11) return "Très élevé — Protection obligatoire";
+            return "Extrême — Éviter l'exposition";
+        } catch (Exception e) { return "—"; }
+    }
+
+    /**
+     * Generates local agricultural advice based on the sensor data.
+     */
+    private String generateAgriculturalAdvice(projectagricole project,
+                                              String tempK, String humidity, String windSpeed,
+                                              String soilMoisture, String uvIndex, String cloudiness) {
+
+        StringBuilder advice = new StringBuilder();
+        double tempC = 0, hum = 0, wind = 0, soil = 0, uv = 0, cloud = 0;
+
+        try { tempC  = Double.parseDouble(tempK) - 273.15; } catch (Exception ignored) {}
+        try { hum    = Double.parseDouble(humidity);       } catch (Exception ignored) {}
+        try { wind   = Double.parseDouble(windSpeed);      } catch (Exception ignored) {}
+        try { soil   = Double.parseDouble(soilMoisture);   } catch (Exception ignored) {}
+        try { uv     = Double.parseDouble(uvIndex);        } catch (Exception ignored) {}
+        try { cloud  = Double.parseDouble(cloudiness);     } catch (Exception ignored) {}
+
+        // Temperature advice
+        if (tempC < 5) {
+            advice.append("❄ Température très froide (").append(String.format("%.1f", tempC))
+                    .append("°C) — Risque de gel. Protégez les cultures fragiles et évitez les semis.\n\n");
+        } else if (tempC < 15) {
+            advice.append("🌤 Température fraîche (").append(String.format("%.1f", tempC))
+                    .append("°C) — Conditions favorables pour blé, orge et légumes d'hiver.\n\n");
+        } else if (tempC <= 30) {
+            advice.append("☀ Température optimale (").append(String.format("%.1f", tempC))
+                    .append("°C) — Idéal pour la croissance active des cultures.\n\n");
+        } else {
+            advice.append("🌡 Chaleur élevée (").append(String.format("%.1f", tempC))
+                    .append("°C) — Augmentez l'irrigation. Préférez les travaux tôt le matin.\n\n");
+        }
+
+        // Humidity advice
+        if (hum < 30) {
+            advice.append("💧 Humidité très basse (").append((int)hum)
+                    .append("%) — Irrigation urgente recommandée. Risque de stress hydrique.\n\n");
+        } else if (hum < 60) {
+            advice.append("💧 Humidité modérée (").append((int)hum)
+                    .append("%) — Surveillez le sol. Irrigation légère possible.\n\n");
+        } else {
+            advice.append("💧 Humidité suffisante (").append((int)hum)
+                    .append("%) — Risque fongique si prolongé. Assurez un bon drainage.\n\n");
+        }
+
+        // Soil moisture advice
+        if (soil > 0) {
+            if (soil < 0.2) {
+                advice.append("🌍 Sol sec (").append(String.format("%.3f", soil))
+                        .append(" m³/m³) — Irrigation immédiate nécessaire.\n\n");
+            } else if (soil < 0.4) {
+                advice.append("🌍 Humidité sol correcte (").append(String.format("%.3f", soil))
+                        .append(" m³/m³) — Conditions favorables pour les racines.\n\n");
+            } else {
+                advice.append("🌍 Sol très humide (").append(String.format("%.3f", soil))
+                        .append(" m³/m³) — Réduisez l'irrigation. Vérifiez le drainage.\n\n");
+            }
+        }
+
+        // Wind advice
+        if (wind > 10) {
+            advice.append("💨 Vent fort (").append(String.format("%.1f", wind))
+                    .append(" m/s) — Évitez les traitements phytosanitaires. Protégez les jeunes plants.\n\n");
+        } else if (wind > 5) {
+            advice.append("💨 Vent modéré — Conditions moyennes pour les épandages.\n\n");
+        }
+
+        // UV advice
+        if (uv >= 6) {
+            advice.append("☀ UV élevé (").append(String.format("%.1f", uv))
+                    .append(") — Travaillez tôt le matin ou en soirée. Protection individuelle obligatoire.\n\n");
+        }
+
+        // Surface-based advice
+        float surface = project.getSurface();
+        if (surface > 50) {
+            advice.append("📏 Grande surface (").append(String.format("%.0f", surface))
+                    .append(" Ha) — Envisagez l'utilisation de drones ou matériel mécanisé.\n\n");
+        }
+
+        // Cloud/spray advice
+        if (cloud < 30) {
+            advice.append("🌾 Ciel dégagé — Bonne visibilité satellite. Conditions idéales pour observation par drone.\n");
+        }
+
+        if (advice.length() == 0) {
+            advice.append("✅ Les conditions météorologiques et pédologiques sont dans des plages normales.\n")
+                    .append("Continuez le suivi régulier de vos cultures et maintenez votre calendrier d'irrigation habituel.");
+        }
+
+        return advice.toString().trim();
     }
 
     // ============================================================================
