@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.function.UnaryOperator;
 
 public class RegisterBanqueController {
 
@@ -41,6 +42,114 @@ public class RegisterBanqueController {
         } catch (SQLException e) {
             showError("Erreur de connexion à la base de données");
         }
+
+        // ✅ AJOUT : Contrôle de saisie en temps réel pour le téléphone
+        setupPhoneFieldValidation();
+    }
+
+    /**
+     * Configure le contrôle de saisie pour le champ téléphone
+     * Autorise uniquement : chiffres, +, espaces, tirets, parenthèses
+     */
+    private void setupPhoneFieldValidation() {
+        UnaryOperator<TextFormatter.Change> phoneFilter = change -> {
+            String newText = change.getControlNewText();
+
+            // Autorise uniquement les caractères valides pour un numéro de téléphone
+            if (newText.matches("[+]?[0-9\\s\\-()]*")) {
+                return change;
+            }
+            return null; // Rejette la modification
+        };
+
+        telField.setTextFormatter(new TextFormatter<>(phoneFilter));
+
+        // Optionnel : Formater automatiquement le numéro pendant la saisie
+        telField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && !newValue.isEmpty()) {
+                // Supprimer les espaces pour vérifier la longueur
+                String digitsOnly = newValue.replaceAll("[^0-9]", "");
+
+                // Limiter à 12 chiffres maximum (pour +216 XX XXX XXX)
+                if (digitsOnly.length() > 12) {
+                    telField.setText(oldValue);
+                }
+            }
+        });
+    }
+
+    /**
+     * Valide le format du numéro de téléphone tunisien
+     * Formats acceptés :
+     * - +216 XX XXX XXX
+     * - 00216 XX XXX XXX
+     * - XX XXX XXX (8 chiffres)
+     * - XXXXXXXX (8 chiffres sans espaces)
+     */
+    private boolean isValidPhoneNumber(String phone) {
+        if (phone == null || phone.trim().isEmpty()) {
+            return true; // Le téléphone est optionnel
+        }
+
+        // Supprimer tous les caractères non numériques sauf +
+        String cleanPhone = phone.replaceAll("[^0-9+]", "");
+
+        // Format international avec +216
+        if (cleanPhone.startsWith("+216")) {
+            String localNumber = cleanPhone.substring(4);
+            return localNumber.length() == 8 && localNumber.matches("[2-9][0-9]{7}");
+        }
+
+        // Format avec 00216
+        if (cleanPhone.startsWith("00216")) {
+            String localNumber = cleanPhone.substring(5);
+            return localNumber.length() == 8 && localNumber.matches("[2-9][0-9]{7}");
+        }
+
+        // Format local (8 chiffres commençant par 2-9)
+        if (cleanPhone.length() == 8) {
+            return cleanPhone.matches("[2-9][0-9]{7}");
+        }
+
+        return false;
+    }
+
+    /**
+     * Retourne un message d'erreur détaillé pour le téléphone
+     */
+    private String getPhoneErrorMessage(String phone) {
+        if (phone == null || phone.trim().isEmpty()) {
+            return null;
+        }
+
+        String cleanPhone = phone.replaceAll("[^0-9+]", "");
+
+        if (cleanPhone.startsWith("+") && !cleanPhone.startsWith("+216")) {
+            return "Seuls les numéros tunisiens (+216) sont acceptés";
+        }
+
+        String localNumber;
+        if (cleanPhone.startsWith("+216")) {
+            localNumber = cleanPhone.substring(4);
+        } else if (cleanPhone.startsWith("00216")) {
+            localNumber = cleanPhone.substring(5);
+        } else {
+            localNumber = cleanPhone;
+        }
+
+        if (localNumber.length() < 8) {
+            return "Le numéro de téléphone doit contenir 8 chiffres";
+        }
+
+        if (localNumber.length() > 8) {
+            return "Le numéro de téléphone ne doit pas dépasser 8 chiffres";
+        }
+
+        if (!localNumber.matches("[2-9][0-9]{7}")) {
+            return "Le numéro doit commencer par 2, 3, 4, 5, 7 ou 9";
+        }
+
+        return "Format de téléphone invalide";
     }
 
     @FXML
@@ -66,7 +175,9 @@ public class RegisterBanqueController {
 
             banque.setAdresseAgence(adresseAgenceField.getText().trim());
             banque.setSiteWeb(siteWebField.getText().trim());
-            banque.setTel(telField.getText().trim());
+
+            // ✅ AJOUT : Formater le téléphone avant de l'enregistrer
+            banque.setTel(formatPhoneNumber(telField.getText().trim()));
 
             // Inscrire
             Banque result = authService.inscrireBanque(banque);
@@ -92,6 +203,30 @@ public class RegisterBanqueController {
         } catch (SQLException e) {
             showError("Erreur lors de l'inscription: " + e.getMessage());
         }
+    }
+
+    /**
+     * Formate le numéro de téléphone au format standard +216 XX XXX XXX
+     */
+    private String formatPhoneNumber(String phone) {
+        if (phone == null || phone.trim().isEmpty()) {
+            return "";
+        }
+
+        String cleanPhone = phone.replaceAll("[^0-9]", "");
+
+        // Si commence par 216, ajouter le +
+        if (cleanPhone.startsWith("216") && cleanPhone.length() == 11) {
+            cleanPhone = cleanPhone.substring(3);
+        }
+
+        // Si 8 chiffres, formater avec +216
+        if (cleanPhone.length() == 8) {
+            return "+216 " + cleanPhone.substring(0, 2) + " " +
+                    cleanPhone.substring(2, 5) + " " + cleanPhone.substring(5);
+        }
+
+        return phone; // Retourner tel quel si format non reconnu
     }
 
     private boolean validateForm() {
@@ -150,6 +285,15 @@ public class RegisterBanqueController {
         if (adresseSiegeField.getText().trim().isEmpty()) {
             showError("L'adresse du siège est obligatoire");
             adresseSiegeField.requestFocus();
+            return false;
+        }
+
+        // ✅ AJOUT : Validation du téléphone (optionnel mais doit être valide si rempli)
+        String phone = telField.getText().trim();
+        if (!phone.isEmpty() && !isValidPhoneNumber(phone)) {
+            String errorMsg = getPhoneErrorMessage(phone);
+            showError(errorMsg != null ? errorMsg : "Le numéro de téléphone n'est pas valide");
+            telField.requestFocus();
             return false;
         }
 
