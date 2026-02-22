@@ -2,103 +2,191 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.geometry.Insets?>
+<?import Components.CaptchaComponent?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="Controllers.LoginController"
-            stylesheets="@../css/styles.css"
-            style="-fx-background-color: linear-gradient(to right, #060806, #095032);">
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="Controllers.LoginController"
+           stylesheets="@../css/login.css"
+           prefWidth="1100" prefHeight="800">
 
-    <center>
-        <HBox alignment="CENTER" spacing="0">
+    <!-- Background avec gradient agricole -->
+    <Pane styleClass="gradient-background"/>
+
+    <!-- Formes décoratives -->
+    <Pane mouseTransparent="true">
+        <Circle layoutX="80" layoutY="100" radius="120" styleClass="floating-shape, shape-1"/>
+        <Circle layoutX="150" layoutY="600" radius="80" styleClass="floating-shape, shape-2"/>
+        <Rectangle layoutX="50" layoutY="350" width="70" height="70" arcWidth="20" arcHeight="20"
+                   styleClass="floating-shape, shape-3" rotate="45"/>
+        <Circle layoutX="550" layoutY="700" radius="100" styleClass="floating-shape, shape-4"/>
+        <Rectangle layoutX="480" layoutY="50" width="50" height="50" arcWidth="15" arcHeight="15"
+                   styleClass="floating-shape, shape-1" rotate="30"/>
+        <Circle layoutX="1050" layoutY="150" radius="60" styleClass="floating-shape, shape-2"/>
+    </Pane>
+
+    <!-- ScrollPane -->
+    <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="transparent-scroll"
+                hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+
+        <HBox alignment="CENTER" spacing="60" minHeight="750">
+            <padding>
+                <Insets top="50" right="60" bottom="50" left="60"/>
+            </padding>
 
             <!-- LEFT SIDE - Branding -->
-            <VBox alignment="CENTER" spacing="30" prefWidth="500" style="-fx-padding: 50;">
-                <Label text="🌾" style="-fx-font-size: 80px;"/>
-                <Label text="AgriFund" style="-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: #B2D944;"/>
-                <Label text="Plateforme de Financement Agricole" style="-fx-font-size: 18px; -fx-text-fill: white;"/>
+            <VBox alignment="CENTER" spacing="35" prefWidth="480" styleClass="branding-section">
 
-                <VBox spacing="15" style="-fx-padding: 40 0 0 0;">
-                    <HBox spacing="15" alignment="CENTER_LEFT">
-                        <Label text="✓" style="-fx-text-fill: #B2D944; -fx-font-size: 18px;"/>
-                        <Label text="Financements adaptés aux agriculteurs" style="-fx-text-fill: white;"/>
+                <!-- Logo et titre -->
+                <VBox alignment="CENTER" spacing="15">
+                    <StackPane styleClass="logo-container-large">
+                        <Label text="🌾" styleClass="logo-large"/>
+                    </StackPane>
+                    <Label text="AgriFund" styleClass="brand-title"/>
+                    <Label text="Plateforme de Financement Agricole" styleClass="brand-subtitle"/>
+                </VBox>
+
+                <!-- Features -->
+                <VBox spacing="15" styleClass="features-list" maxWidth="400">
+                    <HBox spacing="15" alignment="CENTER_LEFT" styleClass="feature-row">
+                        <StackPane styleClass="feature-icon-container">
+                            <Label text="💰" style="-fx-font-size: 20px;"/>
+                        </StackPane>
+                        <VBox spacing="2">
+                            <Label text="Financements adaptés" styleClass="feature-title-text"/>
+                            <Label text="Solutions sur mesure pour agriculteurs" styleClass="feature-desc-text"/>
+                        </VBox>
                     </HBox>
-                    <HBox spacing="15" alignment="CENTER_LEFT">
-                        <Label text="✓" style="-fx-text-fill: #B2D944; -fx-font-size: 18px;"/>
-                        <Label text="Processus simple et transparent" style="-fx-text-fill: white;"/>
+                    <HBox spacing="15" alignment="CENTER_LEFT" styleClass="feature-row">
+                        <StackPane styleClass="feature-icon-container">
+                            <Label text="📋" style="-fx-font-size: 20px;"/>
+                        </StackPane>
+                        <VBox spacing="2">
+                            <Label text="Processus simplifié" styleClass="feature-title-text"/>
+                            <Label text="Demandes en ligne rapides" styleClass="feature-desc-text"/>
+                        </VBox>
                     </HBox>
-                    <HBox spacing="15" alignment="CENTER_LEFT">
-                        <Label text="✓" style="-fx-text-fill: #B2D944; -fx-font-size: 18px;"/>
-                        <Label text="Réseau de banques partenaires" style="-fx-text-fill: white;"/>
+                    <HBox spacing="15" alignment="CENTER_LEFT" styleClass="feature-row">
+                        <StackPane styleClass="feature-icon-container">
+                            <Label text="🏦" style="-fx-font-size: 20px;"/>
+                        </StackPane>
+                        <VBox spacing="2">
+                            <Label text="Réseau bancaire" styleClass="feature-title-text"/>
+                            <Label text="Partenaires de confiance" styleClass="feature-desc-text"/>
+                        </VBox>
                     </HBox>
                 </VBox>
+
+                <!-- Mini Stats -->
+                <HBox spacing="35" alignment="CENTER" styleClass="stats-mini">
+                    <VBox alignment="CENTER" spacing="5">
+                        <Label text="500+" styleClass="stat-mini-number"/>
+                        <Label text="Agriculteurs" styleClass="stat-mini-label"/>
+                    </VBox>
+                    <Separator orientation="VERTICAL" styleClass="stat-separator" prefHeight="40"/>
+                    <VBox alignment="CENTER" spacing="5">
+                        <Label text="12" styleClass="stat-mini-number"/>
+                        <Label text="Banques" styleClass="stat-mini-label"/>
+                    </VBox>
+                    <Separator orientation="VERTICAL" styleClass="stat-separator" prefHeight="40"/>
+                    <VBox alignment="CENTER" spacing="5">
+                        <Label text="15M" styleClass="stat-mini-number"/>
+                        <Label text="DT Financés" styleClass="stat-mini-label"/>
+                    </VBox>
+                </HBox>
             </VBox>
 
             <!-- RIGHT SIDE - Login Form -->
-            <VBox alignment="CENTER" prefWidth="450" style="-fx-background-color: white; -fx-background-radius: 20 0 0 20; -fx-padding: 50;">
+            <VBox fx:id="loginCard" alignment="CENTER" prefWidth="500" minWidth="450" styleClass="login-card">
+                <padding>
+                    <Insets top="45" right="45" bottom="45" left="45"/>
+                </padding>
 
-                <VBox spacing="25" maxWidth="350">
-                    <VBox spacing="5">
-                        <Label text="Connexion" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #060806;"/>
-                        <Label text="Bienvenue ! Connectez-vous à votre compte" style="-fx-text-fill: #848A86;"/>
+                <VBox spacing="20" maxWidth="400">
+
+                    <!-- Header -->
+                    <VBox spacing="10" alignment="CENTER">
+                        <HBox alignment="CENTER" spacing="12">
+                            <Label text="👋" style="-fx-font-size: 32px;"/>
+                            <Label text="Connexion" styleClass="login-title"/>
+                        </HBox>
+                        <Label text="Bienvenue ! Connectez-vous à votre compte" styleClass="login-subtitle"/>
                     </VBox>
 
+                    <!-- Ligne décorative -->
+                    <HBox alignment="CENTER">
+                        <HBox styleClass="accent-line" prefWidth="150"/>
+                    </HBox>
+
                     <!-- Alert Message -->
-                    <HBox fx:id="alertBox" styleClass="alert, alert-danger" visible="false" managed="false">
-                        <Label fx:id="alertMessage" style="-fx-text-fill: #dc3545;"/>
+                    <HBox fx:id="alertBox" styleClass="alert-modern, alert-error" visible="false" managed="false"
+                          spacing="12" alignment="CENTER_LEFT">
+                        <Label text="⚠️" style="-fx-font-size: 18px;"/>
+                        <Label fx:id="alertMessage" styleClass="alert-text" wrapText="true"/>
                     </HBox>
 
                     <!-- Email Field -->
-                    <VBox styleClass="form-group" spacing="8">
-                        <Label text="Email" styleClass="form-label"/>
-                        <TextField fx:id="emailField" styleClass="form-control" promptText="votre@email.com"/>
+                    <VBox styleClass="input-group" spacing="10">
+                        <Label text="Email" styleClass="input-label"/>
+                        <HBox fx:id="emailContainer" styleClass="input-container">
+                            <Label text="📧" styleClass="input-icon"/>
+                            <TextField fx:id="emailField" styleClass="input-field"
+                                       promptText="votre@email.com" HBox.hgrow="ALWAYS"/>
+                        </HBox>
                     </VBox>
 
                     <!-- Password Field -->
-                    <VBox styleClass="form-group" spacing="8">
+                    <VBox styleClass="input-group" spacing="10">
                         <HBox alignment="CENTER_LEFT">
-                            <Label text="Mot de passe" styleClass="form-label" HBox.hgrow="ALWAYS"/>
-                            <Hyperlink text="Mot de passe oublié ?" onAction="#goToForgotPassword"
-                                       style="-fx-text-fill: #089647; -fx-font-size: 12px;"/>
+                            <Label text="Mot de passe" styleClass="input-label" HBox.hgrow="ALWAYS"/>
+                            <Hyperlink text="Oublié ?" onAction="#goToForgotPassword"
+                                       styleClass="forgot-link"/>
                         </HBox>
-                        <PasswordField fx:id="passwordField" styleClass="form-control" promptText="••••••••"/>
+                        <HBox fx:id="passwordContainer" styleClass="input-container">
+                            <Label text="🔐" styleClass="input-icon"/>
+                            <PasswordField fx:id="passwordField" styleClass="input-field"
+                                           promptText="••••••••" HBox.hgrow="ALWAYS"/>
+                        </HBox>
                     </VBox>
 
+                    <!-- CAPTCHA Component -->
+                    <CaptchaComponent fx:id="captchaComponent"/>
+
                     <!-- Remember Me -->
-                    <CheckBox fx:id="rememberMe" text="Se souvenir de moi" style="-fx-text-fill: #060806;"/>
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <CheckBox fx:id="rememberMe" styleClass="custom-checkbox"/>
+                        <Label text="Se souvenir de moi" styleClass="checkbox-label"/>
+                    </HBox>
 
                     <!-- Login Button -->
-                    <Button text="Se connecter" styleClass="btn, btn-primary"
-                            onAction="#handleLogin" prefWidth="350" prefHeight="45"/>
+                    <Button fx:id="loginButton" text="🚀 Se connecter" styleClass="btn-login"
+                            onAction="#handleLogin" maxWidth="Infinity"/>
 
                     <!-- Separator -->
-                    <HBox alignment="CENTER" spacing="15" style="-fx-padding: 10 0;">
+                    <HBox alignment="CENTER" styleClass="divider-container">
                         <Separator HBox.hgrow="ALWAYS"/>
-                        <Label text="OU" style="-fx-text-fill: #848A86;"/>
+                        <Label text="OU" styleClass="divider-text"/>
                         <Separator HBox.hgrow="ALWAYS"/>
                     </HBox>
 
                     <!-- Register Links -->
-                    <VBox spacing="10" alignment="CENTER">
-                        <Label text="Pas encore de compte ?" style="-fx-text-fill: #848A86;"/>
+                    <VBox spacing="12" alignment="CENTER" styleClass="register-section">
+                        <Label text="Pas encore de compte ?" styleClass="register-label"/>
                         <HBox spacing="15" alignment="CENTER">
-                            <Button text="🌾 Inscription Agriculteur" styleClass="btn, btn-secondary"
+                            <Button text="🌱 Agriculteur" styleClass="btn-register, btn-register-agriculteur"
                                     onAction="#goToRegisterAgriculteur"/>
-                            <Button text="🏦 Inscription Banque" styleClass="btn, btn-secondary"
+                            <Button text="🏦 Banque" styleClass="btn-register, btn-register-banque"
                                     onAction="#goToRegisterBanque"/>
                         </HBox>
                     </VBox>
 
                     <!-- Back to Home -->
-                    <HBox alignment="CENTER" style="-fx-padding: 20 0 0 0;">
-                        <Hyperlink text="← Retour à l'accueil" onAction="#goToHome"
-                                   style="-fx-text-fill: #848A86;"/>
+                    <HBox alignment="CENTER">
+                        <Hyperlink text="← Retour à l'accueil" onAction="#goToHome" styleClass="back-link"/>
                     </HBox>
                 </VBox>
-
             </VBox>
         </HBox>
-    </center>
-
-</BorderPane>
+    </ScrollPane>
+</StackPane>
