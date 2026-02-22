@@ -77,6 +77,15 @@
                         prefHeight="40"
                         prefWidth="180"
                         style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+
+                <Button text="🗺 Carte" styleClass="btn-info"
+                        onAction="#handleShowAllProjectsMap"
+                        prefHeight="40" prefWidth="110"
+                        style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: white; -fx-background-color: #1565C0; -fx-background-radius: 8;">
+                    <tooltip>
+                        <Tooltip text="Afficher tous les projets géolocalisés sur la carte"/>
+                    </tooltip>
+                </Button>
             </HBox>
         </VBox>
     </top>

@@ -10,9 +10,10 @@ public class projectagricole {
     private BigDecimal budgetdemande;
     private String statut;
     private Date datesoumission;
+    private Double latitude;
+    private Double longitude;
 
     public projectagricole() {}
-
 
     public projectagricole(String nomproject, float surface, BigDecimal budgetdemande, String statut, Date datesoumission) {
         this.nomproject = nomproject;
@@ -22,7 +23,6 @@ public class projectagricole {
         this.datesoumission = datesoumission;
     }
 
-
     public projectagricole(int idproject, String nomproject, float surface, BigDecimal budgetdemande, String statut, Date datesoumission) {
         this.idproject = idproject;
         this.nomproject = nomproject;
@@ -30,6 +30,17 @@ public class projectagricole {
         this.budgetdemande = budgetdemande;
         this.statut = statut;
         this.datesoumission = datesoumission;
+    }
+
+    public projectagricole(int idproject, String nomproject, float surface, BigDecimal budgetdemande, String statut, Date datesoumission, Double latitude, Double longitude) {
+        this.idproject = idproject;
+        this.nomproject = nomproject;
+        this.surface = surface;
+        this.budgetdemande = budgetdemande;
+        this.statut = statut;
+        this.datesoumission = datesoumission;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public int getIdproject() { return idproject; }
@@ -50,6 +61,16 @@ public class projectagricole {
     public Date getDatesoumission() { return datesoumission; }
     public void setDatesoumission(Date datesoumission) { this.datesoumission = datesoumission; }
 
+    public Double getLatitude() { return latitude; }
+    public void setLatitude(Double latitude) { this.latitude = latitude; }
+
+    public Double getLongitude() { return longitude; }
+    public void setLongitude(Double longitude) { this.longitude = longitude; }
+
+    public boolean hasLocation() {
+        return latitude != null && longitude != null;
+    }
+
     @Override
     public String toString() {
         return "projectagricole{" +
@@ -59,6 +80,8 @@ public class projectagricole {
                 ", budgetdemande=" + budgetdemande +
                 ", statut='" + statut + '\'' +
                 ", datesoumission=" + datesoumission +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
                 '}';
     }
 }

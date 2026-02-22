@@ -52,6 +52,12 @@ import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.util.Duration;
 
+// Mapbox / WebView
+import javafx.scene.web.WebView;
+import javafx.scene.web.WebEngine;
+import netscape.javascript.JSObject;
+import javafx.scene.layout.StackPane;
+
 public class projectagricolecontroller implements Initializable {
 
     // ============================================================================
@@ -88,6 +94,16 @@ public class projectagricolecontroller implements Initializable {
     @FXML private DatePicker dpDateSoumissionDialog;
     @FXML private Button btnSave;
     @FXML private Label lblStatusBadge;
+
+    // Location fields (map picker)
+    @FXML private TextField tfLatitudeDialog;
+    @FXML private TextField tfLongitudeDialog;
+    @FXML private Label lblLocationStatus;
+    @FXML private Button btnOpenMap;
+
+    // Picked coordinates (null = not set)
+    private Double pickedLatitude = null;
+    private Double pickedLongitude = null;
 
     // ============================================================================
     // SHARED FIELDS
@@ -211,6 +227,20 @@ public class projectagricolecontroller implements Initializable {
                 tfBudgetDialog.setText(currentProject.getBudgetdemande().toString());
                 dpDateSoumissionDialog.setValue(currentProject.getDatesoumission().toLocalDate());
                 updateStatusBadge(currentProject.getStatut());
+
+                // Pre-fill coordinates if project already has them
+                if (currentProject.getLatitude() != null && currentProject.getLongitude() != null) {
+                    pickedLatitude  = currentProject.getLatitude();
+                    pickedLongitude = currentProject.getLongitude();
+                    String latStr = String.format("%.6f", pickedLatitude);
+                    String lngStr = String.format("%.6f", pickedLongitude);
+                    if (tfLatitudeDialog  != null) tfLatitudeDialog.setText(latStr);
+                    if (tfLongitudeDialog != null) tfLongitudeDialog.setText(lngStr);
+                    if (lblLocationStatus != null) {
+                        lblLocationStatus.setText("✅ Localisation définie : " + latStr + ", " + lngStr);
+                        lblLocationStatus.setStyle("-fx-text-fill: #076A39; -fx-font-size: 11px; -fx-font-weight: bold;");
+                    }
+                }
             }
         }
     }
@@ -286,6 +316,8 @@ public class projectagricolecontroller implements Initializable {
                 currentProject.setSurface(Float.parseFloat(getDialogFieldValue(tfSurfaceDialog)));
                 currentProject.setBudgetdemande(new BigDecimal(getDialogFieldValue(tfBudgetDialog)));
                 currentProject.setDatesoumission(Date.valueOf(dpDateSoumissionDialog.getValue()));
+                currentProject.setLatitude(pickedLatitude);
+                currentProject.setLongitude(pickedLongitude);
                 // Do NOT update status - it's managed by financial decisions
 
                 service.modifier(currentProject);
@@ -302,6 +334,8 @@ public class projectagricolecontroller implements Initializable {
                         "en cours",
                         Date.valueOf(dpDateSoumissionDialog.getValue())
                 );
+                p.setLatitude(pickedLatitude);
+                p.setLongitude(pickedLongitude);
 
                 service.ajouter(p);
                 showAlert(Alert.AlertType.INFORMATION, "Succès",
@@ -325,6 +359,125 @@ public class projectagricolecontroller implements Initializable {
     @FXML
     void handleCancel(ActionEvent event) {
         closeDialogWindow();
+    }
+
+    // ============================================================================
+    // MAP PICKER (MAPBOX via WebView)
+    // ============================================================================
+
+    /**
+     * Opens the Mapbox location picker in a modal WebView dialog.
+     * Called from the FXML button "Choisir sur la carte".
+     */
+    @FXML
+    void handleOpenMap(ActionEvent event) {
+        Stage mapStage = new Stage();
+        mapStage.initModality(Modality.APPLICATION_MODAL);
+        mapStage.setTitle("Choisir la localisation");
+        mapStage.setWidth(920);
+        mapStage.setHeight(640);
+
+        WebView webView = new WebView();
+        WebEngine engine = webView.getEngine();
+        engine.setJavaScriptEnabled(true);
+
+        java.net.URL mapUrl = getClass().getResource("/mapbox_picker.html");
+        if (mapUrl == null) {
+            showAlert(Alert.AlertType.ERROR, "Fichier manquant",
+                    "Le fichier mapbox_picker.html est introuvable.\n" +
+                            "Assurez-vous qu'il est dans src/main/resources/");
+            return;
+        }
+
+        // PRIMARY: title-based callback — JS sets document.title = 'COORDS|lat|lng'
+        // Using pipe '|' as separator to avoid conflicts with colons in negative coords
+        engine.titleProperty().addListener((obs, oldTitle, newTitle) -> {
+            if (newTitle != null && newTitle.startsWith("COORDS|")) {
+                String[] parts = newTitle.substring(7).split("\\|", 2);
+                if (parts.length == 2) {
+                    try {
+                        double lat = Double.parseDouble(parts[0].trim());
+                        double lng = Double.parseDouble(parts[1].trim());
+                        onLocationPicked(lat, lng, mapStage);
+                    } catch (NumberFormatException ignored) {
+                        System.err.println("Bad coords in title: " + newTitle);
+                    }
+                }
+            }
+        });
+
+        // SECONDARY: inject Java bridge object into JS window after page loads
+        engine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+            if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
+                // Non-static bridge — required for JavaFX WebView JSObject bridge
+                MapBridge bridge = new MapBridge(mapStage, this);
+                JSObject jsWindow = (JSObject) engine.executeScript("window");
+                jsWindow.setMember("javaBridge", bridge);
+
+                // Pre-place existing marker when editing a project
+                if (pickedLatitude != null && pickedLongitude != null) {
+                    engine.executeScript(String.format(java.util.Locale.US,
+                            "setTimeout(function(){ setInitialMarker(%f, %f); }, 400);",
+                            pickedLatitude, pickedLongitude));
+                }
+            }
+        });
+
+        engine.load(mapUrl.toExternalForm());
+
+        Scene mapScene = new Scene(new StackPane(webView));
+        mapStage.setScene(mapScene);
+        mapStage.showAndWait();
+    }
+
+    /**
+     * Called when coordinates are confirmed (from either bridge or title listener).
+     * Runs on the JavaFX Application Thread.
+     */
+    public void onLocationPicked(double lat, double lng, Stage stageToClose) {
+        pickedLatitude  = lat;
+        pickedLongitude = lng;
+        String latStr = String.format(java.util.Locale.US, "%.6f", lat);
+        String lngStr = String.format(java.util.Locale.US, "%.6f", lng);
+
+        javafx.application.Platform.runLater(() -> {
+            // Close the map window first
+            if (stageToClose != null && stageToClose.isShowing()) {
+                stageToClose.close();
+            }
+            // Then update the form fields
+            if (tfLatitudeDialog  != null) tfLatitudeDialog.setText(latStr);
+            if (tfLongitudeDialog != null) tfLongitudeDialog.setText(lngStr);
+            if (lblLocationStatus != null) {
+                lblLocationStatus.setText("Localisation definie : " + latStr + ", " + lngStr);
+                lblLocationStatus.setStyle("-fx-text-fill: #076A39; -fx-font-size: 11px; -fx-font-weight: bold;");
+            }
+        });
+    }
+
+    /**
+     * Non-static JS<->Java bridge class.
+     * Must be non-static and have public methods for JavaFX WebView JSObject to call it.
+     */
+    public class MapBridge {
+        private final Stage mapStage;
+        private final projectagricolecontroller controller;
+
+        public MapBridge(Stage mapStage, projectagricolecontroller controller) {
+            this.mapStage   = mapStage;
+            this.controller = controller;
+        }
+
+        /** Called directly from JS: window.javaBridge.setCoordinates("33.123", "9.456") */
+        public void setCoordinates(String lat, String lng) {
+            try {
+                double latD = Double.parseDouble(lat.trim());
+                double lngD = Double.parseDouble(lng.trim());
+                controller.onLocationPicked(latD, lngD, mapStage);
+            } catch (NumberFormatException e) {
+                System.err.println("MapBridge: invalid coords: " + lat + " / " + lng);
+            }
+        }
     }
 
     private void closeDialogWindow() {
@@ -733,6 +886,16 @@ public class projectagricolecontroller implements Initializable {
         addCardDetailRow(detailsGrid, 1, "💰 Budget:", String.format("%,.2f DT", project.getBudgetdemande()));
         addCardDetailRow(detailsGrid, 2, "📅 Date:", project.getDatesoumission().toString());
 
+        // Latitude & Longitude
+        if (project.getLatitude() != null && project.getLongitude() != null) {
+            addCardDetailRow(detailsGrid, 3, "📍 Latitude:",
+                    String.format(java.util.Locale.US, "%.6f", project.getLatitude()));
+            addCardDetailRow(detailsGrid, 4, "📍 Longitude:",
+                    String.format(java.util.Locale.US, "%.6f", project.getLongitude()));
+        } else {
+            addCardDetailRow(detailsGrid, 3, "📍 Localisation:", "Non définie");
+        }
+
         // Action buttons
         HBox actions = new HBox(8);
         actions.setAlignment(Pos.CENTER);
@@ -886,7 +1049,7 @@ public class projectagricolecontroller implements Initializable {
 
     private void openModifyDialog(projectagricole project) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/projectagricoleadd.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/projectagricolemodify.fxml"));
             Parent root = loader.load();
 
             projectagricolecontroller controller = loader.getController();
@@ -896,7 +1059,7 @@ public class projectagricolecontroller implements Initializable {
 
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Modifier Projet Agricole");
+            stage.setTitle("Modifier Projet Agricole — " + project.getNomproject());
             stage.setScene(new Scene(root));
             stage.showAndWait();
 
@@ -936,92 +1099,129 @@ public class projectagricolecontroller implements Initializable {
     // ============================================================================
 
     private void showProjectDetails(projectagricole project) {
-        Dialog<Void> dialog = new Dialog<>();
-        dialog.setTitle("Détails du Projet");
-        dialog.setHeaderText(null);
+        Stage detailStage = new Stage();
+        detailStage.initModality(Modality.APPLICATION_MODAL);
+        detailStage.setTitle("Détails du Projet — " + project.getNomproject());
 
-        VBox content = new VBox(20);
-        content.setPadding(new Insets(25));
-        content.setStyle("-fx-background-color: white;");
+        boolean hasLocation = project.getLatitude() != null && project.getLongitude() != null;
 
-        // Header with icon and title
+        // ── Left panel: project info ──────────────────────────────────
+        VBox infoPanel = new VBox(18);
+        infoPanel.setPadding(new Insets(25));
+        infoPanel.setStyle("-fx-background-color: white;");
+        infoPanel.setPrefWidth(420);
+
+        // Header
         HBox headerBox = new HBox(15);
         headerBox.setAlignment(Pos.CENTER_LEFT);
-
         Label iconLarge = new Label(getProjectIcon(project.getStatut()));
-        iconLarge.setStyle("-fx-font-size: 48px;");
-
-        VBox titleBox = new VBox(5);
+        iconLarge.setStyle("-fx-font-size: 44px;");
+        VBox titleBox = new VBox(4);
         Label titleLabel = new Label(project.getNomproject());
-        titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #133D03;");
-
+        titleLabel.setStyle("-fx-font-size: 19px; -fx-font-weight: bold; -fx-text-fill: #133D03;");
+        titleLabel.setWrapText(true);
         Label idLabel = new Label("Projet #" + project.getIdproject());
-        idLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #848A86;");
-
+        idLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #848A86;");
         titleBox.getChildren().addAll(titleLabel, idLabel);
         headerBox.getChildren().addAll(iconLarge, titleBox);
 
-        // Status row
+        // Status badge
         HBox statusRow = new HBox(10);
         statusRow.setAlignment(Pos.CENTER_LEFT);
-        Label statusLabel = new Label("Statut:");
-        statusLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: 600; -fx-text-fill: #848A86;");
-
+        Label statusLabel = new Label("Statut :");
+        statusLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #848A86;");
         Label statusBadge = new Label(capitalizeStatus(project.getStatut()));
         statusBadge.getStyleClass().add(getStatusBadgeClass(project.getStatut()));
-        statusBadge.setStyle(statusBadge.getStyle() + "-fx-font-size: 14px; -fx-padding: 8 20;");
-
+        statusBadge.setStyle(statusBadge.getStyle() + "-fx-font-size: 13px; -fx-padding: 6 18;");
         statusRow.getChildren().addAll(statusLabel, statusBadge);
 
         // Details grid
         GridPane detailsGrid = new GridPane();
         detailsGrid.setHgap(20);
-        detailsGrid.setVgap(15);
-        detailsGrid.setPadding(new Insets(10, 0, 10, 0));
+        detailsGrid.setVgap(12);
+        detailsGrid.setPadding(new Insets(8, 0, 8, 0));
+        addDetailRow(detailsGrid, 0, "🌾 Surface :", String.format("%.2f Hectares", project.getSurface()));
+        addDetailRow(detailsGrid, 1, "💰 Budget demandé :", String.format("%,.2f DT", project.getBudgetdemande()));
+        addDetailRow(detailsGrid, 2, "📅 Date de soumission :", project.getDatesoumission().toString());
 
-        addDetailRow(detailsGrid, 0, "🌾 Surface:", String.format("%.2f Hectares", project.getSurface()));
-        addDetailRow(detailsGrid, 1, "💰 Budget demandé:", String.format("%,.2f DT", project.getBudgetdemande()));
-        addDetailRow(detailsGrid, 2, "📅 Date de soumission:", project.getDatesoumission().toString());
-
-        Separator sep = new Separator();
+        // Location info row
+        if (hasLocation) {
+            addDetailRow(detailsGrid, 3, "📍 Latitude :",  String.format(java.util.Locale.US, "%.6f", project.getLatitude()));
+            addDetailRow(detailsGrid, 4, "📍 Longitude :", String.format(java.util.Locale.US, "%.6f", project.getLongitude()));
+        } else {
+            Label noLoc = new Label("📍 Localisation non définie");
+            noLoc.setStyle("-fx-text-fill: #848A86; -fx-font-size: 12px; -fx-font-style: italic;");
+            detailsGrid.add(noLoc, 0, 3, 2, 1);
+        }
 
         // Status explanation
-        VBox statusExplanation = new VBox(8);
+        Separator sep = new Separator();
+        VBox statusExplanation = new VBox(6);
         Label explanationTitle = new Label("ℹ️ À propos du statut");
-        explanationTitle.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #133D03;");
-
+        explanationTitle.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #133D03;");
         Label explanationText = new Label(getStatusExplanation(project.getStatut()));
         explanationText.setWrapText(true);
-        explanationText.setMaxWidth(450);
-        explanationText.setStyle("-fx-font-size: 12px; -fx-text-fill: #6C757D; -fx-line-spacing: 2px;");
-
+        explanationText.setMaxWidth(380);
+        explanationText.setStyle("-fx-font-size: 11px; -fx-text-fill: #6C757D;");
         statusExplanation.getChildren().addAll(explanationTitle, explanationText);
 
-        // Add all to content
-        content.getChildren().addAll(
-                headerBox,
-                statusRow,
-                detailsGrid,
-                sep,
-                statusExplanation
-        );
-
-        dialog.getDialogPane().setContent(content);
-
-        ButtonType closeButton = new ButtonType("Fermer", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().add(closeButton);
-
-        Button closeBtn = (Button) dialog.getDialogPane().lookupButton(closeButton);
+        // Close button
+        Button closeBtn = new Button("✖  Fermer");
         closeBtn.setStyle(
-                "-fx-background-color: #076A39;" +
-                        "-fx-text-fill: white;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-padding: 10 30;" +
-                        "-fx-background-radius: 6;" +
-                        "-fx-cursor: hand;"
-        );
+                "-fx-background-color: #076A39; -fx-text-fill: white; -fx-font-weight: bold;" +
+                        "-fx-padding: 10 28; -fx-background-radius: 8; -fx-cursor: hand; -fx-font-size: 13px;");
+        closeBtn.setOnAction(e -> detailStage.close());
+        HBox btnRow = new HBox(closeBtn);
+        btnRow.setAlignment(Pos.CENTER_RIGHT);
+        btnRow.setPadding(new Insets(10, 0, 0, 0));
 
-        dialog.showAndWait();
+        infoPanel.getChildren().addAll(headerBox, statusRow, new Separator(), detailsGrid, sep, statusExplanation, btnRow);
+
+        // ── Right panel: map WebView (only if location exists) ────────
+        javafx.scene.web.WebView mapView = null;
+        if (hasLocation) {
+            mapView = new javafx.scene.web.WebView();
+            mapView.setPrefWidth(480);
+            mapView.setPrefHeight(500);
+            mapView.setMinWidth(480);
+
+            final javafx.scene.web.WebEngine engine = mapView.getEngine();
+            engine.setJavaScriptEnabled(true);
+
+            java.net.URL mapUrl = getClass().getResource("/mapbox_picker.html");
+            if (mapUrl != null) {
+                final double lat = project.getLatitude();
+                final double lng = project.getLongitude();
+                engine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+                    if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
+                        // Show read-only marker — disable click-to-place and bottom bar
+                        engine.executeScript(String.format(java.util.Locale.US,
+                                "setTimeout(function(){" +
+                                        "  setInitialMarker(%f, %f);" +
+                                        "  document.getElementById('bottom-bar').style.display='none';" +
+                                        "  document.getElementById('hint').style.display='none';" +
+                                        "  document.getElementById('map-wrap').style.cursor='default';" +
+                                        "}, 400);", lat, lng));
+                    }
+                });
+                engine.load(mapUrl.toExternalForm());
+            }
+        }
+
+        // ── Assemble layout ───────────────────────────────────────────
+        HBox root;
+        if (mapView != null) {
+            root = new HBox(mapView, infoPanel);
+            detailStage.setWidth(920);
+            detailStage.setHeight(520);
+        } else {
+            root = new HBox(infoPanel);
+            detailStage.setWidth(450);
+            detailStage.setHeight(480);
+        }
+
+        detailStage.setScene(new Scene(root));
+        detailStage.showAndWait();
     }
 
     private void addDetailRow(GridPane grid, int row, String label, String value) {
@@ -1198,6 +1398,93 @@ public class projectagricolecontroller implements Initializable {
     @FXML
     void openAddProjectForm(ActionEvent event) {
         openAddDialog();
+    }
+
+    // ============================================================================
+    // ALL-PROJECTS MAP  ← FIXED
+    // ============================================================================
+
+    /**
+     * Opens a full-screen map showing every project as a coloured pin:
+     *   green  = accepté  |  orange = en cours  |  red = refusé
+     *
+     * FIX 1: budget is serialised as a JSON string (not a bare number) to avoid
+     *         commas inside a numeric literal when budget >= 1000.
+     * FIX 2: projectsJson is passed directly to engine.executeScript() as a JS
+     *         array literal — no single-quote wrapping, no jsEscape().
+     */
+    @FXML
+    void handleShowAllProjectsMap(ActionEvent event) {
+        if (allProjects == null || allProjects.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Aucun projet",
+                    "Aucun projet disponible à afficher sur la carte.");
+            return;
+        }
+
+        java.net.URL mapUrl = getClass().getResource("/projects_map.html");
+        if (mapUrl == null) {
+            showAlert(Alert.AlertType.ERROR, "Fichier manquant",
+                    "projects_map.html introuvable dans src/main/resources/");
+            return;
+        }
+
+        // Build a valid JSON array — budget serialised as a JSON *string* so that
+        // comma-formatted values like "12,345.67" do not break JSON.parse().
+        StringBuilder json = new StringBuilder("[");
+        for (int i = 0; i < allProjects.size(); i++) {
+            projectagricole p = allProjects.get(i);
+            if (i > 0) json.append(",");
+            json.append("{");
+            json.append("\"nom\":").append(jsonStr(p.getNomproject())).append(",");
+            json.append("\"statut\":").append(jsonStr(p.getStatut())).append(",");
+            // surface stays a number — no comma grouping in "%.2f"
+            json.append("\"surface\":").append(String.format(java.util.Locale.US, "%.2f", p.getSurface())).append(",");
+            // budget as a *string* to keep the comma-formatted display safe
+            json.append("\"budget\":").append(jsonStr(
+                    String.format(java.util.Locale.US, "%,.2f", p.getBudgetdemande()))).append(",");
+            json.append("\"date\":").append(jsonStr(p.getDatesoumission().toString())).append(",");
+            if (p.getLatitude() != null && p.getLongitude() != null) {
+                json.append("\"lat\":").append(String.format(java.util.Locale.US, "%.6f", p.getLatitude())).append(",");
+                json.append("\"lng\":").append(String.format(java.util.Locale.US, "%.6f", p.getLongitude()));
+            } else {
+                json.append("\"lat\":null,\"lng\":null");
+            }
+            json.append("}");
+        }
+        json.append("]");
+
+        // Build the stage with a WebView
+        Stage mapStage = new Stage();
+        mapStage.initModality(Modality.APPLICATION_MODAL);
+        mapStage.setTitle("🗺 Carte des Projets Agricoles");
+        mapStage.setWidth(1100);
+        mapStage.setHeight(720);
+
+        javafx.scene.web.WebView webView = new javafx.scene.web.WebView();
+        javafx.scene.web.WebEngine engine = webView.getEngine();
+        engine.setJavaScriptEnabled(true);
+
+        // Keep a final copy for use inside the lambda
+        final String projectsJson = json.toString();
+
+        engine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+            if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
+                // FIX: pass the JSON array directly as a JS expression.
+                // projectsJson is already a valid JS array literal — no quoting needed.
+                engine.executeScript("loadProjects(" + projectsJson + ")");
+            }
+        });
+
+        engine.load(mapUrl.toExternalForm());
+
+        mapStage.setScene(new Scene(new StackPane(webView)));
+        mapStage.show();
+    }
+
+    /** Wraps a Java string as a JSON string literal (escapes quotes and backslashes). */
+    private String jsonStr(String s) {
+        if (s == null) return "null";
+        return "\"" + s.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
     }
 
     // ============================================================================

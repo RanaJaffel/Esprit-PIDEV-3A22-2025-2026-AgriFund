@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Carte des Projets Agricoles</title>
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        html,body{height:100%;width:100%;overflow:hidden;font-family:'Segoe UI',Arial,sans-serif;display:flex;flex-direction:column}
+
+        #toolbar{background:linear-gradient(135deg,#076A39,#133D03);color:white;padding:0 18px;display:flex;align-items:center;gap:14px;height:50px;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+        #toolbar h3{font-size:15px;flex:1}
+
+        /* Legend bar */
+        #legend{background:#fff;padding:0 18px;display:flex;align-items:center;gap:20px;height:40px;border-bottom:2px solid #e0e0e0;flex-shrink:0;font-size:13px}
+        .leg-dot{width:14px;height:14px;border-radius:50%;border:2px solid rgba(0,0,0,.2);display:inline-block;flex-shrink:0}
+        .leg-item{display:flex;align-items:center;gap:6px;color:#333}
+        #proj-count{margin-left:auto;color:#555;font-size:12px}
+
+        #map-wrap{position:relative;flex:1;overflow:hidden;cursor:grab;background:#aad3df;user-select:none;-webkit-user-select:none}
+        #map-wrap.grabbing{cursor:grabbing}
+        canvas{display:block;position:absolute;top:0;left:0}
+
+        /* Tooltip popup */
+        #tooltip{position:absolute;background:white;border-radius:10px;padding:12px 16px;box-shadow:0 4px 20px rgba(0,0,0,.25);pointer-events:none;display:none;z-index:50;min-width:200px;max-width:260px}
+        #tooltip h4{font-size:14px;color:#133D03;margin-bottom:6px}
+        #tooltip .trow{display:flex;justify-content:space-between;font-size:12px;color:#555;margin:3px 0}
+        #tooltip .trow span:last-child{font-weight:bold;color:#076A39}
+        #tooltip .badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:bold;color:white;margin-top:6px}
+
+        #zoom-ctrl{position:absolute;top:12px;right:12px;display:flex;flex-direction:column;gap:4px;z-index:30}
+        .zbtn{width:34px;height:34px;background:#fff;border:1px solid #ccc;border-radius:7px;font-size:20px;font-weight:bold;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.18);color:#333;line-height:1}
+        .zbtn:hover{background:#f0f0f0}
+
+        #attrib{position:absolute;bottom:5px;right:8px;font-size:10px;color:#333;background:rgba(255,255,255,.7);padding:2px 5px;border-radius:3px;z-index:20}
+        #no-loc{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);color:#fff;padding:8px 18px;border-radius:18px;font-size:12px;pointer-events:none;z-index:20;display:none}
+    </style>
+</head>
+<body>
+
+<div id="toolbar">
+    <span style="font-size:22px">🗺</span>
+    <h3>Carte des Projets Agricoles</h3>
+    <span id="proj-count-title" style="font-size:12px;opacity:.8"></span>
+</div>
+
+<div id="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:#076A39"></div> Accepté</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#F4A261"></div> En cours</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#E63946"></div> Refusé</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#aaa"></div> Sans localisation</div>
+    <span id="proj-count" style="margin-left:auto"></span>
+</div>
+
+<div id="map-wrap">
+    <canvas id="map"></canvas>
+
+    <!-- Hover tooltip -->
+    <div id="tooltip">
+        <h4 id="tt-name"></h4>
+        <div class="trow"><span>Surface</span><span id="tt-surface"></span></div>
+        <div class="trow"><span>Budget</span><span id="tt-budget"></span></div>
+        <div class="trow"><span>Date</span><span id="tt-date"></span></div>
+        <div class="trow"><span>Coordonnées</span><span id="tt-coords"></span></div>
+        <div id="tt-badge" class="badge"></div>
+    </div>
+
+    <div id="zoom-ctrl">
+        <button class="zbtn" id="zoomIn">+</button>
+        <button class="zbtn" id="zoomOut">−</button>
+        <button class="zbtn" id="zoomFit" title="Centrer sur les projets" style="font-size:14px">⊙</button>
+    </div>
+
+    <div id="attrib">© <a href="https://www.openstreetmap.org/copyright" target="_blank" style="color:#333">OpenStreetMap</a> contributors</div>
+    <div id="no-loc">⚠ Certains projets n'ont pas de localisation définie</div>
+</div>
+
+<script>
+    // ═══════════════════════════════════════════════════════════════════
+    //  Read-only canvas map showing all projects as colored pins
+    //  Project data is injected by Java via engine.executeScript("loadProjects(...)")
+    //
+    //  FIX: Uses OpenStreetMap tiles (no Mapbox token required).
+    //       img.crossOrigin is left unset so JavaFX WebView does not block OSM tiles.
+    //  FIX: loadProjects() receives a plain JS array literal — no JSON.parse needed.
+    // ═══════════════════════════════════════════════════════════════════
+
+    var TILE_SIZE = 256, MIN_ZOOM = 2, MAX_ZOOM = 18;
+
+    var zoom = 6, centerLat = 33.8869, centerLng = 9.5375;
+    var projects = [];   // filled by loadProjects()
+    var tileCache = {};
+    var redrawPending = false;
+    var dragging = false, dragStartX, dragStartY, dragStartLat, dragStartLng;
+    var hoveredProject = null;
+
+    var canvas  = document.getElementById('map');
+    var ctx     = canvas.getContext('2d');
+    var mapWrap = document.getElementById('map-wrap');
+    var tooltip = document.getElementById('tooltip');
+
+    // ── Status colours ────────────────────────────────────────────────
+    var STATUS_COLOR = {
+        'accepte' : '#076A39',
+        'en cours': '#F4A261',
+        'refuse'  : '#E63946'
+    };
+    var STATUS_LABEL = {
+        'accepte' : 'Accepté',
+        'en cours': 'En cours',
+        'refuse'  : 'Refusé'
+    };
+    var STATUS_BADGE_BG = {
+        'accepte' : '#076A39',
+        'en cours': '#F4A261',
+        'refuse'  : '#E63946'
+    };
+
+    // ── Projection ────────────────────────────────────────────────────
+    function latToY(lat,z){var s=Math.sin(lat*Math.PI/180);return(0.5-Math.log((1+s)/(1-s))/(4*Math.PI))*Math.pow(2,z)*TILE_SIZE;}
+    function lngToX(lng,z){return(lng+180)/360*Math.pow(2,z)*TILE_SIZE;}
+    function yToLat(y,z){var n=Math.PI-2*Math.PI*y/(Math.pow(2,z)*TILE_SIZE);return 180/Math.PI*Math.atan(0.5*(Math.exp(n)-Math.exp(-n)));}
+    function xToLng(x,z){return x/(Math.pow(2,z)*TILE_SIZE)*360-180;}
+    function w2c(wx,wy){return{x:wx-lngToX(centerLng,zoom)+canvas.width/2, y:wy-latToY(centerLat,zoom)+canvas.height/2};}
+    function c2w(cx,cy){return{x:cx-canvas.width/2+lngToX(centerLng,zoom), y:cy-canvas.height/2+latToY(centerLat,zoom)};}
+
+    // ── Tiles (OpenStreetMap — no token required) ──────────────────────
+    function osmUrl(z,x,y){
+        var sub = ['a','b','c'][(x+y+z)%3];
+        return 'https://' + sub + '.tile.openstreetmap.org/' + z + '/' + x + '/' + y + '.png';
+    }
+
+    function getTile(z,tx,ty){
+        var key=z+'/'+tx+'/'+ty;
+        if(tileCache[key]) return tileCache[key];
+        var obj={img:null,ready:false};
+        tileCache[key]=obj;
+        var img=new Image();
+        // Do NOT set crossOrigin for OSM in JavaFX WebView — it triggers CORS preflight
+        // that OSM does not answer, causing every tile to fail.
+        img.onload=function(){obj.ready=true;requestRedraw();};
+        img.onerror=function(){
+            // Retry once with a different subdomain on error
+            var retryImg=new Image();
+            retryImg.onload=function(){obj.img=retryImg;obj.ready=true;requestRedraw();};
+            retryImg.src=osmUrl(z,(tx+1)%3,ty);
+        };
+        img.src=osmUrl(z,tx,ty);
+        obj.img=img;
+        return obj;
+    }
+
+    // ── Draw ──────────────────────────────────────────────────────────
+    function requestRedraw(){if(!redrawPending){redrawPending=true;setTimeout(draw,0);}}
+
+    function draw(){
+        redrawPending=false;
+        var cw=canvas.width, ch=canvas.height;
+        if(!cw||!ch) return;
+        ctx.clearRect(0,0,cw,ch);
+
+        var numT=Math.pow(2,zoom);
+        var cx=lngToX(centerLng,zoom), cy=latToY(centerLat,zoom);
+        var sTX=Math.floor((cx-cw/2)/TILE_SIZE), sTY=Math.floor((cy-ch/2)/TILE_SIZE);
+        var eTX=Math.ceil((cx+cw/2)/TILE_SIZE),  eTY=Math.ceil((cy+ch/2)/TILE_SIZE);
+
+        for(var tx=sTX;tx<=eTX;tx++){
+            for(var ty=sTY;ty<=eTY;ty++){
+                if(ty<0||ty>=numT) continue;
+                var wtx=((tx%numT)+numT)%numT;
+                var obj=getTile(zoom,wtx,ty);
+                var dx=Math.round(tx*TILE_SIZE-cx+cw/2), dy=Math.round(ty*TILE_SIZE-cy+ch/2);
+                if(obj.ready && obj.img) ctx.drawImage(obj.img,dx,dy,TILE_SIZE,TILE_SIZE);
+                else{ctx.fillStyle='#c8dfc8';ctx.fillRect(dx,dy,TILE_SIZE,TILE_SIZE);ctx.strokeStyle='#9bbf9b';ctx.strokeRect(dx,dy,TILE_SIZE,TILE_SIZE);}
+            }
+        }
+
+        // Draw all project pins
+        projects.forEach(function(p){
+            if(p.lat==null) return;
+            var cp=w2c(lngToX(p.lng,zoom), latToY(p.lat,zoom));
+            drawPin(cp.x, cp.y, p.statut, p===hoveredProject);
+        });
+    }
+
+    // ── Pin drawing ───────────────────────────────────────────────────
+    function drawPin(x, y, statut, hovered) {
+        var color = STATUS_COLOR[statut] || '#aaa';
+        var scale = hovered ? 1.3 : 1.0;
+        var r = 10 * scale;
+
+        ctx.save();
+        ctx.translate(x, y);
+
+        // Drop shadow
+        ctx.shadowColor = 'rgba(0,0,0,0.35)';
+        ctx.shadowBlur  = hovered ? 14 : 8;
+        ctx.shadowOffsetY = 3;
+
+        // Teardrop pin shape
+        ctx.beginPath();
+        ctx.arc(0, -r * 2.1, r, 0, Math.PI * 2);
+        ctx.fillStyle = color;
+        ctx.fill();
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 2 * scale;
+        ctx.stroke();
+
+        // Stem
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetY = 0;
+        ctx.beginPath();
+        ctx.moveTo(-r * 0.45, -r * 2.1 + r * 0.85);
+        ctx.lineTo(0, 0);
+        ctx.lineTo(r * 0.45, -r * 2.1 + r * 0.85);
+        ctx.fillStyle = color;
+        ctx.fill();
+
+        // White dot inside pin head
+        ctx.beginPath();
+        ctx.arc(0, -r * 2.1, r * 0.38, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,0.85)';
+        ctx.fill();
+
+        ctx.restore();
+    }
+
+    // ── Resize ────────────────────────────────────────────────────────
+    function resizeCanvas(){
+        canvas.width=mapWrap.clientWidth;
+        canvas.height=mapWrap.clientHeight;
+        requestRedraw();
+    }
+    window.addEventListener('resize',resizeCanvas);
+    resizeCanvas();
+
+    // ── Pan ───────────────────────────────────────────────────────────
+    mapWrap.addEventListener('mousedown',function(e){
+        if(e.target.classList.contains('zbtn')) return;
+        dragging=true; dragStartX=e.clientX; dragStartY=e.clientY;
+        var w=c2w(e.offsetX,e.offsetY);
+        dragStartLat=yToLat(w.y,zoom); dragStartLng=xToLng(w.x,zoom);
+        mapWrap.classList.add('grabbing');
+        e.preventDefault();
+    });
+    document.addEventListener('mousemove',function(e){
+        if(!dragging) return;
+        var r=canvas.getBoundingClientRect();
+        var w=c2w(e.clientX-r.left,e.clientY-r.top);
+        centerLat-=(yToLat(w.y,zoom)-dragStartLat);
+        centerLng-=(xToLng(w.x,zoom)-dragStartLng);
+        centerLat=Math.max(-85,Math.min(85,centerLat));
+        requestRedraw();
+    });
+    document.addEventListener('mouseup',function(){
+        if(dragging){dragging=false;mapWrap.classList.remove('grabbing');}
+    });
+
+    // ── Hover detection ───────────────────────────────────────────────
+    mapWrap.addEventListener('mousemove',function(e){
+        if(dragging) return;
+        var r=canvas.getBoundingClientRect();
+        var mx=e.clientX-r.left, my=e.clientY-r.top;
+        var found=null;
+        var HIT=18; // px hit radius
+
+        for(var i=projects.length-1;i>=0;i--){
+            var p=projects[i];
+            if(p.lat==null) continue;
+            var cp=w2c(lngToX(p.lng,zoom),latToY(p.lat,zoom));
+            var dx=mx-cp.x, dy=my-(cp.y-24); // offset to pin circle centre
+            if(Math.sqrt(dx*dx+dy*dy)<HIT){found=p;break;}
+        }
+
+        if(found!==hoveredProject){
+            hoveredProject=found;
+            requestRedraw();
+        }
+
+        if(found){
+            showTooltip(e.clientX-r.left, e.clientY-r.top, found);
+        } else {
+            tooltip.style.display='none';
+        }
+    });
+
+    mapWrap.addEventListener('mouseleave',function(){
+        hoveredProject=null; tooltip.style.display='none'; requestRedraw();
+    });
+
+    function showTooltip(x, y, p){
+        document.getElementById('tt-name').textContent = p.nom;
+        document.getElementById('tt-surface').textContent = p.surface + ' Ha';
+        document.getElementById('tt-budget').textContent = p.budget + ' DT';
+        document.getElementById('tt-date').textContent = p.date;
+        document.getElementById('tt-coords').textContent = p.lat.toFixed(4) + ', ' + p.lng.toFixed(4);
+        var badge = document.getElementById('tt-badge');
+        badge.textContent = STATUS_LABEL[p.statut] || p.statut;
+        badge.style.background = STATUS_BADGE_BG[p.statut] || '#888';
+
+        // Position tooltip so it stays inside the map
+        var tw=265, th=140;
+        var tx = x+18, ty = y-th/2;
+        if(tx+tw > canvas.width)  tx = x-tw-10;
+        if(ty < 5)                ty = 5;
+        if(ty+th > canvas.height) ty = canvas.height-th-5;
+
+        tooltip.style.left  = tx+'px';
+        tooltip.style.top   = ty+'px';
+        tooltip.style.display='block';
+    }
+
+    // ── Zoom ──────────────────────────────────────────────────────────
+    mapWrap.addEventListener('wheel',function(e){
+        e.preventDefault();
+        zoomAt(e.offsetX,e.offsetY,e.deltaY<0?1:-1);
+    },{passive:false});
+
+    function zoomAt(px,py,delta){
+        var nz=Math.max(MIN_ZOOM,Math.min(MAX_ZOOM,zoom+delta));
+        if(nz===zoom) return;
+        var w=c2w(px,py); var lat=yToLat(w.y,zoom),lng=xToLng(w.x,zoom);
+        zoom=nz;
+        var w2=c2w(px,py);
+        centerLat+=lat-yToLat(w2.y,zoom); centerLng+=lng-xToLng(w2.x,zoom);
+        centerLat=Math.max(-85,Math.min(85,centerLat));
+        requestRedraw();
+    }
+
+    document.getElementById('zoomIn').addEventListener('click',function(e){e.stopPropagation();zoomAt(canvas.width/2,canvas.height/2,1);});
+    document.getElementById('zoomOut').addEventListener('click',function(e){e.stopPropagation();zoomAt(canvas.width/2,canvas.height/2,-1);});
+    document.getElementById('zoomFit').addEventListener('click',function(e){e.stopPropagation();fitToProjects();});
+
+    // ── Fit view to all located projects ─────────────────────────────
+    function fitToProjects(){
+        var located=projects.filter(function(p){return p.lat!=null;});
+        if(located.length===0){zoom=6;centerLat=33.8869;centerLng=9.5375;requestRedraw();return;}
+        if(located.length===1){zoom=12;centerLat=located[0].lat;centerLng=located[0].lng;requestRedraw();return;}
+
+        var minLat=Infinity,maxLat=-Infinity,minLng=Infinity,maxLng=-Infinity;
+        located.forEach(function(p){
+            minLat=Math.min(minLat,p.lat);maxLat=Math.max(maxLat,p.lat);
+            minLng=Math.min(minLng,p.lng);maxLng=Math.max(maxLng,p.lng);
+        });
+        centerLat=(minLat+maxLat)/2; centerLng=(minLng+maxLng)/2;
+
+        // Pick zoom so all pins fit with 60px padding
+        for(var z=MAX_ZOOM;z>=MIN_ZOOM;z--){
+            var topLeft=w2cAt(lngToX(minLng,z),latToY(maxLat,z),z);
+            var botRight=w2cAt(lngToX(maxLng,z),latToY(minLat,z),z);
+            if(botRight.x-topLeft.x < canvas.width-120 && botRight.y-topLeft.y < canvas.height-120){
+                zoom=z; break;
+            }
+        }
+        requestRedraw();
+    }
+
+    function w2cAt(wx,wy,z){
+        return{x:wx-lngToX(centerLng,z)+canvas.width/2, y:wy-latToY(centerLat,z)+canvas.height/2};
+    }
+
+    // ── loadProjects: called from Java after page loads ───────────────
+    // FIX: The Java side now calls  engine.executeScript("loadProjects(" + projectsJson + ")")
+    //      so the argument arrives here as a real JS array — no JSON.parse() needed.
+    //      We still accept a string argument (fallback) for safety.
+    function loadProjects(data){
+        if(typeof data === 'string'){
+            try{ projects = JSON.parse(data); }
+            catch(e){ projects = []; console.error('loadProjects parse error:', e); }
+        } else {
+            // data is already a JS array (the common path after the fix)
+            projects = data || [];
+        }
+
+        var located=projects.filter(function(p){return p.lat!=null;});
+        var total=projects.length;
+
+        document.getElementById('proj-count').textContent =
+            located.length + ' géolocalisé(s) sur ' + total + ' projet(s)';
+        document.getElementById('proj-count-title').textContent =
+            '— ' + located.length + ' / ' + total + ' géolocalisé(s)';
+
+        if(located.length < total){
+            document.getElementById('no-loc').style.display='block';
+            setTimeout(function(){document.getElementById('no-loc').style.display='none';},4000);
+        }
+
+        fitToProjects();
+    }
+
+    // Initial render (map tiles load even before projects arrive)
+    requestRedraw();
+</script>
+</body>
+</html>
