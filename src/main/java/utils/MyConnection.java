@@ -4,51 +4,44 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/**
- * Classe singleton pour gérer la connexion à la base de données
- */
 public class MyConnection {
 
-    // Attributs de connexion
-    private static final String URL = "jdbc:mysql://localhost:3306/gestiondesdecesions";
-    private static final String USER = "root";
-    private static final String PASSWORD = "";
+    final String URL = "jdbc:mysql://localhost:3306/gestiondesdecesions";
+    final String USER = "root";
+    final String PASS = "";
 
-    private static Connection connection;
+    private Connection con;
+    private static MyConnection instance;
 
-    // Constructeur privé pour empêcher l'instanciation
     private MyConnection() {
-    }
-
-    /**
-     * Méthode pour obtenir une instance unique de la connexion
-     * @return Connection - l'objet de connexion
-     */
-    public static Connection getInstance() {
         try {
-            if (connection == null || connection.isClosed()) {
-                connection = DriverManager.getConnection(URL, USER, PASSWORD);
-                System.out.println("Connexion établie avec succès!");
-            }
+            con = DriverManager.getConnection(URL, USER, PASS);
+            System.out.println("Connected to database successfully");
         } catch (SQLException e) {
-            System.err.println("Erreur lors de la connexion à la base de données");
-            e.printStackTrace();
+            System.out.println("Database connection error: " + e.getMessage());
         }
-        return connection;
     }
 
-    /**
-     * Méthode pour fermer la connexion
-     */
+    public static MyConnection getInstance() {
+        if (instance == null) {
+            instance = new MyConnection();
+        }
+        return instance;
+    }
+
+    public Connection getCon() {
+        return con;
+    }
+
+
     public static void closeConnection() {
         try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-                System.out.println("Connexion fermée avec succès!");
+            if (instance != null && instance.con != null && !instance.con.isClosed()) {
+                instance.con.close();
+                System.out.println("Database connection closed successfully");
             }
         } catch (SQLException e) {
-            System.err.println("Erreur lors de la fermeture de la connexion");
-            e.printStackTrace();
+            System.out.println("Error closing database connection: " + e.getMessage());
         }
     }
 }

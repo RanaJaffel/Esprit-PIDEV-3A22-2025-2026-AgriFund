@@ -5,11 +5,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import services.ServiceDecisionFinanciere;
 import services.ServiceEvaluationRisque;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -29,6 +32,39 @@ public class DecesionController {
     public void initialize() {
         service = new ServiceDecisionFinanciere();
         cbStatut.getItems().addAll("En attente", "Approuvé", "Rejeté");
+
+        // Désactiver les dates passées pour dpDateDecision
+        dpDateDecision.setDayCellFactory(picker -> new DateCell() {
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate today = LocalDate.now();
+                setDisable(empty || date.compareTo(today) < 0);
+            }
+        });
+
+        // Formater l'affichage de la date
+        dpDateDecision.setConverter(new StringConverter<LocalDate>() {
+            private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+            @Override
+            public String toString(LocalDate date) {
+                if (date != null) {
+                    return dateFormatter.format(date);
+                } else {
+                    return "";
+                }
+            }
+
+            @Override
+            public LocalDate fromString(String string) {
+                if (string != null && !string.isEmpty()) {
+                    return LocalDate.parse(string, dateFormatter);
+                } else {
+                    return null;
+                }
+            }
+        });
+
         loadEvaluationIds();
         updateStatus("Prêt");
     }

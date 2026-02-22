@@ -5,13 +5,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import org.json.JSONObject;
 import services.AIService;
 import services.ServiceEvaluationRisque;
 import services.ServiceProjectAgricole;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -36,6 +39,39 @@ public class RisqueController {
         cbNiveauRisque.getItems().addAll("Faible", "Moyen", "Élevé");
         cbFiabiliteDonnees.getItems().addAll("Faible", "Moyenne", "Élevée");
         cbRecommandation.getItems().addAll("Je recommande ce projet", "Je recommande ce projet avec surveillance", "Je ne recommande pas ce projet", "Aucune");
+
+        // Désactiver les dates passées pour dpDateEvaluation
+        dpDateEvaluation.setDayCellFactory(picker -> new DateCell() {
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate today = LocalDate.now();
+                setDisable(empty || date.compareTo(today) < 0);
+            }
+        });
+
+        // Formater l'affichage de la date
+        dpDateEvaluation.setConverter(new StringConverter<LocalDate>() {
+            private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+            @Override
+            public String toString(LocalDate date) {
+                if (date != null) {
+                    return dateFormatter.format(date);
+                } else {
+                    return "";
+                }
+            }
+
+            @Override
+            public LocalDate fromString(String string) {
+                if (string != null && !string.isEmpty()) {
+                    return LocalDate.parse(string, dateFormatter);
+                } else {
+                    return null;
+                }
+            }
+        });
+
         loadProjetIds();
         updateStatus("Prêt");
 

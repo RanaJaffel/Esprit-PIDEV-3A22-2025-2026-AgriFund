@@ -12,7 +12,7 @@ public class ServiceEvaluationRisque implements InterfaceCRUD<EvaluationRisque> 
     private Connection connection;
 
     public ServiceEvaluationRisque() {
-        this.connection = MyConnection.getInstance();
+        this.connection = MyConnection.getInstance().getCon();
     }
 
     @Override
