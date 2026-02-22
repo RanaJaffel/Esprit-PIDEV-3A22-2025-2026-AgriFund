@@ -2,299 +2,176 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.geometry.Insets?>
 
-<StackPane xmlns:fx="http://javafx.com/fxml"
-           fx:controller="Controllers.RegisterBanqueController"
-           stylesheets="@../css/register-banque-modern.css"
-           styleClass="root-pane">
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controllers.RegisterBanqueController"
+            stylesheets="@../css/styles.css"
+            style="-fx-background-color: #f5f5f5;">
 
-    <!-- Background Decorations -->
-    <Pane styleClass="bg-decoration" mouseTransparent="true">
-        <Circle styleClass="deco-circle c1" radius="300" layoutX="-100" layoutY="-50"/>
-        <Circle styleClass="deco-circle c2" radius="200" layoutX="1200" layoutY="150"/>
-        <Circle styleClass="deco-circle c3" radius="250" layoutX="100" layoutY="750"/>
-        <Circle styleClass="deco-circle c4" radius="180" layoutX="1100" layoutY="650"/>
-        <Polygon styleClass="deco-polygon p1" points="0,0, 100,50, 50,100" layoutX="950" layoutY="80"/>
-        <Polygon styleClass="deco-polygon p2" points="0,50, 50,0, 100,50, 50,100" layoutX="150" layoutY="500"/>
-    </Pane>
-
-    <BorderPane styleClass="main-border-pane">
-
-        <!-- TOP NAVBAR -->
-        <top>
-            <HBox styleClass="navbar" alignment="CENTER">
-                <padding><Insets top="12" right="50" bottom="12" left="50"/></padding>
-
-                <!-- Logo -->
-                <HBox alignment="CENTER_LEFT" spacing="12" HBox.hgrow="ALWAYS">
-                    <StackPane styleClass="logo-box">
-                        <Label text="🌾" styleClass="logo-emoji"/>
-                    </StackPane>
-                    <VBox alignment="CENTER_LEFT" style="-fx-cursor: hand;" onMouseClicked="#goToHome">
-                        <Label text="AgriFund" styleClass="logo-text"/>
-                        <Label text="Financement Agricole" styleClass="logo-subtext"/>
-                    </VBox>
-                </HBox>
-
-                <!-- Nav Right -->
-                <HBox spacing="20" alignment="CENTER_RIGHT">
-                    <Label text="Déjà inscrit ?" styleClass="nav-text"/>
-                    <Button text="Se connecter" styleClass="btn-nav" onAction="#goToLogin"/>
-                </HBox>
+    <!-- NAVBAR -->
+    <top>
+        <HBox styleClass="navbar" alignment="CENTER">
+            <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                <VBox alignment="CENTER_LEFT" style="-fx-cursor: hand;" onMouseClicked="#goToHome">
+                    <Label text="🌾 AgriFund" styleClass="navbar-brand"/>
+                    <Label text="Plateforme de Financement Agricole" style="-fx-font-size: 11px; -fx-text-fill: #848A86;"/>
+                </VBox>
             </HBox>
-        </top>
 
-        <!-- CENTER CONTENT -->
-        <center>
-            <ScrollPane fitToWidth="true" styleClass="main-scroll">
-                <HBox alignment="CENTER" spacing="50">
-                    <padding><Insets top="40" right="50" bottom="60" left="50"/></padding>
+            <HBox spacing="15" alignment="CENTER_RIGHT">
+                <Label text="Déjà un compte ?" style="-fx-text-fill: white;"/>
+                <Button text="Se connecter" styleClass="btn, btn-secondary" onAction="#goToLogin"/>
+            </HBox>
+        </HBox>
+    </top>
 
-                    <!-- LEFT PANEL - Presentation -->
-                    <VBox alignment="CENTER" spacing="30" prefWidth="420" styleClass="left-panel">
+    <!-- MAIN CONTENT -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+            <HBox alignment="CENTER" style="-fx-padding: 50;">
 
-                        <!-- Hero Visual -->
-                        <StackPane styleClass="hero-visual">
-                            <VBox styleClass="hero-bg-box"/>
-                            <VBox styleClass="hero-inner-box">
-                                <Label text="🏦" styleClass="hero-emoji"/>
-                            </VBox>
-                            <Circle styleClass="hero-ring" radius="85" strokeWidth="3"/>
-                        </StackPane>
+                <!-- LEFT SIDE - Info -->
+                <VBox alignment="CENTER" spacing="30" prefWidth="400" style="-fx-padding: 50;">
+                    <Label text="🏦" style="-fx-font-size: 80px;"/>
+                    <Label text="Rejoignez AgriFund" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #060806;"/>
+                    <Label text="En tant qu'institution financière" style="-fx-font-size: 18px; -fx-text-fill: #E1B323;"/>
 
-                        <!-- Title -->
-                        <VBox alignment="CENTER" spacing="10">
-                            <Label text="Espace Partenaire" styleClass="hero-title"/>
-                            <Label text="Banques &amp; Institutions Financières" styleClass="hero-subtitle"/>
-                        </VBox>
-
-                        <!-- Benefits List -->
-                        <VBox spacing="16" styleClass="benefits-list">
-
-                            <HBox styleClass="benefit-item" spacing="16" alignment="CENTER_LEFT">
-                                <StackPane styleClass="benefit-icon-box">
-                                    <Label text="📊"/>
-                                </StackPane>
-                                <VBox spacing="3">
-                                    <Label text="Tableau de bord intelligent" styleClass="benefit-title"/>
-                                    <Label text="Suivez vos investissements en temps réel" styleClass="benefit-desc"/>
-                                </VBox>
-                            </HBox>
-
-                            <HBox styleClass="benefit-item" spacing="16" alignment="CENTER_LEFT">
-                                <StackPane styleClass="benefit-icon-box">
-                                    <Label text="🌾"/>
-                                </StackPane>
-                                <VBox spacing="3">
-                                    <Label text="Agriculteurs vérifiés" styleClass="benefit-title"/>
-                                    <Label text="Accédez à des profils authentifiés" styleClass="benefit-desc"/>
-                                </VBox>
-                            </HBox>
-
-                            <HBox styleClass="benefit-item" spacing="16" alignment="CENTER_LEFT">
-                                <StackPane styleClass="benefit-icon-box">
-                                    <Label text="💬"/>
-                                </StackPane>
-                                <VBox spacing="3">
-                                    <Label text="Messagerie intégrée" styleClass="benefit-title"/>
-                                    <Label text="Communication directe et sécurisée" styleClass="benefit-desc"/>
-                                </VBox>
-                            </HBox>
-
-                            <HBox styleClass="benefit-item" spacing="16" alignment="CENTER_LEFT">
-                                <StackPane styleClass="benefit-icon-box">
-                                    <Label text="📈"/>
-                                </StackPane>
-                                <VBox spacing="3">
-                                    <Label text="Rapports détaillés" styleClass="benefit-title"/>
-                                    <Label text="Analyses et statistiques avancées" styleClass="benefit-desc"/>
-                                </VBox>
-                            </HBox>
-                        </VBox>
-
-                        <!-- Stats Bar -->
-                        <HBox styleClass="stats-bar" spacing="0" alignment="CENTER">
-                            <VBox alignment="CENTER" styleClass="stat-item" HBox.hgrow="ALWAYS">
-                                <Label text="500+" styleClass="stat-value"/>
-                                <Label text="Partenaires" styleClass="stat-label"/>
-                            </VBox>
-                            <Separator orientation="VERTICAL" styleClass="stat-divider"/>
-                            <VBox alignment="CENTER" styleClass="stat-item" HBox.hgrow="ALWAYS">
-                                <Label text="15M" styleClass="stat-value"/>
-                                <Label text="DT Financés" styleClass="stat-label"/>
-                            </VBox>
-                            <Separator orientation="VERTICAL" styleClass="stat-divider"/>
-                            <VBox alignment="CENTER" styleClass="stat-item" HBox.hgrow="ALWAYS">
-                                <Label text="99%" styleClass="stat-value"/>
-                                <Label text="Satisfaction" styleClass="stat-label"/>
+                    <VBox spacing="20" style="-fx-padding: 30 0 0 0;">
+                        <HBox spacing="15" alignment="CENTER_LEFT">
+                            <Label text="✓" style="-fx-text-fill: #E1B323; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+                            <VBox>
+                                <Label text="Accès aux agriculteurs" style="-fx-font-weight: bold;"/>
+                                <Label text="Consultez les profils des agriculteurs vérifiés" style="-fx-text-fill: #848A86; -fx-font-size: 12px;"/>
                             </VBox>
                         </HBox>
 
+                        <HBox spacing="15" alignment="CENTER_LEFT">
+                            <Label text="✓" style="-fx-text-fill: #E1B323; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+                            <VBox>
+                                <Label text="Gestion des demandes" style="-fx-font-weight: bold;"/>
+                                <Label text="Évaluez et traitez les demandes de financement" style="-fx-text-fill: #848A86; -fx-font-size: 12px;"/>
+                            </VBox>
+                        </HBox>
+
+                        <HBox spacing="15" alignment="CENTER_LEFT">
+                            <Label text="✓" style="-fx-text-fill: #E1B323; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+                            <VBox>
+                                <Label text="Tableau de bord" style="-fx-font-weight: bold;"/>
+                                <Label text="Suivez vos financements et statistiques" style="-fx-text-fill: #848A86; -fx-font-size: 12px;"/>
+                            </VBox>
+                        </HBox>
+
+                        <HBox spacing="15" alignment="CENTER_LEFT">
+                            <Label text="✓" style="-fx-text-fill: #E1B323; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+                            <VBox>
+                                <Label text="Communication directe" style="-fx-font-weight: bold;"/>
+                                <Label text="Échangez avec les agriculteurs via la messagerie" style="-fx-text-fill: #848A86; -fx-font-size: 12px;"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+                <!-- RIGHT SIDE - Form -->
+                <VBox styleClass="card" prefWidth="550" spacing="20" style="-fx-padding: 40;">
+                    <Label text="Créer votre compte" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #060806;"/>
+                    <Label text="Remplissez les informations de votre établissement" style="-fx-text-fill: #848A86;"/>
+
+                    <!-- Alert Box -->
+                    <HBox fx:id="alertBox" styleClass="alert, alert-danger" visible="false" managed="false">
+                        <Label fx:id="alertMessage" style="-fx-text-fill: #dc3545;"/>
+                    </HBox>
+
+                    <!-- Success Box -->
+                    <HBox fx:id="successBox" styleClass="alert, alert-success" visible="false" managed="false">
+                        <Label fx:id="successMessage" style="-fx-text-fill: #089647;"/>
+                    </HBox>
+
+                    <!-- Form -->
+                    <VBox styleClass="form-group" spacing="8">
+                        <Label text="Nom de la banque *" styleClass="form-label"/>
+                        <TextField fx:id="nomBanqueField" styleClass="form-control" promptText="Nom de votre établissement"/>
                     </VBox>
 
-                    <!-- RIGHT PANEL - Form -->
-                    <VBox styleClass="form-panel" prefWidth="530" spacing="22">
-                        <padding><Insets top="35" right="40" bottom="35" left="40"/></padding>
-
-                        <!-- Form Header -->
-                        <VBox alignment="CENTER" spacing="6">
-                            <Label text="Créer votre compte" styleClass="form-title"/>
-                            <Label text="Remplissez les informations de votre établissement" styleClass="form-desc"/>
+                    <HBox spacing="20">
+                        <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="Code banque *" styleClass="form-label"/>
+                            <TextField fx:id="codeBanqueField" styleClass="form-control" promptText="Ex: BNA, STB..."/>
                         </VBox>
-
-                        <!-- Alert Box -->
-                        <HBox fx:id="alertBox" styleClass="alert-box error" visible="false" managed="false" spacing="10" alignment="CENTER_LEFT">
-                            <Label text="⚠" styleClass="alert-icon"/>
-                            <Label fx:id="alertMessage" styleClass="alert-text" wrapText="true"/>
-                        </HBox>
-
-                        <!-- Success Box -->
-                        <HBox fx:id="successBox" styleClass="alert-box success" visible="false" managed="false" spacing="10" alignment="CENTER_LEFT">
-                            <Label text="✓" styleClass="alert-icon"/>
-                            <Label fx:id="successMessage" styleClass="alert-text" wrapText="true"/>
-                        </HBox>
-
-                        <!-- Form Content -->
-                        <VBox spacing="16">
-
-                            <!-- Nom Banque -->
-                            <VBox styleClass="field-group" spacing="6">
-                                <Label text="Nom de la banque *" styleClass="field-label"/>
-                                <HBox styleClass="input-box">
-                                    <Label text="🏛" styleClass="input-icon"/>
-                                    <TextField fx:id="nomBanqueField" styleClass="input-field" promptText="Entrez le nom de votre établissement"/>
-                                </HBox>
-                            </VBox>
-
-                            <!-- Code + Representant -->
-                            <HBox spacing="15">
-                                <VBox styleClass="field-group" spacing="6" HBox.hgrow="ALWAYS">
-                                    <Label text="Code banque *" styleClass="field-label"/>
-                                    <HBox styleClass="input-box">
-                                        <Label text="#" styleClass="input-icon"/>
-                                        <TextField fx:id="codeBanqueField" styleClass="input-field" promptText="BNA, STB..."/>
-                                    </HBox>
-                                </VBox>
-                                <VBox styleClass="field-group" spacing="6" HBox.hgrow="ALWAYS">
-                                    <Label text="Représentant légal *" styleClass="field-label"/>
-                                    <HBox styleClass="input-box">
-                                        <Label text="👤" styleClass="input-icon"/>
-                                        <TextField fx:id="representantField" styleClass="input-field" promptText="Nom complet"/>
-                                    </HBox>
-                                </VBox>
-                            </HBox>
-
-                            <!-- Email -->
-                            <VBox styleClass="field-group" spacing="6">
-                                <Label text="Email professionnel *" styleClass="field-label"/>
-                                <HBox styleClass="input-box">
-                                    <Label text="✉" styleClass="input-icon"/>
-                                    <TextField fx:id="emailField" styleClass="input-field" promptText="contact@votrebanque.tn"/>
-                                </HBox>
-                            </VBox>
-
-                            <!-- Passwords -->
-                            <HBox spacing="15">
-                                <VBox styleClass="field-group" spacing="6" HBox.hgrow="ALWAYS">
-                                    <Label text="Mot de passe *" styleClass="field-label"/>
-                                    <HBox styleClass="input-box">
-                                        <Label text="🔒" styleClass="input-icon"/>
-                                        <PasswordField fx:id="passwordField" styleClass="input-field" promptText="Min. 6 caractères"/>
-                                    </HBox>
-                                </VBox>
-                                <VBox styleClass="field-group" spacing="6" HBox.hgrow="ALWAYS">
-                                    <Label text="Confirmer *" styleClass="field-label"/>
-                                    <HBox styleClass="input-box">
-                                        <Label text="🔒" styleClass="input-icon"/>
-                                        <PasswordField fx:id="confirmPasswordField" styleClass="input-field" promptText="Confirmer"/>
-                                    </HBox>
-                                </VBox>
-                            </HBox>
-
-                            <!-- Section Divider -->
-                            <HBox alignment="CENTER" spacing="15" styleClass="section-divider">
-                                <Separator HBox.hgrow="ALWAYS"/>
-                                <Label text="Coordonnées" styleClass="section-title"/>
-                                <Separator HBox.hgrow="ALWAYS"/>
-                            </HBox>
-
-                            <!-- Adresse Siege -->
-                            <VBox styleClass="field-group" spacing="6">
-                                <Label text="Adresse du siège *" styleClass="field-label"/>
-                                <HBox styleClass="input-box">
-                                    <Label text="📍" styleClass="input-icon"/>
-                                    <TextField fx:id="adresseSiegeField" styleClass="input-field" promptText="Adresse complète du siège social"/>
-                                </HBox>
-                            </VBox>
-
-                            <!-- Agence + Site Web -->
-                            <HBox spacing="15">
-                                <VBox styleClass="field-group" spacing="6" HBox.hgrow="ALWAYS">
-                                    <HBox spacing="5" alignment="CENTER_LEFT">
-                                        <Label text="Adresse agence" styleClass="field-label"/>
-                                        <Label text="(optionnel)" styleClass="field-optional"/>
-                                    </HBox>
-                                    <HBox styleClass="input-box">
-                                        <Label text="🏢" styleClass="input-icon"/>
-                                        <TextField fx:id="adresseAgenceField" styleClass="input-field" promptText="Adresse agence"/>
-                                    </HBox>
-                                </VBox>
-                                <VBox styleClass="field-group" spacing="6" HBox.hgrow="ALWAYS">
-                                    <HBox spacing="5" alignment="CENTER_LEFT">
-                                        <Label text="Site web" styleClass="field-label"/>
-                                        <Label text="(optionnel)" styleClass="field-optional"/>
-                                    </HBox>
-                                    <HBox styleClass="input-box">
-                                        <Label text="🌐" styleClass="input-icon"/>
-                                        <TextField fx:id="siteWebField" styleClass="input-field" promptText="www.banque.tn"/>
-                                    </HBox>
-                                </VBox>
-                            </HBox>
-
-                            <!-- Telephone -->
-                            <VBox styleClass="field-group" spacing="6">
-                                <HBox spacing="5" alignment="CENTER_LEFT">
-                                    <Label text="Téléphone" styleClass="field-label"/>
-                                    <Label text="(optionnel)" styleClass="field-optional"/>
-                                </HBox>
-                                <HBox styleClass="input-box">
-                                    <Label text="📞" styleClass="input-icon"/>
-                                    <TextField fx:id="telField" styleClass="input-field" promptText="+216 XX XXX XXX"/>
-                                </HBox>
-                            </VBox>
-
+                        <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="Représentant légal *" styleClass="form-label"/>
+                            <TextField fx:id="representantField" styleClass="form-control" promptText="Nom du représentant"/>
                         </VBox>
+                    </HBox>
 
-                        <!-- Terms -->
-                        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="terms-row">
-                            <CheckBox fx:id="termsCheckbox" styleClass="custom-check"/>
-                            <Label text="J'accepte les " styleClass="terms-text"/>
-                            <Hyperlink text="conditions d'utilisation" styleClass="terms-link"/>
-                            <Label text=" et la " styleClass="terms-text"/>
-                            <Hyperlink text="politique de confidentialité" styleClass="terms-link"/>
-                        </HBox>
-
-                        <!-- Submit Button -->
-                        <Button text="Créer mon compte partenaire" styleClass="btn-submit" onAction="#handleRegister" maxWidth="Infinity"/>
-
-                        <!-- Footer Links -->
-                        <VBox spacing="10" alignment="CENTER" styleClass="form-footer">
-                            <HBox alignment="CENTER" spacing="5">
-                                <Label text="🌾" styleClass="footer-icon"/>
-                                <Label text="Vous êtes agriculteur ?" styleClass="footer-text"/>
-                                <Hyperlink text="Inscrivez-vous ici" onAction="#goToRegisterAgriculteur" styleClass="footer-link"/>
-                            </HBox>
-                            <Hyperlink text="← Retour à l'accueil" onAction="#goToHome" styleClass="back-link"/>
-                        </VBox>
-
+                    <VBox styleClass="form-group" spacing="8">
+                        <Label text="Email professionnel *" styleClass="form-label"/>
+                        <TextField fx:id="emailField" styleClass="form-control" promptText="contact@banque.tn"/>
                     </VBox>
 
-                </HBox>
-            </ScrollPane>
-        </center>
+                    <HBox spacing="20">
+                        <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="Mot de passe *" styleClass="form-label"/>
+                            <PasswordField fx:id="passwordField" styleClass="form-control" promptText="••••••••"/>
+                        </VBox>
+                        <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="Confirmer *" styleClass="form-label"/>
+                            <PasswordField fx:id="confirmPasswordField" styleClass="form-control" promptText="••••••••"/>
+                        </VBox>
+                    </HBox>
 
-    </BorderPane>
+                    <Separator style="-fx-padding: 10 0;"/>
 
-</StackPane>
+                    <Label text="Informations complémentaires" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #E1B323;"/>
+
+                    <VBox styleClass="form-group" spacing="8">
+                        <Label text="Adresse du siège *" styleClass="form-label"/>
+                        <TextField fx:id="adresseSiegeField" styleClass="form-control" promptText="Adresse complète du siège"/>
+                    </VBox>
+
+                    <HBox spacing="20">
+                        <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="Adresse agence" styleClass="form-label"/>
+                            <TextField fx:id="adresseAgenceField" styleClass="form-control" promptText="Adresse de l'agence (optionnel)"/>
+                        </VBox>
+                        <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="Site web" styleClass="form-label"/>
+                            <TextField fx:id="siteWebField" styleClass="form-control" promptText="www.banque.tn"/>
+                        </VBox>
+                    </HBox>
+
+                    <VBox styleClass="form-group" spacing="8">
+                        <Label text="Téléphone" styleClass="form-label"/>
+                        <TextField fx:id="telField" styleClass="form-control" promptText="+216 XX XXX XXX"/>
+                    </VBox>
+
+                    <!-- Terms -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <CheckBox fx:id="termsCheckbox"/>
+                        <Label text="J'accepte les " style="-fx-text-fill: #060806;"/>
+                        <Hyperlink text="conditions d'utilisation" style="-fx-text-fill: #E1B323;"/>
+                        <Label text=" et la " style="-fx-text-fill: #060806;"/>
+                        <Hyperlink text="politique de confidentialité" style="-fx-text-fill: #E1B323;"/>
+                    </HBox>
+
+                    <!-- Submit Button -->
+                    <Button text="Créer mon compte" styleClass="btn, btn-accent, btn-large"
+                            onAction="#handleRegister" prefWidth="1000"/>
+
+                    <!-- Links -->
+                    <HBox alignment="CENTER" spacing="5">
+                        <Label text="Vous êtes un agriculteur ?" style="-fx-text-fill: #848A86;"/>
+                        <Hyperlink text="Inscrivez-vous ici" onAction="#goToRegisterAgriculteur" style="-fx-text-fill: #089647;"/>
+                    </HBox>
+
+                    <HBox alignment="CENTER">
+                        <Hyperlink text="← Retour à l'accueil" onAction="#goToHome" style="-fx-text-fill: #848A86;"/>
+                    </HBox>
+                </VBox>
+
+            </HBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>
