@@ -124,7 +124,7 @@ public class AdminAgricultureController {
         HBox.setHgrow(info, Priority.ALWAYS);
 
         Label nameLabel = new Label(agri.getPrenom() + " " + agri.getNom());
-        nameLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        nameLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #ecc500");
 
         Label emailLabel = new Label("📧 " + agri.getEmail());
         emailLabel.setStyle("-fx-text-fill: #848A86;");

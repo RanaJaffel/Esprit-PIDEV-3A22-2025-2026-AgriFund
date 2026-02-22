@@ -156,7 +156,7 @@ public class EmailService {
                 "        </div>" +
                 "        <div class='footer'>" +
                 "            <p>Cet email a été envoyé automatiquement, merci de ne pas y répondre.</p>" +
-                "            <p>&copy; 2024-2025 Gestion des Utilisateurs - ESPRIT</p>" +
+                "            <p>&copy; 2025-2026 AgriFund - BY GreenCoders</p>" +
                 "        </div>" +
                 "    </div>" +
                 "</body>" +
@@ -205,7 +205,7 @@ public class EmailService {
                 "        </div>" +
                 "        <div class='footer'>" +
                 "            <p>Cet email a été envoyé automatiquement, merci de ne pas y répondre.</p>" +
-                "            <p>&copy; 2024-2025 Gestion des Utilisateurs - ESPRIT</p>" +
+                "            <p>&copy; 2025-2026 AgriFund - BY GreenCoders</p>" +
                 "        </div>" +
                 "    </div>" +
                 "</body>" +

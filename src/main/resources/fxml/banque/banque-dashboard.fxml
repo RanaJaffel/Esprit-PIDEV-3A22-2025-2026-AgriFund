@@ -127,7 +127,7 @@
                                     <ImageView fx:id="profilePhoto" fitWidth="80" fitHeight="80"/>
                                     <VBox spacing="5">
                                         <HBox spacing="10" alignment="CENTER_LEFT">
-                                            <Label fx:id="profileName" text="" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                                            <Label fx:id="profileName" text="" style="-fx-font-size: 18px; -fx-font-weight: bold;-fx-text-fill: #E1B323;"/>
                                             <Label fx:id="profileCode" text="" style="-fx-text-fill: #E1B323; -fx-font-weight: bold;"/>
                                         </HBox>
                                         <Label fx:id="profileEmail" text="" style="-fx-text-fill: #848A86;"/>
@@ -141,11 +141,11 @@
                                     <HBox spacing="10">
                                         <Label text="👔" style="-fx-font-size: 16px;"/>
                                         <Label text="Représentant:" style="-fx-text-fill: #848A86;"/>
-                                        <Label fx:id="profileRepresentant" text=""/>
+                                        <Label fx:id="profileRepresentant" text="" style="-fx-text-fill: #0a371d;" />
                                     </HBox>
                                     <HBox spacing="10">
                                         <Label text="🏛️" style="-fx-font-size: 16px;"/>
-                                        <Label fx:id="profileSiege" text="" wrapText="true"/>
+                                        <Label fx:id="profileSiege" text="" wrapText="true" style="-fx-text-fill: #0a371d;"/>
                                     </HBox>
                                     <HBox spacing="10">
                                         <Label text="🌐" style="-fx-font-size: 16px;"/>
@@ -176,21 +176,21 @@
                             <VBox spacing="8" HBox.hgrow="ALWAYS">
                                 <HBox spacing="10" alignment="CENTER_LEFT">
                                     <Label text="🔍" style="-fx-font-size: 20px;"/>
-                                    <Label text="Consultez les profils des agriculteurs vérifiés"/>
+                                    <Label text="Consultez les profils des agriculteurs vérifiés" style="-fx-text-fill: #876c00;"/>
                                 </HBox>
                                 <HBox spacing="10" alignment="CENTER_LEFT">
                                     <Label text="💬" style="-fx-font-size: 20px;"/>
-                                    <Label text="Communiquez directement avec les agriculteurs"/>
+                                    <Label text="Communiquez directement avec les agriculteurs" style="-fx-text-fill: #876c00;"/>
                                 </HBox>
                             </VBox>
                             <VBox spacing="8" HBox.hgrow="ALWAYS">
                                 <HBox spacing="10" alignment="CENTER_LEFT">
                                     <Label text="📄" style="-fx-font-size: 20px;"/>
-                                    <Label text="Téléchargez vos documents officiels"/>
+                                    <Label text="Téléchargez vos documents officiels" style="-fx-text-fill: #876c00;"/>
                                 </HBox>
                                 <HBox spacing="10" alignment="CENTER_LEFT">
                                     <Label text="🔐" style="-fx-font-size: 20px;"/>
-                                    <Label text="Sécurisez votre compte avec la 2FA"/>
+                                    <Label text="Sécurisez votre compte avec la 2FA" style="-fx-text-fill: #876c00;"/>
                                 </HBox>
                             </VBox>
                         </HBox>

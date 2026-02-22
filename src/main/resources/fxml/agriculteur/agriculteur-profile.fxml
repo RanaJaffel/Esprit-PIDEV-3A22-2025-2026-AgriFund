@@ -149,11 +149,11 @@
                     <HBox spacing="50">
                         <VBox spacing="5">
                             <Label text="Date d'inscription" style="-fx-text-fill: #848A86;"/>
-                            <Label fx:id="dateInscription" style="-fx-font-weight: bold;"/>
+                            <Label fx:id="dateInscription" style="-fx-font-weight: bold;-fx-text-fill: #0a371d;"/>
                         </VBox>
                         <VBox spacing="5">
                             <Label text="Statut" style="-fx-text-fill: #848A86;"/>
-                            <Label fx:id="statusLabel" style="-fx-font-weight: bold;"/>
+                            <Label fx:id="statusLabel" style="-fx-font-weight: bold;-fx-text-fill: #0a371d;"/>
                         </VBox>
                         <VBox spacing="5">
                             <Label text="Vérification" style="-fx-text-fill: #848A86;"/>

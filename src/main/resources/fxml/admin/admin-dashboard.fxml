@@ -15,7 +15,14 @@
         <VBox styleClass="sidebar">
             <!-- Logo -->
             <VBox styleClass="sidebar-header" spacing="5">
-                <Label text="🌾 AgriFund" styleClass="sidebar-logo"/>
+                <ImageView fitWidth="220"
+                           preserveRatio="true"
+                           smooth="true"
+                           cache="true">
+                    <image>
+                        <Image url="@/images/logo.png"/>
+                    </image>
+                </ImageView>
                 <Label text="Administration" style="-fx-text-fill: #848A86; -fx-font-size: 12px;"/>
             </VBox>
 

@@ -1002,3 +1002,74 @@
     -fx-pref-width: 10;
     -fx-pref-height: 10;
 }
+/* ===== SATELLITE PAGE STYLES ===== */
+
+.risk-low {
+    -fx-text-fill: #28a745 !important;
+}
+
+.risk-medium {
+    -fx-text-fill: #ffc107 !important;
+}
+
+.risk-high {
+    -fx-text-fill: #fd7e14 !important;
+}
+
+.risk-critical {
+    -fx-text-fill: #dc3545 !important;
+}
+
+.badge-info {
+    -fx-background-color: #17a2b8;
+    -fx-text-fill: white;
+    -fx-padding: 4 10;
+    -fx-background-radius: 12;
+    -fx-font-size: 11px;
+}
+
+/* Progress bars */
+.progress-bar {
+    -fx-pref-height: 10px;
+    -fx-background-radius: 5;
+}
+
+.progress-bar > .track {
+    -fx-background-color: #e0e0e0;
+    -fx-background-radius: 5;
+}
+
+.progress-bar > .bar {
+    -fx-background-radius: 5;
+    -fx-background-insets: 0;
+}
+
+/* Stat cards for satellite */
+.stat-card {
+    -fx-padding: 20;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 3);
+}
+
+.stat-value {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* Charts */
+.chart {
+    -fx-background-color: transparent;
+}
+
+.chart-plot-background {
+    -fx-background-color: #f8f9fa;
+}
+
+.chart-vertical-grid-lines {
+    -fx-stroke: #e0e0e0;
+}
+
+.chart-horizontal-grid-lines {
+    -fx-stroke: #e0e0e0;
+}

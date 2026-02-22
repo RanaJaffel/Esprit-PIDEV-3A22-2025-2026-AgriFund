@@ -71,19 +71,19 @@
                     <VBox spacing="10">
                         <HBox spacing="10" alignment="CENTER_LEFT">
                             <Label text="✓" style="-fx-text-fill: #089647; -fx-font-weight: bold;"/>
-                            <Label text="Utilisez un mot de passe fort avec au moins 8 caractères"/>
+                            <Label text="Utilisez un mot de passe fort avec au moins 8 caractères" style="-fx-text-fill: #ecc500"/>
                         </HBox>
                         <HBox spacing="10" alignment="CENTER_LEFT">
                             <Label text="✓" style="-fx-text-fill: #089647; -fx-font-weight: bold;"/>
-                            <Label text="Activez l'authentification à deux facteurs"/>
+                            <Label text="Activez l'authentification à deux facteurs" style="-fx-text-fill: #ecc500"/>
                         </HBox>
                         <HBox spacing="10" alignment="CENTER_LEFT">
                             <Label text="✓" style="-fx-text-fill: #089647; -fx-font-weight: bold;"/>
-                            <Label text="Ne partagez jamais vos codes de vérification"/>
+                            <Label text="Ne partagez jamais vos codes de vérification" style="-fx-text-fill: #ecc500"/>
                         </HBox>
                         <HBox spacing="10" alignment="CENTER_LEFT">
                             <Label text="✓" style="-fx-text-fill: #089647; -fx-font-weight: bold;"/>
-                            <Label text="Vérifiez régulièrement l'historique de vos connexions"/>
+                            <Label text="Vérifiez régulièrement l'historique de vos connexions" style="-fx-text-fill: #ecc500" />
                         </HBox>
                     </VBox>
                 </VBox>

@@ -124,7 +124,7 @@ public class AdminBanquesController {
         HBox nameRow = new HBox(10);
         nameRow.setAlignment(Pos.CENTER_LEFT);
         Label nameLabel = new Label(banque.getNom());
-        nameLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        nameLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;-fx-text-fill: #E1B323");
         Label codeLabel = new Label("[" + banque.getCodeBanque() + "]");
         codeLabel.setStyle("-fx-text-fill: #E1B323; -fx-font-weight: bold;");
         nameRow.getChildren().addAll(nameLabel, codeLabel);

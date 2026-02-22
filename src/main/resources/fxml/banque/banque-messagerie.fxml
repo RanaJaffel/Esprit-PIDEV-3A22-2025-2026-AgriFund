@@ -22,7 +22,7 @@
                 <!-- Header -->
                 <HBox alignment="CENTER" style="-fx-padding: 20; -fx-background-color: #060806;">
                     <Label text="💬 Messages" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;" HBox.hgrow="ALWAYS"/>
-                    <Button text="✏️" style="-fx-background-color: #E1B323; -fx-text-fill: #060806; -fx-background-radius: 50; -fx-min-width: 40; -fx-min-height: 40;"
+                    <Button text="+" style="-fx-background-color: #E1B323; -fx-text-fill: #060806; -fx-background-radius: 50; -fx-min-width: 40; -fx-min-height: 40;"
                             onAction="#showNewConversationDialog"/>
                 </HBox>
 

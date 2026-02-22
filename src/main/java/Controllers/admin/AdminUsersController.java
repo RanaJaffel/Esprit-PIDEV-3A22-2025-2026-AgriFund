@@ -170,9 +170,9 @@ public class AdminUsersController {
 
         // Actions column
         colActions.setCellFactory(col -> new TableCell<>() {
-            private final Button btnEdit = new Button("✏️");
-            private final Button btnDelete = new Button("🗑️");
-            private final Button btnView = new Button("👁️");
+            private final Button btnEdit = new Button("modifier");
+            private final Button btnDelete = new Button("supprimer");
+            private final Button btnView = new Button("voir");
             private final HBox buttons = new HBox(5, btnView, btnEdit, btnDelete);
 
             {

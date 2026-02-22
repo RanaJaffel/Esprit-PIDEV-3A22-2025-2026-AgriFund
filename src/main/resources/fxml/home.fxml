@@ -15,7 +15,14 @@
         <HBox styleClass="navbar" alignment="CENTER">
             <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
                 <VBox alignment="CENTER_LEFT">
-                    <Label text="🌾 AgriFund" styleClass="navbar-brand"/>
+                    <ImageView fitWidth="200"
+                               preserveRatio="true"
+                               smooth="true"
+                               cache="true">
+                        <image>
+                            <Image url="@/images/logo.png"/>
+                        </image>
+                    </ImageView>
                     <Label text="Plateforme de Financement Agricole" style="-fx-font-size: 11px; -fx-text-fill: #848A86;"/>
                 </VBox>
             </HBox>
@@ -178,7 +185,14 @@
                 <VBox styleClass="footer" spacing="30">
                     <HBox spacing="80" alignment="CENTER">
                         <VBox spacing="15">
-                            <Label text="🌾 AgriFund" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #B2D944;"/>
+                            <ImageView fitWidth="220"
+                                       preserveRatio="true"
+                                       smooth="true"
+                                       cache="true">
+                                <image>
+                                    <Image url="@/images/logo.png"/>
+                                </image>
+                            </ImageView>
                             <Label text="Plateforme de financement agricole" styleClass="footer-text"/>
                             <Label text="© 2024-2025 ESPRIT" styleClass="footer-text"/>
                         </VBox>

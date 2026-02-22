@@ -260,7 +260,7 @@ public class AdminDashboardController {
         // Infos
         VBox info = new VBox(2);
         Label nameLabel = new Label(agri.getPrenom() + " " + agri.getNom());
-        nameLabel.setStyle("-fx-font-weight: bold;");
+        nameLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #ecc500");
         Label typeLabel = new Label("🌾 Agriculteur - " + agri.getTypeCulture());
         typeLabel.setStyle("-fx-text-fill: #848A86; -fx-font-size: 12px;");
         info.getChildren().addAll(nameLabel, typeLabel);

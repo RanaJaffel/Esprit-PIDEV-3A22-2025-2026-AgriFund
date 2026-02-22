@@ -98,19 +98,19 @@
                     <VBox spacing="10">
                         <HBox spacing="10" alignment="CENTER_LEFT">
                             <Label text="✓" style="-fx-text-fill: #089647; -fx-font-weight: bold;"/>
-                            <Label text="Utilisez un mot de passe unique et complexe"/>
+                            <Label text="Utilisez un mot de passe unique et complexe"  style="-fx-text-fill: #ecc500"/>
                         </HBox>
                         <HBox spacing="10" alignment="CENTER_LEFT">
                             <Label text="✓" style="-fx-text-fill: #089647; -fx-font-weight: bold;"/>
-                            <Label text="Activez l'authentification à deux facteurs"/>
+                            <Label text="Activez l'authentification à deux facteurs"  style="-fx-text-fill: #ecc500"/>
                         </HBox>
                         <HBox spacing="10" alignment="CENTER_LEFT">
                             <Label text="✓" style="-fx-text-fill: #089647; -fx-font-weight: bold;"/>
-                            <Label text="Ne partagez jamais vos codes de vérification"/>
+                            <Label text="Ne partagez jamais vos codes de vérification"  style="-fx-text-fill: #ecc500"/>
                         </HBox>
                         <HBox spacing="10" alignment="CENTER_LEFT">
                             <Label text="✓" style="-fx-text-fill: #089647; -fx-font-weight: bold;"/>
-                            <Label text="Déconnectez-vous des appareils non utilisés"/>
+                            <Label text="Déconnectez-vous des appareils non utilisés" style="-fx-text-fill: #ecc500"/>
                         </HBox>
                     </VBox>
                 </VBox>

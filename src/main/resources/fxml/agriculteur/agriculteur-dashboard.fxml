@@ -126,7 +126,7 @@
                                 <HBox spacing="15">
                                     <ImageView fx:id="profilePhoto" fitWidth="80" fitHeight="80"/>
                                     <VBox spacing="5">
-                                        <Label fx:id="profileName" text="" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                                        <Label fx:id="profileName" text="" style="-fx-font-size: 18px; -fx-font-weight: bold;-fx-text-fill: #00cb45"/>
                                         <Label fx:id="profileEmail" text="" style="-fx-text-fill: #848A86;"/>
                                         <Label fx:id="profileTel" text="" style="-fx-text-fill: #848A86;"/>
                                     </VBox>
@@ -172,21 +172,21 @@
                             <VBox spacing="8" HBox.hgrow="ALWAYS">
                                 <HBox spacing="10" alignment="CENTER_LEFT">
                                     <Label text="📷" style="-fx-font-size: 20px;"/>
-                                    <Label text="Ajoutez une photo de profil professionnelle"/>
+                                    <Label text="Ajoutez une photo de profil professionnelle" style="-fx-text-fill: #ecc500"/>
                                 </HBox>
                                 <HBox spacing="10" alignment="CENTER_LEFT">
                                     <Label text="📄" style="-fx-font-size: 20px;"/>
-                                    <Label text="Téléchargez vos documents justificatifs"/>
+                                    <Label text="Téléchargez vos documents justificatifs" style="-fx-text-fill: #ecc500"/>
                                 </HBox>
                             </VBox>
                             <VBox spacing="8" HBox.hgrow="ALWAYS">
                                 <HBox spacing="10" alignment="CENTER_LEFT">
                                     <Label text="✅" style="-fx-font-size: 20px;"/>
-                                    <Label text="Complétez toutes les informations de votre ferme"/>
+                                    <Label text="Complétez toutes les informations de votre ferme" style="-fx-text-fill: #ecc500"/>
                                 </HBox>
                                 <HBox spacing="10" alignment="CENTER_LEFT">
                                     <Label text="🔐" style="-fx-font-size: 20px;"/>
-                                    <Label text="Activez l'authentification à deux facteurs"/>
+                                    <Label text="Activez l'authentification à deux facteurs" style="-fx-text-fill: #ecc500"/>
                                 </HBox>
                             </VBox>
                         </HBox>

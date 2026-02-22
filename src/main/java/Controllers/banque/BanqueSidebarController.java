@@ -36,7 +36,7 @@ public class BanqueSidebarController {
     @FXML private Button btnDocuments;
     @FXML private Button btnMessagerie;
     @FXML private Button btnSecurity;
-
+    @FXML private Button btnSatellite;
     private BanqueService banqueService;
 
     @FXML
@@ -131,7 +131,10 @@ public class BanqueSidebarController {
     public void goToSecurity() {
         loadPage("banque/banque-security");
     }
-
+    @FXML
+    public void goToSatellite() {
+        loadPage("banque/banque-satellite");
+    }
     @FXML
     public void handleLogout() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
