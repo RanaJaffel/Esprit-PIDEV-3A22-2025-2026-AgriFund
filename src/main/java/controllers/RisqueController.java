@@ -5,6 +5,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.json.JSONObject;
+import services.AIService;
 import services.ServiceEvaluationRisque;
 import services.ServiceProjectAgricole;
 
@@ -31,12 +33,18 @@ public class RisqueController {
     @FXML
     public void initialize() {
         service = new ServiceEvaluationRisque();
-
-        cbNiveauRisque.getItems().addAll("Faible", "Moyen", "Élevé", "Critique");
+        cbNiveauRisque.getItems().addAll("Faible", "Moyen", "Élevé");
         cbFiabiliteDonnees.getItems().addAll("Faible", "Moyenne", "Élevée");
-        cbRecommandation.getItems().addAll("Aucune", "Surveillance", "Action immédiate");
+        cbRecommandation.getItems().addAll("Je recommande ce projet", "Je recommande ce projet avec surveillance", "Je ne recommande pas ce projet", "Aucune");
         loadProjetIds();
         updateStatus("Prêt");
+
+        // Écouteur pour la sélection d'un projet
+        cbIdProjet.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
+            if (newValue != null) {
+                handleIdProjetSelection();
+            }
+        });
     }
 
     private void loadProjetIds() {
@@ -51,9 +59,7 @@ public class RisqueController {
 
     @FXML
     private void handleSave(ActionEvent event) {
-        if (!validateFields()) {
-            return;
-        }
+        if (!validateFields()) return;
 
         try {
             int scoreGlobal = Integer.parseInt(tfScoreGlobal.getText());
@@ -61,7 +67,7 @@ public class RisqueController {
             String fiabiliteDonnees = cbFiabiliteDonnees.getValue();
             String facteurPrincipal = tfFacteurPrincipal.getText();
             int recommandation = cbRecommandation.getSelectionModel().getSelectedIndex();
-            java.util.Date dateEvaluation = java.sql.Date.valueOf(dpDateEvaluation.getValue());
+            Date dateEvaluation = java.sql.Date.valueOf(dpDateEvaluation.getValue());
             int idProjet = cbIdProjet.getValue();
 
             if (evaluationEnCours == null) {
@@ -95,39 +101,18 @@ public class RisqueController {
     private boolean validateFields() {
         StringBuilder errors = new StringBuilder();
 
-        if (tfScoreGlobal.getText().isEmpty()) {
-            errors.append("- Le score global est obligatoire\n");
-        }
-
-        if (cbNiveauRisque.getValue() == null) {
-            errors.append("- Le niveau de risque est obligatoire\n");
-        }
-
-        if (cbFiabiliteDonnees.getValue() == null) {
-            errors.append("- La fiabilité des données est obligatoire\n");
-        }
-
-        if (tfFacteurPrincipal.getText().isEmpty()) {
-            errors.append("- Le facteur principal est obligatoire\n");
-        }
-
-        if (cbRecommandation.getValue() == null) {
-            errors.append("- La recommandation est obligatoire\n");
-        }
-
-        if (dpDateEvaluation.getValue() == null) {
-            errors.append("- La date d'évaluation est obligatoire\n");
-        }
-
-        if (cbIdProjet.getValue() == null) {
-            errors.append("- Le projet est obligatoire\n");
-        }
+        if (tfScoreGlobal.getText().isEmpty()) errors.append("- Le score global est obligatoire\n");
+        if (cbNiveauRisque.getValue() == null) errors.append("- Le niveau de risque est obligatoire\n");
+        if (cbFiabiliteDonnees.getValue() == null) errors.append("- La fiabilité des données est obligatoire\n");
+        if (tfFacteurPrincipal.getText().isEmpty()) errors.append("- Le facteur principal est obligatoire\n");
+        if (cbRecommandation.getValue() == null) errors.append("- La recommandation est obligatoire\n");
+        if (dpDateEvaluation.getValue() == null) errors.append("- La date d'évaluation est obligatoire\n");
+        if (cbIdProjet.getValue() == null) errors.append("- Le projet est obligatoire\n");
 
         if (errors.length() > 0) {
             showAlert(Alert.AlertType.WARNING, "Champs incomplets", errors.toString());
             return false;
         }
-
         return true;
     }
 
@@ -154,7 +139,6 @@ public class RisqueController {
     public void loadEvaluation(int idEvaluation) {
         try {
             EvaluationRisque evaluation = service.getById(idEvaluation);
-
             if (evaluation != null) {
                 evaluationEnCours = evaluation;
 
@@ -166,8 +150,8 @@ public class RisqueController {
                 cbRecommandation.setValue(getRecommandationString(evaluation.getRecommandation()));
                 cbIdProjet.setValue(evaluation.getIdProjet());
 
-                java.util.Date utilDate = new java.util.Date(evaluation.getDateEvaluation().getTime());
-                dpDateEvaluation.setValue(utilDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+                dpDateEvaluation.setValue(evaluation.getDateEvaluation()
+                        .toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 
                 updateStatus("Modification en cours");
             } else {
@@ -194,9 +178,7 @@ public class RisqueController {
     }
 
     private void updateStatus(String message) {
-        if (lblStatus != null) {
-            lblStatus.setText(message);
-        }
+        if (lblStatus != null) lblStatus.setText(message);
     }
 
     private void showAlert(Alert.AlertType type, String title, String content) {
@@ -205,5 +187,36 @@ public class RisqueController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void handleIdProjetSelection() {
+        if (cbIdProjet.getValue() != null) {
+            int idProjet = cbIdProjet.getValue();
+            System.out.println("ID Projet sélectionné: " + idProjet);
+            String response = AIService.evaluateRisk(idProjet);
+            System.out.println("Réponse de l'API: " + response);
+            if (response != null) {
+                try {
+                    JSONObject jsonResponse = new JSONObject(response);
+                    if (jsonResponse.has("error")) {
+                        showAlert(Alert.AlertType.WARNING, "Attention", jsonResponse.getString("error"));
+                    } else {
+                        tfScoreGlobal.setText(String.valueOf(jsonResponse.optInt("scoreGlobal", 0)));
+                        cbNiveauRisque.setValue(jsonResponse.optString("niveauRisque", "Faible"));
+                        cbFiabiliteDonnees.setValue(jsonResponse.optString("fiabiliteDonnees", "Faible"));
+                        tfFacteurPrincipal.setText(jsonResponse.optString("facteurPrincipal", "Aucune donnée récente"));
+                        String recommandation = jsonResponse.optString("recommandation", "Aucune");
+                        System.out.println("Recommandation reçue: " + recommandation);
+                        cbRecommandation.setValue(recommandation);
+                    }
+                } catch (Exception e) {
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors du traitement de la réponse: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de récupérer les données d'évaluation.");
+            }
+        }
     }
 }
