@@ -25,7 +25,7 @@ public class RisqueController {
     @FXML private TextField tfScoreGlobal;
     @FXML private ComboBox<String> cbNiveauRisque;
     @FXML private ComboBox<String> cbFiabiliteDonnees;
-    @FXML private TextField tfFacteurPrincipal;
+    @FXML private TextArea tfFacteurPrincipal;  // Changé de TextField à TextArea
     @FXML private ComboBox<String> cbRecommandation;
     @FXML private DatePicker dpDateEvaluation;
     @FXML private Label lblStatus;
@@ -140,7 +140,7 @@ public class RisqueController {
         if (tfScoreGlobal.getText().isEmpty()) errors.append("- Le score global est obligatoire\n");
         if (cbNiveauRisque.getValue() == null) errors.append("- Le niveau de risque est obligatoire\n");
         if (cbFiabiliteDonnees.getValue() == null) errors.append("- La fiabilité des données est obligatoire\n");
-        if (tfFacteurPrincipal.getText().isEmpty()) errors.append("- Le facteur principal est obligatoire\n");
+        if (tfFacteurPrincipal.getText().isEmpty()) errors.append("- Les facteurs principaux sont obligatoires\n");
         if (cbRecommandation.getValue() == null) errors.append("- La recommandation est obligatoire\n");
         if (dpDateEvaluation.getValue() == null) errors.append("- La date d'évaluation est obligatoire\n");
         if (cbIdProjet.getValue() == null) errors.append("- Le projet est obligatoire\n");

@@ -6,9 +6,9 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="controllers.RisqueListController"
             prefWidth="1400"
-            prefHeight="800"
+            prefHeight="850"
             styleClass="root"
-            stylesheets="@style.css">
+            stylesheets="@risquelist.css">
 
     <!-- En-tête -->
     <top>
@@ -33,37 +33,51 @@
                     <Insets top="10" right="15" bottom="10" left="15"/>
                 </padding>
                 <Label text="🔍 Rechercher:" styleClass="form-label"/>
-                <TextField fx:id="tfSearch" promptText="Rechercher..." onKeyReleased="#handleSearch" prefWidth="300"/>
+                <TextField fx:id="tfSearch" promptText="Rechercher..." onKeyReleased="#handleSearch" prefWidth="300" styleClass="text-field"/>
                 <Button text="🔄 Rafraîchir" styleClass="button-accent" onAction="#handleRefresh"/>
             </HBox>
 
             <!-- Tableau des évaluations -->
-            <TableView fx:id="tableEvaluations" prefHeight="500">
+            <TableView fx:id="tableEvaluations" prefHeight="500" styleClass="table-view">
                 <columns>
-                    <TableColumn fx:id="colId" text="ID" prefWidth="50" />
-                    <TableColumn fx:id="colIdProjet" text="ID Projet" prefWidth="80" />
-                    <TableColumn fx:id="colScoreGlobal" text="Score Global" prefWidth="100" />
-                    <TableColumn fx:id="colNiveauRisque" text="Niveau de Risque" prefWidth="120" />
-                    <TableColumn fx:id="colFiabiliteDonnees" text="Fiabilité des Données" prefWidth="120" />
-                    <TableColumn fx:id="colFacteurPrincipal" text="Facteur Principal" prefWidth="200" />
-                    <TableColumn fx:id="colRecommandation" text="Recommandation" prefWidth="120" />
-                    <TableColumn fx:id="colDateEvaluation" text="Date d'Évaluation" prefWidth="150" />
-                    <TableColumn fx:id="colActions" text="Actions" prefWidth="150" />
+                    <TableColumn fx:id="colId" text="ID" prefWidth="50" styleClass="table-column"/>
+                    <TableColumn fx:id="colIdProjet" text="ID Projet" prefWidth="80" styleClass="table-column"/>
+                    <TableColumn fx:id="colScoreGlobal" text="Score Global" prefWidth="100" styleClass="table-column"/>
+                    <TableColumn fx:id="colNiveauRisque" text="Niveau de Risque" prefWidth="120" styleClass="table-column"/>
+                    <TableColumn fx:id="colFiabiliteDonnees" text="Fiabilité des Données" prefWidth="120" styleClass="table-column"/>
+                    <TableColumn fx:id="colFacteurPrincipal" text="Facteur Principal" prefWidth="250" styleClass="table-column"/>
+                    <TableColumn fx:id="colRecommandation" text="Recommandation" prefWidth="120" styleClass="table-column"/>
+                    <TableColumn fx:id="colDateEvaluation" text="Date d'Évaluation" prefWidth="150" styleClass="table-column"/>
+                    <TableColumn fx:id="colActions" text="Actions" prefWidth="150" styleClass="table-column"/>
                 </columns>
             </TableView>
 
             <!-- Statistiques -->
             <HBox spacing="20" alignment="CENTER_LEFT">
-                <Label text="Total: " styleClass="stats-label"/>
-                <Label fx:id="lblTotal" text="0" styleClass="stats-value"/>
-                <Label text="Faible: " styleClass="stats-label"/>
-                <Label fx:id="lblFaible" text="0" styleClass="stats-value"/>
-                <Label text="Moyen: " styleClass="stats-label"/>
-                <Label fx:id="lblMoyen" text="0" styleClass="stats-value"/>
-                <Label text="Élevé: " styleClass="stats-label"/>
-                <Label fx:id="lblEleve" text="0" styleClass="stats-value"/>
-                <Label text="Critique: " styleClass="stats-label"/>
-                <Label fx:id="lblCritique" text="0" styleClass="stats-value"/>
+                <VBox spacing="5" alignment="CENTER">
+                    <Label text="Total" styleClass="stats-label"/>
+                    <Label fx:id="lblTotal" text="0" styleClass="stats-value"/>
+                </VBox>
+                <Separator orientation="VERTICAL" styleClass="vertical-separator"/>
+                <VBox spacing="5" alignment="CENTER">
+                    <Label text="Faible" styleClass="stats-label"/>
+                    <Label fx:id="lblFaible" text="0" styleClass="stats-value"/>
+                </VBox>
+                <Separator orientation="VERTICAL" styleClass="vertical-separator"/>
+                <VBox spacing="5" alignment="CENTER">
+                    <Label text="Moyen" styleClass="stats-label"/>
+                    <Label fx:id="lblMoyen" text="0" styleClass="stats-value"/>
+                </VBox>
+                <Separator orientation="VERTICAL" styleClass="vertical-separator"/>
+                <VBox spacing="5" alignment="CENTER">
+                    <Label text="Élevé" styleClass="stats-label"/>
+                    <Label fx:id="lblEleve" text="0" styleClass="stats-value"/>
+                </VBox>
+                <Separator orientation="VERTICAL" styleClass="vertical-separator"/>
+                <VBox spacing="5" alignment="CENTER">
+                    <Label text="Critique" styleClass="stats-label"/>
+                    <Label fx:id="lblCritique" text="0" styleClass="stats-value"/>
+                </VBox>
             </HBox>
 
             <Label fx:id="lblStatus" styleClass="status-label" text="Prêt"/>

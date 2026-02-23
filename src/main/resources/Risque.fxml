@@ -5,98 +5,101 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="controllers.RisqueController"
-            prefWidth="800"
-            prefHeight="600"
+            prefWidth="900"
+            prefHeight="850"
             styleClass="root"
-            stylesheets="@style.css">
+            stylesheets="@risque.css">
 
     <!-- En-tête -->
     <top>
         <HBox styleClass="header">
-            <Label styleClass="title" text="Gestion Agricole Pro - Détail de l'Évaluation de Risque"/>
+            <Label styleClass="title" text="Gestion Agricole Pro - Évaluation de Risque"/>
         </HBox>
     </top>
 
-    <!-- Contenu principal -->
+    <!-- Contenu principal avec ScrollPane -->
     <center>
-        <VBox spacing="20" styleClass="main-content">
-            <padding>
-                <Insets top="30" right="30" bottom="30" left="30"/>
-            </padding>
+        <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+            <VBox spacing="20" styleClass="main-content">
+                <padding>
+                    <Insets top="30" right="30" bottom="30" left="30"/>
+                </padding>
 
-            <!-- Section Formulaire -->
-            <VBox spacing="20" styleClass="form-section">
-                <Label text="INFORMATIONS DE L'ÉVALUATION" styleClass="section-title"/>
+                <!-- Section Formulaire -->
+                <VBox spacing="20" styleClass="form-section">
+                    <Label text="INFORMATIONS DE L'ÉVALUATION" styleClass="section-title"/>
 
-                <GridPane hgap="20" vgap="20" styleClass="form-grid">
-                    <padding>
-                        <Insets top="20" right="20" bottom="20" left="20"/>
-                    </padding>
-
-                    <!-- Ligne 1 -->
-                    <Label text="ID Évaluation :" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
-                    <TextField fx:id="tfIdEvaluation" editable="false"
-                               GridPane.rowIndex="0" GridPane.columnIndex="1"
-                               prefWidth="350" styleClass="text-field-readonly"/>
-
-                    <!-- Ligne 2 -->
-                    <Label text="ID Projet :" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
-                    <ComboBox fx:id="cbIdProjet"
-                              GridPane.rowIndex="1" GridPane.columnIndex="1"
-                              prefWidth="350" promptText="Sélectionner un projet"/>
-
-                    <!-- Ligne 3 -->
-                    <Label text="Score Global :" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
-                    <TextField fx:id="tfScoreGlobal"
-                               GridPane.rowIndex="2" GridPane.columnIndex="1"
-                               prefWidth="350" promptText="Entrez le score global"/>
-
-                    <!-- Ligne 4 -->
-                    <Label text="Niveau de Risque :" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label"/>
-                    <ComboBox fx:id="cbNiveauRisque"
-                              promptText="Sélectionner un niveau de risque"
-                              GridPane.rowIndex="3" GridPane.columnIndex="1"
-                              prefWidth="350"/>
-
-                    <!-- Ligne 5 -->
-                    <Label text="Fiabilité des Données :" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="form-label"/>
-                    <ComboBox fx:id="cbFiabiliteDonnees"
-                              promptText="Sélectionner la fiabilité des données"
-                              GridPane.rowIndex="4" GridPane.columnIndex="1"
-                              prefWidth="350"/>
-
-                    <!-- Ligne 6 -->
-                    <Label text="Facteur Principal :" GridPane.rowIndex="5" GridPane.columnIndex="0" styleClass="form-label"/>
-                    <TextField fx:id="tfFacteurPrincipal"
-                               GridPane.rowIndex="5" GridPane.columnIndex="1"
-                               prefWidth="350" promptText="Entrez le facteur principal"/>
-
-                    <!-- Ligne 7 -->
-                    <Label text="Recommandation :" GridPane.rowIndex="6" GridPane.columnIndex="0" styleClass="form-label"/>
-                    <ComboBox fx:id="cbRecommandation"
-                              promptText="Sélectionner une recommandation"
-                              GridPane.rowIndex="6" GridPane.columnIndex="1"
-                              prefWidth="350"/>
-
-                    <!-- Ligne 8 -->
-                    <Label text="Date d'Évaluation :" GridPane.rowIndex="7" GridPane.columnIndex="0" styleClass="form-label"/>
-                    <DatePicker fx:id="dpDateEvaluation"
-                                GridPane.rowIndex="7" GridPane.columnIndex="1"
-                                prefWidth="350" promptText="Sélectionner une date"/>
-
-                    <!-- Ligne 9 - Boutons -->
-                    <HBox spacing="15" GridPane.rowIndex="8" GridPane.columnIndex="0"
-                          GridPane.columnSpan="2" alignment="CENTER">
+                    <GridPane hgap="20" vgap="20" styleClass="form-grid">
                         <padding>
-                            <Insets top="20"/>
+                            <Insets top="20" right="20" bottom="20" left="20"/>
                         </padding>
-                        <Button text="Annuler" styleClass="button-secondary" onAction="#handleCancel" prefWidth="150"/>
-                        <Button text="Enregistrer" styleClass="button-primary" onAction="#handleSave" prefWidth="150"/>
-                        <Button text="Effacer" styleClass="button-accent" onAction="#handleClear" prefWidth="150"/>
-                    </HBox>
-                </GridPane>
+
+                        <!-- Ligne 1 (masquée) -->
+                        <Label text="ID Évaluation :" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label" visible="false"/>
+                        <TextField fx:id="tfIdEvaluation" editable="false"
+                                   GridPane.rowIndex="0" GridPane.columnIndex="1"
+                                   prefWidth="350" styleClass="text-field-readonly" visible="false"/>
+
+                        <!-- Ligne 2 -->
+                        <Label text="ID Projet :" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+                        <ComboBox fx:id="cbIdProjet"
+                                  GridPane.rowIndex="1" GridPane.columnIndex="1"
+                                  prefWidth="350" promptText="Sélectionner un projet" styleClass="combo-box"/>
+
+                        <!-- Ligne 3 -->
+                        <Label text="Score Global :" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
+                        <TextField fx:id="tfScoreGlobal"
+                                   GridPane.rowIndex="2" GridPane.columnIndex="1"
+                                   prefWidth="350" promptText="Entrez le score global" styleClass="text-field"/>
+
+                        <!-- Ligne 4 -->
+                        <Label text="Niveau de Risque :" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label"/>
+                        <ComboBox fx:id="cbNiveauRisque"
+                                  promptText="Sélectionner un niveau de risque"
+                                  GridPane.rowIndex="3" GridPane.columnIndex="1"
+                                  prefWidth="350" styleClass="combo-box"/>
+
+                        <!-- Ligne 5 -->
+                        <Label text="Fiabilité des Données :" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="form-label"/>
+                        <ComboBox fx:id="cbFiabiliteDonnees"
+                                  promptText="Sélectionner la fiabilité des données"
+                                  GridPane.rowIndex="4" GridPane.columnIndex="1"
+                                  prefWidth="350" styleClass="combo-box"/>
+
+                        <!-- Ligne 6 -->
+                        <Label text="Facteurs et Conseils :" GridPane.rowIndex="5" GridPane.columnIndex="0" styleClass="form-label" GridPane.valignment="TOP"/>
+                        <TextArea fx:id="tfFacteurPrincipal"
+                                  GridPane.rowIndex="5" GridPane.columnIndex="1"
+                                  prefWidth="350" prefHeight="400"
+                                  promptText="Facteurs principaux et conseils"
+                                  wrapText="true" styleClass="text-area"/>
+
+                        <!-- Ligne 7 -->
+                        <Label text="Recommandation :" GridPane.rowIndex="6" GridPane.columnIndex="0" styleClass="form-label"/>
+                        <ComboBox fx:id="cbRecommandation"
+                                  promptText="Sélectionner une recommandation"
+                                  GridPane.rowIndex="6" GridPane.columnIndex="1"
+                                  prefWidth="350" styleClass="combo-box"/>
+
+                        <!-- Ligne 8 -->
+                        <Label text="Date d'Évaluation :" GridPane.rowIndex="7" GridPane.columnIndex="0" styleClass="form-label"/>
+                        <DatePicker fx:id="dpDateEvaluation"
+                                    GridPane.rowIndex="7" GridPane.columnIndex="1"
+                                    prefWidth="350" promptText="Sélectionner une date" styleClass="date-picker"/>
+
+                        <!-- Ligne 9 - Boutons -->
+                        <HBox spacing="15" GridPane.rowIndex="8" GridPane.columnSpan="2" alignment="CENTER">
+                            <padding>
+                                <Insets top="20"/>
+                            </padding>
+                            <Button text="Annuler" styleClass="button-secondary" onAction="#handleCancel" prefWidth="150"/>
+                            <Button text="Enregistrer" styleClass="button-primary" onAction="#handleSave" prefWidth="150"/>
+                            <Button text="Effacer" styleClass="button-accent" onAction="#handleClear" prefWidth="150"/>
+                        </HBox>
+                    </GridPane>
+                </VBox>
             </VBox>
-        </VBox>
+        </ScrollPane>
     </center>
 
     <!-- Pied de page -->

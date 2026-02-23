@@ -6,9 +6,9 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="controllers.DecisionListController"
             prefWidth="1400"
-            prefHeight="800"
+            prefHeight="850"
             styleClass="root"
-            stylesheets="@style.css">
+            stylesheets="@decisionlist.css">
 
     <!-- En-tête -->
     <top>
@@ -33,30 +33,38 @@
                     <Insets top="10" right="15" bottom="10" left="15"/>
                 </padding>
                 <Label text="🔍 Rechercher:" styleClass="form-label"/>
-                <TextField fx:id="tfSearch" promptText="Rechercher..." onKeyReleased="#handleSearch" prefWidth="300"/>
+                <TextField fx:id="tfSearch" promptText="Rechercher..." onKeyReleased="#handleSearch" prefWidth="300" styleClass="text-field"/>
                 <Button text="🔄 Rafraîchir" styleClass="button-accent" onAction="#handleRefresh"/>
             </HBox>
 
             <!-- Tableau des décisions -->
-            <TableView fx:id="tableDecisions" prefHeight="500">
+            <TableView fx:id="tableDecisions" prefHeight="500" styleClass="table-view">
                 <columns>
-                    <TableColumn fx:id="colId" text="ID" prefWidth="50" />
-                    <TableColumn fx:id="colStatut" text="Statut" prefWidth="100" />
-                    <TableColumn fx:id="colDate" text="Date" prefWidth="150" />
-                    <TableColumn fx:id="colJustification" text="Justification" prefWidth="300" />
-                    <TableColumn fx:id="colIdEvaluation" text="ID Évaluation" prefWidth="100" />
-                    <TableColumn fx:id="colActions" text="Actions" prefWidth="150" />
+                    <TableColumn fx:id="colId" text="ID" prefWidth="50" styleClass="table-column"/>
+                    <TableColumn fx:id="colStatut" text="Statut" prefWidth="100" styleClass="table-column"/>
+                    <TableColumn fx:id="colDate" text="Date" prefWidth="150" styleClass="table-column"/>
+                    <TableColumn fx:id="colJustification" text="Justification" prefWidth="300" styleClass="table-column"/>
+                    <TableColumn fx:id="colIdEvaluation" text="ID Évaluation" prefWidth="100" styleClass="table-column"/>
+                    <TableColumn fx:id="colActions" text="Actions" prefWidth="150" styleClass="table-column"/>
                 </columns>
             </TableView>
 
             <!-- Statistiques -->
             <HBox spacing="20" alignment="CENTER_LEFT">
-                <Label text="Total: " styleClass="stats-label"/>
-                <Label fx:id="lblTotal" text="0" styleClass="stats-value"/>
-                <Label text="Approuvés: " styleClass="stats-label"/>
-                <Label fx:id="lblApprouves" text="0" styleClass="stats-value"/>
-                <Label text="En Attente: " styleClass="stats-label"/>
-                <Label fx:id="lblEnAttente" text="0" styleClass="stats-value"/>
+                <VBox spacing="5" alignment="CENTER">
+                    <Label text="Total" styleClass="stats-label"/>
+                    <Label fx:id="lblTotal" text="0" styleClass="stats-value"/>
+                </VBox>
+                <Separator orientation="VERTICAL" styleClass="vertical-separator"/>
+                <VBox spacing="5" alignment="CENTER">
+                    <Label text="Approuvés" styleClass="stats-label"/>
+                    <Label fx:id="lblApprouves" text="0" styleClass="stats-value"/>
+                </VBox>
+                <Separator orientation="VERTICAL" styleClass="vertical-separator"/>
+                <VBox spacing="5" alignment="CENTER">
+                    <Label text="En attente" styleClass="stats-label"/>
+                    <Label fx:id="lblEnAttente" text="0" styleClass="stats-value"/>
+                </VBox>
             </HBox>
 
             <Label fx:id="lblStatus" styleClass="status-label" text="Prêt"/>
