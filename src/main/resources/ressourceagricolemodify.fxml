@@ -6,7 +6,7 @@
 
 <VBox prefHeight="650.0" prefWidth="520.0" spacing="0" stylesheets="@style.css"
       xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="controles.ressourceprojectmodifycontroller">
+      fx:controller="controles.ressourceprojectcontroller">
 
 
     <HBox alignment="CENTER_LEFT" spacing="15" styleClass="page-header">
