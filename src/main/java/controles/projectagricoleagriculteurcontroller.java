@@ -665,7 +665,18 @@ public class projectagricoleagriculteurcontroller implements Initializable {
         btnDelete.setTooltip(new Tooltip("Supprimer"));
         btnDelete.setMinWidth(40); btnDelete.setPrefWidth(40);
 
-        actions.getChildren().addAll(btnView, btnEdit, btnDelete);
+        Button btnChat = new Button("💬");
+        btnChat.getStyleClass().add("btn-view");
+        btnChat.setStyle(
+                "-fx-background-color: linear-gradient(to bottom right, #1a73e8, #0d47a1);" +
+                        "-fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 6 10;" +
+                        "-fx-background-radius: 8; -fx-cursor: hand;" +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(26,115,232,0.5), 6, 0, 0, 2);");
+        btnChat.setTooltip(new Tooltip("🌿 Assistant Plante Malade — Analyse IA Gemini"));
+        btnChat.setMinWidth(40); btnChat.setPrefWidth(40);
+        btnChat.setOnAction(e -> openPlantDiseaseChat(project));
+
+        actions.getChildren().addAll(btnView, btnEdit, btnDelete, btnChat);
         HBox.setHgrow(actions, Priority.ALWAYS);
 
         // Conseils button
@@ -1362,5 +1373,412 @@ public class projectagricoleagriculteurcontroller implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    // ============================================================================
+    // 🌿 ASSISTANT PLANTE MALADE — GEMINI AI VISION
+    // ============================================================================
+
+    // ── Groq API key — can be overridden at runtime via the 🔑 button in the chat ──
+    // Groq supports vision via llama-4 and llava models — free tier, very fast.
+    private static String GROQ_API_KEY = "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";
+
+    private void openPlantDiseaseChat(projectagricole project) {
+        Stage chatStage = new Stage();
+        chatStage.initModality(Modality.APPLICATION_MODAL);
+        chatStage.setTitle("🌿 Assistant Plante Malade — " + project.getNomproject());
+        chatStage.setWidth(680);
+        chatStage.setHeight(750);
+        chatStage.setResizable(false);
+
+        // ── Root ──────────────────────────────────────────────────────────────
+        VBox root = new VBox();
+        root.setStyle("-fx-background-color: #F0F7F0;");
+
+        // ── Header ────────────────────────────────────────────────────────────
+        HBox header = new HBox(14);
+        header.setAlignment(Pos.CENTER_LEFT);
+        header.setPadding(new Insets(18, 22, 18, 22));
+        header.setStyle(
+                "-fx-background-color: linear-gradient(to right, #076A39, #089647);" +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.25), 8, 0, 0, 3);");
+        Label headerIcon = new Label("🌿");
+        headerIcon.setStyle("-fx-font-size: 30px;");
+        VBox headerText = new VBox(2);
+        Label headerTitle = new Label("Assistant Plante Malade");
+        headerTitle.setStyle("-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: white;");
+        Label headerSub = new Label("Projet : " + project.getNomproject() + "  •  IA Gemini Vision");
+        headerSub.setStyle("-fx-font-size: 11px; -fx-text-fill: rgba(255,255,255,0.80);");
+        headerText.getChildren().addAll(headerTitle, headerSub);
+        HBox.setHgrow(headerText, Priority.ALWAYS);
+
+        // 🔑 Change API key button
+        Button btnChangeKey = new Button("🔑");
+        btnChangeKey.setStyle(
+                "-fx-background-color: rgba(255,255,255,0.18); -fx-text-fill: white;" +
+                        "-fx-font-size: 16px; -fx-padding: 6 10; -fx-background-radius: 8;" +
+                        "-fx-cursor: hand; -fx-border-color: rgba(255,255,255,0.35);" +
+                        "-fx-border-width: 1; -fx-border-radius: 8;");
+        btnChangeKey.setTooltip(new Tooltip("Changer la clé API Groq (si quota épuisé)"));
+        btnChangeKey.setOnAction(ev -> {
+            TextInputDialog dlg = new TextInputDialog(GROQ_API_KEY);
+            dlg.setTitle("Clé API Groq");
+            dlg.setHeaderText("🔑 Nouvelle clé API Groq");
+            dlg.setContentText(
+                    "Obtenez une clé gratuite sur : console.groq.com/keys\n" +
+                            "Collez-la ici :");
+            dlg.getEditor().setPrefWidth(420);
+            dlg.showAndWait().ifPresent(newKey -> {
+                String trimmed = newKey.trim();
+                if (!trimmed.isEmpty()) {
+                    GROQ_API_KEY = trimmed;
+                    showAlert(Alert.AlertType.INFORMATION, "Clé mise à jour",
+                            "✅ Nouvelle clé API Groq activée.\nVous pouvez maintenant analyser vos plantes.");
+                }
+            });
+        });
+
+        header.getChildren().addAll(headerIcon, headerText, btnChangeKey);
+
+        // ── Chat scroll area ───────────────────────────────────────────────────
+        VBox chatBox = new VBox(14);
+        chatBox.setPadding(new Insets(18, 18, 8, 18));
+        javafx.scene.control.ScrollPane scrollPane = new javafx.scene.control.ScrollPane(chatBox);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background-color: transparent; -fx-border-width: 0;");
+        scrollPane.setVbarPolicy(javafx.scene.control.ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
+
+        // Welcome bubble
+        addChatBubble(chatBox, "🌿 Bonjour ! Je suis votre assistant spécialisé en maladies des plantes.\n\n" +
+                "📸 Envoyez-moi une photo de votre plante malade et je vous fournirai :\n" +
+                "  • Le nom exact de la plante\n  • Le diagnostic de la maladie\n" +
+                "  • Un traitement agricole adapté\n\nCliquez sur 📎 pour sélectionner votre photo.", false);
+
+        // ── Bottom panel ───────────────────────────────────────────────────────
+        VBox bottomPanel = new VBox(10);
+        bottomPanel.setPadding(new Insets(12, 16, 16, 16));
+        bottomPanel.setStyle(
+                "-fx-background-color: white;" +
+                        "-fx-border-color: #D0E8D0; -fx-border-width: 1 0 0 0;");
+
+        // Image preview
+        Label[] imageLabelHolder = { null };
+        File[] selectedFileHolder = { null };
+
+        HBox previewBox = new HBox(10);
+        previewBox.setAlignment(Pos.CENTER_LEFT);
+        previewBox.setVisible(false);
+        previewBox.setManaged(false);
+        javafx.scene.image.ImageView imagePreview = new javafx.scene.image.ImageView();
+        imagePreview.setFitWidth(80); imagePreview.setFitHeight(80);
+        imagePreview.setPreserveRatio(true);
+        imagePreview.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 6, 0, 0, 2);");
+        Label previewLabel = new Label("Image sélectionnée");
+        previewLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #076A39; -fx-font-weight: bold;");
+        Button btnRemoveImg = new Button("✖");
+        btnRemoveImg.setStyle("-fx-background-color: #D32F2F; -fx-text-fill: white;" +
+                "-fx-background-radius: 50%; -fx-padding: 2 6; -fx-cursor: hand; -fx-font-size: 10px;");
+        previewBox.getChildren().addAll(imagePreview, previewLabel, btnRemoveImg);
+
+        // Input row
+        HBox inputRow = new HBox(8);
+        inputRow.setAlignment(Pos.CENTER);
+
+        Button btnAttach = new Button("📎");
+        btnAttach.setStyle(
+                "-fx-background-color: linear-gradient(to bottom, #E8F5E9, #C8E6C9);" +
+                        "-fx-text-fill: #076A39; -fx-font-size: 18px; -fx-padding: 8 12;" +
+                        "-fx-background-radius: 10; -fx-cursor: hand;" +
+                        "-fx-border-color: #A5D6A7; -fx-border-width: 1; -fx-border-radius: 10;");
+        btnAttach.setTooltip(new Tooltip("Joindre une photo de plante malade"));
+
+        Button btnSend = new Button("🔍 Analyser");
+        btnSend.setStyle(
+                "-fx-background-color: linear-gradient(to right, #076A39, #089647);" +
+                        "-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;" +
+                        "-fx-padding: 10 28; -fx-background-radius: 10; -fx-cursor: hand;" +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(7,106,57,0.4), 8, 0, 0, 2);");
+        btnSend.setDisable(true);
+
+        Label statusLabel = new Label("Sélectionnez une image pour commencer l'analyse");
+        statusLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #888; -fx-font-style: italic;");
+        statusLabel.setWrapText(true);
+
+        HBox.setHgrow(statusLabel, Priority.ALWAYS);
+        inputRow.getChildren().addAll(btnAttach, statusLabel, btnSend);
+
+        bottomPanel.getChildren().addAll(previewBox, inputRow);
+
+        // ── Events ────────────────────────────────────────────────────────────
+        btnAttach.setOnAction(ev -> {
+            javafx.stage.FileChooser fc = new javafx.stage.FileChooser();
+            fc.setTitle("Sélectionner une photo de plante");
+            fc.getExtensionFilters().addAll(
+                    new javafx.stage.FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp", "*.webp"));
+            File file = fc.showOpenDialog(chatStage);
+            if (file != null) {
+                selectedFileHolder[0] = file;
+                try {
+                    javafx.scene.image.Image img = new javafx.scene.image.Image(file.toURI().toString());
+                    imagePreview.setImage(img);
+                    previewLabel.setText(file.getName());
+                    previewBox.setVisible(true);
+                    previewBox.setManaged(true);
+                    btnSend.setDisable(false);
+                    statusLabel.setText("✅ Image prête — Cliquez sur Analyser");
+                    statusLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #076A39; -fx-font-weight: bold;");
+                } catch (Exception ex) {
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger l'image.");
+                }
+            }
+        });
+
+        btnRemoveImg.setOnAction(ev -> {
+            selectedFileHolder[0] = null;
+            imagePreview.setImage(null);
+            previewBox.setVisible(false);
+            previewBox.setManaged(false);
+            btnSend.setDisable(true);
+            statusLabel.setText("Sélectionnez une image pour commencer l'analyse");
+            statusLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #888; -fx-font-style: italic;");
+        });
+
+        btnSend.setOnAction(ev -> {
+            File imgFile = selectedFileHolder[0];
+            if (imgFile == null) return;
+
+            // Show user bubble with image name
+            addChatBubble(chatBox, "📸 " + imgFile.getName(), true);
+            scrollToBottom(scrollPane, chatBox);
+
+            // Disable buttons during analysis
+            btnSend.setDisable(true);
+            btnAttach.setDisable(true);
+            statusLabel.setText("⏳ Analyse en cours par Gemini AI…");
+            statusLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #E1B323; -fx-font-weight: bold;");
+
+            // Typing indicator
+            Label typingLabel = new Label("🌿 Assistant analyse votre plante…  ⣾");
+            typingLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #076A39; -fx-font-style: italic;");
+            chatBox.getChildren().add(typingLabel);
+            scrollToBottom(scrollPane, chatBox);
+
+            // Call Gemini in background thread
+            Thread bgThread = new Thread(() -> {
+                String response = callGeminiVision(imgFile, project.getNomproject());
+                javafx.application.Platform.runLater(() -> {
+                    chatBox.getChildren().remove(typingLabel);
+                    addChatBubble(chatBox, response, false);
+                    scrollToBottom(scrollPane, chatBox);
+                    // Reset
+                    btnSend.setDisable(false);
+                    btnAttach.setDisable(false);
+                    selectedFileHolder[0] = null;
+                    imagePreview.setImage(null);
+                    previewBox.setVisible(false);
+                    previewBox.setManaged(false);
+                    statusLabel.setText("Analyse terminée — Joignez une nouvelle image pour continuer");
+                    statusLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #888; -fx-font-style: italic;");
+                });
+            });
+            bgThread.setDaemon(true);
+            bgThread.start();
+        });
+
+        root.getChildren().addAll(header, scrollPane, bottomPanel);
+        chatStage.setScene(new Scene(root));
+        chatStage.show();
+    }
+
+    /** Add a styled chat bubble (left = AI, right = user) */
+    private void addChatBubble(VBox chatBox, String text, boolean isUser) {
+        Label bubble = new Label(text);
+        bubble.setWrapText(true);
+        bubble.setMaxWidth(480);
+        if (isUser) {
+            bubble.setStyle(
+                    "-fx-background-color: linear-gradient(to bottom right, #076A39, #089647);" +
+                            "-fx-text-fill: white; -fx-font-size: 13px; -fx-padding: 12 16;" +
+                            "-fx-background-radius: 18 18 4 18;" +
+                            "-fx-effect: dropshadow(three-pass-box, rgba(7,106,57,0.35), 6, 0, 0, 2);");
+            HBox row = new HBox(bubble);
+            row.setAlignment(Pos.CENTER_RIGHT);
+            chatBox.getChildren().add(row);
+        } else {
+            bubble.setStyle(
+                    "-fx-background-color: white;" +
+                            "-fx-text-fill: #1A2E1A; -fx-font-size: 13px; -fx-padding: 14 18;" +
+                            "-fx-background-radius: 18 18 18 4;" +
+                            "-fx-border-color: #D0E8D0; -fx-border-width: 1; -fx-border-radius: 18 18 18 4;" +
+                            "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.10), 6, 0, 0, 2);" +
+                            "-fx-line-spacing: 3px;");
+            HBox row = new HBox(10);
+            row.setAlignment(Pos.TOP_LEFT);
+            Label avatar = new Label("🌿");
+            avatar.setStyle("-fx-font-size: 20px;");
+            row.getChildren().addAll(avatar, bubble);
+            chatBox.getChildren().add(row);
+        }
+    }
+
+    private void scrollToBottom(javafx.scene.control.ScrollPane sp, VBox chatBox) {
+        javafx.application.Platform.runLater(() -> {
+            chatBox.layout();
+            sp.layout();
+            sp.setVvalue(1.0);
+        });
+    }
+
+    /**
+     * Groq vision models tried in order (fallback on 429/503).
+     * All support image input via the OpenAI-compatible chat completions API.
+     */
+    private static final String[] GROQ_VISION_MODELS = {
+            "meta-llama/llama-4-scout-17b-16e-instruct",   // best vision, fast
+            "meta-llama/llama-4-maverick-17b-128e-instruct", // alt vision
+            "llava-v1.5-7b-4096-preview"                   // legacy fallback
+    };
+
+    /** Call Groq Vision API with automatic model fallback. */
+    private String callGeminiVision(File imageFile, String projectName) {
+        try {
+            // Read and base64-encode the image
+            byte[] imageBytes = java.nio.file.Files.readAllBytes(imageFile.toPath());
+            String base64Image = java.util.Base64.getEncoder().encodeToString(imageBytes);
+
+            // Detect MIME type
+            String fileName = imageFile.getName().toLowerCase();
+            String mimeType = "image/jpeg";
+            if (fileName.endsWith(".png"))   mimeType = "image/png";
+            else if (fileName.endsWith(".gif"))  mimeType = "image/gif";
+            else if (fileName.endsWith(".webp")) mimeType = "image/webp";
+            else if (fileName.endsWith(".bmp"))  mimeType = "image/bmp";
+
+            String prompt = "Tu es un expert agronome. " +
+                    "Le projet agricole s'appelle : \"" + projectName + "\". " +
+                    "Identifie immédiatement le nom de la plante sur cette image, " +
+                    "analyse la maladie visible et donne un traitement agricole concret. " +
+                    "Réponds en français, structuré ainsi :\n" +
+                    "🌱 Plante : [nom]\n" +
+                    "🦠 Maladie détectée : [nom de la maladie]\n" +
+                    "⚠ Symptômes observés : [description courte]\n" +
+                    "💊 Traitement recommandé :\n  • [produit/méthode 1]\n  • [produit/méthode 2]\n  • [produit/méthode 3]\n" +
+                    "🔄 Prévention : [conseil court]\n" +
+                    "Si la plante est saine, indique-le clairement.";
+
+            // Groq uses OpenAI-compatible chat completions with image_url content
+            String jsonBody = "{"
+                    + "\"model\":\"MODEL_PLACEHOLDER\","
+                    + "\"messages\":[{"
+                    +   "\"role\":\"user\","
+                    +   "\"content\":["
+                    +     "{\"type\":\"text\",\"text\":\"" + escapeJson(prompt) + "\"},"
+                    +     "{\"type\":\"image_url\",\"image_url\":{"
+                    +       "\"url\":\"data:" + mimeType + ";base64," + base64Image + "\""
+                    +     "}}"
+                    +   "]"
+                    + "}],"
+                    + "\"max_tokens\":1024,"
+                    + "\"temperature\":0.3"
+                    + "}";
+
+            String lastError = "Aucun modèle disponible.";
+
+            for (String model : GROQ_VISION_MODELS) {
+                try {
+                    String body = jsonBody.replace("MODEL_PLACEHOLDER", model);
+
+                    java.net.URL url = new java.net.URL("https://api.groq.com/openai/v1/chat/completions");
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("POST");
+                    conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                    conn.setRequestProperty("Authorization", "Bearer " + GROQ_API_KEY);
+                    conn.setDoOutput(true);
+                    conn.setConnectTimeout(30000);
+                    conn.setReadTimeout(60000);
+
+                    try (OutputStream os = conn.getOutputStream()) {
+                        os.write(body.getBytes(StandardCharsets.UTF_8));
+                    }
+
+                    int status = conn.getResponseCode();
+
+                    // Read response (success or error stream)
+                    java.io.InputStream is;
+                    try { is = conn.getInputStream(); }
+                    catch (Exception e) { is = conn.getErrorStream(); }
+
+                    StringBuilder sb = new StringBuilder();
+                    if (is != null) {
+                        try (BufferedReader br = new BufferedReader(
+                                new InputStreamReader(is, StandardCharsets.UTF_8))) {
+                            String line;
+                            while ((line = br.readLine()) != null) sb.append(line).append("\n");
+                        }
+                    }
+                    String responseJson = sb.toString();
+
+                    if (status == 429 || status == 503) {
+                        lastError = "HTTP " + status + " [" + model + "]";
+                        System.out.println("Groq model " + model + " quota/unavailable, trying next...");
+                        continue;
+                    }
+
+                    if (status >= 200 && status < 300) {
+                        // Parse: choices[0].message.content
+                        // JSON: {"choices":[{"message":{"content":"..."}}]}
+                        int idx = responseJson.indexOf("\"content\":");
+                        if (idx >= 0) {
+                            int start = responseJson.indexOf("\"", idx + 10) + 1;
+                            int end = start;
+                            while (end < responseJson.length()) {
+                                char c = responseJson.charAt(end);
+                                if (c == '\\') { end += 2; continue; }
+                                if (c == '"') break;
+                                end++;
+                            }
+                            String raw = responseJson.substring(start, end)
+                                    .replace("\\n", "\n")
+                                    .replace("\\t", "\t")
+                                    .replace("\\\"", "\"")
+                                    .replace("\\\\", "\\");
+                            return raw;
+                        }
+                        return "⚠ Réponse inattendue du modèle " + model + ".";
+                    } else {
+                        // Real error — show it
+                        return "❌ Erreur API Groq (HTTP " + status + ")\n\n"
+                                + responseJson.substring(0, Math.min(500, responseJson.length()));
+                    }
+
+                } catch (Exception modelEx) {
+                    lastError = "Erreur réseau [" + model + "] : " + modelEx.getMessage();
+                    System.err.println("Groq model " + model + " exception: " + modelEx.getMessage());
+                }
+            }
+
+            // All models exhausted
+            return "❌ Quota épuisé sur tous les modèles Groq.\n\n" +
+                    "💡 Solution rapide :\n" +
+                    "  1. Allez sur console.groq.com/keys\n" +
+                    "  2. Cliquez « Create API Key »\n" +
+                    "  3. Copiez la clé et cliquez 🔑 en haut à droite\n" +
+                    "  4. Collez la nouvelle clé et réessayez\n\n" +
+                    "⏱ Ou attendez quelques minutes — le quota se réinitialise automatiquement.\n\n" +
+                    "Dernière erreur : " + lastError;
+
+        } catch (Exception ex) {
+            return "❌ Erreur lors de la lecture de l'image :\n" + ex.getMessage();
+        }
+    }
+
+    private String escapeJson(String text) {
+        return text
+                .replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\t", "\\t");
     }
 }
