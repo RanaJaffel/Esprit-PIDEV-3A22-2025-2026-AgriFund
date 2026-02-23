@@ -1,4 +1,4 @@
-package com.agrifund.controller;
+package com.agrifund.services;
 
 import com.agrifund.model.ProduitFinancier;
 import com.agrifund.util.DatabaseConnection;
@@ -7,7 +7,7 @@ import javafx.collections.ObservableList;
 
 import java.sql.*;
 
-public class ProduitFinancierController {
+public class ProduitFinancierService {
 
     // CREATE
     public boolean ajouterProduit(ProduitFinancier produit) {

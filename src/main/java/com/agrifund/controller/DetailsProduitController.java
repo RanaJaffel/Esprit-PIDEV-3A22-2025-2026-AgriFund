@@ -1,4 +1,4 @@
-package com.agrifund.view;
+package com.agrifund.controller;
 
 import com.agrifund.model.ProduitFinancier;
 import com.agrifund.util.PDFGenerator;

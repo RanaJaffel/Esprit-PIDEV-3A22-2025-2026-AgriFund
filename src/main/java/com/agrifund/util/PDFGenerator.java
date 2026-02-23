@@ -65,8 +65,8 @@ public class PDFGenerator {
         ajouterLigneTableau(tableInfo, "Nom du Produit", produit.getNomProduit());
         ajouterLigneTableau(tableInfo, "Type de Financement", produit.getTypeFinancement());
         ajouterLigneTableau(tableInfo, "Taux d'Interet", String.format("%.2f %%", produit.getTauxInteret()));
-        ajouterLigneTableau(tableInfo, "Montant Minimum", String.format("%,.2f DH", produit.getMontantMin()));
-        ajouterLigneTableau(tableInfo, "Montant Maximum", String.format("%,.2f DH", produit.getMontantMax()));
+        ajouterLigneTableau(tableInfo, "Montant Minimum", String.format("%,.2f DT", produit.getMontantMin()));
+        ajouterLigneTableau(tableInfo, "Montant Maximum", String.format("%,.2f DT", produit.getMontantMax()));
 
         document.add(tableInfo);
         document.add(new Paragraph(" "));
@@ -84,8 +84,8 @@ public class PDFGenerator {
         tableStats.setWidthPercentage(100);
         tableStats.setWidths(new float[]{1, 1});
 
-        ajouterCelluleStats(tableStats, "Montant Moyen", String.format("%,.2f DH", moyenne), VERT_CLAIR);
-        ajouterCelluleStats(tableStats, "Ecart Min-Max", String.format("%,.2f DH", ecart), GOLD);
+        ajouterCelluleStats(tableStats, "Montant Moyen", String.format("%,.2f DT", moyenne), VERT_CLAIR);
+        ajouterCelluleStats(tableStats, "Ecart Min-Max", String.format("%,.2f DT", ecart), GOLD);
 
         document.add(tableStats);
         document.add(new Paragraph(" "));

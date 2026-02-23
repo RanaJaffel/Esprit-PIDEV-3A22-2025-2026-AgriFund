@@ -19,24 +19,28 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     private VBox contentArea;
+    private Button btnUtilisateur;
     private Button btnProduits;
     private Button btnOffres;
+    private Button btnCarte;
+    private Button btnVueCarte;
+    private Button btnChatbot;
 
-    private String activeStyle = "-fx-background-color: linear-gradient(to bottom, #B2D944, #476C1A);" +
-            "-fx-text-fill: white;" +
-            "-fx-font-weight: bold;" +
-            "-fx-font-size: 14;" +
-            "-fx-background-radius: 20;" +
-            "-fx-padding: 10 30 10 30;" +
-            "-fx-cursor: hand;";
+    private String activeStyle = "-fx-background-color: linear-gradient(to bottom, #B2D944, #476C1A);"
+            + "-fx-text-fill: white;"
+            + "-fx-font-weight: bold;"
+            + "-fx-font-size: 14;"
+            + "-fx-background-radius: 20;"
+            + "-fx-padding: 10 30 10 30;"
+            + "-fx-cursor: hand;";
 
-    private String inactiveStyle = "-fx-background-color: linear-gradient(to bottom, #076A39, #095032);" +
-            "-fx-text-fill: #B2D944;" +
-            "-fx-font-weight: bold;" +
-            "-fx-font-size: 14;" +
-            "-fx-background-radius: 20;" +
-            "-fx-padding: 10 30 10 30;" +
-            "-fx-cursor: hand;";
+    private String inactiveStyle = "-fx-background-color: linear-gradient(to bottom, #076A39, #095032);"
+            + "-fx-text-fill: #B2D944;"
+            + "-fx-font-weight: bold;"
+            + "-fx-font-size: 14;"
+            + "-fx-background-radius: 20;"
+            + "-fx-padding: 10 30 10 30;"
+            + "-fx-cursor: hand;";
 
     @Override
     public void start(Stage primaryStage) {
@@ -54,8 +58,8 @@ public class Main extends Application {
             // ==================== NAVBAR ====================
             HBox navbar = new HBox(20);
             navbar.setAlignment(Pos.CENTER_LEFT);
-            navbar.setStyle("-fx-background-color: linear-gradient(to right, #076A39, #089647, #076A39);" +
-                    "-fx-padding: 15 30 15 30;");
+            navbar.setStyle("-fx-background-color: linear-gradient(to right, #076A39, #089647, #076A39);"
+                    + "-fx-padding: 15 30 15 30;");
 
             DropShadow navShadow = new DropShadow();
             navShadow.setColor(Color.web("#060806"));
@@ -86,6 +90,24 @@ public class Main extends Application {
             HBox spacer = new HBox();
             HBox.setHgrow(spacer, Priority.ALWAYS);
 
+            // Bouton Utilisateur (simplified user interface)
+            btnUtilisateur = new Button("👤 Mon Espace");
+            btnUtilisateur.setStyle(inactiveStyle);
+            DropShadow btnShadow0 = new DropShadow();
+            btnShadow0.setColor(Color.web("#060806"));
+            btnShadow0.setOffsetY(3);
+            btnShadow0.setRadius(8);
+            btnUtilisateur.setEffect(btnShadow0);
+            btnUtilisateur.setOnAction(e -> {
+                chargerInterface("UtilisateurView.fxml");
+                btnUtilisateur.setStyle(activeStyle);
+                btnProduits.setStyle(inactiveStyle);
+                btnOffres.setStyle(inactiveStyle);
+                btnCarte.setStyle(inactiveStyle);
+                btnVueCarte.setStyle(inactiveStyle);
+                btnChatbot.setStyle(inactiveStyle);
+            });
+
             // Bouton Produits
             btnProduits = new Button("Produits Financiers");
             btnProduits.setStyle(activeStyle);
@@ -96,8 +118,12 @@ public class Main extends Application {
             btnProduits.setEffect(btnShadow1);
             btnProduits.setOnAction(e -> {
                 chargerInterface("ProduitFinancierView.fxml");
+                btnUtilisateur.setStyle(inactiveStyle);
                 btnProduits.setStyle(activeStyle);
                 btnOffres.setStyle(inactiveStyle);
+                btnCarte.setStyle(inactiveStyle);
+                btnVueCarte.setStyle(inactiveStyle);
+                btnChatbot.setStyle(inactiveStyle);
             });
 
             // Bouton Offres
@@ -110,12 +136,69 @@ public class Main extends Application {
             btnOffres.setEffect(btnShadow2);
             btnOffres.setOnAction(e -> {
                 chargerInterface("OffreFinanciereView.fxml");
-                btnOffres.setStyle(activeStyle);
+                btnUtilisateur.setStyle(inactiveStyle);
                 btnProduits.setStyle(inactiveStyle);
+                btnOffres.setStyle(activeStyle);
+                btnCarte.setStyle(inactiveStyle);
+                btnVueCarte.setStyle(inactiveStyle);
+                btnChatbot.setStyle(inactiveStyle);
             });
 
-            navbar.getChildren().addAll(logoBox, spacer, btnProduits, btnOffres);
+            // Bouton Carte
+            btnCarte = new Button("Carte");
+            btnCarte.setStyle(inactiveStyle);
+            DropShadow btnShadow3 = new DropShadow();
+            btnShadow3.setColor(Color.web("#060806"));
+            btnShadow3.setOffsetY(3);
+            btnShadow3.setRadius(8);
+            btnCarte.setEffect(btnShadow3);
+            btnCarte.setOnAction(e -> {
+                chargerInterface("MapView.fxml");
+                btnUtilisateur.setStyle(inactiveStyle);
+                btnProduits.setStyle(inactiveStyle);
+                btnOffres.setStyle(inactiveStyle);
+                btnCarte.setStyle(activeStyle);
+                btnVueCarte.setStyle(inactiveStyle);
+                btnChatbot.setStyle(inactiveStyle);
+            });
 
+            // Bouton Vue Carte (simple design map)
+            btnVueCarte = new Button("\uD83C\uDF0D Vue Carte");
+            btnVueCarte.setStyle(inactiveStyle);
+            DropShadow btnShadow5 = new DropShadow();
+            btnShadow5.setColor(Color.web("#060806"));
+            btnShadow5.setOffsetY(3);
+            btnShadow5.setRadius(8);
+            btnVueCarte.setEffect(btnShadow5);
+            btnVueCarte.setOnAction(e -> {
+                chargerInterface("SimpleMapView.fxml");
+                btnUtilisateur.setStyle(inactiveStyle);
+                btnProduits.setStyle(inactiveStyle);
+                btnOffres.setStyle(inactiveStyle);
+                btnCarte.setStyle(inactiveStyle);
+                btnVueCarte.setStyle(activeStyle);
+                btnChatbot.setStyle(inactiveStyle);
+            });
+
+            // Bouton Chatbot
+            btnChatbot = new Button("🤖 Chatbot");
+            btnChatbot.setStyle(inactiveStyle);
+            DropShadow btnShadow4 = new DropShadow();
+            btnShadow4.setColor(Color.web("#060806"));
+            btnShadow4.setOffsetY(3);
+            btnShadow4.setRadius(8);
+            btnChatbot.setEffect(btnShadow4);
+            btnChatbot.setOnAction(e -> {
+                chargerInterface("ChatbotView.fxml");
+                btnUtilisateur.setStyle(inactiveStyle);
+                btnProduits.setStyle(inactiveStyle);
+                btnOffres.setStyle(inactiveStyle);
+                btnCarte.setStyle(inactiveStyle);
+                btnVueCarte.setStyle(inactiveStyle);
+                btnChatbot.setStyle(activeStyle);
+            });
+
+            navbar.getChildren().addAll(logoBox, spacer, btnUtilisateur, btnProduits, btnOffres, btnCarte, btnVueCarte, btnChatbot);
             // ==================== CONTENT AREA ====================
             contentArea = new VBox();
             contentArea.setStyle("-fx-background-color: #095032;");

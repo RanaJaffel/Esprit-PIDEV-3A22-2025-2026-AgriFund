@@ -1,6 +1,6 @@
-package com.agrifund.view;
+package com.agrifund.controller;
 
-import com.agrifund.controller.ProduitFinancierController;
+import com.agrifund.services.ProduitFinancierService;
 import com.agrifund.model.ProduitFinancier;
 import com.agrifund.util.DatabaseConnection;
 import com.agrifund.util.PDFGenerator;
@@ -19,7 +19,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import javafx.scene.image.Image;  // Add this import
+import javafx.scene.image.Image;
 
 import java.sql.*;
 import java.util.Optional;
@@ -51,7 +51,7 @@ public class ProduitFinancierViewController {
     @FXML private Button btnNouveau;
     @FXML private Button btnActualiser;
 
-    private ProduitFinancierController produitController;
+    private ProduitFinancierService produitService;
     private ObservableList<ProduitFinancier> produitsList;
     private ObservableList<String> typesList;
 
@@ -60,7 +60,7 @@ public class ProduitFinancierViewController {
         System.out.println("🚀 Initialisation ProduitFinancierViewController...");
 
         try {
-            produitController = new ProduitFinancierController();
+            produitService = new ProduitFinancierService();
             produitsList = FXCollections.observableArrayList();
             typesList = FXCollections.observableArrayList();
 
@@ -310,7 +310,6 @@ public class ProduitFinancierViewController {
 
             Stage stage = new Stage();
 
-            // ✅ Add logo icon
             try {
                 Image icon = new Image(getClass().getResourceAsStream("/com/agrifund/images/logo.png"));
                 stage.getIcons().add(icon);
@@ -355,7 +354,6 @@ public class ProduitFinancierViewController {
 
             Stage stage = new Stage();
 
-            // ✅ Add logo icon
             try {
                 Image icon = new Image(getClass().getResourceAsStream("/com/agrifund/images/logo.png"));
                 stage.getIcons().add(icon);
@@ -396,7 +394,6 @@ public class ProduitFinancierViewController {
 
             Stage stage = new Stage();
 
-            // ✅ Add logo icon
             try {
                 Image icon = new Image(getClass().getResourceAsStream("/com/agrifund/images/logo.png"));
                 stage.getIcons().add(icon);
@@ -431,7 +428,7 @@ public class ProduitFinancierViewController {
 
         Optional<ButtonType> result = confirm.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean success = produitController.supprimerProduit(selected.getIdProduit());
+            boolean success = produitService.supprimerProduit(selected.getIdProduit());
 
             if (success) {
                 chargerDonnees();
@@ -452,7 +449,7 @@ public class ProduitFinancierViewController {
             return;
         }
 
-        ObservableList<ProduitFinancier> resultats = produitController.rechercherProduits(keyword);
+        ObservableList<ProduitFinancier> resultats = produitService.rechercherProduits(keyword);
         produitsList.clear();
         produitsList.addAll(resultats);
         tableView.setItems(produitsList);
@@ -466,10 +463,6 @@ public class ProduitFinancierViewController {
         chargerTypes();
         lblStatus.setText("Actualise");
     }
-
-
-
-
 
     @FXML
     private void handleDownloadPDF() {

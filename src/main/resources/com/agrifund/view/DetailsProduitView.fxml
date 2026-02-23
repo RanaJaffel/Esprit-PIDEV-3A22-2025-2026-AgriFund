@@ -9,7 +9,7 @@
       style="-fx-background-color: #FFFFFF;"
       xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.agrifund.view.DetailsProduitController">
+      fx:controller="com.agrifund.controller.DetailsProduitController">
 
     <!-- ========== CUSTOM TITLE BAR ========== -->
     <HBox fx:id="titleBar" alignment="CENTER_LEFT" spacing="10"

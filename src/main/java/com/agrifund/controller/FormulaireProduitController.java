@@ -1,6 +1,6 @@
-package com.agrifund.view;
+package com.agrifund.controller;
 
-import com.agrifund.controller.ProduitFinancierController;
+import com.agrifund.services.ProduitFinancierService;
 import com.agrifund.model.ProduitFinancier;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -35,7 +35,7 @@ public class FormulaireProduitController {
     @FXML private TextArea txtRegles;
     @FXML private Button btnValider;
 
-    private ProduitFinancierController produitController;
+    private ProduitFinancierService produitService;
     private ProduitFinancier produitAModifier;
     private boolean modeModification = false;
     private Runnable onSuccess;
@@ -46,7 +46,7 @@ public class FormulaireProduitController {
 
     @FXML
     public void initialize() {
-        produitController = new ProduitFinancierController();
+        produitService = new ProduitFinancierService();
 
         // Charger les types de financement
         cbType.setItems(FXCollections.observableArrayList(
@@ -229,7 +229,7 @@ public class FormulaireProduitController {
                 produitAModifier.setMontantMax(Double.parseDouble(txtMontantMax.getText().trim()));
                 produitAModifier.setReglesFinancieres(txtRegles.getText().trim());
 
-                boolean success = produitController.modifierProduit(produitAModifier);
+                boolean success = produitService.modifierProduit(produitAModifier);
 
                 if (success) {
                     showAlert("Succes", "Produit modifie avec succes!", Alert.AlertType.INFORMATION);
@@ -251,7 +251,7 @@ public class FormulaireProduitController {
                 nouveauProduit.setMontantMax(Double.parseDouble(txtMontantMax.getText().trim()));
                 nouveauProduit.setReglesFinancieres(txtRegles.getText().trim());
 
-                boolean success = produitController.ajouterProduit(nouveauProduit);
+                boolean success = produitService.ajouterProduit(nouveauProduit);
 
                 if (success) {
                     showAlert("Succes", "Produit cree avec succes!", Alert.AlertType.INFORMATION);
