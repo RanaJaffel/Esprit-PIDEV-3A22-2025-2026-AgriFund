@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="680.0" prefWidth="520.0" spacing="0" stylesheets="@style.css"
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controles.projectagricoleagriculteurcontroller">
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="15" styleClass="page-header">
+        <padding><Insets top="20" right="25" bottom="20" left="25"/></padding>
+        <StackPane styleClass="icon-container" style="-fx-min-width: 50; -fx-min-height: 50;">
+            <Label text="✏️" style="-fx-font-size: 28px;"/>
+        </StackPane>
+        <VBox spacing="2">
+            <Label text="Modifier le Projet" styleClass="header-title"/>
+            <Label text="Mettre à jour les informations du projet"
+                   style="-fx-text-fill: rgba(255,255,255,0.9); -fx-font-size: 13px;"/>
+        </VBox>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="scroll-pane" VBox.vgrow="ALWAYS">
+        <VBox spacing="25" styleClass="form-container">
+            <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>
+
+            <!-- ── Informations de Base ── -->
+            <VBox spacing="15">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="📋" style="-fx-font-size: 20px;"/>
+                    <Label text="Informations de Base" styleClass="section-header"/>
+                </HBox>
+                <Separator/>
+                <GridPane hgap="15" vgap="18">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="35"/>
+                        <ColumnConstraints percentWidth="65"/>
+                    </columnConstraints>
+
+                    <VBox spacing="5" GridPane.rowIndex="0" GridPane.columnIndex="0">
+                        <Label text="Nom du Projet *" styleClass="label"/>
+                        <Label text="Identifiant unique" styleClass="label-small"/>
+                    </VBox>
+                    <TextField fx:id="tfNomProjectDialog" promptText="Ex: Culture de Blé Bio 2026"
+                               GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                    <VBox spacing="5" GridPane.rowIndex="1" GridPane.columnIndex="0">
+                        <Label text="Surface (Hectares) *" styleClass="label"/>
+                        <Label text="Surface cultivable" styleClass="label-small"/>
+                    </VBox>
+                    <HBox spacing="10" alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <TextField fx:id="tfSurfaceDialog" promptText="Ex: 25.5" HBox.hgrow="ALWAYS"/>
+                        <Label text="Ha" style="-fx-font-weight: bold; -fx-text-fill: #2D6A4F;"/>
+                    </HBox>
+
+                    <rowConstraints>
+                        <RowConstraints/><RowConstraints/>
+                    </rowConstraints>
+                </GridPane>
+            </VBox>
+
+            <!-- ── Informations Financières ── -->
+            <VBox spacing="15">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="💰" style="-fx-font-size: 20px;"/>
+                    <Label text="Informations Financières" styleClass="section-header"/>
+                </HBox>
+                <Separator/>
+                <GridPane hgap="15" vgap="18">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="35"/>
+                        <ColumnConstraints percentWidth="65"/>
+                    </columnConstraints>
+
+                    <VBox spacing="5" GridPane.rowIndex="0" GridPane.columnIndex="0">
+                        <Label text="Budget Demandé *" styleClass="label"/>
+                        <Label text="Montant total requis" styleClass="label-small"/>
+                    </VBox>
+                    <HBox spacing="10" alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <TextField fx:id="tfBudgetDialog" promptText="Ex: 45000.00" HBox.hgrow="ALWAYS"/>
+                        <Label text="DT" style="-fx-font-weight: bold; -fx-text-fill: #2D6A4F;"/>
+                    </HBox>
+
+                    <rowConstraints><RowConstraints/></rowConstraints>
+                </GridPane>
+            </VBox>
+
+            <!-- ── Statut et Calendrier ── -->
+            <VBox spacing="15">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="📊" style="-fx-font-size: 20px;"/>
+                    <Label text="Statut et Calendrier" styleClass="section-header"/>
+                </HBox>
+                <Separator/>
+                <GridPane hgap="15" vgap="18">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="35"/>
+                        <ColumnConstraints percentWidth="65"/>
+                    </columnConstraints>
+
+                    <VBox spacing="5" GridPane.rowIndex="0" GridPane.columnIndex="0">
+                        <Label text="Statut Actuel" styleClass="label"/>
+                        <Label text="Géré automatiquement" styleClass="label-small"/>
+                    </VBox>
+                    <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <Label fx:id="lblStatusBadge" text="📋 En cours"/>
+                        <Label text="(Modifié automatiquement par les décisions financières)"
+                               style="-fx-font-size: 10px; -fx-text-fill: #848A86;"/>
+                    </VBox>
+
+                    <VBox spacing="5" GridPane.rowIndex="1" GridPane.columnIndex="0">
+                        <Label text="Date de Soumission *" styleClass="label"/>
+                        <Label text="Date de dépôt" styleClass="label-small"/>
+                    </VBox>
+                    <DatePicker fx:id="dpDateSoumissionDialog" maxWidth="Infinity"
+                                promptText="Sélectionner la date..."
+                                GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                    <rowConstraints>
+                        <RowConstraints/><RowConstraints/>
+                    </rowConstraints>
+                </GridPane>
+            </VBox>
+
+            <!-- ── Localisation du Projet ── -->
+            <VBox spacing="15">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="📍" style="-fx-font-size: 20px;"/>
+                    <Label text="Localisation du Projet" styleClass="section-header"/>
+                </HBox>
+                <Separator/>
+                <GridPane hgap="15" vgap="12">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="35"/>
+                        <ColumnConstraints percentWidth="65"/>
+                    </columnConstraints>
+
+                    <VBox spacing="5" GridPane.rowIndex="0" GridPane.columnIndex="0">
+                        <Label text="Latitude" styleClass="label"/>
+                        <Label text="Coordonnée Nord/Sud" styleClass="label-small"/>
+                    </VBox>
+                    <TextField fx:id="tfLatitudeDialog" editable="false"
+                               promptText="Cliquez sur la carte →"
+                               GridPane.columnIndex="1" GridPane.rowIndex="0"
+                               style="-fx-background-color: #f5f5f5; -fx-text-fill: #076A39; -fx-font-weight: bold;"/>
+
+                    <VBox spacing="5" GridPane.rowIndex="1" GridPane.columnIndex="0">
+                        <Label text="Longitude" styleClass="label"/>
+                        <Label text="Coordonnée Est/Ouest" styleClass="label-small"/>
+                    </VBox>
+                    <TextField fx:id="tfLongitudeDialog" editable="false"
+                               promptText="Cliquez sur la carte →"
+                               GridPane.columnIndex="1" GridPane.rowIndex="1"
+                               style="-fx-background-color: #f5f5f5; -fx-text-fill: #076A39; -fx-font-weight: bold;"/>
+
+                    <Label text="" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Button fx:id="btnOpenMap" text="🗺  Modifier sur la carte"
+                                onAction="#handleOpenMap" prefHeight="38"
+                                style="-fx-background-color: #076A39; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand; -fx-font-size: 13px;"/>
+                        <Label fx:id="lblLocationStatus"
+                               text="⚠ Localisation non définie (optionnel)"
+                               style="-fx-text-fill: #848A86; -fx-font-size: 11px;"/>
+                    </VBox>
+
+                    <rowConstraints>
+                        <RowConstraints/><RowConstraints/><RowConstraints/>
+                    </rowConstraints>
+                </GridPane>
+            </VBox>
+
+            <!-- ── Buttons ── -->
+            <HBox spacing="15" alignment="CENTER_RIGHT">
+                <padding><Insets top="10"/></padding>
+                <Button text="✖ Annuler" onAction="#handleCancel"
+                        prefWidth="130" prefHeight="40" styleClass="btn-danger"/>
+                <Button fx:id="btnSave" text="💾 Sauvegarder" onAction="#handleSave"
+                        prefWidth="150" prefHeight="40" styleClass="btn-secondary"/>
+            </HBox>
+        </VBox>
+    </ScrollPane>
+</VBox>

@@ -41,6 +41,14 @@
                     </Button>
 
 
+                    <Button text="🌾 Vue Agriculteur →"
+                            style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #2E7D32; -fx-background-radius: 8;"
+                            onAction="#goToProjectAgriculteur" prefHeight="40" prefWidth="200">
+                        <tooltip>
+                            <Tooltip text="Accéder à la vue Agriculteur des projets"/>
+                        </tooltip>
+                    </Button>
+
                     <Button text="📦 Ressources →" styleClass="btn-nav"
                             style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"
                             onAction="#goToRessources" prefHeight="40" prefWidth="170"/>
