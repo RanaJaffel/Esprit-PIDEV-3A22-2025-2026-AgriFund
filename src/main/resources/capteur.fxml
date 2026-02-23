@@ -4,7 +4,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import javafx.scene.chart.PieChart?>
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="controlers.CapteurController"
       spacing="20"
@@ -28,9 +27,17 @@
             <Label text="Statut :" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
             <ComboBox fx:id="cbStatut" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-            <Label text="ID Projet :" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-            <TextField fx:id="tfProjet" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+            <Label text="Projet :" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="cbProjet"
+                      promptText="Sélectionner un projet"
+                      GridPane.rowIndex="3" GridPane.columnIndex="1"/>
         </GridPane>
+
+        <!-- 🔍 NOUVEAU : test visuel de l'API GEO -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Button text="Tester localisation" onAction="#testerLocalisation" styleClass="btn"/>
+            <Label fx:id="lblGeo" text="Coordonnées : --"/>
+        </HBox>
 
         <HBox spacing="15">
             <Button text="➕ Ajouter" onAction="#ajouterCapteur" styleClass="btn-success"/>
@@ -50,11 +57,9 @@
                 <TableColumn fx:id="colType" text="Type"/>
                 <TableColumn fx:id="colLocalisation" text="Localisation"/>
                 <TableColumn fx:id="colStatut" text="Statut"/>
+                <TableColumn fx:id="colProjet" text="Projet"/>
             </columns>
         </TableView>
     </VBox>
 
 </VBox>
-
-
-

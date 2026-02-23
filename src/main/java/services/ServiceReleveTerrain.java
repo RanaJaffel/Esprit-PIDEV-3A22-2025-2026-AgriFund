@@ -173,4 +173,32 @@ public class ServiceReleveTerrain implements interfaceCrud<releve_terrain> {
         PreparedStatement pst = con.prepareStatement(sql);
         pst.executeUpdate();
     }
+    // ===== MÉTIER AVANCÉ =====
+// Détection d’anomalie basée sur moyenne + écart-type
+
+    public boolean detecterAnomalieStatistique(int idCapteur, double nouvelleValeur) throws SQLException {
+
+        String sql = """
+        SELECT AVG(valeur_mesuree) as moyenne,
+               STDDEV(valeur_mesuree) as ecart
+        FROM releve_terrain
+        WHERE id_capteur = ?
+    """;
+
+        PreparedStatement pst = con.prepareStatement(sql);
+        pst.setInt(1, idCapteur);
+        ResultSet rs = pst.executeQuery();
+
+        if (rs.next()) {
+
+            double moyenne = rs.getDouble("moyenne");
+            double ecart = rs.getDouble("ecart");
+
+            if (ecart == 0) return false;
+
+            return Math.abs(nouvelleValeur - moyenne) > 2 * ecart;
+        }
+
+        return false;
+    }
 }

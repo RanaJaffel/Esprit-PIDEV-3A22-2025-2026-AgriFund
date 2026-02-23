@@ -10,8 +10,12 @@
       stylesheets="@style.css">
 
     <Label text="Relevés Terrain – IoT" styleClass="title"/>
+    <Label fx:id="lblMeteo"
+           text="Température météo : --"
+           styleClass="section-title"/>
 
-    <!-- FORM -->
+
+
     <HBox spacing="10" alignment="CENTER">
         <TextField fx:id="txtType" promptText="Type"/>
         <TextField fx:id="txtValeur" promptText="Valeur"/>
@@ -26,6 +30,7 @@
             <TableColumn fx:id="colValeur" text="Valeur"/>
             <TableColumn fx:id="colUnite" text="Unité"/>
             <TableColumn fx:id="colCapteur" text="Capteur"/>
+            <TableColumn fx:id="colEtat" text="État"/>
         </columns>
     </TableView>
 

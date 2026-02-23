@@ -8,7 +8,7 @@ public class capteur {
     private String typeCapteur;
     private String localisation;
     private String statut;
-    private int idProjet;
+    private Integer idProjet;
     private LocalDateTime dateInstallation;
 
 
@@ -56,11 +56,11 @@ public class capteur {
         this.statut = statut;
     }
 
-    public int getIdProjet() {
+    public Integer getIdProjet() {
         return idProjet;
     }
 
-    public void setIdProjet(int idProjet) {
+    public void setIdProjet(Integer idProjet) {
         this.idProjet = idProjet;
     }
 
