@@ -2,226 +2,414 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.Insets?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="Controllers.HomeController"
-            stylesheets="@../css/styles.css">
+            stylesheets="@../css/home.css">
 
     <!-- NAVBAR -->
     <top>
-        <HBox styleClass="navbar" alignment="CENTER">
-            <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
-                <VBox alignment="CENTER_LEFT">
-                    <ImageView fitWidth="200"
-                               preserveRatio="true"
-                               smooth="true"
-                               cache="true">
-                        <image>
-                            <Image url="@/images/logo.png"/>
-                        </image>
-                    </ImageView>
-                    <Label text="Plateforme de Financement Agricole" style="-fx-font-size: 11px; -fx-text-fill: #848A86;"/>
+        <HBox styleClass="navbar-modern" alignment="CENTER">
+            <!-- Logo -->
+            <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS" spacing="15">
+                <VBox styleClass="logo-container" alignment="CENTER_LEFT" onMouseClicked="#goToHome">
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="🌾" style="-fx-font-size: 32px;"/>
+                        <Label text="AgriFund" styleClass="logo-text"/>
+                    </HBox>
+                    <Label text="Plateforme de Financement Agricole" styleClass="logo-subtitle"/>
                 </VBox>
             </HBox>
 
-            <HBox spacing="10" alignment="CENTER">
+            <!-- Nav Links -->
+            <HBox styleClass="nav-links" alignment="CENTER">
                 <Button text="Accueil" styleClass="nav-link, nav-link-active"/>
                 <Button text="À propos" styleClass="nav-link" onAction="#goToAbout"/>
-                <Button text="Espace Agriculteur" styleClass="nav-link" onAction="#goToAgriculteurSpace"/>
-                <Button text="Espace Banque" styleClass="nav-link" onAction="#goToBanqueSpace"/>
+                <Button text="Services" styleClass="nav-link" onAction="#scrollToFeatures"/>
+                <Button text="Contact" styleClass="nav-link" onAction="#scrollToContact"/>
             </HBox>
 
+            <!-- Auth Buttons -->
             <HBox spacing="15" alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
-                <Button text="Se connecter" styleClass="btn, btn-secondary" onAction="#goToLogin"/>
-                <Button text="S'inscrire" styleClass="btn, btn-primary" onAction="#showRegisterOptions"/>
+                <Button text="Se connecter" styleClass="btn-nav-secondary" onAction="#goToLogin"/>
+                <Button text="S'inscrire" styleClass="btn-nav-primary" onAction="#showRegisterOptions"/>
             </HBox>
         </HBox>
     </top>
 
     <!-- MAIN CONTENT -->
     <center>
-        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+        <ScrollPane fitToWidth="true" styleClass="transparent-scroll" vbarPolicy="AS_NEEDED" hbarPolicy="NEVER">
             <VBox spacing="0">
 
-                <!-- HERO SECTION -->
-                <VBox styleClass="hero-section" alignment="CENTER" spacing="20">
-                    <HBox spacing="50" alignment="CENTER">
-                        <VBox spacing="20" maxWidth="600">
-                            <HBox spacing="0">
-                                <Label text="Financez votre " styleClass="hero-title"/>
-                                <Label text="Agriculture" styleClass="hero-title, hero-title-accent"/>
+                <!-- ==================== HERO SECTION ==================== -->
+                <StackPane styleClass="hero-section">
+                    <!-- Floating Shapes -->
+                    <Pane mouseTransparent="true">
+                        <Circle layoutX="100" layoutY="100" radius="150" styleClass="floating-shape, shape-filled-1"/>
+                        <Circle layoutX="1100" layoutY="500" radius="200" styleClass="floating-shape, shape-filled-2"/>
+                        <Rectangle layoutX="900" layoutY="80" width="100" height="100" arcWidth="25" arcHeight="25"
+                                   styleClass="floating-shape, shape-filled-1" rotate="45"/>
+                        <Circle layoutX="200" layoutY="500" radius="80" styleClass="floating-shape"/>
+                        <Rectangle layoutX="1000" layoutY="350" width="60" height="60" arcWidth="15" arcHeight="15"
+                                   styleClass="floating-shape, shape-filled-2" rotate="30"/>
+                    </Pane>
+
+                    <HBox spacing="80" alignment="CENTER">
+                        <padding>
+                            <Insets top="0" right="80" bottom="0" left="80"/>
+                        </padding>
+
+                        <!-- Left Content -->
+                        <VBox spacing="30" styleClass="hero-content" alignment="CENTER_LEFT">
+                            <!-- Badge -->
+                            <HBox>
+                                <HBox styleClass="hero-badge" spacing="8" alignment="CENTER">
+                                    <Label text="🚀" style="-fx-font-size: 14px;"/>
+                                    <Label text="Nouvelle plateforme 2024" styleClass="hero-badge-text"/>
+                                </HBox>
                             </HBox>
-                            <Label text="AgriFund connecte les agriculteurs aux institutions financières pour des solutions de financement adaptées, transparentes et accessibles."
-                                   styleClass="hero-subtitle" wrapText="true"/>
-                            <HBox spacing="15">
-                                <Button text="Commencer maintenant" styleClass="btn, btn-accent, btn-large" onAction="#showRegisterOptions"/>
-                                <Button text="En savoir plus" styleClass="btn, btn-secondary, btn-large" onAction="#goToAbout"/>
+
+                            <!-- Title -->
+                            <VBox spacing="5">
+                                <HBox spacing="0" alignment="CENTER_LEFT">
+                                    <Label text="Financez votre " styleClass="hero-title"/>
+                                </HBox>
+                                <Label text="Agriculture" styleClass="hero-title-accent"/>
+                            </VBox>
+
+                            <!-- Subtitle -->
+                            <Label text="AgriFund connecte les agriculteurs tunisiens aux institutions financières pour des solutions de financement adaptées, transparentes et accessibles."
+                                   styleClass="hero-subtitle" wrapText="true" maxWidth="550"/>
+
+                            <!-- Buttons -->
+                            <HBox spacing="20">
+                                <Button text="🌱 Commencer maintenant" styleClass="btn-hero-primary" onAction="#showRegisterOptions"/>
+                                <Button text="En savoir plus →" styleClass="btn-hero-secondary" onAction="#goToAbout"/>
                             </HBox>
 
                             <!-- Stats -->
-                            <HBox spacing="40" style="-fx-padding: 40 0 0 0;">
-                                <VBox alignment="CENTER_LEFT">
-                                    <Label text="500+" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #B2D944;"/>
-                                    <Label text="Agriculteurs" style="-fx-font-size: 14px; -fx-text-fill: white;"/>
+                            <HBox styleClass="hero-stats">
+                                <VBox styleClass="stat-item">
+                                    <Label text="500+" styleClass="stat-number"/>
+                                    <Label text="Agriculteurs actifs" styleClass="stat-label"/>
                                 </VBox>
-                                <VBox alignment="CENTER_LEFT">
-                                    <Label text="25+" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #B2D944;"/>
-                                    <Label text="Banques partenaires" style="-fx-font-size: 14px; -fx-text-fill: white;"/>
+                                <VBox styleClass="stat-item">
+                                    <Label text="25+" styleClass="stat-number"/>
+                                    <Label text="Banques partenaires" styleClass="stat-label"/>
                                 </VBox>
-                                <VBox alignment="CENTER_LEFT">
-                                    <Label text="10M€" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #B2D944;"/>
-                                    <Label text="Financements" style="-fx-font-size: 14px; -fx-text-fill: white;"/>
+                                <VBox styleClass="stat-item">
+                                    <Label text="15M" styleClass="stat-number"/>
+                                    <Label text="DT Financés" styleClass="stat-label"/>
                                 </VBox>
                             </HBox>
                         </VBox>
 
-                        <!-- Hero Image Placeholder -->
-                        <StackPane prefWidth="400" prefHeight="400" style="-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 20;">
-                            <Label text="🌾" style="-fx-font-size: 150px;"/>
+                        <!-- Right Content - Hero Image -->
+                        <StackPane styleClass="hero-image-container" prefWidth="450" prefHeight="450">
+                            <VBox alignment="CENTER" spacing="20">
+                                <Label text="🌾" styleClass="hero-emoji"/>
+                                <HBox spacing="15" alignment="CENTER">
+                                    <Label text="🚜" styleClass="hero-emoji-small"/>
+                                    <Label text="💰" styleClass="hero-emoji-small"/>
+                                    <Label text="🏦" styleClass="hero-emoji-small"/>
+                                </HBox>
+                            </VBox>
+                        </StackPane>
+                    </HBox>
+                </StackPane>
+
+                <!-- ==================== FEATURES SECTION ==================== -->
+                <VBox fx:id="featuresSection" styleClass="features-section" spacing="60" alignment="CENTER">
+                    <!-- Header -->
+                    <VBox alignment="CENTER" spacing="15">
+                        <HBox alignment="CENTER">
+                            <HBox styleClass="section-badge">
+                                <Label text="✨ NOS SERVICES" styleClass="section-badge-text"/>
+                            </HBox>
+                        </HBox>
+                        <Label text="Solutions adaptées à vos besoins" styleClass="section-title"/>
+                        <Label text="Des outils puissants pour simplifier votre accès au financement agricole"
+                               styleClass="section-subtitle"/>
+                    </VBox>
+
+                    <!-- Feature Cards -->
+                    <HBox spacing="40" alignment="CENTER">
+                        <!-- Feature 1: Agriculteur -->
+                        <VBox styleClass="feature-card" prefWidth="360" alignment="CENTER" spacing="20"
+                              onMouseClicked="#goToAgriculteurSpace">
+                            <StackPane styleClass="feature-icon-container">
+                                <Label text="🌱" styleClass="feature-icon"/>
+                            </StackPane>
+                            <Label text="Espace Agriculteur" styleClass="feature-title"/>
+                            <Label text="Accédez aux financements adaptés à votre exploitation. Gérez vos documents et suivez vos demandes en temps réel depuis votre tableau de bord personnalisé."
+                                   styleClass="feature-description" wrapText="true" maxWidth="300"/>
+                            <Button text="Accéder →" styleClass="btn-feature" onAction="#goToAgriculteurSpace"/>
+                        </VBox>
+
+                        <!-- Feature 2: Banque -->
+                        <VBox styleClass="feature-card" prefWidth="360" alignment="CENTER" spacing="20"
+                              onMouseClicked="#goToBanqueSpace">
+                            <StackPane styleClass="feature-icon-container">
+                                <Label text="🏦" styleClass="feature-icon"/>
+                            </StackPane>
+                            <Label text="Espace Banque" styleClass="feature-title"/>
+                            <Label text="Consultez les profils vérifiés des agriculteurs. Évaluez les demandes de financement et gérez votre portefeuille en toute simplicité."
+                                   styleClass="feature-description" wrapText="true" maxWidth="300"/>
+                            <Button text="Accéder →" styleClass="btn-feature" onAction="#goToBanqueSpace"/>
+                        </VBox>
+
+                        <!-- Feature 3: Dashboard -->
+                        <VBox styleClass="feature-card" prefWidth="360" alignment="CENTER" spacing="20">
+                            <StackPane styleClass="feature-icon-container">
+                                <Label text="📊" styleClass="feature-icon"/>
+                            </StackPane>
+                            <Label text="Tableau de bord" styleClass="feature-title"/>
+                            <Label text="Visualisez vos statistiques en temps réel. Suivez vos performances et prenez des décisions éclairées grâce à nos outils d'analyse."
+                                   styleClass="feature-description" wrapText="true" maxWidth="300"/>
+                            <Button text="Découvrir →" styleClass="btn-feature-secondary"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <!-- ==================== HOW IT WORKS SECTION ==================== -->
+                <VBox styleClass="how-it-works-section" spacing="60" alignment="CENTER">
+                    <!-- Header -->
+                    <VBox alignment="CENTER" spacing="15">
+                        <HBox alignment="CENTER">
+                            <HBox styleClass="section-badge">
+                                <Label text="📋 PROCESSUS" styleClass="section-badge-text"/>
+                            </HBox>
+                        </HBox>
+                        <Label text="Comment ça marche ?" styleClass="section-title"/>
+                        <Label text="Un processus simple en 4 étapes pour accéder à votre financement"
+                               styleClass="section-subtitle"/>
+                    </VBox>
+
+                    <!-- Steps -->
+                    <HBox spacing="30" alignment="CENTER">
+                        <!-- Step 1 -->
+                        <VBox styleClass="step-container" alignment="CENTER">
+                            <StackPane styleClass="step-number-container, step-1-bg">
+                                <Label text="1" styleClass="step-number"/>
+                            </StackPane>
+                            <Label text="Inscription" styleClass="step-title"/>
+                            <Label text="Créez votre compte en quelques minutes avec vos informations de base"
+                                   styleClass="step-description" wrapText="true"/>
+                        </VBox>
+
+                        <Label text="→" styleClass="step-arrow"/>
+
+                        <!-- Step 2 -->
+                        <VBox styleClass="step-container" alignment="CENTER">
+                            <StackPane styleClass="step-number-container, step-2-bg">
+                                <Label text="2" styleClass="step-number"/>
+                            </StackPane>
+                            <Label text="Documents" styleClass="step-title"/>
+                            <Label text="Téléchargez vos documents justificatifs depuis votre espace sécurisé"
+                                   styleClass="step-description" wrapText="true"/>
+                        </VBox>
+
+                        <Label text="→" styleClass="step-arrow"/>
+
+                        <!-- Step 3 -->
+                        <VBox styleClass="step-container" alignment="CENTER">
+                            <StackPane styleClass="step-number-container, step-3-bg">
+                                <Label text="3" styleClass="step-number"/>
+                            </StackPane>
+                            <Label text="Vérification" styleClass="step-title"/>
+                            <Label text="Notre équipe vérifie votre dossier et valide votre profil rapidement"
+                                   styleClass="step-description" wrapText="true"/>
+                        </VBox>
+
+                        <Label text="→" styleClass="step-arrow"/>
+
+                        <!-- Step 4 -->
+                        <VBox styleClass="step-container" alignment="CENTER">
+                            <StackPane styleClass="step-number-container, step-4-bg">
+                                <Label text="4" styleClass="step-number, step-number-dark"/>
+                            </StackPane>
+                            <Label text="Financement" styleClass="step-title"/>
+                            <Label text="Accédez aux offres de financement et choisissez celle qui vous convient"
+                                   styleClass="step-description" wrapText="true"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <!-- ==================== TESTIMONIALS SECTION ==================== -->
+                <VBox styleClass="testimonials-section" spacing="60" alignment="CENTER">
+                    <!-- Header -->
+                    <VBox alignment="CENTER" spacing="15">
+                        <HBox alignment="CENTER">
+                            <HBox styleClass="section-badge">
+                                <Label text="💬 TÉMOIGNAGES" styleClass="section-badge-text"/>
+                            </HBox>
+                        </HBox>
+                        <Label text="Ce que disent nos utilisateurs" styleClass="section-title"/>
+                        <Label text="Des agriculteurs et banques satisfaits de notre plateforme"
+                               styleClass="section-subtitle"/>
+                    </VBox>
+
+                    <!-- Testimonial Cards -->
+                    <HBox spacing="40" alignment="CENTER">
+                        <!-- Testimonial 1 -->
+                        <VBox styleClass="testimonial-card" spacing="20" alignment="CENTER_LEFT">
+                            <Label text="⭐⭐⭐⭐⭐" styleClass="stars"/>
+                            <Label text="&quot;Grâce à AgriFund, j'ai pu obtenir un financement pour moderniser mon exploitation. Le processus était simple et rapide !&quot;"
+                                   styleClass="testimonial-quote" wrapText="true"/>
+                            <HBox spacing="15" alignment="CENTER_LEFT">
+                                <Label text="👨‍🌾" styleClass="testimonial-avatar"/>
+                                <VBox>
+                                    <Label text="Mohamed Ben Ali" styleClass="testimonial-author"/>
+                                    <Label text="Agriculteur, Béja" styleClass="testimonial-role"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Testimonial 2 -->
+                        <VBox styleClass="testimonial-card" spacing="20" alignment="CENTER_LEFT">
+                            <Label text="⭐⭐⭐⭐⭐" styleClass="stars"/>
+                            <Label text="&quot;Une plateforme moderne qui nous permet d'accéder à un réseau d'agriculteurs vérifiés. Excellent pour notre activité de financement rural.&quot;"
+                                   styleClass="testimonial-quote" wrapText="true"/>
+                            <HBox spacing="15" alignment="CENTER_LEFT">
+                                <Label text="👩‍💼" styleClass="testimonial-avatar"/>
+                                <VBox>
+                                    <Label text="Sonia Trabelsi" styleClass="testimonial-author"/>
+                                    <Label text="Directrice, BNA" styleClass="testimonial-role"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Testimonial 3 -->
+                        <VBox styleClass="testimonial-card" spacing="20" alignment="CENTER_LEFT">
+                            <Label text="⭐⭐⭐⭐⭐" styleClass="stars"/>
+                            <Label text="&quot;Le tableau de bord est très intuitif. Je peux suivre mes demandes et communiquer directement avec les banques. Vraiment pratique !&quot;"
+                                   styleClass="testimonial-quote" wrapText="true"/>
+                            <HBox spacing="15" alignment="CENTER_LEFT">
+                                <Label text="👨‍🌾" styleClass="testimonial-avatar"/>
+                                <VBox>
+                                    <Label text="Ahmed Khelifi" styleClass="testimonial-author"/>
+                                    <Label text="Agriculteur, Sfax" styleClass="testimonial-role"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <!-- ==================== CTA SECTION ==================== -->
+                <VBox styleClass="cta-section" spacing="35" alignment="CENTER">
+                    <Label text="🌾" style="-fx-font-size: 60px;"/>
+                    <Label text="Prêt à développer votre agriculture ?" styleClass="cta-title"/>
+                    <Label text="Rejoignez des centaines d'agriculteurs qui ont déjà fait confiance à AgriFund pour leurs projets"
+                           styleClass="cta-subtitle" wrapText="true" maxWidth="600" textAlignment="CENTER"/>
+                    <HBox spacing="25" alignment="CENTER">
+                        <Button text="🚀 S'inscrire gratuitement" styleClass="btn-cta-primary" onAction="#showRegisterOptions"/>
+                        <Button text="📞 Nous contacter" styleClass="btn-cta-secondary" onAction="#scrollToContact"/>
+                    </HBox>
+                </VBox>
+
+                <!-- ==================== PARTNERS SECTION ==================== -->
+                <VBox styleClass="partners-section" spacing="30" alignment="CENTER">
+                    <Label text="Nos partenaires de confiance" style="-fx-font-size: 16px; -fx-text-fill: #848A86;"/>
+                    <HBox spacing="40" alignment="CENTER">
+                        <StackPane styleClass="partner-logo">
+                            <Label text="🏦 BNA" styleClass="partner-text"/>
+                        </StackPane>
+                        <StackPane styleClass="partner-logo">
+                            <Label text="🏦 STB" styleClass="partner-text"/>
+                        </StackPane>
+                        <StackPane styleClass="partner-logo">
+                            <Label text="🏦 BIAT" styleClass="partner-text"/>
+                        </StackPane>
+                        <StackPane styleClass="partner-logo">
+                            <Label text="🏦 ATB" styleClass="partner-text"/>
+                        </StackPane>
+                        <StackPane styleClass="partner-logo">
+                            <Label text="🏦 BH" styleClass="partner-text"/>
                         </StackPane>
                     </HBox>
                 </VBox>
 
-                <!-- FEATURES SECTION -->
-                <VBox style="-fx-padding: 80 50; -fx-background-color: white;" spacing="50" alignment="CENTER">
-                    <VBox alignment="CENTER" spacing="10">
-                        <Label text="Nos Services" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #060806;"/>
-                        <Label text="Des solutions adaptées à vos besoins" style="-fx-font-size: 16px; -fx-text-fill: #848A86;"/>
-                    </VBox>
-
-                    <HBox spacing="30" alignment="CENTER">
-                        <!-- Feature 1 -->
-                        <VBox styleClass="feature-card" prefWidth="350" alignment="CENTER" spacing="10" onMouseClicked="#goToAgriculteurSpace">
-                            <Label text="🌱" styleClass="feature-icon"/>
-                            <Label text="Espace Agriculteur" styleClass="feature-title"/>
-                            <Label text="Accédez aux financements, gérez vos documents et suivez vos demandes en temps réel."
-                                   styleClass="feature-description" textAlignment="CENTER"/>
-                            <Button text="Accéder →" styleClass="btn, btn-primary" style="-fx-margin-top: 20;"/>
+                <!-- ==================== FOOTER ==================== -->
+                <VBox fx:id="contactSection" styleClass="footer" spacing="50">
+                    <HBox spacing="100" alignment="TOP_CENTER">
+                        <!-- Brand Column -->
+                        <VBox styleClass="footer-brand" spacing="20">
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="🌾" style="-fx-font-size: 35px;"/>
+                                <Label text="AgriFund" styleClass="footer-logo"/>
+                            </HBox>
+                            <Label text="La plateforme de référence pour le financement agricole en Tunisie. Nous connectons les agriculteurs aux institutions financières pour un avenir agricole durable."
+                                   styleClass="footer-description" wrapText="true"/>
+                            <!-- Social Icons -->
+                            <HBox styleClass="footer-social">
+                                <StackPane styleClass="social-icon">
+                                    <Label text="📘" styleClass="social-icon-text"/>
+                                </StackPane>
+                                <StackPane styleClass="social-icon">
+                                    <Label text="📸" styleClass="social-icon-text"/>
+                                </StackPane>
+                                <StackPane styleClass="social-icon">
+                                    <Label text="🐦" styleClass="social-icon-text"/>
+                                </StackPane>
+                                <StackPane styleClass="social-icon">
+                                    <Label text="💼" styleClass="social-icon-text"/>
+                                </StackPane>
+                            </HBox>
                         </VBox>
 
-                        <!-- Feature 2 -->
-                        <VBox styleClass="feature-card" prefWidth="350" alignment="CENTER" spacing="10" onMouseClicked="#goToBanqueSpace">
-                            <Label text="🏦" styleClass="feature-icon"/>
-                            <Label text="Espace Banque" styleClass="feature-title"/>
-                            <Label text="Consultez les profils des agriculteurs, évaluez les demandes et gérez vos financements."
-                                   styleClass="feature-description" textAlignment="CENTER"/>
-                            <Button text="Accéder →" styleClass="btn, btn-primary" style="-fx-margin-top: 20;"/>
-                        </VBox>
-
-                        <!-- Feature 3 -->
-                        <VBox styleClass="feature-card" prefWidth="350" alignment="CENTER" spacing="10">
-                            <Label text="📊" styleClass="feature-icon"/>
-                            <Label text="Tableau de bord" styleClass="feature-title"/>
-                            <Label text="Visualisez vos statistiques, suivez vos performances et prenez des décisions éclairées."
-                                   styleClass="feature-description" textAlignment="CENTER"/>
-                            <Button text="Découvrir →" styleClass="btn, btn-secondary" style="-fx-margin-top: 20;"/>
-                        </VBox>
-                    </HBox>
-                </VBox>
-
-                <!-- HOW IT WORKS SECTION -->
-                <VBox style="-fx-padding: 80 50; -fx-background-color: #f5f5f5;" spacing="50" alignment="CENTER">
-                    <VBox alignment="CENTER" spacing="10">
-                        <Label text="Comment ça marche ?" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #060806;"/>
-                        <Label text="Un processus simple en 4 étapes" style="-fx-font-size: 16px; -fx-text-fill: #848A86;"/>
-                    </VBox>
-
-                    <HBox spacing="50" alignment="CENTER">
-                        <VBox alignment="CENTER" spacing="15" prefWidth="200">
-                            <StackPane prefWidth="80" prefHeight="80" style="-fx-background-color: #089647; -fx-background-radius: 50;">
-                                <Label text="1" style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-                            </StackPane>
-                            <Label text="Inscription" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-                            <Label text="Créez votre compte en quelques minutes" style="-fx-text-fill: #848A86;" textAlignment="CENTER" wrapText="true"/>
-                        </VBox>
-
-                        <Label text="→" style="-fx-font-size: 30px; -fx-text-fill: #089647;"/>
-
-                        <VBox alignment="CENTER" spacing="15" prefWidth="200">
-                            <StackPane prefWidth="80" prefHeight="80" style="-fx-background-color: #076A39; -fx-background-radius: 50;">
-                                <Label text="2" style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-                            </StackPane>
-                            <Label text="Documents" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-                            <Label text="Téléchargez vos documents justificatifs" style="-fx-text-fill: #848A86;" textAlignment="CENTER" wrapText="true"/>
-                        </VBox>
-
-                        <Label text="→" style="-fx-font-size: 30px; -fx-text-fill: #089647;"/>
-
-                        <VBox alignment="CENTER" spacing="15" prefWidth="200">
-                            <StackPane prefWidth="80" prefHeight="80" style="-fx-background-color: #095032; -fx-background-radius: 50;">
-                                <Label text="3" style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-                            </StackPane>
-                            <Label text="Vérification" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-                            <Label text="Notre équipe vérifie votre dossier" style="-fx-text-fill: #848A86;" textAlignment="CENTER" wrapText="true"/>
-                        </VBox>
-
-                        <Label text="→" style="-fx-font-size: 30px; -fx-text-fill: #089647;"/>
-
-                        <VBox alignment="CENTER" spacing="15" prefWidth="200">
-                            <StackPane prefWidth="80" prefHeight="80" style="-fx-background-color: #B2D944; -fx-background-radius: 50;">
-                                <Label text="4" style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #060806;"/>
-                            </StackPane>
-                            <Label text="Financement" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-                            <Label text="Accédez aux offres de financement" style="-fx-text-fill: #848A86;" textAlignment="CENTER" wrapText="true"/>
-                        </VBox>
-                    </HBox>
-                </VBox>
-
-                <!-- CTA SECTION -->
-                <VBox style="-fx-padding: 80 50; -fx-background-color: linear-gradient(to right, #089647, #076A39);" alignment="CENTER" spacing="30">
-                    <Label text="Prêt à commencer ?" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-                    <Label text="Rejoignez des centaines d'agriculteurs qui ont déjà fait confiance à AgriFund"
-                           style="-fx-font-size: 16px; -fx-text-fill: rgba(255,255,255,0.9);"/>
-                    <HBox spacing="20" alignment="CENTER">
-                        <Button text="S'inscrire gratuitement" styleClass="btn, btn-accent, btn-large" onAction="#showRegisterOptions"/>
-                        <Button text="Nous contacter" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-border-color: white; -fx-border-width: 2; -fx-border-radius: 8; -fx-padding: 15 40; -fx-font-size: 16px; -fx-cursor: hand;"/>
-                    </HBox>
-                </VBox>
-
-                <!-- FOOTER -->
-                <VBox styleClass="footer" spacing="30">
-                    <HBox spacing="80" alignment="CENTER">
-                        <VBox spacing="15">
-                            <ImageView fitWidth="220"
-                                       preserveRatio="true"
-                                       smooth="true"
-                                       cache="true">
-                                <image>
-                                    <Image url="@/images/logo.png"/>
-                                </image>
-                            </ImageView>
-                            <Label text="Plateforme de financement agricole" styleClass="footer-text"/>
-                            <Label text="© 2024-2025 ESPRIT" styleClass="footer-text"/>
-                        </VBox>
-
-                        <VBox spacing="10">
-                            <Label text="Liens rapides" style="-fx-font-weight: bold; -fx-text-fill: white;"/>
+                        <!-- Links Column 1 -->
+                        <VBox styleClass="footer-column">
+                            <Label text="Liens rapides" styleClass="footer-column-title"/>
                             <Label text="Accueil" styleClass="footer-link"/>
-                            <Label text="À propos" styleClass="footer-link"/>
-                            <Label text="Contact" styleClass="footer-link"/>
+                            <Label text="À propos" styleClass="footer-link" onMouseClicked="#goToAbout"/>
+                            <Label text="Services" styleClass="footer-link"/>
+                            <Label text="FAQ" styleClass="footer-link"/>
                         </VBox>
 
-                        <VBox spacing="10">
-                            <Label text="Espaces" style="-fx-font-weight: bold; -fx-text-fill: white;"/>
-                            <Label text="Agriculteur" styleClass="footer-link"/>
-                            <Label text="Banque" styleClass="footer-link"/>
-                            <Label text="Admin" styleClass="footer-link"/>
+                        <!-- Links Column 2 -->
+                        <VBox styleClass="footer-column">
+                            <Label text="Espaces" styleClass="footer-column-title"/>
+                            <Label text="Agriculteur" styleClass="footer-link" onMouseClicked="#goToAgriculteurSpace"/>
+                            <Label text="Banque" styleClass="footer-link" onMouseClicked="#goToBanqueSpace"/>
+                            <Label text="Administration" styleClass="footer-link"/>
                         </VBox>
 
-                        <VBox spacing="10">
-                            <Label text="Contact" style="-fx-font-weight: bold; -fx-text-fill: white;"/>
-                            <Label text="📧 contact@agrifund.tn" styleClass="footer-text"/>
-                            <Label text="📱 +216 XX XXX XXX" styleClass="footer-text"/>
-                            <Label text="📍 Tunis, Tunisie" styleClass="footer-text"/>
+                        <!-- Contact Column -->
+                        <VBox styleClass="footer-column">
+                            <Label text="Contact" styleClass="footer-column-title"/>
+                            <HBox styleClass="footer-contact-item">
+                                <Label text="📧" styleClass="footer-contact-icon"/>
+                                <Label text="contact@agrifund.tn" styleClass="footer-contact-text"/>
+                            </HBox>
+                            <HBox styleClass="footer-contact-item">
+                                <Label text="📱" styleClass="footer-contact-icon"/>
+                                <Label text="+216 XX XXX XXX" styleClass="footer-contact-text"/>
+                            </HBox>
+                            <HBox styleClass="footer-contact-item">
+                                <Label text="📍" styleClass="footer-contact-icon"/>
+                                <Label text="Tunis, Tunisie" styleClass="footer-contact-text"/>
+                            </HBox>
                         </VBox>
+                    </HBox>
+
+                    <!-- Divider -->
+                    <Pane styleClass="footer-divider"/>
+
+                    <!-- Bottom -->
+                    <HBox styleClass="footer-bottom" alignment="CENTER">
+                        <Label text="© 2024-2025 AgriFund - ESPRIT. Tous droits réservés." styleClass="footer-copyright" HBox.hgrow="ALWAYS"/>
+                        <HBox spacing="30">
+                            <Label text="Politique de confidentialité" styleClass="footer-link"/>
+                            <Label text="Conditions d'utilisation" styleClass="footer-link"/>
+                        </HBox>
                     </HBox>
                 </VBox>
 
             </VBox>
         </ScrollPane>
     </center>
-
 </BorderPane>

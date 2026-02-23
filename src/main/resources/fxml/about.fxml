@@ -2,242 +2,492 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.Insets?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="Controllers.AboutController"
-            stylesheets="@../css/styles.css">
+            stylesheets="@../css/about.css">
 
     <!-- NAVBAR -->
     <top>
-        <HBox styleClass="navbar" alignment="CENTER">
-            <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
-                <VBox alignment="CENTER_LEFT" style="-fx-cursor: hand;" onMouseClicked="#goToHome">
-                    <Label text="🌾 AgriFund" styleClass="navbar-brand"/>
-                    <Label text="Plateforme de Financement Agricole" style="-fx-font-size: 11px; -fx-text-fill: #848A86;"/>
+        <HBox styleClass="navbar-modern" alignment="CENTER">
+            <!-- Logo -->
+            <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS" spacing="15">
+                <VBox styleClass="logo-container" alignment="CENTER_LEFT" onMouseClicked="#goToHome">
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="🌾" style="-fx-font-size: 32px;"/>
+                        <Label text="AgriFund" styleClass="logo-text"/>
+                    </HBox>
+                    <Label text="Plateforme de Financement Agricole" styleClass="logo-subtitle"/>
                 </VBox>
             </HBox>
 
-            <HBox spacing="10" alignment="CENTER">
+            <!-- Nav Links -->
+            <HBox styleClass="nav-links" alignment="CENTER">
                 <Button text="Accueil" styleClass="nav-link" onAction="#goToHome"/>
                 <Button text="À propos" styleClass="nav-link, nav-link-active"/>
-                <Button text="Espace Agriculteur" styleClass="nav-link" onAction="#goToLogin"/>
-                <Button text="Espace Banque" styleClass="nav-link" onAction="#goToLogin"/>
+                <Button text="Services" styleClass="nav-link" onAction="#goToHome"/>
+                <Button text="Contact" styleClass="nav-link" onAction="#scrollToContact"/>
             </HBox>
 
+            <!-- Auth Buttons -->
             <HBox spacing="15" alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
-                <Button text="Se connecter" styleClass="btn, btn-secondary" onAction="#goToLogin"/>
-                <Button text="S'inscrire" styleClass="btn, btn-primary" onAction="#showRegisterOptions"/>
+                <Button text="Se connecter" styleClass="btn-nav-secondary" onAction="#goToLogin"/>
+                <Button text="S'inscrire" styleClass="btn-nav-primary" onAction="#showRegisterOptions"/>
             </HBox>
         </HBox>
     </top>
 
     <!-- MAIN CONTENT -->
     <center>
-        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+        <ScrollPane fitToWidth="true" styleClass="transparent-scroll" vbarPolicy="AS_NEEDED" hbarPolicy="NEVER">
             <VBox spacing="0">
 
-                <!-- HERO SECTION -->
-                <VBox style="-fx-background-color: linear-gradient(to right, #060806, #095032); -fx-padding: 80 50;"
-                      alignment="CENTER" spacing="20">
-                    <Label text="À Propos de Nous" style="-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-                    <Label text="Découvrez notre mission et notre équipe"
-                           style="-fx-font-size: 18px; -fx-text-fill: rgba(255,255,255,0.8);"/>
-                </VBox>
+                <!-- ==================== HERO SECTION ==================== -->
+                <StackPane styleClass="hero-about">
+                    <!-- Floating Shapes -->
+                    <Pane mouseTransparent="true">
+                        <Circle layoutX="100" layoutY="80" radius="120" styleClass="floating-shape, shape-filled-1"/>
+                        <Circle layoutX="1100" layoutY="300" radius="150" styleClass="floating-shape, shape-filled-2"/>
+                        <Rectangle layoutX="950" layoutY="50" width="80" height="80" arcWidth="20" arcHeight="20"
+                                   styleClass="floating-shape, shape-filled-1" rotate="45"/>
+                        <Circle layoutX="200" layoutY="350" radius="60" styleClass="floating-shape"/>
+                    </Pane>
 
-                <!-- MISSION SECTION -->
-                <VBox style="-fx-padding: 80 100; -fx-background-color: white;" spacing="40">
-                    <HBox spacing="60" alignment="CENTER">
-                        <VBox spacing="20" maxWidth="500">
-                            <Label text="Notre Mission" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #060806;"/>
-                            <Label text="AgriFund est née d'une vision simple mais ambitieuse : démocratiser l'accès au financement pour les agriculteurs tunisiens."
-                                   style="-fx-font-size: 16px; -fx-text-fill: #848A86;" wrapText="true"/>
-                            <Label text="Notre plateforme met en relation les agriculteurs avec les institutions financières, simplifiant ainsi le processus de demande de financement et offrant des solutions adaptées aux besoins spécifiques du secteur agricole."
-                                   style="-fx-font-size: 14px; -fx-text-fill: #060806;" wrapText="true"/>
+                    <VBox spacing="25" alignment="CENTER">
+                        <!-- Breadcrumb -->
+                        <HBox spacing="10" alignment="CENTER">
+                            <Label text="Accueil" styleClass="breadcrumb" style="-fx-cursor: hand;" onMouseClicked="#goToHome"/>
+                            <Label text="→" styleClass="breadcrumb"/>
+                            <Label text="À propos" styleClass="breadcrumb, breadcrumb-active"/>
+                        </HBox>
 
-                            <HBox spacing="30" style="-fx-padding: 20 0 0 0;">
-                                <VBox alignment="CENTER">
-                                    <Label text="500+" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #089647;"/>
-                                    <Label text="Agriculteurs" style="-fx-text-fill: #848A86;"/>
+                        <!-- Badge -->
+                        <HBox alignment="CENTER">
+                            <HBox styleClass="hero-badge" spacing="10">
+                                <Label text="🌱" style="-fx-font-size: 16px;"/>
+                                <Label text="Notre Histoire" styleClass="hero-badge-text"/>
+                            </HBox>
+                        </HBox>
+
+                        <Label text="À Propos de Nous" styleClass="hero-title-about"/>
+                        <Label text="Découvrez notre mission, nos valeurs et l'équipe passionnée derrière AgriFund"
+                               styleClass="hero-subtitle-about" wrapText="true" maxWidth="600" textAlignment="CENTER"/>
+                    </VBox>
+                </StackPane>
+
+                <!-- ==================== MISSION SECTION ==================== -->
+                <VBox styleClass="mission-section" spacing="60">
+                    <HBox spacing="80" alignment="CENTER">
+                        <!-- Left Content -->
+                        <VBox spacing="25" maxWidth="550">
+                            <HBox>
+                                <HBox styleClass="section-badge">
+                                    <Label text="🎯 NOTRE MISSION" styleClass="section-badge-text"/>
+                                </HBox>
+                            </HBox>
+
+                            <Label text="Démocratiser le financement agricole" styleClass="section-title" wrapText="true"/>
+
+                            <Label text="AgriFund est née d'une vision simple mais ambitieuse : faciliter l'accès au financement pour tous les agriculteurs tunisiens."
+                                   styleClass="mission-text" wrapText="true"/>
+
+                            <Label text="Notre plateforme innovante met en relation directe les agriculteurs avec les institutions financières, simplifiant le processus de demande de financement et offrant des solutions sur mesure adaptées aux besoins spécifiques du secteur agricole tunisien."
+                                   styleClass="mission-description" wrapText="true"/>
+
+                            <!-- Stats -->
+                            <HBox spacing="20" style="-fx-padding: 20 0 0 0;">
+                                <VBox styleClass="stat-box" spacing="5">
+                                    <Label text="500+" styleClass="stat-number"/>
+                                    <Label text="Agriculteurs" styleClass="stat-label"/>
                                 </VBox>
-                                <VBox alignment="CENTER">
-                                    <Label text="25+" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #089647;"/>
-                                    <Label text="Banques" style="-fx-text-fill: #848A86;"/>
+                                <VBox styleClass="stat-box" spacing="5">
+                                    <Label text="25+" styleClass="stat-number"/>
+                                    <Label text="Banques" styleClass="stat-label"/>
                                 </VBox>
-                                <VBox alignment="CENTER">
-                                    <Label text="10M+" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #089647;"/>
-                                    <Label text="TND Financés" style="-fx-text-fill: #848A86;"/>
+                                <VBox styleClass="stat-box" spacing="5">
+                                    <Label text="15M" styleClass="stat-number"/>
+                                    <Label text="DT Financés" styleClass="stat-label"/>
+                                </VBox>
+                                <VBox styleClass="stat-box" spacing="5">
+                                    <Label text="98%" styleClass="stat-number"/>
+                                    <Label text="Satisfaction" styleClass="stat-label"/>
                                 </VBox>
                             </HBox>
                         </VBox>
 
-                        <StackPane prefWidth="400" prefHeight="300"
-                                   style="-fx-background-color: linear-gradient(to bottom right, #089647, #076A39); -fx-background-radius: 20;">
-                            <Label text="🌾" style="-fx-font-size: 120px;"/>
+                        <!-- Right Content - Image -->
+                        <StackPane styleClass="mission-image-container" prefWidth="420" prefHeight="380">
+                            <VBox alignment="CENTER" spacing="15">
+                                <Label text="🌾" styleClass="mission-emoji"/>
+                                <HBox spacing="15" alignment="CENTER">
+                                    <Label text="🚜" style="-fx-font-size: 35px;"/>
+                                    <Label text="💰" style="-fx-font-size: 35px;"/>
+                                    <Label text="🏦" style="-fx-font-size: 35px;"/>
+                                </HBox>
+                            </VBox>
                         </StackPane>
                     </HBox>
                 </VBox>
 
-                <!-- VALUES SECTION -->
-                <VBox style="-fx-padding: 80 50; -fx-background-color: #f5f5f5;" spacing="50" alignment="CENTER">
-                    <VBox alignment="CENTER" spacing="10">
-                        <Label text="Nos Valeurs" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #060806;"/>
-                        <Label text="Les principes qui guident notre action" style="-fx-font-size: 16px; -fx-text-fill: #848A86;"/>
+                <!-- ==================== VALUES SECTION ==================== -->
+                <VBox styleClass="values-section" spacing="60" alignment="CENTER">
+                    <!-- Header -->
+                    <VBox alignment="CENTER" spacing="15">
+                        <HBox alignment="CENTER">
+                            <HBox styleClass="section-badge">
+                                <Label text="💎 NOS VALEURS" styleClass="section-badge-text"/>
+                            </HBox>
+                        </HBox>
+                        <Label text="Les principes qui nous guident" styleClass="section-title"/>
+                        <Label text="Des valeurs fondamentales au cœur de chaque action"
+                               styleClass="section-subtitle"/>
                     </VBox>
 
+                    <!-- Value Cards -->
                     <HBox spacing="30" alignment="CENTER">
                         <!-- Value 1 -->
-                        <VBox styleClass="card" prefWidth="280" alignment="CENTER" spacing="15">
-                            <StackPane prefWidth="80" prefHeight="80"
-                                       style="-fx-background-color: rgba(8, 150, 71, 0.1); -fx-background-radius: 50;">
-                                <Label text="🤝" style="-fx-font-size: 35px;"/>
+                        <VBox styleClass="value-card" prefWidth="280" alignment="CENTER" spacing="20">
+                            <StackPane styleClass="value-icon-container, value-icon-1">
+                                <Label text="🤝" styleClass="value-icon"/>
                             </StackPane>
-                            <Label text="Confiance" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #060806;"/>
-                            <Label text="Nous construisons des relations durables basées sur la transparence et l'intégrité."
-                                   style="-fx-font-size: 14px; -fx-text-fill: #848A86;" wrapText="true" textAlignment="CENTER"/>
+                            <Label text="Confiance" styleClass="value-title"/>
+                            <Label text="Nous construisons des relations durables basées sur la transparence et l'intégrité avec tous nos partenaires."
+                                   styleClass="value-description" wrapText="true" maxWidth="230"/>
                         </VBox>
 
                         <!-- Value 2 -->
-                        <VBox styleClass="card" prefWidth="280" alignment="CENTER" spacing="15">
-                            <StackPane prefWidth="80" prefHeight="80"
-                                       style="-fx-background-color: rgba(225, 179, 35, 0.1); -fx-background-radius: 50;">
-                                <Label text="💡" style="-fx-font-size: 35px;"/>
+                        <VBox styleClass="value-card" prefWidth="280" alignment="CENTER" spacing="20">
+                            <StackPane styleClass="value-icon-container, value-icon-2">
+                                <Label text="💡" styleClass="value-icon"/>
                             </StackPane>
-                            <Label text="Innovation" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #060806;"/>
-                            <Label text="Nous utilisons la technologie pour simplifier et moderniser le financement agricole."
-                                   style="-fx-font-size: 14px; -fx-text-fill: #848A86;" wrapText="true" textAlignment="CENTER"/>
+                            <Label text="Innovation" styleClass="value-title"/>
+                            <Label text="Nous utilisons la technologie pour simplifier et moderniser le financement agricole en Tunisie."
+                                   styleClass="value-description" wrapText="true" maxWidth="230"/>
                         </VBox>
 
                         <!-- Value 3 -->
-                        <VBox styleClass="card" prefWidth="280" alignment="CENTER" spacing="15">
-                            <StackPane prefWidth="80" prefHeight="80"
-                                       style="-fx-background-color: rgba(178, 217, 68, 0.2); -fx-background-radius: 50;">
-                                <Label text="🌱" style="-fx-font-size: 35px;"/>
+                        <VBox styleClass="value-card" prefWidth="280" alignment="CENTER" spacing="20">
+                            <StackPane styleClass="value-icon-container, value-icon-3">
+                                <Label text="🌱" styleClass="value-icon"/>
                             </StackPane>
-                            <Label text="Durabilité" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #060806;"/>
-                            <Label text="Nous soutenons une agriculture responsable et respectueuse de l'environnement."
-                                   style="-fx-font-size: 14px; -fx-text-fill: #848A86;" wrapText="true" textAlignment="CENTER"/>
+                            <Label text="Durabilité" styleClass="value-title"/>
+                            <Label text="Nous soutenons une agriculture responsable et respectueuse de l'environnement pour les générations futures."
+                                   styleClass="value-description" wrapText="true" maxWidth="230"/>
                         </VBox>
 
                         <!-- Value 4 -->
-                        <VBox styleClass="card" prefWidth="280" alignment="CENTER" spacing="15">
-                            <StackPane prefWidth="80" prefHeight="80"
-                                       style="-fx-background-color: rgba(71, 108, 26, 0.1); -fx-background-radius: 50;">
-                                <Label text="⚡" style="-fx-font-size: 35px;"/>
+                        <VBox styleClass="value-card" prefWidth="280" alignment="CENTER" spacing="20">
+                            <StackPane styleClass="value-icon-container, value-icon-4">
+                                <Label text="⚡" styleClass="value-icon"/>
                             </StackPane>
-                            <Label text="Efficacité" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #060806;"/>
-                            <Label text="Des processus rapides et simplifiés pour un accès facile au financement."
-                                   style="-fx-font-size: 14px; -fx-text-fill: #848A86;" wrapText="true" textAlignment="CENTER"/>
+                            <Label text="Efficacité" styleClass="value-title"/>
+                            <Label text="Des processus optimisés et rapides pour un accès simplifié au financement agricole."
+                                   styleClass="value-description" wrapText="true" maxWidth="230"/>
                         </VBox>
                     </HBox>
                 </VBox>
 
-                <!-- TEAM SECTION -->
-                <VBox style="-fx-padding: 80 50; -fx-background-color: white;" spacing="50" alignment="CENTER">
+                <!-- ==================== TEAM SECTION ==================== -->
+                <VBox styleClass="team-section" spacing="60" alignment="CENTER">
+                    <!-- Header -->
+                    <VBox alignment="CENTER" spacing="15">
+                        <HBox alignment="CENTER">
+                            <HBox styleClass="section-badge">
+                                <Label text="👥 NOTRE ÉQUIPE" styleClass="section-badge-text"/>
+                            </HBox>
+                        </HBox>
+                        <Label text="Les personnes derrière AgriFund" styleClass="section-title"/>
+                        <Label text="Une équipe passionnée et dévouée au service de l'agriculture tunisienne"
+                               styleClass="section-subtitle"/>
+                    </VBox>
+
+                    <!-- Team Members Row 1 -->
+                    <HBox spacing="30" alignment="CENTER">
+
+                        <!-- Member 1: Souleima Ben Rhouma -->
+                        <VBox styleClass="team-member-card" spacing="18" alignment="CENTER">
+                            <StackPane styleClass="team-photo-container">
+                                <!-- Option 1: Avec photo -->
+                                <ImageView fx:id="photo1" fitWidth="140" fitHeight="140" preserveRatio="true"
+                                           styleClass="team-photo">
+                                    <image>
+                                        <Image url="@/images/team/souleima.png" />
+                                    </image>
+                                </ImageView>
+                                <!-- Option 2: Placeholder si pas de photo (à cacher si photo existe) -->
+                                <!--
+                                <StackPane styleClass="team-photo-placeholder, team-photo-placeholder-1">
+                                    <Label text="👩‍💻" styleClass="team-emoji"/>
+                                </StackPane>
+                                -->
+                            </StackPane>
+                            <VBox spacing="5" alignment="CENTER">
+                                <Label text="Souleima Ben Rhouma" styleClass="team-name"/>
+                                <Label text="Responsable Module 1" styleClass="team-role"/>
+                                <Label text="Gestion des Utilisateurs" styleClass="team-module"/>
+                            </VBox>
+                            <HBox styleClass="team-social" alignment="CENTER">
+                                <StackPane styleClass="social-btn">
+                                    <Label text="💼" styleClass="social-btn-icon"/>
+                                </StackPane>
+                                <StackPane styleClass="social-btn">
+                                    <Label text="📧" styleClass="social-btn-icon"/>
+                                </StackPane>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Member 2: Ibrahim Sakka -->
+                        <VBox styleClass="team-member-card" spacing="18" alignment="CENTER">
+                            <StackPane styleClass="team-photo-container">
+                                <ImageView fx:id="photo2" fitWidth="140" fitHeight="140" preserveRatio="true"
+                                           styleClass="team-photo">
+                                    <image>
+                                        <Image url="@/images/team/souleima.png" />
+                                    </image>
+                                </ImageView>
+                            </StackPane>
+                            <VBox spacing="5" alignment="CENTER">
+                                <Label text="Ibrahim Sakka" styleClass="team-name"/>
+                                <Label text="Responsable Module 2" styleClass="team-role"/>
+                                <Label text="Gestion des Financements" styleClass="team-module"/>
+                            </VBox>
+                            <HBox styleClass="team-social" alignment="CENTER">
+                                <StackPane styleClass="social-btn">
+                                    <Label text="💼" styleClass="social-btn-icon"/>
+                                </StackPane>
+                                <StackPane styleClass="social-btn">
+                                    <Label text="📧" styleClass="social-btn-icon"/>
+                                </StackPane>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Member 3: Rayen Khedhiri -->
+                        <VBox styleClass="team-member-card" spacing="18" alignment="CENTER">
+                            <StackPane styleClass="team-photo-container">
+                                <ImageView fx:id="photo3" fitWidth="140" fitHeight="140" preserveRatio="true"
+                                           styleClass="team-photo">
+                                    <image>
+                                        <Image url="@/images/team/souleima.png" />
+                                    </image>
+                                </ImageView>
+                            </StackPane>
+                            <VBox spacing="5" alignment="CENTER">
+                                <Label text="Rayen Khedhiri" styleClass="team-name"/>
+                                <Label text="Responsable Module 3" styleClass="team-role"/>
+                                <Label text="Gestion des Documents" styleClass="team-module"/>
+                            </VBox>
+                            <HBox styleClass="team-social" alignment="CENTER">
+                                <StackPane styleClass="social-btn">
+                                    <Label text="💼" styleClass="social-btn-icon"/>
+                                </StackPane>
+                                <StackPane styleClass="social-btn">
+                                    <Label text="📧" styleClass="social-btn-icon"/>
+                                </StackPane>
+                            </HBox>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Team Members Row 2 -->
+                    <HBox spacing="30" alignment="CENTER">
+
+                        <!-- Member 4: Rane Jaffel -->
+                        <VBox styleClass="team-member-card" spacing="18" alignment="CENTER">
+                            <StackPane styleClass="team-photo-container">
+                                <ImageView fx:id="photo4" fitWidth="140" fitHeight="140" preserveRatio="true"
+                                           styleClass="team-photo">
+                                    <image>
+                                        <Image url="@/images/team/rane.jpeg" />
+                                    </image>
+                                </ImageView>
+                            </StackPane>
+                            <VBox spacing="5" alignment="CENTER">
+                                <Label text="Rane Jaffel" styleClass="team-name"/>
+                                <Label text="Responsable Module 4" styleClass="team-role"/>
+                                <Label text="Messagerie &amp; Notifications" styleClass="team-module"/>
+                            </VBox>
+                            <HBox styleClass="team-social" alignment="CENTER">
+                                <StackPane styleClass="social-btn">
+                                    <Label text="💼" styleClass="social-btn-icon"/>
+                                </StackPane>
+                                <StackPane styleClass="social-btn">
+                                    <Label text="📧" styleClass="social-btn-icon"/>
+                                </StackPane>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Member 5: Chedy Derouiche -->
+                        <VBox styleClass="team-member-card" spacing="18" alignment="CENTER">
+                            <StackPane styleClass="team-photo-container">
+                                <ImageView fx:id="photo5" fitWidth="140" fitHeight="140" preserveRatio="true"
+                                           styleClass="team-photo">
+                                    <image>
+                                        <Image url="@/images/team/souleima.png" />
+                                    </image>
+                                </ImageView>
+                            </StackPane>
+                            <VBox spacing="5" alignment="CENTER">
+                                <Label text="Chedy Derouiche" styleClass="team-name"/>
+                                <Label text="Responsable Module 5" styleClass="team-role"/>
+                                <Label text="Tableau de Bord &amp; Analytics" styleClass="team-module"/>
+                            </VBox>
+                            <HBox styleClass="team-social" alignment="CENTER">
+                                <StackPane styleClass="social-btn">
+                                    <Label text="💼" styleClass="social-btn-icon"/>
+                                </StackPane>
+                                <StackPane styleClass="social-btn">
+                                    <Label text="📧" styleClass="social-btn-icon"/>
+                                </StackPane>
+                            </HBox>
+                        </VBox>
+                    </HBox>
+
+                    <!-- ESPRIT Logo/Info -->
+                    <VBox spacing="15" alignment="CENTER" style="-fx-padding: 30 0 0 0;">
+                        <Label text="Projet réalisé dans le cadre de" style="-fx-font-size: 14px; -fx-text-fill: #848A86;"/>
+                        <HBox spacing="15" alignment="CENTER">
+                            <Label text="🎓" style="-fx-font-size: 35px;"/>
+                            <VBox alignment="CENTER_LEFT">
+                                <Label text="ESPRIT" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #133D03;"/>
+                                <Label text="École Supérieure Privée d'Ingénierie et de Technologies"
+                                       style="-fx-font-size: 12px; -fx-text-fill: #848A86;"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+                <!-- ==================== TECHNOLOGIES SECTION ==================== -->
+                <VBox styleClass="tech-section" spacing="40" alignment="CENTER">
                     <VBox alignment="CENTER" spacing="10">
-                        <Label text="Notre Équipe" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #060806;"/>
-                        <Label text="Les personnes derrière AgriFund" style="-fx-font-size: 16px; -fx-text-fill: #848A86;"/>
+                        <Label text="Technologies Utilisées" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #133D03;"/>
+                        <Label text="Les outils qui alimentent notre plateforme" style="-fx-font-size: 14px; -fx-text-fill: #848A86;"/>
+                    </VBox>
+
+                    <HBox spacing="25" alignment="CENTER">
+                        <VBox styleClass="tech-card" spacing="10" alignment="CENTER">
+                            <Label text="☕" styleClass="tech-icon"/>
+                            <Label text="Java" styleClass="tech-name"/>
+                        </VBox>
+                        <VBox styleClass="tech-card" spacing="10" alignment="CENTER">
+                            <Label text="🎨" styleClass="tech-icon"/>
+                            <Label text="JavaFX" styleClass="tech-name"/>
+                        </VBox>
+                        <VBox styleClass="tech-card" spacing="10" alignment="CENTER">
+                            <Label text="🗄️" styleClass="tech-icon"/>
+                            <Label text="MySQL" styleClass="tech-name"/>
+                        </VBox>
+                        <VBox styleClass="tech-card" spacing="10" alignment="CENTER">
+                            <Label text="📦" styleClass="tech-icon"/>
+                            <Label text="Maven" styleClass="tech-name"/>
+                        </VBox>
+                        <VBox styleClass="tech-card" spacing="10" alignment="CENTER">
+                            <Label text="🔧" styleClass="tech-icon"/>
+                            <Label text="Scene Builder" styleClass="tech-name"/>
+                        </VBox>
+                        <VBox styleClass="tech-card" spacing="10" alignment="CENTER">
+                            <Label text="📝" styleClass="tech-icon"/>
+                            <Label text="CSS" styleClass="tech-name"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <!-- ==================== CONTACT SECTION ==================== -->
+                <VBox fx:id="contactSection" styleClass="contact-section" spacing="50" alignment="CENTER">
+                    <VBox spacing="15" alignment="CENTER">
+                        <Label text="📞" style="-fx-font-size: 50px;"/>
+                        <Label text="Contactez-nous" styleClass="contact-title"/>
+                        <Label text="Une question ? N'hésitez pas à nous contacter"
+                               styleClass="contact-subtitle"/>
                     </VBox>
 
                     <HBox spacing="40" alignment="CENTER">
-                        <!-- Team Member 1 -->
-                        <VBox alignment="CENTER" spacing="15">
-                            <StackPane prefWidth="150" prefHeight="150"
-                                       style="-fx-background-color: #089647; -fx-background-radius: 75;">
-                                <Label text="👨‍💻" style="-fx-font-size: 60px;"/>
-                            </StackPane>
-                            <Label text="Développeur 1" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-                            <Label text="Full Stack Developer" style="-fx-text-fill: #089647;"/>
+                        <VBox styleClass="contact-card" spacing="15" alignment="CENTER">
+                            <Label text="📧" styleClass="contact-icon"/>
+                            <Label text="Email" styleClass="contact-label"/>
+                            <Label text="contact@agrifund.tn" styleClass="contact-value"/>
                         </VBox>
 
-                        <!-- Team Member 2 -->
-                        <VBox alignment="CENTER" spacing="15">
-                            <StackPane prefWidth="150" prefHeight="150"
-                                       style="-fx-background-color: #E1B323; -fx-background-radius: 75;">
-                                <Label text="👩‍💻" style="-fx-font-size: 60px;"/>
-                            </StackPane>
-                            <Label text="Développeur 2" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-                            <Label text="Backend Developer" style="-fx-text-fill: #089647;"/>
+                        <VBox styleClass="contact-card" spacing="15" alignment="CENTER">
+                            <Label text="📱" styleClass="contact-icon"/>
+                            <Label text="Téléphone" styleClass="contact-label"/>
+                            <Label text="+216 XX XXX XXX" styleClass="contact-value"/>
                         </VBox>
 
-                        <!-- Team Member 3 -->
-                        <VBox alignment="CENTER" spacing="15">
-                            <StackPane prefWidth="150" prefHeight="150"
-                                       style="-fx-background-color: #B2D944; -fx-background-radius: 75;">
-                                <Label text="👨‍🎨" style="-fx-font-size: 60px;"/>
-                            </StackPane>
-                            <Label text="Développeur 3" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-                            <Label text="UI/UX Designer" style="-fx-text-fill: #089647;"/>
+                        <VBox styleClass="contact-card" spacing="15" alignment="CENTER">
+                            <Label text="📍" styleClass="contact-icon"/>
+                            <Label text="Adresse" styleClass="contact-label"/>
+                            <Label text="ESPRIT, Tunis" styleClass="contact-value"/>
                         </VBox>
 
-                        <!-- Team Member 4 -->
-                        <VBox alignment="CENTER" spacing="15">
-                            <StackPane prefWidth="150" prefHeight="150"
-                                       style="-fx-background-color: #476C1A; -fx-background-radius: 75;">
-                                <Label text="👩‍🔬" style="-fx-font-size: 60px;"/>
-                            </StackPane>
-                            <Label text="Développeur 4" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-                            <Label text="Database Expert" style="-fx-text-fill: #089647;"/>
+                        <VBox styleClass="contact-card" spacing="15" alignment="CENTER">
+                            <Label text="🕐" styleClass="contact-icon"/>
+                            <Label text="Horaires" styleClass="contact-label"/>
+                            <Label text="Lun-Ven: 9h-18h" styleClass="contact-value"/>
                         </VBox>
                     </HBox>
                 </VBox>
 
-                <!-- CONTACT SECTION -->
-                <VBox style="-fx-padding: 80 50; -fx-background-color: linear-gradient(to right, #089647, #076A39);"
-                      alignment="CENTER" spacing="30">
-                    <Label text="Contactez-nous" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-                    <Label text="Une question ? N'hésitez pas à nous contacter"
-                           style="-fx-font-size: 16px; -fx-text-fill: rgba(255,255,255,0.9);"/>
-
-                    <HBox spacing="50" alignment="CENTER" style="-fx-padding: 20 0 0 0;">
-                        <VBox alignment="CENTER" spacing="10">
-                            <Label text="📧" style="-fx-font-size: 30px;"/>
-                            <Label text="Email" style="-fx-font-weight: bold; -fx-text-fill: white;"/>
-                            <Label text="contact@agrifund.tn" style="-fx-text-fill: #B2D944;"/>
+                <!-- ==================== FOOTER ==================== -->
+                <VBox styleClass="footer" spacing="50">
+                    <HBox spacing="100" alignment="TOP_CENTER">
+                        <!-- Brand Column -->
+                        <VBox styleClass="footer-brand" spacing="20">
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="🌾" style="-fx-font-size: 35px;"/>
+                                <Label text="AgriFund" styleClass="footer-logo"/>
+                            </HBox>
+                            <Label text="La plateforme de référence pour le financement agricole en Tunisie. Projet ESPRIT 2024-2025."
+                                   styleClass="footer-description" wrapText="true"/>
+                            <HBox styleClass="footer-social">
+                                <StackPane styleClass="social-icon">
+                                    <Label text="📘" styleClass="social-icon-text"/>
+                                </StackPane>
+                                <StackPane styleClass="social-icon">
+                                    <Label text="📸" styleClass="social-icon-text"/>
+                                </StackPane>
+                                <StackPane styleClass="social-icon">
+                                    <Label text="💼" styleClass="social-icon-text"/>
+                                </StackPane>
+                            </HBox>
                         </VBox>
 
-                        <VBox alignment="CENTER" spacing="10">
-                            <Label text="📱" style="-fx-font-size: 30px;"/>
-                            <Label text="Téléphone" style="-fx-font-weight: bold; -fx-text-fill: white;"/>
-                            <Label text="+216 XX XXX XXX" style="-fx-text-fill: #B2D944;"/>
-                        </VBox>
-
-                        <VBox alignment="CENTER" spacing="10">
-                            <Label text="📍" style="-fx-font-size: 30px;"/>
-                            <Label text="Adresse" style="-fx-font-weight: bold; -fx-text-fill: white;"/>
-                            <Label text="ESPRIT, Tunis, Tunisie" style="-fx-text-fill: #B2D944;"/>
-                        </VBox>
-                    </HBox>
-                </VBox>
-
-                <!-- FOOTER -->
-                <VBox styleClass="footer" spacing="30">
-                    <HBox spacing="80" alignment="CENTER">
-                        <VBox spacing="15">
-                            <Label text="🌾 AgriFund" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #B2D944;"/>
-                            <Label text="Plateforme de financement agricole" styleClass="footer-text"/>
-                            <Label text="© 2024-2025 ESPRIT" styleClass="footer-text"/>
-                        </VBox>
-
-                        <VBox spacing="10">
-                            <Label text="Liens rapides" style="-fx-font-weight: bold; -fx-text-fill: white;"/>
+                        <!-- Links Column 1 -->
+                        <VBox styleClass="footer-column">
+                            <Label text="Navigation" styleClass="footer-column-title"/>
                             <Label text="Accueil" styleClass="footer-link" onMouseClicked="#goToHome"/>
                             <Label text="À propos" styleClass="footer-link"/>
+                            <Label text="Services" styleClass="footer-link"/>
                             <Label text="Contact" styleClass="footer-link"/>
                         </VBox>
 
-                        <VBox spacing="10">
-                            <Label text="Légal" style="-fx-font-weight: bold; -fx-text-fill: white;"/>
+                        <!-- Links Column 2 -->
+                        <VBox styleClass="footer-column">
+                            <Label text="Espaces" styleClass="footer-column-title"/>
+                            <Label text="Agriculteur" styleClass="footer-link" onMouseClicked="#goToLogin"/>
+                            <Label text="Banque" styleClass="footer-link" onMouseClicked="#goToLogin"/>
+                            <Label text="Administration" styleClass="footer-link"/>
+                        </VBox>
+
+                        <!-- Links Column 3 -->
+                        <VBox styleClass="footer-column">
+                            <Label text="Légal" styleClass="footer-column-title"/>
                             <Label text="Conditions d'utilisation" styleClass="footer-link"/>
                             <Label text="Politique de confidentialité" styleClass="footer-link"/>
                             <Label text="Mentions légales" styleClass="footer-link"/>
                         </VBox>
+                    </HBox>
+
+                    <Pane styleClass="footer-divider"/>
+
+                    <HBox styleClass="footer-bottom" alignment="CENTER">
+                        <Label text="© 2024-2025 AgriFund - Projet ESPRIT. Tous droits réservés."
+                               styleClass="footer-copyright" HBox.hgrow="ALWAYS"/>
                     </HBox>
                 </VBox>
 
             </VBox>
         </ScrollPane>
     </center>
-
 </BorderPane>

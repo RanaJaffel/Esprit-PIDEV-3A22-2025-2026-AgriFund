@@ -1,5 +1,6 @@
 package Controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -67,5 +68,8 @@ public class AboutController {
         alert.setTitle("Erreur");
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    public void scrollToContact(ActionEvent actionEvent) {
     }
 }
