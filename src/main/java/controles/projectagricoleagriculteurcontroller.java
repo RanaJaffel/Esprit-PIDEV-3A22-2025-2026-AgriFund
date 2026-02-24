@@ -63,6 +63,14 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
+// News API
+import java.util.function.Consumer;
+import javafx.concurrent.Task;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
+
 public class projectagricoleagriculteurcontroller implements Initializable {
 
     // ============================================================================
@@ -1780,5 +1788,945 @@ public class projectagricoleagriculteurcontroller implements Initializable {
                 .replace("\n", "\\n")
                 .replace("\r", "\\r")
                 .replace("\t", "\\t");
+    }
+
+    // ============================================================================
+    // 📰 ACTUALITÉS AGRICOLES — NewsAPI
+    // ============================================================================
+
+    private static final String NEWS_API_KEY = "6263389c98ca4dbbb7ac1eec33269db2";
+
+    /**
+     * Opens a beautiful modal window showing the latest agricultural news
+     * fetched from NewsAPI.org.
+     * Called by the "📰 Actualités" button in the FXML.
+     */
+    @FXML
+    private void openNewsDialog() {
+        Stage newsStage = new Stage();
+        newsStage.setTitle("📰 Actualités Agricoles");
+        newsStage.initModality(Modality.APPLICATION_MODAL);
+        newsStage.setResizable(true);
+        newsStage.setMinWidth(740);
+        newsStage.setMinHeight(580);
+
+        // ── Root ─────────────────────────────────────────────────────────────
+        BorderPane root = new BorderPane();
+        root.setStyle("-fx-background-color: #F4F6F8;");
+
+        // ── HEADER ───────────────────────────────────────────────────────────
+        HBox header = new HBox(14);
+        header.setAlignment(Pos.CENTER_LEFT);
+        header.setStyle(
+                "-fx-background-color: linear-gradient(to right, #1B5E20, #2E7D32);" +
+                        "-fx-padding: 18 28;"
+        );
+        Label newsIconLbl = new Label("📰");
+        newsIconLbl.setStyle("-fx-font-size: 36px;");
+
+        VBox newsTitleBox = new VBox(2);
+        Label newsTitleLbl = new Label("Actualités Agricoles");
+        newsTitleLbl.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;");
+        Label newsSubLbl = new Label("Dernières nouvelles du monde agricole • NewsAPI.org");
+        newsSubLbl.setStyle("-fx-font-size: 12px; -fx-text-fill: rgba(255,255,255,0.80);");
+        newsTitleBox.getChildren().addAll(newsTitleLbl, newsSubLbl);
+
+        Region headerSpacer = new Region();
+        HBox.setHgrow(headerSpacer, Priority.ALWAYS);
+
+        TextField searchField = new TextField();
+        searchField.setPromptText("🔍 Rechercher...");
+        searchField.setPrefWidth(200);
+        searchField.setStyle(
+                "-fx-background-color: rgba(255,255,255,0.18);" +
+                        "-fx-text-fill: white; -fx-prompt-text-fill: rgba(255,255,255,0.60);" +
+                        "-fx-border-color: rgba(255,255,255,0.40); -fx-border-radius: 20;" +
+                        "-fx-background-radius: 20; -fx-padding: 6 14;"
+        );
+
+        Button refreshBtn = new Button("🔄 Rafraîchir");
+        refreshBtn.setStyle(
+                "-fx-background-color: rgba(255,255,255,0.22);" +
+                        "-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12px;" +
+                        "-fx-background-radius: 20; -fx-border-radius: 20;" +
+                        "-fx-padding: 7 16; -fx-cursor: hand;"
+        );
+        header.getChildren().addAll(newsIconLbl, newsTitleBox, headerSpacer, searchField, refreshBtn);
+
+        // ── CATEGORY FILTER BAR ──────────────────────────────────────────────
+        HBox filterBar = new HBox(10);
+        filterBar.setAlignment(Pos.CENTER_LEFT);
+        filterBar.setStyle(
+                "-fx-background-color: white; -fx-padding: 10 24;" +
+                        "-fx-border-color: #E0E0E0; -fx-border-width: 0 0 1 0;"
+        );
+        Label filterLbl = new Label("Thème :");
+        filterLbl.setStyle("-fx-font-size: 12px; -fx-text-fill: #666; -fx-font-weight: bold;");
+
+        String[][] topics = {
+                {"Agriculture", "agriculture",  "ferme"},
+                {"Cultures",    "culture",      "recolte"},
+                {"Elevage",     "elevage",      "betail"},
+                {"Meteo",       "meteo",        "climat"},
+                {"Marche",      "prix",         "economie"},
+                {"Innovation",  "innovation",   "technologie"}
+        };
+
+        ToggleGroup tg = new ToggleGroup();
+        ToggleButton[] topicBtns = new ToggleButton[topics.length];
+        String styleNormal =
+                "-fx-background-color: #F1F8E9; -fx-text-fill: #33691E;" +
+                        "-fx-font-size: 11px; -fx-font-weight: bold;" +
+                        "-fx-background-radius: 20; -fx-border-radius: 20;" +
+                        "-fx-border-color: #C5E1A5; -fx-padding: 5 12; -fx-cursor: hand;";
+        String styleSelected =
+                "-fx-background-color: #2E7D32; -fx-text-fill: white;" +
+                        "-fx-font-size: 11px; -fx-font-weight: bold;" +
+                        "-fx-background-radius: 20; -fx-border-radius: 20;" +
+                        "-fx-border-color: #1B5E20; -fx-padding: 5 12; -fx-cursor: hand;";
+
+        for (int i = 0; i < topics.length; i++) {
+            ToggleButton tb = new ToggleButton(topics[i][0]);
+            // store "primary|fallback" in userData
+            tb.setUserData(topics[i][1] + "|" + topics[i][2]);
+            tb.setToggleGroup(tg);
+            tb.setStyle(styleNormal);
+            tb.selectedProperty().addListener((obs, wasSelected, isSelected) ->
+                    tb.setStyle(isSelected ? styleSelected : styleNormal));
+            topicBtns[i] = tb;
+        }
+        topicBtns[0].setSelected(true);
+
+        filterBar.getChildren().add(filterLbl);
+        for (ToggleButton tb : topicBtns) filterBar.getChildren().add(tb);
+
+        VBox topBox = new VBox(0, header, filterBar);
+        root.setTop(topBox);
+
+        // ── NEWS ListView ─────────────────────────────────────────────────────
+        ListView<NewsArticle> newsListView = new ListView<>();
+        newsListView.setStyle("-fx-background-color: transparent; -fx-border-width: 0;");
+        newsListView.setCellFactory(lv -> new NewsListCell());
+
+        VBox centerBox = new VBox(0);
+        centerBox.setStyle("-fx-background-color: #F4F6F8; -fx-padding: 12 20;");
+        VBox.setVgrow(newsListView, Priority.ALWAYS);
+
+        Label loadingLabel = new Label("⏳ Chargement des actualités...");
+        loadingLabel.setStyle(
+                "-fx-font-size: 15px; -fx-text-fill: #2E7D32; -fx-font-weight: bold;" +
+                        "-fx-padding: 60 0;"
+        );
+        loadingLabel.setMaxWidth(Double.MAX_VALUE);
+        loadingLabel.setAlignment(Pos.CENTER);
+
+        ProgressIndicator spinner = new ProgressIndicator();
+        spinner.setPrefSize(50, 50);
+        VBox loadingBox = new VBox(12, spinner, loadingLabel);
+        loadingBox.setAlignment(Pos.CENTER);
+        loadingBox.setPadding(new Insets(60, 0, 0, 0));
+
+        centerBox.getChildren().add(loadingBox);
+        root.setCenter(centerBox);
+
+        // ── STATUS BAR ────────────────────────────────────────────────────────
+        HBox statusBar = new HBox(10);
+        statusBar.setAlignment(Pos.CENTER_LEFT);
+        statusBar.setStyle(
+                "-fx-background-color: white; -fx-padding: 8 20;" +
+                        "-fx-border-color: #E0E0E0; -fx-border-width: 1 0 0 0;"
+        );
+        Label statusLbl = new Label("📡 Connexion à NewsAPI...");
+        statusLbl.setStyle("-fx-font-size: 11px; -fx-text-fill: #999;");
+        Label poweredBy = new Label("Propulsé par NewsAPI.org");
+        poweredBy.setStyle("-fx-font-size: 10px; -fx-text-fill: #bbb;");
+        Region statusSpacer = new Region();
+        HBox.setHgrow(statusSpacer, Priority.ALWAYS);
+        statusBar.getChildren().addAll(statusLbl, statusSpacer, poweredBy);
+        root.setBottom(statusBar);
+
+        Scene scene = new Scene(root, 760, 620);
+        newsStage.setScene(scene);
+        newsStage.show();
+
+        // ── Fetch logic ───────────────────────────────────────────────────────
+        // userData format: "primary|fallback"
+        final String[] currentQuery = {"agriculture|ferme"};
+
+        Consumer<String> fetchNews = queryData -> {
+            currentQuery[0] = queryData;
+            String[] parts = queryData.split("\\|", 2);
+            String primaryQ  = parts[0].trim();
+            String fallbackQ = parts.length > 1 ? parts[1].trim() : "";
+
+            centerBox.getChildren().setAll(loadingBox);
+            statusLbl.setText("Chargement en cours...");
+            statusLbl.setStyle("-fx-font-size: 11px; -fx-text-fill: #999;");
+
+            Task<List<NewsArticle>> task = new Task<List<NewsArticle>>() {
+                @Override
+                protected List<NewsArticle> call() throws Exception {
+                    // 1st attempt: primary keyword
+                    List<NewsArticle> result = fetchAgricultureNews(primaryQ);
+                    // 2nd attempt: fallback keyword
+                    if (result.isEmpty() && !fallbackQ.isEmpty()) {
+                        result = fetchAgricultureNews(fallbackQ);
+                    }
+                    // 3rd attempt: add "agricole" as context
+                    if (result.isEmpty()) {
+                        result = fetchAgricultureNews("agricole " + primaryQ);
+                    }
+                    return result;
+                }
+            };
+            task.setOnSucceeded(evt -> {
+                List<NewsArticle> articles = task.getValue();
+                if (articles.isEmpty()) {
+                    Label noResultsLbl = new Label("Aucun article trouve pour ce theme. Essayez la recherche manuelle.");
+                    noResultsLbl.setStyle("-fx-font-size: 14px; -fx-text-fill: #888; -fx-padding: 60 0;");
+                    noResultsLbl.setMaxWidth(Double.MAX_VALUE);
+                    noResultsLbl.setAlignment(Pos.CENTER);
+                    noResultsLbl.setWrapText(true);
+                    centerBox.getChildren().setAll(noResultsLbl);
+                } else {
+                    newsListView.getItems().setAll(articles);
+                    centerBox.getChildren().setAll(newsListView);
+                    VBox.setVgrow(newsListView, Priority.ALWAYS);
+                }
+                statusLbl.setText(articles.size() + " articles charges - NewsAPI.org");
+                statusLbl.setStyle("-fx-font-size: 11px; -fx-text-fill: #2E7D32; -fx-font-weight: bold;");
+            });
+            task.setOnFailed(evt -> {
+                Label errLbl = new Label("Impossible de charger les actualites. Verifiez votre connexion.");
+                errLbl.setStyle("-fx-font-size: 14px; -fx-text-fill: #c0392b; -fx-padding: 60 0;");
+                errLbl.setMaxWidth(Double.MAX_VALUE);
+                errLbl.setAlignment(Pos.CENTER);
+                errLbl.setWrapText(true);
+                centerBox.getChildren().setAll(errLbl);
+                statusLbl.setText("Erreur de chargement");
+                statusLbl.setStyle("-fx-font-size: 11px; -fx-text-fill: #c0392b;");
+            });
+
+            Thread t = new Thread(task);
+            t.setDaemon(true);
+            t.start();
+        };
+
+        // Wire events
+        tg.selectedToggleProperty().addListener((obs, oldT, newT) -> {
+            if (newT != null) fetchNews.accept((String) newT.getUserData());
+        });
+        refreshBtn.setOnAction(e -> fetchNews.accept(currentQuery[0]));
+        searchField.setOnAction(e -> {
+            String q = searchField.getText().trim();
+            if (!q.isEmpty()) {
+                tg.selectToggle(null);
+                fetchNews.accept(q + "|" + q + " agricole");
+            }
+        });
+
+        // Initial load
+        fetchNews.accept("agriculture|ferme");
+    }
+
+    /**
+     * Calls NewsAPI /v2/everything with the given query.
+     * Tries French first, then English as fallback.
+     */
+    private List<NewsArticle> fetchAgricultureNews(String query) throws Exception {
+        return doNewsApiCall(query);
+    }
+
+    private List<NewsArticle> doNewsApiCall(String query) throws Exception {
+        String encodedQuery = java.net.URLEncoder.encode(query, "UTF-8");
+        String urlStr = "https://newsapi.org/v2/everything"
+                + "?q=" + encodedQuery
+                + "&sortBy=publishedAt"
+                + "&pageSize=40"
+                + "&apiKey=" + NEWS_API_KEY;
+
+        java.net.URL url = new java.net.URL(urlStr);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("User-Agent", "JavaFX-AgricoleApp/1.0");
+        conn.setConnectTimeout(10000);
+        conn.setReadTimeout(10000);
+
+        int status = conn.getResponseCode();
+        java.io.InputStream is = (status >= 200 && status < 300)
+                ? conn.getInputStream() : conn.getErrorStream();
+
+        StringBuilder sb = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = br.readLine()) != null) sb.append(line);
+        }
+        conn.disconnect();
+        return parseNewsArticles(sb.toString());
+    }
+
+    /** Lightweight JSON parser — no external library needed. */
+    private List<NewsArticle> parseNewsArticles(String json) {
+        List<NewsArticle> list = new ArrayList<>();
+        int articlesStart = json.indexOf("\"articles\":[");
+        if (articlesStart < 0) return list;
+
+        int pos = articlesStart + 12;
+        while (list.size() < 30) {
+            int objStart = json.indexOf("{", pos);
+            if (objStart < 0) break;
+            int depth = 0, objEnd = objStart;
+            for (int i = objStart; i < json.length(); i++) {
+                char c = json.charAt(i);
+                if (c == '{') depth++;
+                else if (c == '}') { depth--; if (depth == 0) { objEnd = i; break; } }
+            }
+            if (objEnd <= objStart) break;
+            String obj = json.substring(objStart, objEnd + 1);
+            NewsArticle a = new NewsArticle();
+            a.title       = extractNewsJsonString(obj, "title");
+            a.description = extractNewsJsonString(obj, "description");
+            a.url         = extractNewsJsonString(obj, "url");
+            a.source      = extractNewsJsonString(obj, "name");
+            a.publishedAt = extractNewsJsonString(obj, "publishedAt");
+            if (a.title != null && !a.title.isEmpty() && !"[Removed]".equals(a.title)) {
+                list.add(a);
+            }
+            pos = objEnd + 1;
+        }
+        return list;
+    }
+
+    private String extractNewsJsonString(String json, String key) {
+        String search = "\"" + key + "\":";
+        int idx = json.indexOf(search);
+        if (idx < 0) return "";
+        int valStart = idx + search.length();
+        while (valStart < json.length() && json.charAt(valStart) == ' ') valStart++;
+        if (valStart >= json.length()) return "";
+        if (json.charAt(valStart) == '"') {
+            int start = valStart + 1, end = start;
+            while (end < json.length()) {
+                char c = json.charAt(end);
+                if (c == '\\') { end += 2; continue; }
+                if (c == '"') break;
+                end++;
+            }
+            return json.substring(start, end)
+                    .replace("\\n", " ").replace("\\\"", "\"").replace("\\/", "/");
+        } else if (valStart + 4 <= json.length() && json.substring(valStart, valStart + 4).equals("null")) {
+            return "";
+        }
+        int end = valStart;
+        while (end < json.length() && json.charAt(end) != ',' && json.charAt(end) != '}') end++;
+        return json.substring(valStart, end).trim();
+    }
+
+    // ── Data model ────────────────────────────────────────────────────────────
+    private static class NewsArticle {
+        String title;
+        String description;
+        String url;
+        String source;
+        String publishedAt;
+    }
+
+    // ── Custom ListCell — renders each article as a beautiful card ────────────
+    private class NewsListCell extends ListCell<NewsArticle> {
+
+        private final VBox card        = new VBox(7);
+        private final HBox topRow      = new HBox(8);
+        private final Label sourceTag  = new Label();
+        private final Label dateLbl    = new Label();
+        private final Label titleLbl   = new Label();
+        private final Label descLbl    = new Label();
+        private final Hyperlink linkLbl = new Hyperlink("🔗 Lire l'article complet");
+
+        private static final String CARD_NORMAL =
+                "-fx-background-color: white;" +
+                        "-fx-background-radius: 12;" +
+                        "-fx-border-color: #E8F5E9; -fx-border-width: 1;" +
+                        "-fx-border-radius: 12;" +
+                        "-fx-padding: 14 16;" +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.07), 6, 0, 0, 2);";
+
+        private static final String CARD_HOVER =
+                "-fx-background-color: #F9FFF9;" +
+                        "-fx-background-radius: 12;" +
+                        "-fx-border-color: #A5D6A7; -fx-border-width: 1.5;" +
+                        "-fx-border-radius: 12;" +
+                        "-fx-padding: 14 16;" +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(46,125,50,0.18), 10, 0, 0, 3);";
+
+        NewsListCell() {
+            card.setStyle(CARD_NORMAL);
+            card.setOnMouseEntered(e -> card.setStyle(CARD_HOVER));
+            card.setOnMouseExited(e -> card.setStyle(CARD_NORMAL));
+
+            sourceTag.setStyle(
+                    "-fx-background-color: #E8F5E9; -fx-text-fill: #2E7D32;" +
+                            "-fx-font-size: 10px; -fx-font-weight: bold;" +
+                            "-fx-padding: 3 8; -fx-background-radius: 10;"
+            );
+            dateLbl.setStyle("-fx-font-size: 10px; -fx-text-fill: #AAAAAA;");
+
+            Region rowSpacer = new Region();
+            HBox.setHgrow(rowSpacer, Priority.ALWAYS);
+            topRow.setAlignment(Pos.CENTER_LEFT);
+            topRow.getChildren().addAll(sourceTag, rowSpacer, dateLbl);
+
+            titleLbl.setStyle(
+                    "-fx-font-size: 14px; -fx-font-weight: bold;" +
+                            "-fx-text-fill: #1B2D1B; -fx-wrap-text: true;"
+            );
+            titleLbl.setWrapText(true);
+            titleLbl.setMaxWidth(Double.MAX_VALUE);
+
+            descLbl.setStyle("-fx-font-size: 12px; -fx-text-fill: #555555; -fx-wrap-text: true;");
+            descLbl.setWrapText(true);
+            descLbl.setMaxWidth(Double.MAX_VALUE);
+
+            linkLbl.setStyle(
+                    "-fx-text-fill: #1976D2; -fx-font-size: 11px;" +
+                            "-fx-font-weight: bold; -fx-cursor: hand; -fx-border-width: 0;"
+            );
+
+            Separator sep = new Separator();
+            sep.setStyle("-fx-background-color: #E8F5E9;");
+            card.getChildren().addAll(topRow, titleLbl, descLbl, sep, linkLbl);
+
+            setStyle("-fx-background-color: transparent; -fx-padding: 5 0;");
+            setGraphic(null);
+        }
+
+        @Override
+        protected void updateItem(NewsArticle article, boolean empty) {
+            super.updateItem(article, empty);
+            if (empty || article == null) { setGraphic(null); return; }
+
+            String src = (article.source != null && !article.source.isEmpty())
+                    ? article.source : "Source inconnue";
+            sourceTag.setText("📰 " + src);
+
+            String date = (article.publishedAt != null && article.publishedAt.length() >= 10)
+                    ? article.publishedAt.substring(0, 10) : "";
+            dateLbl.setText(date);
+
+            titleLbl.setText(article.title != null ? article.title : "(Sans titre)");
+            descLbl.setText((article.description != null && !article.description.isEmpty())
+                    ? article.description : "Aucune description disponible.");
+
+            linkLbl.setOnAction(e -> {
+                if (article.url != null && !article.url.isEmpty()) {
+                    openArticleReader(article);
+                }
+            });
+
+            setGraphic(card);
+        }
+    }
+
+    // ── In-app article reader — fetches & renders full content immediately ─────
+    private void openArticleReader(NewsArticle article) {
+        Stage readerStage = new Stage();
+        readerStage.setTitle(article.title != null ? article.title : "Article");
+        readerStage.initModality(Modality.APPLICATION_MODAL);
+        readerStage.setResizable(true);
+        readerStage.setWidth(1050);
+        readerStage.setHeight(800);
+
+        // ── Root ──────────────────────────────────────────────────────────────
+        BorderPane readerRoot = new BorderPane();
+        readerRoot.setStyle("-fx-background-color: #1B2D1B;");
+
+        // ── HEADER BAR ────────────────────────────────────────────────────────
+        HBox titleBar = new HBox(12);
+        titleBar.setAlignment(Pos.CENTER_LEFT);
+        titleBar.setStyle(
+                "-fx-background-color: linear-gradient(to right, #1B5E20, #2E7D32);" +
+                        "-fx-padding: 14 22;"
+        );
+
+        Button backBtn = new Button("  Retour");
+        backBtn.setStyle(
+                "-fx-background-color: rgba(255,255,255,0.18); -fx-text-fill: white;" +
+                        "-fx-font-weight: bold; -fx-font-size: 12px; -fx-padding: 6 16;" +
+                        "-fx-background-radius: 20; -fx-cursor: hand;" +
+                        "-fx-border-color: rgba(255,255,255,0.35); -fx-border-radius: 20; -fx-border-width: 1;"
+        );
+        backBtn.setOnAction(e -> readerStage.close());
+
+        Label articleTitleLbl = new Label(article.title != null ? article.title : "Article");
+        articleTitleLbl.setStyle(
+                "-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"
+        );
+        articleTitleLbl.setMaxWidth(680);
+        articleTitleLbl.setWrapText(true);
+
+        Region titleSpacer = new Region();
+        HBox.setHgrow(titleSpacer, Priority.ALWAYS);
+
+        String srcText  = (article.source != null && !article.source.isEmpty()) ? article.source : "";
+        String dateText = (article.publishedAt != null && article.publishedAt.length() >= 10)
+                ? article.publishedAt.substring(0, 10) : "";
+        Label sourceDateLbl = new Label(
+                (srcText.isEmpty() ? "" : srcText) +
+                        ((!srcText.isEmpty() && !dateText.isEmpty()) ? "  |  " : "") +
+                        dateText
+        );
+        sourceDateLbl.setStyle(
+                "-fx-font-size: 11px; -fx-text-fill: rgba(255,255,255,0.70);"
+        );
+
+        // Zoom controls in header
+        String zBtnStyle =
+                "-fx-background-color: rgba(255,255,255,0.15); -fx-text-fill: white;" +
+                        "-fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 4 10;" +
+                        "-fx-background-radius: 6; -fx-cursor: hand;";
+        Button btnZoomOut = new Button("A-");
+        Button btnZoomIn  = new Button("A+");
+        btnZoomOut.setStyle(zBtnStyle);
+        btnZoomIn.setStyle(zBtnStyle);
+
+        titleBar.getChildren().addAll(backBtn, articleTitleLbl, titleSpacer, sourceDateLbl, btnZoomOut, btnZoomIn);
+        readerRoot.setTop(titleBar);
+
+        // ── WebView — shows "Chargement..." immediately ────────────────────────
+        WebView webView = new WebView();
+        WebEngine engine = webView.getEngine();
+        engine.setJavaScriptEnabled(true);
+
+        // Show skeleton loading page right away (no emoji — safe chars only)
+        engine.loadContent(buildSkeletonPage());
+
+        readerRoot.setCenter(webView);
+
+        // ── BOTTOM STATUS BAR ─────────────────────────────────────────────────
+        HBox bottomBar = new HBox(12);
+        bottomBar.setAlignment(Pos.CENTER_LEFT);
+        bottomBar.setStyle(
+                "-fx-background-color: #162816;" +
+                        "-fx-padding: 8 20;" +
+                        "-fx-border-color: #0D1F0D; -fx-border-width: 1 0 0 0;"
+        );
+        ProgressIndicator fetchSpinner = new ProgressIndicator();
+        fetchSpinner.setPrefSize(16, 16);
+        fetchSpinner.setStyle("-fx-accent: #66BB6A;");
+        Label statusLbl = new Label("Chargement de l'article en cours...");
+        statusLbl.setStyle("-fx-font-size: 11px; -fx-text-fill: #81C784;");
+        Region bSpacer = new Region();
+        HBox.setHgrow(bSpacer, Priority.ALWAYS);
+        Label urlLbl = new Label(article.url != null ? article.url : "");
+        urlLbl.setStyle("-fx-font-size: 10px; -fx-text-fill: rgba(165,214,167,0.45);");
+        urlLbl.setMaxWidth(400);
+
+        Button btnClose = new Button("X  Fermer");
+        btnClose.setStyle(
+                "-fx-background-color: rgba(211,47,47,0.28); -fx-text-fill: #EF9A9A;" +
+                        "-fx-font-weight: bold; -fx-font-size: 12px; -fx-padding: 5 16;" +
+                        "-fx-background-radius: 14; -fx-cursor: hand;"
+        );
+        btnClose.setOnAction(e -> readerStage.close());
+
+        bottomBar.getChildren().addAll(fetchSpinner, statusLbl, bSpacer, urlLbl, btnClose);
+        readerRoot.setBottom(bottomBar);
+
+        readerStage.setScene(new Scene(readerRoot));
+        readerStage.show();
+
+        // ── Zoom ─────────────────────────────────────────────────────────────
+        final double[] zoom = {1.0};
+        btnZoomOut.setOnAction(e -> { zoom[0] = Math.max(zoom[0] - 0.15, 0.5); webView.setZoom(zoom[0]); });
+        btnZoomIn.setOnAction(e -> { zoom[0] = Math.min(zoom[0] + 0.15, 2.5); webView.setZoom(zoom[0]); });
+
+        // ── Fetch article content in background thread ─────────────────────────
+        Task<String> fetchTask = new Task<String>() {
+            @Override
+            protected String call() throws Exception {
+                return fetchAndExtractArticle(article);
+            }
+        };
+
+        fetchTask.setOnSucceeded(evt -> {
+            String html = fetchTask.getValue();
+            engine.loadContent(html, "text/html");
+            fetchSpinner.setVisible(false);
+            statusLbl.setText("Article charge - " + srcText + (dateText.isEmpty() ? "" : "  |  " + dateText));
+            statusLbl.setStyle("-fx-font-size: 11px; -fx-text-fill: #A5D6A7;");
+        });
+        fetchTask.setOnFailed(evt -> {
+            engine.loadContent(buildErrorPage(article), "text/html");
+            fetchSpinner.setVisible(false);
+            statusLbl.setText("Impossible de charger l'article complet.");
+            statusLbl.setStyle("-fx-font-size: 11px; -fx-text-fill: #EF9A9A;");
+        });
+
+        Thread t = new Thread(fetchTask);
+        t.setDaemon(true);
+        t.start();
+    }
+
+    /**
+     * Fetches the raw HTML of the article URL, then extracts meaningful
+     * text paragraphs and wraps them in a clean, beautifully styled HTML page.
+     * Falls back to the description if fetching fails.
+     */
+    private String fetchAndExtractArticle(NewsArticle article) {
+        String title   = article.title       != null ? article.title       : "";
+        String desc    = article.description != null ? article.description : "";
+        String srcName = article.source      != null ? article.source      : "";
+        String date    = (article.publishedAt != null && article.publishedAt.length() >= 10)
+                ? article.publishedAt.substring(0, 10) : "";
+        String url     = article.url         != null ? article.url         : "";
+
+        // ── Try to fetch the actual page ──────────────────────────────────────
+        String rawHtml = "";
+        try {
+            java.net.URL urlObj = new java.net.URL(url);
+            HttpURLConnection conn = (HttpURLConnection) urlObj.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setConnectTimeout(8000);
+            conn.setReadTimeout(10000);
+            // Mimic a real browser to avoid 403s
+            conn.setRequestProperty("User-Agent",
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
+                            "AppleWebKit/537.36 (KHTML, like Gecko) " +
+                            "Chrome/120.0.0.0 Safari/537.36");
+            conn.setRequestProperty("Accept", "text/html,application/xhtml+xml,*/*;q=0.9");
+            conn.setRequestProperty("Accept-Language", "fr-FR,fr;q=0.9,en;q=0.8");
+            int status = conn.getResponseCode();
+            if (status >= 200 && status < 400) {
+                java.io.InputStream is = conn.getInputStream();
+                // Read with detected charset or UTF-8 fallback
+                String contentType = conn.getContentType();
+                String charset = "UTF-8";
+                if (contentType != null && contentType.contains("charset=")) {
+                    charset = contentType.substring(contentType.indexOf("charset=") + 8).trim();
+                    if (charset.contains(";")) charset = charset.substring(0, charset.indexOf(";")).trim();
+                }
+                StringBuilder sb = new StringBuilder();
+                try (BufferedReader br = new BufferedReader(
+                        new java.io.InputStreamReader(is, charset))) {
+                    String line;
+                    while ((line = br.readLine()) != null) sb.append(line).append("\n");
+                }
+                rawHtml = sb.toString();
+            }
+            conn.disconnect();
+        } catch (Exception e) {
+            System.out.println("Fetch failed: " + e.getMessage());
+        }
+
+        // ── Extract paragraphs from raw HTML ─────────────────────────────────
+        String bodyContent = extractArticleBody(rawHtml, desc);
+
+        // ── Build clean reader HTML ───────────────────────────────────────────
+        return buildReaderHtml(title, srcName, date, url, bodyContent);
+    }
+
+    /**
+     * Pulls readable <p> paragraphs from raw HTML, strips tags, returns
+     * them as clean HTML paragraphs. Falls back to description if nothing found.
+     */
+    /**
+     * Decodes common HTML entities to their actual characters so the
+     * reader displays clean readable French text instead of &#8217; etc.
+     */
+    private String decodeHtmlEntities(String text) {
+        if (text == null) return "";
+        // Named entities most common in French press
+        text = text.replace("&nbsp;",   " ")
+                .replace("&amp;",    "&")
+                .replace("&lt;",     "<")
+                .replace("&gt;",     ">")
+                .replace("&quot;",   "\"")
+                .replace("&apos;",   "'")
+                .replace("&laquo;",  "\u00ab")
+                .replace("&raquo;",  "\u00bb")
+                .replace("&agrave;", "\u00e0")
+                .replace("&eacute;", "\u00e9")
+                .replace("&egrave;", "\u00e8")
+                .replace("&ecirc;",  "\u00ea")
+                .replace("&euml;",   "\u00eb")
+                .replace("&icirc;",  "\u00ee")
+                .replace("&iuml;",   "\u00ef")
+                .replace("&ocirc;",  "\u00f4")
+                .replace("&ugrave;", "\u00f9")
+                .replace("&ucirc;",  "\u00fb")
+                .replace("&uuml;",   "\u00fc")
+                .replace("&ccedil;", "\u00e7")
+                .replace("&oelig;",  "\u0153")
+                .replace("&OElig;",  "\u0152")
+                .replace("&hellip;", "\u2026")
+                .replace("&mdash;",  "\u2014")
+                .replace("&ndash;",  "\u2013")
+                .replace("&rsquo;",  "\u2019")
+                .replace("&lsquo;",  "\u2018")
+                .replace("&rdquo;",  "\u201d")
+                .replace("&ldquo;",  "\u201c")
+                .replace("&euro;",   "\u20ac")
+                .replace("&copy;",   "\u00a9")
+                .replace("&reg;",    "\u00ae")
+                .replace("&times;",  "\u00d7")
+                .replace("&divide;", "\u00f7")
+                .replace("&deg;",    "\u00b0")
+                .replace("&sect;",   "\u00a7")
+                .replace("&para;",   "\u00b6")
+                .replace("&middot;", "\u00b7")
+                .replace("&bull;",   "\u2022")
+                .replace("&prime;",  "\u2032")
+                .replace("&Prime;",  "\u2033");
+
+        // Numeric decimal entities: &#8217; &#171; etc.
+        java.util.regex.Matcher dm = java.util.regex.Pattern
+                .compile("&#(\\d{1,6});").matcher(text);
+        StringBuffer sbDec = new StringBuffer();
+        while (dm.find()) {
+            int cp = Integer.parseInt(dm.group(1));
+            dm.appendReplacement(sbDec,
+                    java.util.regex.Matcher.quoteReplacement(
+                            new String(Character.toChars(cp))));
+        }
+        dm.appendTail(sbDec);
+        text = sbDec.toString();
+
+        // Numeric hex entities: &#x2019; etc.
+        java.util.regex.Matcher hm = java.util.regex.Pattern
+                .compile("&#[xX]([0-9a-fA-F]{1,6});").matcher(text);
+        StringBuffer sbHex = new StringBuffer();
+        while (hm.find()) {
+            int cp = Integer.parseInt(hm.group(1), 16);
+            hm.appendReplacement(sbHex,
+                    java.util.regex.Matcher.quoteReplacement(
+                            new String(Character.toChars(cp))));
+        }
+        hm.appendTail(sbHex);
+        return sbHex.toString();
+    }
+
+    private String extractArticleBody(String rawHtml, String fallbackDesc) {
+        if (rawHtml == null || rawHtml.isEmpty()) {
+            return "<p>" + escapeHtml(decodeHtmlEntities(fallbackDesc)) + "</p>";
+        }
+
+        // Remove noisy blocks
+        String cleaned = rawHtml
+                .replaceAll("(?is)<script[^>]*>.*?</script>", " ")
+                .replaceAll("(?is)<style[^>]*>.*?</style>",   " ")
+                .replaceAll("(?is)<nav[^>]*>.*?</nav>",       " ")
+                .replaceAll("(?is)<header[^>]*>.*?</header>", " ")
+                .replaceAll("(?is)<footer[^>]*>.*?</footer>", " ")
+                .replaceAll("(?is)<aside[^>]*>.*?</aside>",   " ")
+                .replaceAll("(?is)<figure[^>]*>.*?</figure>", " ")
+                .replaceAll("(?is)<!--.*?-->",                 " ");
+
+        // Extract <p> paragraphs
+        StringBuilder body = new StringBuilder();
+        java.util.regex.Pattern pPattern =
+                java.util.regex.Pattern.compile("(?is)<p(?:\\s[^>]*)?>(.+?)</p>");
+        java.util.regex.Matcher m = pPattern.matcher(cleaned);
+        int count = 0;
+        while (m.find() && count < 120) {
+            // Strip inner tags, decode entities, clean whitespace
+            String pText = m.group(1)
+                    .replaceAll("<[^>]+>", " ")   // remove inner HTML tags
+                    .replaceAll("\\s{2,}", " ")  // collapse whitespace
+                    .trim();
+            pText = decodeHtmlEntities(pText); // decode &nbsp; &#8217; etc.
+            pText = pText.replaceAll("\\s{2,}", " ").trim(); // re-collapse after decode
+            if (pText.length() > 60) {
+                body.append("<p>").append(escapeHtml(pText)).append("</p>\n");
+                count++;
+            }
+        }
+
+        // Fallback: try <article> block
+        if (count < 3) {
+            java.util.regex.Pattern articlePattern =
+                    java.util.regex.Pattern.compile("(?is)<article[^>]*>(.*?)</article>");
+            java.util.regex.Matcher am = articlePattern.matcher(cleaned);
+            if (am.find()) {
+                String articleText = am.group(1)
+                        .replaceAll("<[^>]+>", " ")
+                        .replaceAll("\\s{2,}", " ").trim();
+                articleText = decodeHtmlEntities(articleText)
+                        .replaceAll("\\s{2,}", " ").trim();
+                if (articleText.length() > 100) {
+                    body = new StringBuilder("<p>")
+                            .append(escapeHtml(articleText)).append("</p>");
+                }
+            }
+        }
+
+        if (body.length() < 50) {
+            return "<p>" + escapeHtml(decodeHtmlEntities(fallbackDesc)) + "</p>" +
+                    "<p style='color:#999;font-style:italic;font-size:13px;'>" +
+                    "Le contenu complet de cet article n'a pas pu etre extrait automatiquement. " +
+                    "Il est possible que le site protege son contenu.</p>";
+        }
+
+        return body.toString();
+    }
+
+    /** Builds the final beautifully-styled reader HTML page. */
+    private String buildReaderHtml(String title, String source, String date,
+                                   String url, String bodyHtml) {
+        return "<!DOCTYPE html>\n<html>\n<head>\n" +
+                "<meta charset='UTF-8'>\n" +
+                "<meta name='viewport' content='width=device-width, initial-scale=1'>\n" +
+                "<style>\n" +
+                "  * { box-sizing: border-box; margin: 0; padding: 0; }\n" +
+                "  html { scroll-behavior: smooth; }\n" +
+                "  body {\n" +
+                "    font-family: Georgia, 'Times New Roman', serif;\n" +
+                "    background: #FAFAF8;\n" +
+                "    color: #1A1A1A;\n" +
+                "    line-height: 1.85;\n" +
+                "    font-size: 17px;\n" +
+                "  }\n" +
+                "  /* ── Hero header ── */\n" +
+                "  .hero {\n" +
+                "    background: linear-gradient(160deg, #1B5E20 0%, #2E7D32 55%, #388E3C 100%);\n" +
+                "    padding: 48px 60px 40px;\n" +
+                "    color: white;\n" +
+                "  }\n" +
+                "  .meta {\n" +
+                "    display: flex; align-items: center; gap: 14px;\n" +
+                "    margin-bottom: 20px;\n" +
+                "  }\n" +
+                "  .source-badge {\n" +
+                "    background: rgba(255,255,255,0.22);\n" +
+                "    color: white;\n" +
+                "    padding: 4px 14px;\n" +
+                "    border-radius: 20px;\n" +
+                "    font-size: 12px;\n" +
+                "    font-weight: 700;\n" +
+                "    font-family: Arial, sans-serif;\n" +
+                "    letter-spacing: 0.5px;\n" +
+                "  }\n" +
+                "  .date-badge {\n" +
+                "    font-family: Arial, sans-serif;\n" +
+                "    font-size: 12px;\n" +
+                "    color: rgba(255,255,255,0.72);\n" +
+                "  }\n" +
+                "  .hero h1 {\n" +
+                "    font-size: 30px;\n" +
+                "    font-weight: 700;\n" +
+                "    line-height: 1.3;\n" +
+                "    color: white;\n" +
+                "    font-family: Arial, sans-serif;\n" +
+                "  }\n" +
+                "  /* ── Divider ── */\n" +
+                "  .divider {\n" +
+                "    height: 4px;\n" +
+                "    background: linear-gradient(to right, #4CAF50, #81C784, transparent);\n" +
+                "  }\n" +
+                "  /* ── Article body ── */\n" +
+                "  .article-wrap {\n" +
+                "    max-width: 780px;\n" +
+                "    margin: 0 auto;\n" +
+                "    padding: 44px 40px 60px;\n" +
+                "  }\n" +
+                "  .article-wrap p {\n" +
+                "    margin-bottom: 20px;\n" +
+                "    color: #222;\n" +
+                "    text-align: justify;\n" +
+                "    hyphens: auto;\n" +
+                "  }\n" +
+                "  .article-wrap p:first-child {\n" +
+                "    font-size: 19px;\n" +
+                "    font-weight: 600;\n" +
+                "    color: #1B5E20;\n" +
+                "    border-left: 5px solid #4CAF50;\n" +
+                "    padding-left: 18px;\n" +
+                "    margin-bottom: 28px;\n" +
+                "    line-height: 1.7;\n" +
+                "  }\n" +
+                "  /* ── Footer ── */\n" +
+                "  .article-footer {\n" +
+                "    border-top: 2px solid #E8F5E9;\n" +
+                "    margin-top: 40px;\n" +
+                "    padding-top: 20px;\n" +
+                "  }\n" +
+                "  .article-footer p {\n" +
+                "    font-family: Arial, sans-serif;\n" +
+                "    font-size: 12px;\n" +
+                "    color: #999;\n" +
+                "    word-break: break-all;\n" +
+                "  }\n" +
+                "  .source-label {\n" +
+                "    display: inline-block;\n" +
+                "    background: #E8F5E9;\n" +
+                "    color: #2E7D32;\n" +
+                "    padding: 2px 10px;\n" +
+                "    border-radius: 10px;\n" +
+                "    font-size: 12px;\n" +
+                "    font-weight: bold;\n" +
+                "    font-family: Arial, sans-serif;\n" +
+                "    margin-bottom: 6px;\n" +
+                "  }\n" +
+                "</style>\n" +
+                "</head>\n<body>\n" +
+                "<div class='hero'>\n" +
+                "  <div class='meta'>\n" +
+                "    <span class='source-badge'>" + escapeHtml(source) + "</span>\n" +
+                "    <span class='date-badge'>" + escapeHtml(date) + "</span>\n" +
+                "  </div>\n" +
+                "  <h1>" + escapeHtml(title) + "</h1>\n" +
+                "</div>\n" +
+                "<div class='divider'></div>\n" +
+                "<div class='article-wrap'>\n" +
+                bodyHtml + "\n" +
+                "  <div class='article-footer'>\n" +
+                "    <p class='source-label'>Source</p>\n" +
+                "    <p>" + escapeHtml(url) + "</p>\n" +
+                "  </div>\n" +
+                "</div>\n" +
+                "</body>\n</html>";
+    }
+
+    /** Shown instantly while content is being fetched in background. */
+    private String buildSkeletonPage() {
+        return "<!DOCTYPE html><html><head><meta charset='UTF-8'><style>" +
+                "* { box-sizing: border-box; margin: 0; padding: 0; }" +
+                "body { font-family: Arial, sans-serif; background: #FAFAF8;" +
+                "       display: flex; flex-direction: column; align-items: center;" +
+                "       justify-content: center; height: 100vh; gap: 20px; color: #2E7D32; }" +
+                ".spinner { width: 48px; height: 48px; border: 5px solid #C8E6C9;" +
+                "           border-top-color: #2E7D32; border-radius: 50%;" +
+                "           animation: spin 0.9s linear infinite; }" +
+                "@keyframes spin { to { transform: rotate(360deg); } }" +
+                "h3 { font-size: 16px; color: #2E7D32; }" +
+                "p { font-size: 12px; color: #999; }" +
+                "</style></head><body>" +
+                "<div class='spinner'></div>" +
+                "<h3>Chargement de l'article...</h3>" +
+                "<p>Recuperation du contenu en cours</p>" +
+                "</body></html>";
+    }
+
+    /** Shown when fetch failed completely. */
+    private String buildErrorPage(NewsArticle article) {
+        String title = article.title != null ? escapeHtml(article.title) : "";
+        String desc  = article.description != null ? escapeHtml(article.description) : "";
+        String src   = article.source != null ? escapeHtml(article.source) : "";
+        String date  = (article.publishedAt != null && article.publishedAt.length() >= 10)
+                ? article.publishedAt.substring(0, 10) : "";
+        return buildReaderHtml(
+                article.title != null ? article.title : "",
+                src, date,
+                article.url != null ? article.url : "",
+                "<p>" + desc + "</p>" +
+                        "<p style='color:#999;font-size:13px;font-style:italic;" +
+                        "font-family:Arial,sans-serif;margin-top:24px;'>" +
+                        "Le contenu complet n'a pas pu etre recupere (site protege ou hors ligne)." +
+                        "</p>"
+        );
+    }
+
+    private String escapeHtml(String text) {
+        if (text == null) return "";
+        return text.replace("&", "&amp;").replace("<", "&lt;")
+                .replace(">", "&gt;").replace("\"", "&quot;");
     }
 }

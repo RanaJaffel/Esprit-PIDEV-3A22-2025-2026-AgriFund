@@ -30,6 +30,20 @@
                 </HBox>
 
                 <HBox spacing="10">
+                    <!-- 📰 NEWSPAPER BUTTON -->
+                    <Button text="📰 Actualités" styleClass="btn-nav"
+                            onAction="#openNewsDialog"
+                            prefHeight="40" prefWidth="150"
+                            style="-fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: 600;
+                                   -fx-background-color: linear-gradient(to right, #E67E22, #D35400);
+                                   -fx-background-radius: 8; -fx-border-radius: 8;
+                                   -fx-effect: dropshadow(three-pass-box, rgba(211,84,0,0.4), 8, 0, 0, 2);
+                                   -fx-cursor: hand;">
+                        <tooltip>
+                            <Tooltip text="Dernières actualités agricoles"/>
+                        </tooltip>
+                    </Button>
+
                     <Button text="📄 Exporter PDF" styleClass="btn-info"
                             style="-fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: 600;"
                             onAction="#exportToPDF" prefHeight="40" prefWidth="150">
