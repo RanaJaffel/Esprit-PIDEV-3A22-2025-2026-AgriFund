@@ -10,6 +10,8 @@ import services.ApiGeoService;
 import services.ServiceCapteur;
 
 import java.sql.SQLException;
+import java.awt.Desktop;
+import java.net.URI;
 
 public class CapteurController {
 
@@ -246,23 +248,49 @@ public class CapteurController {
     }
     @FXML
     private void testerLocalisation() {
+
         String loc = tfLocalisation.getText().trim();
 
         if (loc.isEmpty()) {
-            afficherErreur("Localisation vide", "Veuillez saisir une localisation avant de tester.");
+            afficherErreur("Localisation vide",
+                    "Veuillez saisir une localisation avant de tester.");
             return;
         }
 
-        // Appel du 2ᵉ API (géocodage OpenStreetMap)
-        ApiGeoService.Coordinates coords = geoService.geocode(loc);
+        try {
 
-        if (coords == null) {
-            lblGeo.setText("Coordonnées : introuvables");
-        } else {
+            ApiGeoService.Coordinates coords =
+                    geoService.geocode(loc);
+
+            if (coords == null) {
+                lblGeo.setText("Coordonnées : introuvables");
+                return;
+            }
+
+            // ✅ Afficher coordonnées
             lblGeo.setText(String.format(
                     "Coordonnées : %.5f , %.5f",
-                    coords.getLat(), coords.getLon()
+                    coords.getLat(),
+                    coords.getLon()
             ));
+
+            // ✅ Ouvrir la carte dans le navigateur
+            String url =
+                    "https://www.openstreetmap.org/?mlat="
+                            + coords.getLat()
+                            + "&mlon="
+                            + coords.getLon()
+                            + "#map=15/"
+                            + coords.getLat()
+                            + "/"
+                            + coords.getLon();
+
+            Desktop.getDesktop().browse(new URI(url));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            afficherErreur("Erreur",
+                    "Impossible d'ouvrir la carte.");
         }
     }
 }

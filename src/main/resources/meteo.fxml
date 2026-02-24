@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controlers.MeteoController"
+            stylesheets="@style.css">
+
+    <!-- HEADER -->
+    <top>
+        <VBox alignment="CENTER" spacing="5" styleClass="weather-header">
+            <Label fx:id="lblVille" styleClass="weather-city"/>
+            <Label fx:id="lblDate" styleClass="weather-date"/>
+        </VBox>
+    </top>
+
+    <!-- CENTER MAIN WEATHER -->
+    <center>
+        <VBox alignment="CENTER" spacing="15" styleClass="weather-main">
+
+            <ImageView fx:id="imgIcon"
+                       fitHeight="140"
+                       fitWidth="140"/>
+
+            <Label fx:id="lblTemp"
+                   styleClass="weather-temp"/>
+
+            <Label fx:id="lblDescription"
+                   styleClass="weather-description"/>
+
+        </VBox>
+    </center>
+
+    <!-- BOTTOM DETAILS -->
+    <bottom>
+        <HBox alignment="CENTER"
+              spacing="30"
+              styleClass="weather-details">
+
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <VBox alignment="CENTER" styleClass="weather-card">
+                <Label text="🌡 Ressenti"/>
+                <Label fx:id="lblRessenti" styleClass="weather-value"/>
+            </VBox>
+
+            <VBox alignment="CENTER" styleClass="weather-card">
+                <Label text="💧 Humidité"/>
+                <Label fx:id="lblHumidite" styleClass="weather-value"/>
+            </VBox>
+
+            <VBox alignment="CENTER" styleClass="weather-card">
+                <Label text="🌬 Vent"/>
+                <Label fx:id="lblVent" styleClass="weather-value"/>
+            </VBox>
+
+        </HBox>
+    </bottom>
+
+</BorderPane>

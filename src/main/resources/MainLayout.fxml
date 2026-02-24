@@ -21,7 +21,12 @@
             <Button text="📊 Relevés IoT"
                     onAction="#openDashboard"
                     styleClass="menu-button"/>
+
+            <Button text="🌤 Météo"
+                    onAction="#openMeteo"
+                    styleClass="menu-button"/>
         </VBox>
+
     </left>
 
     <!-- CONTENU -->

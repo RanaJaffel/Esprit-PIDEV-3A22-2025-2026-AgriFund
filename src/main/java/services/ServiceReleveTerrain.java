@@ -201,4 +201,176 @@ public class ServiceReleveTerrain implements interfaceCrud<releve_terrain> {
 
         return false;
     }
+    public String analyserNiveauRisque(int idCapteur, double valeur) throws SQLException {
+
+        String sql = """
+        SELECT AVG(valeur_mesuree) as moyenne
+        FROM releve_terrain
+        WHERE id_capteur = ?
+    """;
+
+        PreparedStatement pst = con.prepareStatement(sql);
+        pst.setInt(1, idCapteur);
+        ResultSet rs = pst.executeQuery();
+
+        if (rs.next()) {
+            double moyenne = rs.getDouble("moyenne");
+
+            if (moyenne == 0) return "FAIBLE";
+
+            double ecart = Math.abs(valeur - moyenne);
+            double pourcentage = (ecart / moyenne) * 100;
+
+            if (pourcentage > 40) return "ÉLEVÉ";
+            if (pourcentage > 20) return "MOYEN";
+        }
+
+        return "FAIBLE";
+    }
+
+    public int countAnomalies() throws SQLException {
+        return (int) afficher().stream()
+                .filter(r -> {
+                    try {
+                        return analyserNiveauRisque(
+                                r.getIdCapteur(),
+                                r.getValeurMesuree()
+                        ).equals("ÉLEVÉ");
+                    } catch (Exception e) {
+                        return false;
+                    }
+                }).count();
+    }
+    public double calculerScoreSante(int idCapteur) throws SQLException {
+
+        List<releve_terrain> releves = getRelevesByCapteur(idCapteur);
+
+        long anomalies = releves.stream()
+                .filter(r -> {
+                    try {
+                        return analyserNiveauRisque(
+                                idCapteur,
+                                r.getValeurMesuree()
+                        ).equals("ÉLEVÉ");
+                    } catch (Exception e) {
+                        return false;
+                    }
+                }).count();
+
+        if (releves.isEmpty()) return 100;
+
+        double taux = (double) anomalies / releves.size();
+
+        return 100 - (taux * 100);
+    }
+    public int countByCapteur(int idCapteur) throws SQLException {
+
+        String sql = "SELECT COUNT(*) as total FROM releve_terrain WHERE id_capteur = ?";
+
+        PreparedStatement pst = con.prepareStatement(sql);
+        pst.setInt(1, idCapteur);
+
+        ResultSet rs = pst.executeQuery();
+
+        if (rs.next()) {
+            return rs.getInt("total");
+        }
+
+        return 0;
+    }
+
+    public String getLastDate(int idCapteur) throws SQLException {
+
+        String sql = """
+        SELECT date_heure
+        FROM releve_terrain
+        WHERE id_capteur = ?
+        ORDER BY date_heure DESC
+        LIMIT 1
+    """;
+
+        PreparedStatement pst = con.prepareStatement(sql);
+        pst.setInt(1, idCapteur);
+
+        ResultSet rs = pst.executeQuery();
+
+        if (rs.next()) {
+            return rs.getTimestamp("date_heure").toString();
+        }
+
+        return "Aucun relevé";
+    }
+    public String analyseIntelligente(int idCapteur, double valeur)
+            throws SQLException {
+
+        String sql = """
+        SELECT AVG(valeur_mesuree) as moyenne,
+               STDDEV(valeur_mesuree) as ecart
+        FROM releve_terrain
+        WHERE id_capteur = ?
+    """;
+
+        PreparedStatement pst = con.prepareStatement(sql);
+        pst.setInt(1, idCapteur);
+        ResultSet rs = pst.executeQuery();
+
+        if (rs.next()) {
+
+            double moyenne = rs.getDouble("moyenne");
+            double ecart = rs.getDouble("ecart");
+
+            if (ecart == 0)
+                return "Données insuffisantes pour analyse.";
+
+            double deviation =
+                    Math.abs(valeur - moyenne);
+
+            if (deviation > 2 * ecart) {
+
+                return """
+            ⚠ Anomalie critique détectée.
+            La valeur est fortement éloignée
+            de la moyenne historique.
+
+            Recommandation :
+            Vérifier le capteur ou
+            l'environnement immédiatement.
+            """;
+
+            } else if (deviation > ecart) {
+
+                return """
+            ⚠ Variation importante détectée.
+            La valeur est supérieure à la
+            variation normale.
+
+            Recommandation :
+            Surveiller l'évolution.
+            """;
+
+            } else {
+
+                return """
+            ✅ Valeur normale.
+            Les données sont cohérentes
+            avec l'historique.
+            """;
+            }
+        }
+
+        return "Aucune donnée historique disponible.";
+    }
+    public double predictionSimple(int idCapteur)
+            throws SQLException {
+
+        List<releve_terrain> list =
+                getRelevesByCapteur(idCapteur);
+
+        if (list.size() < 2) return 0;
+
+        double last = list.get(0).getValeurMesuree();
+        double prev = list.get(1).getValeurMesuree();
+
+        return last + (last - prev);
+    }
 }

@@ -16,6 +16,13 @@ import services.ServiceReleveTerrain;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ReleveController {
 
@@ -33,6 +40,11 @@ public class ReleveController {
     @FXML private TextField txtValeur;
     @FXML private TextField txtUnite;
     @FXML private TextField txtCapteur;
+    @FXML private TextField txtSearch;
+    @FXML private Label lblTotal;
+    @FXML private Label lblAnomalies;
+
+    private ObservableList<releve_terrain> masterData = FXCollections.observableArrayList();
 
 
     private final ServiceReleveTerrain service = new ServiceReleveTerrain();
@@ -101,45 +113,24 @@ public class ReleveController {
         } else {
             lblMeteo.setText("Erreur récupération météo");
         }
+        chart.setCreateSymbols(false);
     }
 
 
 
     private void chargerReleves() {
         try {
-            ObservableList<releve_terrain> list =
-                    FXCollections.observableArrayList(service.afficher());
-
-            tableReleve.setItems(list);
-            alimenterGraphique(list);
-
+            masterData = FXCollections.observableArrayList(service.afficher());
+            tableReleve.setItems(masterData);
+            alimenterGraphique(masterData);
+            updateStats(masterData);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
 
-    private void alimenterGraphique(List<releve_terrain> list) {
 
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Mesures IoT");
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-
-        for (releve_terrain r : list) {
-            if (r.getDateHeure() != null) {
-                series.getData().add(
-                        new XYChart.Data<>(
-                                r.getDateHeure().format(formatter),
-                                r.getValeurMesuree()
-                        )
-                );
-            }
-        }
-
-        chart.getData().clear();
-        chart.getData().add(series);
-    }
 
 
     private void gererSelection() {
@@ -314,6 +305,223 @@ public class ReleveController {
             e.printStackTrace();
         }
     }
+    @FXML
+    private void filtrerLive() {
+
+        if (txtSearch == null) return;
+
+        String filter = txtSearch.getText().toLowerCase();
+
+        ObservableList<releve_terrain> filtered =
+                masterData.filtered(r ->
+                        r.getTypeMesure().toLowerCase().contains(filter) ||
+                                String.valueOf(r.getIdCapteur()).contains(filter)
+                );
+
+        tableReleve.setItems(filtered);
+        alimenterGraphique(filtered);
+        updateStats(filtered);
+    }
+    @FXML
+    private void afficherAnomalies() {
+
+        ObservableList<releve_terrain> anomalies =
+                masterData.filtered(r ->
+                        {
+                            try {
+                                return service.detecterAnomalieStatistique(
+                                        r.getIdCapteur(),
+                                        r.getValeurMesuree()
+                                );
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                );
+
+        tableReleve.setItems(anomalies);
+        alimenterGraphique(anomalies);
+        updateStats(anomalies);
+    }
+    private void updateStats(List<releve_terrain> list) {
+
+        if (lblTotal == null || lblAnomalies == null) return;
+
+        long anomalies = list.stream()
+                .filter(r ->
+                        {
+                            try {
+                                return service.detecterAnomalieStatistique(
+                                        r.getIdCapteur(),
+                                        r.getValeurMesuree()
+                                );
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                ).count();
+
+        lblTotal.setText("Total: " + list.size());
+        lblAnomalies.setText("Anomalies: " + anomalies);
+    }
+    private void alimenterGraphique(List<releve_terrain> list) {
+
+        chart.getData().clear();
+
+        // ✅ Limite à 500 derniers points max
+        int maxPoints = 500;
+
+        List<releve_terrain> dataToShow;
+
+        if (list.size() > maxPoints) {
+            dataToShow = list.subList(
+                    list.size() - maxPoints,
+                    list.size()
+            );
+        } else {
+            dataToShow = list;
+        }
+
+        Map<Integer, List<releve_terrain>> grouped =
+                dataToShow.stream()
+                        .collect(Collectors.groupingBy(
+                                releve_terrain::getIdCapteur
+                        ));
+
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("HH:mm:ss");
+
+        for (Integer capteur : grouped.keySet()) {
+
+            XYChart.Series<String, Number> series =
+                    new XYChart.Series<>();
+
+            series.setName("Capteur " + capteur);
+
+            for (releve_terrain r : grouped.get(capteur)) {
+
+                if (r.getDateHeure() != null) {
+                    series.getData().add(
+                            new XYChart.Data<>(
+                                    r.getDateHeure().format(formatter),
+                                    r.getValeurMesuree()
+                            )
+                    );
+                }
+            }
+
+            chart.getData().add(series);
+        }
+    }
+    @FXML
+    private void exportPDF() {
+
+        try {
+
+            Document document = new Document();
+            PdfWriter.getInstance(document,
+                    new FileOutputStream("releves.pdf"));
+
+            document.open();
+            document.add(new Paragraph("Rapport Relevés IoT\n\n"));
+
+            for (releve_terrain r : tableReleve.getItems()) {
+                document.add(new Paragraph(
+                        r.getTypeMesure() + " | "
+                                + r.getValeurMesuree() + " | "
+                                + r.getUnite()
+                ));
+            }
+
+            document.close();
+
+            new Alert(Alert.AlertType.INFORMATION,
+                    "PDF généré ✅").show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    private void exportCSV() {
+
+        try (PrintWriter writer =
+                     new PrintWriter("releves.csv")) {
+
+            writer.println("Type,Valeur,Unite,Capteur");
+
+            for (releve_terrain r : tableReleve.getItems()) {
+                writer.println(
+                        r.getTypeMesure() + ","
+                                + r.getValeurMesuree() + ","
+                                + r.getUnite() + ","
+                                + r.getIdCapteur()
+                );
+            }
+
+            new Alert(Alert.AlertType.INFORMATION,
+                    "CSV exporté ✅").show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    private void analyseIA() {
+
+        releve_terrain selected =
+                tableReleve.getSelectionModel().getSelectedItem();
+
+        if (selected == null) {
+            new Alert(Alert.AlertType.WARNING,
+                    "Sélectionnez un relevé").show();
+            return;
+        }
+
+        try {
+
+            String analyse =
+                    service.analyseIntelligente(
+                            selected.getIdCapteur(),
+                            selected.getValeurMesuree()
+                    );
+
+            Alert alert =
+                    new Alert(Alert.AlertType.INFORMATION);
+
+            alert.setHeaderText("Analyse intelligente locale");
+            alert.setContentText(analyse);
+            alert.getDialogPane().setPrefWidth(450);
+            alert.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    private void predictionLocale() {
+
+        releve_terrain selected =
+                tableReleve.getSelectionModel().getSelectedItem();
+
+        if (selected == null) return;
+
+        try {
+
+            double prediction =
+                    service.predictionSimple(
+                            selected.getIdCapteur()
+                    );
+
+            new Alert(Alert.AlertType.INFORMATION,
+                    "Prochaine valeur estimée : "
+                            + prediction).show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 }

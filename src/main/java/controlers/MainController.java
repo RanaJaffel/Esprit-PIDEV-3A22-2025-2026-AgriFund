@@ -24,6 +24,14 @@ public class MainController {
     private void openDashboard() {
         loadPage("/dashboard.fxml");
     }
+    @FXML
+    private void openMap() {
+        loadPage("/map.fxml");
+    }
+    @FXML
+    private void openMeteo() {
+        loadPage("/meteo.fxml");
+    }
 
     private void loadPage(String fxml) {
         try {

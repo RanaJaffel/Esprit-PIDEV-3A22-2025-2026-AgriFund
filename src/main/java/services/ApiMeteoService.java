@@ -1,5 +1,6 @@
 package services;
 
+import entities.MeteoData;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -56,6 +57,89 @@ public class ApiMeteoService {
             return -999;
         } catch (Exception e) {
             System.err.println("❌ Erreur de parsing JSON météo : " + e.getMessage());
+            return -999;
+        }
+    }
+    public MeteoData getWeather(String city) {
+
+        try {
+
+            String cityEncoded = URLEncoder.encode(city, StandardCharsets.UTF_8);
+
+            String url = BASE_URL
+                    + "?q=" + cityEncoded
+                    + "&units=metric"
+                    + "&lang=fr"
+                    + "&appid=" + API_KEY;
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response =
+                    client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 200) {
+                return null;
+            }
+
+            JSONObject json = new JSONObject(response.body());
+
+            double temp = json.getJSONObject("main").getDouble("temp");
+            double feels = json.getJSONObject("main").getDouble("feels_like");
+            int humidity = json.getJSONObject("main").getInt("humidity");
+            double wind = json.getJSONObject("wind").getDouble("speed");
+
+            String description =
+                    json.getJSONArray("weather")
+                            .getJSONObject(0)
+                            .getString("description");
+
+            String icon =
+                    json.getJSONArray("weather")
+                            .getJSONObject(0)
+                            .getString("icon");
+
+            return new MeteoData(
+                    temp,
+                    feels,
+                    humidity,
+                    wind,
+                    description,
+                    icon
+            );
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public double getTemperatureByCoords(double lat, double lon) {
+
+        try {
+
+            String url = BASE_URL
+                    + "?lat=" + lat
+                    + "&lon=" + lon
+                    + "&units=metric"
+                    + "&appid=" + API_KEY;
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response =
+                    client.send(request,
+                            HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 200) return -999;
+
+            JSONObject json = new JSONObject(response.body());
+            return json.getJSONObject("main").getDouble("temp");
+
+        } catch (Exception e) {
             return -999;
         }
     }

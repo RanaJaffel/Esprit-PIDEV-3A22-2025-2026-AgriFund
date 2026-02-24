@@ -13,6 +13,11 @@
     <Label fx:id="lblMeteo"
            text="Température météo : --"
            styleClass="section-title"/>
+    <!-- FILTRE TEMPS RÉEL -->
+    <TextField fx:id="txtSearch"
+               promptText="🔍 Filtrer en temps réel..."
+               onKeyReleased="#filtrerLive"/>
+
 
 
 
@@ -43,6 +48,11 @@
             <NumberAxis label="Valeur"/>
         </yAxis>
     </LineChart>
+    <!-- STATISTIQUES -->
+    <HBox spacing="20" alignment="CENTER">
+        <Label fx:id="lblTotal" text="Total: 0"/>
+        <Label fx:id="lblAnomalies" text="Anomalies: 0"/>
+    </HBox>
 
     <!-- BUTTONS -->
     <HBox spacing="10" alignment="CENTER">
@@ -51,6 +61,17 @@
         <Button text="Supprimer" onAction="#supprimerReleve" styleClass="btn-danger"/>
         <Button text="Clôturer la journée" onAction="#viderGraphique"/>
         <Button text="Voir rapports journaliers" onAction="#ouvrirRapports"/>
+        <Button text="⚠ Anomalies"
+                onAction="#afficherAnomalies"/>
+
+        <Button text="📄 Export PDF"
+                onAction="#exportPDF"/>
+
+        <Button text="📊 Export CSV"
+                onAction="#exportCSV"/>
+
+        <Button text="🤖 Analyse IA"
+                onAction="#analyseIA"/>
 
     </HBox>
 
