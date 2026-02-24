@@ -11,12 +11,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import services.PdfExportService;
 import services.ServiceEvaluationRisque;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 
@@ -26,12 +30,12 @@ public class RisqueListController {
     @FXML private TableColumn<EvaluationRisque, Integer> colId;
     @FXML private TableColumn<EvaluationRisque, Integer> colIdProjet;
     @FXML private TableColumn<EvaluationRisque, Integer> colScoreGlobal;
-    @FXML private TableColumn<EvaluationRisque, String> colNiveauRisque;
-    @FXML private TableColumn<EvaluationRisque, String> colFiabiliteDonnees;
-    @FXML private TableColumn<EvaluationRisque, String> colFacteurPrincipal;
-    @FXML private TableColumn<EvaluationRisque, String> colRecommandation;
-    @FXML private TableColumn<EvaluationRisque, Date> colDateEvaluation;
-    @FXML private TableColumn<EvaluationRisque, Void> colActions;
+    @FXML private TableColumn<EvaluationRisque, String>  colNiveauRisque;
+    @FXML private TableColumn<EvaluationRisque, String>  colFiabiliteDonnees;
+    @FXML private TableColumn<EvaluationRisque, String>  colFacteurPrincipal;
+    @FXML private TableColumn<EvaluationRisque, String>  colRecommandation;
+    @FXML private TableColumn<EvaluationRisque, Date>    colDateEvaluation;
+    @FXML private TableColumn<EvaluationRisque, Void>    colActions;
 
     @FXML private TextField tfSearch;
     @FXML private Label lblTotal;
@@ -45,15 +49,19 @@ public class RisqueListController {
     private ObservableList<EvaluationRisque> evaluationsData;
     private ObservableList<EvaluationRisque> filteredData;
 
+    // ── Initialisation ────────────────────────────────────────────────────────
+
     @FXML
     public void initialize() {
         service = new ServiceEvaluationRisque();
         evaluationsData = FXCollections.observableArrayList();
-        filteredData = FXCollections.observableArrayList();
+        filteredData    = FXCollections.observableArrayList();
 
         setupTableColumns();
         loadEvaluations();
     }
+
+    // ── Configuration des colonnes ────────────────────────────────────────────
 
     private void setupTableColumns() {
         colId.setCellValueFactory(new PropertyValueFactory<>("idEvaluation"));
@@ -76,7 +84,6 @@ public class RisqueListController {
                 } else {
                     setText(item);
                     setAlignment(Pos.CENTER);
-
                     switch (item) {
                         case "Faible":
                             setStyle("-fx-background-color: #B2D944; -fx-text-fill: #133D03; -fx-font-weight: bold; -fx-padding: 5 10; -fx-background-radius: 5;");
@@ -111,7 +118,6 @@ public class RisqueListController {
                 } else {
                     String displayText = item.length() > 50 ? item.substring(0, 50) + "..." : item;
                     setText(displayText);
-
                     Tooltip tooltip = new Tooltip(item);
                     tooltip.setWrapText(true);
                     tooltip.setMaxWidth(400);
@@ -122,15 +128,13 @@ public class RisqueListController {
 
         colRecommandation.setCellValueFactory(cellData -> {
             int recommandation = cellData.getValue().getRecommandation();
-            String recommandationString = getRecommandationString(recommandation);
-            return new javafx.beans.property.SimpleStringProperty(recommandationString);
+            return new javafx.beans.property.SimpleStringProperty(getRecommandationString(recommandation));
         });
         colRecommandation.setStyle("-fx-alignment: CENTER;");
 
         colDateEvaluation.setCellValueFactory(new PropertyValueFactory<>("dateEvaluation"));
         colDateEvaluation.setCellFactory(column -> new TableCell<EvaluationRisque, Date>() {
-            private SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-
+            private final SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
             @Override
             protected void updateItem(Date item, boolean empty) {
                 super.updateItem(item, empty);
@@ -144,24 +148,21 @@ public class RisqueListController {
         });
 
         colActions.setCellFactory(column -> new TableCell<EvaluationRisque, Void>() {
-            private final Button btnEdit = new Button("✏️ Modifier");
+            private final Button btnEdit   = new Button("✏️ Modifier");
             private final Button btnDelete = new Button("🗑️ Supprimer");
-            private final HBox hbox = new HBox(10, btnEdit, btnDelete);
+            private final HBox   hbox      = new HBox(10, btnEdit, btnDelete);
 
             {
                 btnEdit.getStyleClass().add("button-primary");
                 btnEdit.setStyle("-fx-font-size: 11px; -fx-padding: 5 10;");
-
                 btnDelete.getStyleClass().add("button-secondary");
                 btnDelete.setStyle("-fx-font-size: 11px; -fx-padding: 5 10;");
-
                 hbox.setAlignment(Pos.CENTER);
 
                 btnEdit.setOnAction(event -> {
                     EvaluationRisque evaluation = getTableView().getItems().get(getIndex());
                     handleEdit(evaluation);
                 });
-
                 btnDelete.setOnAction(event -> {
                     EvaluationRisque evaluation = getTableView().getItems().get(getIndex());
                     handleDelete(evaluation);
@@ -171,23 +172,12 @@ public class RisqueListController {
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(hbox);
-                }
+                setGraphic(empty ? null : hbox);
             }
         });
     }
 
-    private String getRecommandationString(int recommandation) {
-        switch (recommandation) {
-            case 0: return "Aucune";
-            case 1: return "Surveillance";
-            case 2: return "Action immédiate";
-            default: return "Inconnu";
-        }
-    }
+    // ── Chargement des données ────────────────────────────────────────────────
 
     private void loadEvaluations() {
         try {
@@ -195,10 +185,8 @@ public class RisqueListController {
             evaluationsData.addAll(service.afficher());
             filteredData.setAll(evaluationsData);
             tableEvaluations.setItems(filteredData);
-
             updateStatistics();
             updateStatus("Données chargées - " + evaluationsData.size() + " évaluation(s)");
-
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger les évaluations: " + e.getMessage());
             e.printStackTrace();
@@ -206,10 +194,10 @@ public class RisqueListController {
     }
 
     private void updateStatistics() {
-        int total = evaluationsData.size();
-        int faible = (int) evaluationsData.stream().filter(d -> "Faible".equals(d.getNiveauRisque())).count();
-        int moyen = (int) evaluationsData.stream().filter(d -> "Moyen".equals(d.getNiveauRisque())).count();
-        int eleve = (int) evaluationsData.stream().filter(d -> "Élevé".equals(d.getNiveauRisque())).count();
+        int total    = evaluationsData.size();
+        int faible   = (int) evaluationsData.stream().filter(d -> "Faible".equals(d.getNiveauRisque())).count();
+        int moyen    = (int) evaluationsData.stream().filter(d -> "Moyen".equals(d.getNiveauRisque())).count();
+        int eleve    = (int) evaluationsData.stream().filter(d -> "Élevé".equals(d.getNiveauRisque())).count();
         int critique = (int) evaluationsData.stream().filter(d -> "Critique".equals(d.getNiveauRisque())).count();
 
         lblTotal.setText(String.valueOf(total));
@@ -219,29 +207,34 @@ public class RisqueListController {
         lblCritique.setText(String.valueOf(critique));
     }
 
+    // ── Handlers FXML ────────────────────────────────────────────────────────
+
     @FXML
     private void handleSearch() {
         String searchText = tfSearch.getText().toLowerCase().trim();
-
         if (searchText.isEmpty()) {
             filteredData.setAll(evaluationsData);
         } else {
             filteredData.clear();
             for (EvaluationRisque e : evaluationsData) {
-                if (String.valueOf(e.getIdEvaluation()).contains(searchText) ||
-                        String.valueOf(e.getIdProjet()).contains(searchText) ||
-                        String.valueOf(e.getScoreGlobal()).contains(searchText) ||
-                        e.getNiveauRisque().toLowerCase().contains(searchText) ||
-                        e.getFiabiliteDonnees().toLowerCase().contains(searchText) ||
-                        e.getFacteurPrincipal().toLowerCase().contains(searchText) ||
+                if (String.valueOf(e.getIdEvaluation()).contains(searchText)        ||
+                        String.valueOf(e.getIdProjet()).contains(searchText)        ||
+                        String.valueOf(e.getScoreGlobal()).contains(searchText)     ||
+                        e.getNiveauRisque().toLowerCase().contains(searchText)      ||
+                        e.getFiabiliteDonnees().toLowerCase().contains(searchText)  ||
+                        e.getFacteurPrincipal().toLowerCase().contains(searchText)  ||
                         getRecommandationString(e.getRecommandation()).toLowerCase().contains(searchText)) {
                     filteredData.add(e);
                 }
             }
         }
-
         tableEvaluations.setItems(filteredData);
         updateStatus(filteredData.size() + " résultat(s) trouvé(s)");
+    }
+
+    @FXML
+    private void handleRefresh() {
+        loadEvaluations();
     }
 
     @FXML
@@ -249,15 +242,12 @@ public class RisqueListController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Risque.fxml"));
             Parent root = loader.load();
-
             Stage stage = new Stage();
             stage.setTitle("Nouvelle Évaluation");
             stage.setScene(new Scene(root));
             stage.setMinWidth(800);
             stage.setMinHeight(600);
-
             stage.setOnHidden(e -> loadEvaluations());
-
             stage.showAndWait();
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir le formulaire: " + e.getMessage());
@@ -265,22 +255,73 @@ public class RisqueListController {
         }
     }
 
+    @FXML
+    private void handleViewDecisionList() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/DecisionList.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Liste des Décisions Financières");
+            stage.setScene(new Scene(root));
+            stage.setMinWidth(1400);
+            stage.setMinHeight(800);
+            stage.show();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir la liste des décisions financières: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleExportPdf() {
+        if (filteredData.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Export PDF", "Aucune donnée à exporter.");
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Enregistrer le rapport PDF");
+        fileChooser.setInitialFileName(
+                "rapport_risques_" + new SimpleDateFormat("yyyyMMdd_HHmm").format(new Date()) + ".pdf"
+        );
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Fichiers PDF (*.pdf)", "*.pdf")
+        );
+
+        Stage stage = (Stage) tableEvaluations.getScene().getWindow();
+        File file = fileChooser.showSaveDialog(stage);
+
+        if (file != null) {
+            try {
+                updateStatus("⏳ Génération du PDF en cours...");
+                PdfExportService exportService = new PdfExportService();
+                exportService.exportToPdf(new ArrayList<>(filteredData), file.getAbsolutePath());
+                showAlert(Alert.AlertType.INFORMATION, "Export réussi",
+                        "✅ Le rapport PDF a été généré avec succès :\n" + file.getAbsolutePath());
+                updateStatus("PDF exporté : " + file.getName());
+            } catch (Exception e) {
+                showAlert(Alert.AlertType.ERROR, "Erreur d'export",
+                        "Impossible de générer le PDF :\n" + e.getMessage());
+                e.printStackTrace();
+                updateStatus("❌ Erreur lors de l'export PDF");
+            }
+        }
+    }
+
+    // ── Actions sur lignes ────────────────────────────────────────────────────
+
     private void handleEdit(EvaluationRisque evaluation) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Risque.fxml"));
             Parent root = loader.load();
-
             RisqueController controller = loader.getController();
             controller.loadEvaluation(evaluation.getIdEvaluation());
-
             Stage stage = new Stage();
             stage.setTitle("Modifier Évaluation #" + evaluation.getIdEvaluation());
             stage.setScene(new Scene(root));
             stage.setMinWidth(800);
             stage.setMinHeight(600);
-
             stage.setOnHidden(e -> loadEvaluations());
-
             stage.showAndWait();
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir le formulaire: " + e.getMessage());
@@ -292,7 +333,7 @@ public class RisqueListController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation de suppression");
         alert.setHeaderText("Supprimer l'évaluation #" + evaluation.getIdEvaluation() + " ?");
-        alert.setContentText("Cette action est irréversible!");
+        alert.setContentText("Cette action est irréversible !");
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -300,11 +341,9 @@ public class RisqueListController {
                 service.supprimer(evaluation.getIdEvaluation());
                 evaluationsData.remove(evaluation);
                 filteredData.remove(evaluation);
-
-                showAlert(Alert.AlertType.INFORMATION, "Succès", "Évaluation supprimée avec succès!");
+                showAlert(Alert.AlertType.INFORMATION, "Succès", "Évaluation supprimée avec succès !");
                 updateStatistics();
                 updateStatus("Évaluation supprimée");
-
             } catch (SQLException e) {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de supprimer: " + e.getMessage());
                 e.printStackTrace();
@@ -312,27 +351,14 @@ public class RisqueListController {
         }
     }
 
-    @FXML
-    private void handleRefresh() {
-        loadEvaluations();
-    }
+    // ── Utilitaires ───────────────────────────────────────────────────────────
 
-    @FXML
-    private void handleViewDecisionList() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/DecisionList.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = new Stage();
-            stage.setTitle("Liste des Décisions Financières");
-            stage.setScene(new Scene(root));
-            stage.setMinWidth(1400);
-            stage.setMinHeight(800);
-            stage.show();
-
-        } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir la liste des décisions financières: " + e.getMessage());
-            e.printStackTrace();
+    private String getRecommandationString(int recommandation) {
+        switch (recommandation) {
+            case 0:  return "Aucune";
+            case 1:  return "Surveillance";
+            case 2:  return "Action immédiate";
+            default: return "Inconnu";
         }
     }
 

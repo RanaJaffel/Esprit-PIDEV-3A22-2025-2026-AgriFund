@@ -35,6 +35,8 @@
                 <Label text="🔍 Rechercher:" styleClass="form-label"/>
                 <TextField fx:id="tfSearch" promptText="Rechercher..." onKeyReleased="#handleSearch" prefWidth="300" styleClass="text-field"/>
                 <Button text="🔄 Rafraîchir" styleClass="button-accent" onAction="#handleRefresh"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="📄 Exporter PDF" styleClass="button-export" onAction="#handleExportPdf"/>
             </HBox>
 
             <!-- Tableau des évaluations -->
