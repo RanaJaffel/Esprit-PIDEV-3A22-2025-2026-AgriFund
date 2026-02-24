@@ -6,60 +6,137 @@
 
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="controlers.CapteurController"
-      spacing="20"
+      spacing="0"
       styleClass="content-area"
       stylesheets="@style.css">
 
-    <Label text="Gestion des Capteurs" styleClass="title"/>
+    <!-- ═══════════════════════════════════════
+         PAGE TITLE
+    ═══════════════════════════════════════ -->
+    <VBox spacing="4" style="-fx-padding: 0 0 10 0;">
+        <Label text="📡  Gestion des Capteurs" styleClass="title"/>
+        <Label text="Ajoutez, modifiez et localisez vos capteurs agricoles"
+               styleClass="subtitle"
+               style="-fx-font-size:14px; -fx-text-fill:#848A86; -fx-padding:0;"/>
+    </VBox>
 
-    <!-- FORMULAIRE CRUD -->
-    <VBox styleClass="panel" spacing="10">
+    <Separator styleClass="separator" style="-fx-padding: 0 0 20 0;"/>
 
-        <Label text="Ajouter / Modifier un capteur" styleClass="section-title"/>
+    <!-- ═══════════════════════════════════════
+         FORM PANEL
+    ═══════════════════════════════════════ -->
+    <VBox styleClass="panel" spacing="18" style="-fx-margin: 0 0 20 0;">
+        <VBox.margin><Insets bottom="20"/></VBox.margin>
 
-        <GridPane hgap="15" vgap="10">
-            <Label text="Type :" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-            <TextField fx:id="tfType" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-
-            <Label text="Localisation :" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-            <TextField fx:id="tfLocalisation" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-
-            <Label text="Statut :" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-            <ComboBox fx:id="cbStatut" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-
-            <Label text="Projet :" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-            <ComboBox fx:id="cbProjet"
-                      promptText="Sélectionner un projet"
-                      GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-        </GridPane>
-
-        <!-- 🔍 NOUVEAU : test visuel de l'API GEO -->
-        <HBox spacing="10" alignment="CENTER_LEFT">
-            <Button text="Tester localisation" onAction="#testerLocalisation" styleClass="btn"/>
-            <Label fx:id="lblGeo" text="Coordonnées : --"/>
+        <!-- Panel header -->
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="✏️" style="-fx-font-size:18px;"/>
+            <Label text="Ajouter / Modifier un capteur" styleClass="section-title"
+                   style="-fx-padding:0;"/>
         </HBox>
 
-        <HBox spacing="15">
-            <Button text="➕ Ajouter" onAction="#ajouterCapteur" styleClass="btn-success"/>
-            <Button text="✏️ Modifier" onAction="#modifierCapteur" styleClass="btn"/>
-            <Button text="🗑️ Supprimer" onAction="#supprimerCapteur" styleClass="btn-danger"/>
+        <Separator/>
+
+        <!-- 2-column form grid -->
+        <GridPane hgap="24" vgap="16">
+            <columnConstraints>
+                <ColumnConstraints minWidth="110" maxWidth="130"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+                <ColumnConstraints minWidth="110" maxWidth="130"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+
+            <!-- Row 0 : Type | Statut -->
+            <Label text="Type :" styleClass="form-label"
+                   GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="tfType"
+                       promptText="Ex: Température, Humidité…"
+                       GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Statut :" styleClass="form-label"
+                   GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+            <ComboBox fx:id="cbStatut"
+                      promptText="Sélectionner…"
+                      maxWidth="Infinity"
+                      GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+
+            <!-- Row 1 : Localisation | Projet -->
+            <Label text="Localisation :" styleClass="form-label"
+                   GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField fx:id="tfLocalisation"
+                       promptText="Ex: Sfax, Tunisie"
+                       GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Projet :" styleClass="form-label"
+                   GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+            <ComboBox fx:id="cbProjet"
+                      promptText="Sélectionner un projet"
+                      maxWidth="Infinity"
+                      GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+        </GridPane>
+
+        <!-- Geo test strip -->
+        <HBox styleClass="panel"
+              style="-fx-background-color:#F5F5F0; -fx-padding:10 16 10 16; -fx-effect:none; -fx-border-color:#E8E8E8; -fx-border-width:1; -fx-border-radius:8; -fx-background-radius:8;"
+              alignment="CENTER_LEFT" spacing="14">
+            <Button text="📍  Tester la localisation"
+                    onAction="#testerLocalisation"
+                    styleClass="btn"/>
+            <Label text="│" style="-fx-text-fill:#CCCCCC; -fx-font-size:18px;"/>
+            <Label fx:id="lblGeo"
+                   text="Coordonnées : --"
+                   style="-fx-text-fill:#848A86; -fx-font-size:13px; -fx-font-style:italic;"/>
+        </HBox>
+
+        <!-- Action buttons -->
+        <HBox spacing="14">
+            <Button text="➕  Ajouter"
+                    onAction="#ajouterCapteur"
+                    styleClass="btn, btn-success"
+                    prefWidth="160"/>
+            <Button text="✏️  Modifier"
+                    onAction="#modifierCapteur"
+                    styleClass="btn"
+                    prefWidth="160"/>
+            <Button text="🗑️  Supprimer"
+                    onAction="#supprimerCapteur"
+                    styleClass="btn, btn-danger"
+                    prefWidth="160"/>
         </HBox>
 
     </VBox>
 
-    <!-- TABLE -->
-    <VBox styleClass="panel" spacing="10">
-        <Label text="Liste des capteurs" styleClass="section-title"/>
+    <!-- ═══════════════════════════════════════
+         TABLE PANEL
+    ═══════════════════════════════════════ -->
+    <VBox styleClass="panel" spacing="16" VBox.vgrow="ALWAYS">
 
-        <TableView fx:id="tableCapteur">
+        <!-- Panel header -->
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="📋" style="-fx-font-size:18px;"/>
+            <Label text="Liste des capteurs" styleClass="section-title"
+                   style="-fx-padding:0;"/>
+        </HBox>
+
+        <Separator/>
+
+        <TableView fx:id="tableCapteur"
+                   styleClass="table-view"
+                   minHeight="340"
+                   VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="colId" text="ID"/>
-                <TableColumn fx:id="colType" text="Type"/>
-                <TableColumn fx:id="colLocalisation" text="Localisation"/>
-                <TableColumn fx:id="colStatut" text="Statut"/>
-                <TableColumn fx:id="colProjet" text="Projet"/>
+                <TableColumn fx:id="colId"           text="ID"           prefWidth="65"/>
+                <TableColumn fx:id="colType"         text="Type"         prefWidth="175"/>
+                <TableColumn fx:id="colLocalisation" text="Localisation" prefWidth="220"/>
+                <TableColumn fx:id="colStatut"       text="Statut"       prefWidth="130"/>
+                <TableColumn fx:id="colProjet"       text="Projet"       prefWidth="115"/>
             </columns>
+            <placeholder>
+                <Label text="Aucun capteur enregistré"
+                       style="-fx-text-fill:#848A86; -fx-font-style:italic; -fx-font-size:13px;"/>
+            </placeholder>
         </TableView>
+
     </VBox>
 
 </VBox>

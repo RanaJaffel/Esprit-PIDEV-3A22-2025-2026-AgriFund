@@ -1,1 +1,5605 @@
-Type,Valeur,Unite,Capteur
+=================================================
+                RAPPORT RELEVÉS IoT              
+=================================================
+Date : 2026-02-24
+
+Type;Valeur;Unité;Capteur
+Humidité du sol;46.89;%;4
+pH du sol;6.62;pH;5
+Pluviométrie;5.14;mm;7
+Luminosité;12409.92;lux;8
+Vitesse du vent;33.8;km/h;9
+Température Test;47.82;unité;16
+temperature;18.27;unité;17
+Humidité du sol;74.77;%;4
+pH du sol;6.33;pH;5
+Pluviométrie;5.96;mm;7
+Luminosité;45004.25;lux;8
+Vitesse du vent;36.04;km/h;9
+Température Test;23.01;unité;16
+temperature;65.42;unité;17
+Humidité du sol;76.8;%;4
+pH du sol;6.86;pH;5
+Pluviométrie;9.8;mm;7
+Luminosité;31986.24;lux;8
+Vitesse du vent;27.17;km/h;9
+Température Test;98.95;unité;16
+temperature;37.85;unité;17
+Luminosité;27052.33;lux;8
+Vitesse du vent;16.87;km/h;9
+Température Test;28.75;unité;16
+temperature;15.18;unité;17
+Humidité du sol;76.43;%;4
+pH du sol;7.25;pH;5
+Pluviométrie;5.04;mm;7
+Humidité du sol;46.38;%;4
+pH du sol;7.25;pH;5
+Pluviométrie;0.58;mm;7
+Luminosité;88146.87;lux;8
+Vitesse du vent;13.75;km/h;9
+Température Test;10.12;unité;16
+temperature;60.43;unité;17
+Vitesse du vent;24.05;km/h;9
+Température Test;6.14;unité;16
+temperature;0.95;unité;17
+Humidité du sol;43.11;%;4
+pH du sol;6.17;pH;5
+Pluviométrie;9.02;mm;7
+Luminosité;1695.02;lux;8
+Humidité du sol;45.01;%;4
+pH du sol;6.45;pH;5
+Pluviométrie;9.2;mm;7
+Luminosité;51997.31;lux;8
+Vitesse du vent;29.16;km/h;9
+Température Test;60.63;unité;16
+temperature;18.67;unité;17
+Humidité du sol;60.38;%;4
+pH du sol;7.39;pH;5
+Pluviométrie;1.38;mm;7
+Luminosité;18390.46;lux;8
+Vitesse du vent;8.94;km/h;9
+Température Test;39.63;unité;16
+temperature;23.76;unité;17
+Pluviométrie;9.99;mm;7
+Luminosité;8346.78;lux;8
+Vitesse du vent;37.13;km/h;9
+Température Test;63.63;unité;16
+temperature;99.65;unité;17
+Humidité du sol;68.45;%;4
+pH du sol;7.27;pH;5
+Luminosité;19661.02;lux;8
+Vitesse du vent;16.46;km/h;9
+Température Test;61.94;unité;16
+temperature;72.61;unité;17
+Humidité du sol;77.2;%;4
+pH du sol;6.73;pH;5
+Pluviométrie;2.1;mm;7
+pH du sol;6.26;pH;5
+Pluviométrie;4.35;mm;7
+Luminosité;95534.87;lux;8
+Vitesse du vent;26.42;km/h;9
+Température Test;26.69;unité;16
+temperature;16.85;unité;17
+Humidité du sol;49.26;%;4
+Luminosité;56200.89;lux;8
+Vitesse du vent;17.12;km/h;9
+Température Test;68.15;unité;16
+temperature;20.62;unité;17
+Humidité du sol;41.14;%;4
+pH du sol;6.05;pH;5
+Pluviométrie;8.39;mm;7
+Humidité du sol;50.84;%;4
+pH du sol;6.11;pH;5
+Pluviométrie;7.62;mm;7
+Luminosité;76227.19;lux;8
+Vitesse du vent;14.02;km/h;9
+Température Test;44.26;unité;16
+temperature;44.34;unité;17
+Humidité du sol;43.45;%;4
+pH du sol;6.73;pH;5
+Pluviométrie;2.92;mm;7
+Luminosité;82844.07;lux;8
+Vitesse du vent;3.17;km/h;9
+Température Test;36.7;unité;16
+temperature;49.47;unité;17
+temperature;11.97;unité;17
+Humidité du sol;59.26;%;4
+pH du sol;7.4;pH;5
+Pluviométrie;0.19;mm;7
+Luminosité;39732.83;lux;8
+Vitesse du vent;3.94;km/h;9
+Température Test;62.04;unité;16
+Humidité du sol;61.29;%;4
+pH du sol;6.94;pH;5
+Pluviométrie;3.39;mm;7
+Luminosité;52646.77;lux;8
+Vitesse du vent;1.38;km/h;9
+Température Test;39.87;unité;16
+temperature;99.55;unité;17
+Humidité du sol;55.68;%;4
+pH du sol;6.9;pH;5
+Pluviométrie;6.44;mm;7
+Luminosité;90925.86;lux;8
+Vitesse du vent;16.93;km/h;9
+Température Test;38.18;unité;16
+temperature;46.59;unité;17
+Humidité du sol;74.83;%;4
+pH du sol;6.25;pH;5
+Pluviométrie;4.26;mm;7
+Luminosité;34128.64;lux;8
+Vitesse du vent;5.65;km/h;9
+Température Test;20.92;unité;16
+temperature;37.08;unité;17
+Humidité du sol;52.49;%;4
+pH du sol;6.54;pH;5
+Pluviométrie;3.38;mm;7
+Luminosité;67946.93;lux;8
+Vitesse du vent;29.51;km/h;9
+Température Test;76.87;unité;16
+temperature;35.25;unité;17
+Humidité du sol;65.64;%;4
+pH du sol;6.94;pH;5
+Pluviométrie;1.69;mm;7
+Luminosité;87131.16;lux;8
+Vitesse du vent;45.66;km/h;9
+Température Test;91.73;unité;16
+temperature;44.88;unité;17
+Humidité du sol;65.19;%;4
+pH du sol;7.37;pH;5
+Pluviométrie;0.38;mm;7
+Luminosité;73856.32;lux;8
+Vitesse du vent;26.01;km/h;9
+Température Test;13.65;unité;16
+temperature;73.08;unité;17
+Humidité du sol;49.14;%;4
+pH du sol;6.31;pH;5
+Pluviométrie;0.09;mm;7
+Luminosité;79517.77;lux;8
+Vitesse du vent;10.28;km/h;9
+Température Test;26.45;unité;16
+temperature;40.98;unité;17
+Humidité du sol;60.6;%;4
+pH du sol;7.11;pH;5
+Pluviométrie;7.27;mm;7
+Luminosité;65546.92;lux;8
+Vitesse du vent;10.02;km/h;9
+Température Test;22.37;unité;16
+temperature;92.53;unité;17
+Humidité du sol;78.09;%;4
+pH du sol;6.17;pH;5
+Pluviométrie;8.11;mm;7
+Luminosité;71384.36;lux;8
+Vitesse du vent;34.83;km/h;9
+Température Test;18.12;unité;16
+temperature;16.74;unité;17
+Humidité du sol;69.18;%;4
+pH du sol;7.03;pH;5
+Pluviométrie;0.62;mm;7
+Luminosité;33696.93;lux;8
+Vitesse du vent;33.13;km/h;9
+Température Test;24.98;unité;16
+temperature;33.67;unité;17
+Humidité du sol;71.46;%;4
+pH du sol;6.22;pH;5
+Pluviométrie;0.63;mm;7
+Luminosité;26996.84;lux;8
+Vitesse du vent;48.37;km/h;9
+Température Test;21.12;unité;16
+temperature;76.89;unité;17
+Humidité du sol;68.12;%;4
+pH du sol;6.04;pH;5
+Pluviométrie;0.55;mm;7
+Luminosité;93102.01;lux;8
+Vitesse du vent;12.71;km/h;9
+Température Test;31.69;unité;16
+temperature;84.44;unité;17
+Humidité du sol;44.21;%;4
+pH du sol;7.06;pH;5
+Pluviométrie;3.51;mm;7
+Luminosité;10807.92;lux;8
+Vitesse du vent;17.77;km/h;9
+Température Test;79.6;unité;16
+temperature;1.77;unité;17
+Humidité du sol;65.68;%;4
+pH du sol;6.41;pH;5
+Pluviométrie;8.23;mm;7
+Luminosité;41791.39;lux;8
+Vitesse du vent;16.55;km/h;9
+Température Test;66.21;unité;16
+temperature;26.89;unité;17
+Humidité du sol;45.79;%;4
+pH du sol;6.35;pH;5
+Pluviométrie;3.95;mm;7
+Luminosité;48365.95;lux;8
+Vitesse du vent;41.23;km/h;9
+Température Test;93.82;unité;16
+temperature;85.39;unité;17
+Température Test;53.4;unité;16
+temperature;4.77;unité;17
+Humidité du sol;63.56;%;4
+pH du sol;6.06;pH;5
+Pluviométrie;0.55;mm;7
+Luminosité;77808.31;lux;8
+Vitesse du vent;12.91;km/h;9
+Humidité du sol;60.33;%;4
+pH du sol;6.27;pH;5
+Pluviométrie;0.06;mm;7
+Luminosité;9889.35;lux;8
+Vitesse du vent;16.66;km/h;9
+Température Test;28.03;unité;16
+temperature;96.3;unité;17
+Humidité du sol;41.63;%;4
+pH du sol;6.54;pH;5
+Pluviométrie;2.08;mm;7
+Luminosité;79222.95;lux;8
+Vitesse du vent;43.79;km/h;9
+Température Test;14.54;unité;16
+temperature;32.74;unité;17
+Humidité du sol;41.43;%;4
+pH du sol;7.27;pH;5
+Pluviométrie;9.64;mm;7
+Luminosité;78783.56;lux;8
+Vitesse du vent;9.24;km/h;9
+Température Test;4.01;unité;16
+temperature;70.6;unité;17
+Humidité du sol;73.53;%;4
+pH du sol;6.27;pH;5
+Pluviométrie;8.31;mm;7
+Luminosité;89882.51;lux;8
+Vitesse du vent;2.6;km/h;9
+Température Test;96.76;unité;16
+temperature;5.14;unité;17
+Humidité du sol;62.19;%;4
+pH du sol;7.13;pH;5
+Pluviométrie;3.91;mm;7
+Luminosité;93970.53;lux;8
+Vitesse du vent;20.95;km/h;9
+Température Test;83.73;unité;16
+temperature;32.52;unité;17
+Humidité du sol;54.24;%;4
+pH du sol;7.3;pH;5
+Pluviométrie;5.46;mm;7
+Luminosité;32098.7;lux;8
+Vitesse du vent;42.06;km/h;9
+Température Test;98.73;unité;16
+temperature;2.1;unité;17
+Humidité du sol;73.97;%;4
+pH du sol;7.29;pH;5
+Pluviométrie;0.12;mm;7
+Luminosité;58665.61;lux;8
+Vitesse du vent;18.24;km/h;9
+Température Test;59.6;unité;16
+temperature;98.38;unité;17
+Humidité du sol;44.05;%;4
+pH du sol;6.8;pH;5
+Pluviométrie;4.49;mm;7
+Luminosité;24895.32;lux;8
+Vitesse du vent;31.19;km/h;9
+Température Test;76.86;unité;16
+temperature;36.65;unité;17
+Humidité du sol;42.46;%;4
+pH du sol;7.2;pH;5
+Pluviométrie;7.18;mm;7
+Luminosité;13713.42;lux;8
+Vitesse du vent;6.93;km/h;9
+Température Test;79.14;unité;16
+temperature;46.95;unité;17
+Humidité du sol;77.3;%;4
+pH du sol;6.7;pH;5
+Pluviométrie;3.65;mm;7
+Luminosité;68053.62;lux;8
+Vitesse du vent;4.28;km/h;9
+Température Test;42.03;unité;16
+temperature;75.18;unité;17
+Humidité du sol;78.59;%;4
+pH du sol;6.94;pH;5
+Pluviométrie;9.27;mm;7
+Luminosité;67591.0;lux;8
+Vitesse du vent;20.15;km/h;9
+Température Test;92.19;unité;16
+temperature;15.45;unité;17
+pH du sol;6.39;pH;5
+Pluviométrie;7.0;mm;7
+Luminosité;99616.26;lux;8
+Vitesse du vent;49.77;km/h;9
+Température Test;32.11;unité;16
+temperature;96.26;unité;17
+Humidité du sol;61.55;%;4
+Humidité du sol;73.23;%;4
+pH du sol;6.62;pH;5
+Pluviométrie;6.84;mm;7
+Luminosité;6986.52;lux;8
+Vitesse du vent;31.78;km/h;9
+Température Test;90.96;unité;16
+temperature;53.77;unité;17
+Humidité du sol;62.36;%;4
+pH du sol;6.19;pH;5
+Pluviométrie;9.24;mm;7
+Luminosité;23129.69;lux;8
+Vitesse du vent;9.05;km/h;9
+Température Test;0.08;unité;16
+temperature;21.95;unité;17
+Humidité du sol;63.74;%;4
+pH du sol;7.41;pH;5
+Pluviométrie;4.81;mm;7
+Luminosité;76587.28;lux;8
+Vitesse du vent;18.28;km/h;9
+Température Test;91.79;unité;16
+temperature;20.2;unité;17
+Humidité du sol;45.95;%;4
+pH du sol;6.54;pH;5
+Pluviométrie;4.43;mm;7
+Luminosité;12858.21;lux;8
+Vitesse du vent;36.02;km/h;9
+Température Test;66.65;unité;16
+temperature;95.3;unité;17
+Humidité du sol;53.86;%;4
+pH du sol;6.49;pH;5
+Pluviométrie;5.0;mm;7
+Luminosité;47146.39;lux;8
+Vitesse du vent;2.84;km/h;9
+Température Test;91.31;unité;16
+temperature;4.03;unité;17
+Pluviométrie;1.33;mm;7
+Luminosité;24106.96;lux;8
+Vitesse du vent;38.8;km/h;9
+Température Test;28.65;unité;16
+temperature;80.32;unité;17
+Humidité du sol;69.22;%;4
+pH du sol;7.43;pH;5
+Humidité du sol;62.48;%;4
+pH du sol;7.02;pH;5
+Pluviométrie;0.21;mm;7
+Luminosité;92617.94;lux;8
+Vitesse du vent;20.15;km/h;9
+Température Test;62.25;unité;16
+temperature;33.13;unité;17
+Humidité du sol;70.23;%;4
+pH du sol;6.14;pH;5
+Pluviométrie;1.67;mm;7
+Luminosité;78709.74;lux;8
+Vitesse du vent;26.24;km/h;9
+Température Test;33.43;unité;16
+temperature;26.2;unité;17
+Humidité du sol;71.39;%;4
+pH du sol;7.09;pH;5
+Pluviométrie;6.11;mm;7
+Luminosité;30073.01;lux;8
+Vitesse du vent;6.49;km/h;9
+Température Test;19.37;unité;16
+temperature;4.89;unité;17
+Humidité du sol;49.22;%;4
+pH du sol;7.26;pH;5
+Pluviométrie;7.16;mm;7
+Luminosité;35499.58;lux;8
+Vitesse du vent;15.72;km/h;9
+Température Test;25.41;unité;16
+temperature;53.76;unité;17
+temperature;10.21;unité;17
+Humidité du sol;57.16;%;4
+pH du sol;6.0;pH;5
+Pluviométrie;3.94;mm;7
+Luminosité;79506.37;lux;8
+Vitesse du vent;9.67;km/h;9
+Température Test;13.22;unité;16
+Humidité du sol;49.21;%;4
+pH du sol;6.95;pH;5
+Pluviométrie;3.46;mm;7
+Luminosité;18874.32;lux;8
+Vitesse du vent;12.68;km/h;9
+Température Test;16.6;unité;16
+temperature;75.17;unité;17
+Humidité du sol;65.1;%;4
+pH du sol;7.39;pH;5
+Pluviométrie;8.21;mm;7
+Luminosité;40262.25;lux;8
+Vitesse du vent;40.36;km/h;9
+Température Test;1.97;unité;16
+temperature;11.12;unité;17
+Humidité du sol;70.79;%;4
+pH du sol;6.95;pH;5
+Pluviométrie;5.07;mm;7
+Luminosité;36183.05;lux;8
+Vitesse du vent;40.26;km/h;9
+Température Test;55.33;unité;16
+temperature;32.61;unité;17
+Humidité du sol;69.79;%;4
+pH du sol;7.21;pH;5
+Pluviométrie;7.79;mm;7
+Luminosité;97372.46;lux;8
+Vitesse du vent;43.06;km/h;9
+Température Test;10.45;unité;16
+temperature;70.19;unité;17
+Humidité du sol;54.98;%;4
+pH du sol;6.55;pH;5
+Pluviométrie;1.48;mm;7
+Luminosité;74732.71;lux;8
+Vitesse du vent;1.61;km/h;9
+Température Test;97.65;unité;16
+temperature;64.07;unité;17
+Humidité du sol;48.23;%;4
+pH du sol;6.94;pH;5
+Pluviométrie;3.79;mm;7
+Luminosité;82728.39;lux;8
+Vitesse du vent;46.75;km/h;9
+Température Test;58.67;unité;16
+temperature;78.26;unité;17
+Humidité du sol;46.7;%;4
+pH du sol;6.56;pH;5
+Pluviométrie;8.95;mm;7
+Luminosité;49980.07;lux;8
+Vitesse du vent;46.46;km/h;9
+Température Test;88.41;unité;16
+temperature;67.55;unité;17
+Humidité du sol;63.43;%;4
+pH du sol;6.83;pH;5
+Pluviométrie;5.67;mm;7
+Luminosité;10898.68;lux;8
+Vitesse du vent;35.38;km/h;9
+Température Test;64.02;unité;16
+temperature;84.12;unité;17
+temperature;90.17;unité;17
+Humidité du sol;70.78;%;4
+pH du sol;6.78;pH;5
+Pluviométrie;3.03;mm;7
+Luminosité;76121.45;lux;8
+Vitesse du vent;42.81;km/h;9
+Température Test;12.46;unité;16
+Humidité du sol;59.43;%;4
+pH du sol;6.73;pH;5
+Pluviométrie;3.43;mm;7
+Luminosité;43314.22;lux;8
+Vitesse du vent;31.01;km/h;9
+Température Test;91.34;unité;16
+temperature;36.46;unité;17
+Humidité du sol;54.91;%;4
+pH du sol;6.35;pH;5
+Pluviométrie;4.3;mm;7
+Luminosité;58201.21;lux;8
+Vitesse du vent;48.06;km/h;9
+Température Test;7.42;unité;16
+temperature;95.94;unité;17
+Humidité du sol;46.54;%;4
+pH du sol;6.35;pH;5
+Pluviométrie;0.56;mm;7
+Luminosité;91580.87;lux;8
+Vitesse du vent;18.46;km/h;9
+Température Test;42.16;unité;16
+temperature;11.94;unité;17
+Humidité du sol;70.34;%;4
+pH du sol;6.97;pH;5
+Pluviométrie;0.6;mm;7
+Luminosité;44178.73;lux;8
+Vitesse du vent;23.53;km/h;9
+Température Test;33.82;unité;16
+temperature;91.86;unité;17
+Luminosité;8285.47;lux;8
+Vitesse du vent;20.1;km/h;9
+Température Test;44.65;unité;16
+temperature;50.95;unité;17
+Humidité du sol;61.58;%;4
+pH du sol;7.45;pH;5
+Pluviométrie;3.01;mm;7
+Humidité du sol;62.72;%;4
+pH du sol;6.42;pH;5
+Pluviométrie;8.93;mm;7
+Luminosité;68386.06;lux;8
+Vitesse du vent;14.02;km/h;9
+Température Test;11.32;unité;16
+temperature;19.01;unité;17
+Humidité du sol;59.15;%;4
+pH du sol;6.24;pH;5
+Pluviométrie;9.21;mm;7
+Luminosité;50361.49;lux;8
+Vitesse du vent;30.54;km/h;9
+Température Test;28.23;unité;16
+temperature;70.12;unité;17
+Humidité du sol;51.72;%;4
+pH du sol;6.83;pH;5
+Pluviométrie;8.55;mm;7
+Luminosité;22262.74;lux;8
+Vitesse du vent;29.42;km/h;9
+Température Test;60.77;unité;16
+temperature;80.19;unité;17
+Humidité du sol;75.41;%;4
+pH du sol;6.23;pH;5
+Pluviométrie;0.33;mm;7
+Luminosité;18548.14;lux;8
+Vitesse du vent;28.27;km/h;9
+Température Test;89.29;unité;16
+temperature;45.68;unité;17
+Humidité du sol;43.76;%;4
+pH du sol;6.89;pH;5
+Pluviométrie;2.94;mm;7
+Luminosité;7663.05;lux;8
+Vitesse du vent;22.12;km/h;9
+Température Test;28.31;unité;16
+temperature;53.06;unité;17
+Vitesse du vent;22.8;km/h;9
+Température Test;78.99;unité;16
+temperature;56.24;unité;17
+Humidité du sol;71.68;%;4
+pH du sol;7.21;pH;5
+Pluviométrie;7.18;mm;7
+Luminosité;96875.62;lux;8
+Humidité du sol;40.3;%;4
+pH du sol;6.11;pH;5
+Pluviométrie;8.62;mm;7
+Luminosité;92479.39;lux;8
+Vitesse du vent;41.91;km/h;9
+Température Test;35.29;unité;16
+temperature;97.0;unité;17
+pH du sol;7.34;pH;5
+Pluviométrie;4.57;mm;7
+Luminosité;24373.76;lux;8
+Vitesse du vent;44.72;km/h;9
+Température Test;79.15;unité;16
+temperature;19.88;unité;17
+Humidité du sol;63.5;%;4
+Humidité du sol;75.04;%;4
+pH du sol;7.41;pH;5
+Pluviométrie;4.0;mm;7
+Luminosité;5826.0;lux;8
+Vitesse du vent;11.83;km/h;9
+Température Test;43.03;unité;16
+temperature;83.13;unité;17
+Humidité du sol;62.75;%;4
+pH du sol;6.5;pH;5
+Pluviométrie;4.86;mm;7
+Luminosité;50702.69;lux;8
+Vitesse du vent;47.26;km/h;9
+Température Test;26.16;unité;16
+temperature;74.67;unité;17
+Humidité du sol;53.28;%;4
+pH du sol;6.88;pH;5
+Pluviométrie;1.53;mm;7
+Luminosité;29194.03;lux;8
+Vitesse du vent;35.14;km/h;9
+Température Test;2.16;unité;16
+temperature;36.15;unité;17
+Luminosité;18341.71;lux;8
+Vitesse du vent;24.62;km/h;9
+Température Test;57.07;unité;16
+temperature;69.31;unité;17
+Humidité du sol;62.91;%;4
+pH du sol;7.09;pH;5
+Pluviométrie;3.93;mm;7
+Humidité du sol;54.09;%;4
+pH du sol;6.91;pH;5
+Pluviométrie;3.48;mm;7
+Luminosité;33337.54;lux;8
+Vitesse du vent;45.56;km/h;9
+Température Test;34.8;unité;16
+temperature;17.74;unité;17
+Humidité du sol;56.02;%;4
+pH du sol;7.12;pH;5
+Pluviométrie;8.8;mm;7
+Luminosité;86933.53;lux;8
+Vitesse du vent;46.57;km/h;9
+Température Test;89.99;unité;16
+temperature;58.76;unité;17
+Humidité du sol;54.1;%;4
+pH du sol;6.36;pH;5
+Pluviométrie;4.24;mm;7
+Luminosité;72340.48;lux;8
+Vitesse du vent;45.55;km/h;9
+Température Test;29.21;unité;16
+temperature;3.19;unité;17
+temperature;21.05;unité;17
+Humidité du sol;59.93;%;4
+pH du sol;6.36;pH;5
+Pluviométrie;2.4;mm;7
+Luminosité;1539.14;lux;8
+Vitesse du vent;32.13;km/h;9
+Température Test;74.44;unité;16
+Humidité du sol;54.6;%;4
+pH du sol;6.52;pH;5
+Pluviométrie;5.42;mm;7
+Luminosité;32543.14;lux;8
+Vitesse du vent;13.1;km/h;9
+Température Test;10.19;unité;16
+temperature;91.21;unité;17
+Humidité du sol;43.14;%;4
+pH du sol;7.32;pH;5
+Pluviométrie;5.28;mm;7
+Luminosité;5484.8;lux;8
+Vitesse du vent;35.18;km/h;9
+Température Test;77.63;unité;16
+temperature;54.83;unité;17
+Humidité du sol;45.4;%;4
+pH du sol;6.06;pH;5
+Pluviométrie;1.4;mm;7
+Luminosité;88454.89;lux;8
+Vitesse du vent;12.82;km/h;9
+Humidité du sol;76.8;%;4
+pH du sol;6.94;pH;5
+Pluviométrie;4.73;mm;7
+Luminosité;86832.52;lux;8
+Vitesse du vent;12.47;km/h;9
+pH du sol;7.39;pH;5
+Pluviométrie;0.84;mm;7
+Luminosité;19048.96;lux;8
+Vitesse du vent;3.8;km/h;9
+Humidité du sol;65.7;%;4
+Humidité du sol;44.21;%;4
+pH du sol;6.81;pH;5
+Pluviométrie;6.2;mm;7
+Luminosité;1328.94;lux;8
+Vitesse du vent;5.71;km/h;9
+Humidité du sol;63.0;%;4
+pH du sol;6.08;pH;5
+Pluviométrie;2.96;mm;7
+Luminosité;10471.34;lux;8
+Vitesse du vent;12.34;km/h;9
+Pluviométrie;9.17;mm;7
+Luminosité;6010.46;lux;8
+Vitesse du vent;11.78;km/h;9
+Humidité du sol;78.67;%;4
+pH du sol;7.38;pH;5
+Humidité du sol;55.8;%;4
+pH du sol;6.17;pH;5
+Pluviométrie;3.13;mm;7
+Luminosité;79112.91;lux;8
+Vitesse du vent;6.79;km/h;9
+Humidité du sol;75.26;%;4
+pH du sol;6.66;pH;5
+Pluviométrie;3.72;mm;7
+Luminosité;22337.4;lux;8
+Vitesse du vent;21.48;km/h;9
+Humidité du sol;53.25;%;4
+pH du sol;7.47;pH;5
+Pluviométrie;9.57;mm;7
+Luminosité;47952.66;lux;8
+Vitesse du vent;43.41;km/h;9
+Humidité du sol;62.27;%;4
+pH du sol;6.37;pH;5
+Pluviométrie;5.51;mm;7
+Luminosité;18337.88;lux;8
+Vitesse du vent;18.76;km/h;9
+Humidité du sol;50.07;%;4
+pH du sol;6.48;pH;5
+Pluviométrie;5.23;mm;7
+Luminosité;77439.39;lux;8
+Vitesse du vent;39.5;km/h;9
+Humidité du sol;51.36;%;4
+pH du sol;6.52;pH;5
+Pluviométrie;7.85;mm;7
+Luminosité;50226.37;lux;8
+Vitesse du vent;43.17;km/h;9
+Humidité du sol;49.6;%;4
+pH du sol;6.66;pH;5
+Pluviométrie;8.74;mm;7
+Luminosité;57564.32;lux;8
+Vitesse du vent;38.79;km/h;9
+Humidité du sol;73.12;%;4
+pH du sol;7.32;pH;5
+Pluviométrie;9.95;mm;7
+Luminosité;61970.14;lux;8
+Vitesse du vent;42.05;km/h;9
+Humidité du sol;59.17;%;4
+pH du sol;6.35;pH;5
+Pluviométrie;3.77;mm;7
+Luminosité;4804.77;lux;8
+Vitesse du vent;24.57;km/h;9
+Humidité du sol;76.82;%;4
+pH du sol;7.18;pH;5
+Pluviométrie;6.88;mm;7
+Luminosité;20476.55;lux;8
+Vitesse du vent;41.67;km/h;9
+Humidité du sol;78.26;%;4
+pH du sol;6.36;pH;5
+Pluviométrie;5.16;mm;7
+Luminosité;76979.64;lux;8
+Vitesse du vent;44.08;km/h;9
+Humidité du sol;69.09;%;4
+pH du sol;7.11;pH;5
+Pluviométrie;0.32;mm;7
+Luminosité;67930.49;lux;8
+Vitesse du vent;7.43;km/h;9
+Humidité du sol;76.49;%;4
+pH du sol;6.53;pH;5
+Pluviométrie;6.34;mm;7
+Luminosité;68706.23;lux;8
+Vitesse du vent;27.52;km/h;9
+Humidité du sol;41.14;%;4
+pH du sol;6.27;pH;5
+Pluviométrie;8.21;mm;7
+Luminosité;34238.91;lux;8
+Vitesse du vent;28.85;km/h;9
+Humidité du sol;69.25;%;4
+pH du sol;6.94;pH;5
+Pluviométrie;5.57;mm;7
+Luminosité;9723.14;lux;8
+Vitesse du vent;26.16;km/h;9
+pH du sol;6.79;pH;5
+Pluviométrie;4.26;mm;7
+Luminosité;37686.57;lux;8
+Vitesse du vent;36.62;km/h;9
+Humidité du sol;47.09;%;4
+Humidité du sol;46.91;%;4
+pH du sol;6.32;pH;5
+Pluviométrie;0.03;mm;7
+Luminosité;10785.33;lux;8
+Vitesse du vent;17.21;km/h;9
+Humidité du sol;75.12;%;4
+pH du sol;6.49;pH;5
+Pluviométrie;5.46;mm;7
+Luminosité;6680.43;lux;8
+Vitesse du vent;7.68;km/h;9
+Humidité du sol;63.19;%;4
+pH du sol;7.12;pH;5
+Pluviométrie;2.39;mm;7
+Luminosité;69641.0;lux;8
+Vitesse du vent;41.47;km/h;9
+Pluviométrie;0.12;mm;7
+Luminosité;36952.51;lux;8
+Vitesse du vent;44.42;km/h;9
+Humidité du sol;62.13;%;4
+pH du sol;6.9;pH;5
+Humidité du sol;62.44;%;4
+pH du sol;6.21;pH;5
+Pluviométrie;1.8;mm;7
+Luminosité;33646.85;lux;8
+Vitesse du vent;36.31;km/h;9
+Humidité du sol;48.51;%;4
+pH du sol;6.11;pH;5
+Pluviométrie;7.99;mm;7
+Luminosité;98881.34;lux;8
+Vitesse du vent;41.02;km/h;9
+Humidité du sol;58.46;%;4
+pH du sol;6.89;pH;5
+Pluviométrie;0.88;mm;7
+Luminosité;71720.86;lux;8
+Vitesse du vent;14.11;km/h;9
+Humidité du sol;67.65;%;4
+pH du sol;7.2;pH;5
+Pluviométrie;0.59;mm;7
+Luminosité;7738.0;lux;8
+Vitesse du vent;13.7;km/h;9
+Humidité du sol;73.92;%;4
+pH du sol;6.64;pH;5
+Pluviométrie;3.77;mm;7
+Luminosité;60644.47;lux;8
+Vitesse du vent;4.84;km/h;9
+Humidité du sol;71.97;%;4
+pH du sol;6.14;pH;5
+Pluviométrie;1.51;mm;7
+Luminosité;84155.62;lux;8
+Vitesse du vent;23.64;km/h;9
+Pluviométrie;5.98;mm;7
+Luminosité;53864.7;lux;8
+Vitesse du vent;9.35;km/h;9
+Humidité du sol;52.09;%;4
+pH du sol;7.05;pH;5
+Humidité du sol;55.78;%;4
+pH du sol;6.05;pH;5
+Pluviométrie;0.73;mm;7
+Luminosité;47292.56;lux;8
+Vitesse du vent;12.41;km/h;9
+Humidité du sol;68.23;%;4
+pH du sol;6.88;pH;5
+Pluviométrie;8.95;mm;7
+Luminosité;29857.99;lux;8
+Vitesse du vent;41.89;km/h;9
+Humidité du sol;60.05;%;4
+pH du sol;7.26;pH;5
+Pluviométrie;8.05;mm;7
+Luminosité;99830.35;lux;8
+Vitesse du vent;3.78;km/h;9
+Humidité du sol;60.99;%;4
+pH du sol;6.53;pH;5
+Pluviométrie;3.24;mm;7
+Luminosité;87972.31;lux;8
+Vitesse du vent;19.41;km/h;9
+Humidité du sol;56.88;%;4
+pH du sol;7.43;pH;5
+Pluviométrie;3.54;mm;7
+Luminosité;33390.52;lux;8
+Vitesse du vent;19.16;km/h;9
+Humidité du sol;52.35;%;4
+pH du sol;7.13;pH;5
+Pluviométrie;3.79;mm;7
+Luminosité;75687.59;lux;8
+Vitesse du vent;6.78;km/h;9
+Humidité du sol;56.36;%;4
+pH du sol;7.44;pH;5
+Pluviométrie;3.91;mm;7
+Luminosité;32882.94;lux;8
+Vitesse du vent;18.13;km/h;9
+Humidité du sol;53.61;%;4
+pH du sol;7.04;pH;5
+Pluviométrie;0.73;mm;7
+Luminosité;3203.48;lux;8
+Vitesse du vent;14.88;km/h;9
+Vitesse du vent;23.87;km/h;9
+Humidité du sol;79.38;%;4
+pH du sol;6.57;pH;5
+Pluviométrie;2.84;mm;7
+Luminosité;12173.36;lux;8
+Humidité du sol;67.39;%;4
+pH du sol;6.58;pH;5
+Pluviométrie;2.85;mm;7
+Luminosité;69360.14;lux;8
+Vitesse du vent;38.63;km/h;9
+Humidité du sol;70.49;%;4
+pH du sol;6.38;pH;5
+Pluviométrie;6.83;mm;7
+Luminosité;42545.66;lux;8
+Vitesse du vent;41.54;km/h;9
+Humidité du sol;79.82;%;4
+pH du sol;6.16;pH;5
+Pluviométrie;8.52;mm;7
+Luminosité;88442.67;lux;8
+Vitesse du vent;12.45;km/h;9
+Humidité du sol;52.52;%;4
+pH du sol;6.32;pH;5
+Pluviométrie;7.05;mm;7
+Luminosité;24332.89;lux;8
+Vitesse du vent;25.94;km/h;9
+Pluviométrie;6.6;mm;7
+Luminosité;84904.59;lux;8
+Vitesse du vent;6.33;km/h;9
+Humidité du sol;62.67;%;4
+pH du sol;6.31;pH;5
+Humidité du sol;73.47;%;4
+pH du sol;6.47;pH;5
+Pluviométrie;4.05;mm;7
+Luminosité;8525.13;lux;8
+Vitesse du vent;29.63;km/h;9
+Humidité du sol;75.9;%;4
+pH du sol;7.36;pH;5
+Pluviométrie;3.22;mm;7
+Luminosité;97426.0;lux;8
+Vitesse du vent;26.67;km/h;9
+Luminosité;5670.03;lux;8
+Vitesse du vent;24.38;km/h;9
+Humidité du sol;64.45;%;4
+pH du sol;6.5;pH;5
+Pluviométrie;4.49;mm;7
+Humidité du sol;48.6;%;4
+pH du sol;7.23;pH;5
+Pluviométrie;9.16;mm;7
+Luminosité;20380.11;lux;8
+Vitesse du vent;12.45;km/h;9
+Humidité du sol;70.77;%;4
+pH du sol;6.52;pH;5
+Pluviométrie;1.73;mm;7
+Luminosité;80560.62;lux;8
+Vitesse du vent;45.13;km/h;9
+Pluviométrie;1.12;mm;7
+Luminosité;91757.72;lux;8
+Vitesse du vent;3.32;km/h;9
+Humidité du sol;58.95;%;4
+pH du sol;6.81;pH;5
+Humidité du sol;79.0;%;4
+pH du sol;6.59;pH;5
+Pluviométrie;7.57;mm;7
+Luminosité;71745.24;lux;8
+Vitesse du vent;25.9;km/h;9
+Humidité du sol;57.37;%;4
+pH du sol;6.33;pH;5
+Pluviométrie;3.88;mm;7
+Luminosité;19523.72;lux;8
+Vitesse du vent;45.0;km/h;9
+Humidité du sol;41.32;%;4
+pH du sol;7.41;pH;5
+Pluviométrie;4.64;mm;7
+Luminosité;59091.35;lux;8
+Vitesse du vent;17.13;km/h;9
+Humidité du sol;46.49;%;4
+pH du sol;6.59;pH;5
+Pluviométrie;8.35;mm;7
+Luminosité;54532.69;lux;8
+Vitesse du vent;36.09;km/h;9
+Humidité du sol;41.07;%;4
+pH du sol;7.49;pH;5
+Pluviométrie;2.98;mm;7
+Luminosité;71355.7;lux;8
+Vitesse du vent;28.53;km/h;9
+Humidité du sol;40.9;%;4
+pH du sol;7.33;pH;5
+Pluviométrie;9.08;mm;7
+Luminosité;35474.56;lux;8
+Vitesse du vent;8.86;km/h;9
+Humidité du sol;52.39;%;4
+pH du sol;6.16;pH;5
+Pluviométrie;6.39;mm;7
+Luminosité;92654.71;lux;8
+Vitesse du vent;40.84;km/h;9
+Humidité du sol;77.88;%;4
+pH du sol;6.59;pH;5
+Pluviométrie;0.38;mm;7
+Luminosité;28277.83;lux;8
+Vitesse du vent;44.86;km/h;9
+Humidité du sol;46.8;%;4
+pH du sol;6.27;pH;5
+Pluviométrie;5.92;mm;7
+Luminosité;11477.59;lux;8
+Vitesse du vent;45.07;km/h;9
+Humidité du sol;70.22;%;4
+pH du sol;6.98;pH;5
+Pluviométrie;6.96;mm;7
+Luminosité;64334.21;lux;8
+Vitesse du vent;46.78;km/h;9
+Luminosité;90421.53;lux;8
+Vitesse du vent;28.79;km/h;9
+Humidité du sol;66.26;%;4
+pH du sol;6.4;pH;5
+Pluviométrie;6.8;mm;7
+Humidité du sol;60.39;%;4
+pH du sol;6.78;pH;5
+Pluviométrie;2.68;mm;7
+Luminosité;66477.94;lux;8
+Vitesse du vent;36.35;km/h;9
+Luminosité;98329.46;lux;8
+Vitesse du vent;40.31;km/h;9
+Pluviométrie;7.79;mm;7
+pH du sol;6.48;pH;5
+Humidité du sol;50.02;%;4
+Humidité du sol;50.15;%;4
+pH du sol;6.26;pH;5
+Pluviométrie;8.13;mm;7
+Luminosité;75583.82;lux;8
+Vitesse du vent;1.67;km/h;9
+Humidité du sol;51.6;%;4
+pH du sol;6.13;pH;5
+Pluviométrie;8.48;mm;7
+Luminosité;79429.66;lux;8
+Vitesse du vent;18.68;km/h;9
+Humidité du sol;62.96;%;4
+pH du sol;7.4;pH;5
+Pluviométrie;5.83;mm;7
+Luminosité;57364.95;lux;8
+Vitesse du vent;45.63;km/h;9
+Humidité du sol;75.71;%;4
+pH du sol;7.48;pH;5
+Pluviométrie;0.37;mm;7
+Luminosité;3818.05;lux;8
+Vitesse du vent;29.52;km/h;9
+Humidité du sol;66.71;%;4
+pH du sol;6.54;pH;5
+Pluviométrie;5.32;mm;7
+Luminosité;37362.41;lux;8
+Vitesse du vent;39.45;km/h;9
+Humidité du sol;45.4;%;4
+pH du sol;7.1;pH;5
+Pluviométrie;3.2;mm;7
+Luminosité;90511.63;lux;8
+Vitesse du vent;7.68;km/h;9
+Humidité du sol;59.43;%;4
+pH du sol;6.01;pH;5
+Pluviométrie;6.15;mm;7
+Luminosité;31432.89;lux;8
+Vitesse du vent;43.02;km/h;9
+Humidité du sol;79.57;%;4
+pH du sol;6.61;pH;5
+Pluviométrie;0.97;mm;7
+Luminosité;74097.65;lux;8
+Vitesse du vent;5.34;km/h;9
+Humidité du sol;71.02;%;4
+pH du sol;7.18;pH;5
+Pluviométrie;4.43;mm;7
+Luminosité;12727.92;lux;8
+Vitesse du vent;2.57;km/h;9
+Humidité du sol;57.98;%;4
+pH du sol;7.39;pH;5
+Pluviométrie;4.79;mm;7
+Luminosité;44941.79;lux;8
+Vitesse du vent;28.0;km/h;9
+Humidité du sol;62.51;%;4
+pH du sol;6.31;pH;5
+Pluviométrie;0.4;mm;7
+Luminosité;35210.75;lux;8
+Vitesse du vent;4.44;km/h;9
+Humidité du sol;48.45;%;4
+pH du sol;6.16;pH;5
+Pluviométrie;2.8;mm;7
+Luminosité;84247.19;lux;8
+Vitesse du vent;3.7;km/h;9
+Humidité du sol;70.34;%;4
+pH du sol;6.8;pH;5
+Pluviométrie;9.61;mm;7
+Luminosité;2927.82;lux;8
+Vitesse du vent;48.36;km/h;9
+Humidité du sol;55.1;%;4
+pH du sol;7.32;pH;5
+Pluviométrie;6.37;mm;7
+Luminosité;54284.21;lux;8
+Vitesse du vent;0.99;km/h;9
+Humidité du sol;46.68;%;4
+pH du sol;6.32;pH;5
+Pluviométrie;7.86;mm;7
+Luminosité;259.44;lux;8
+Vitesse du vent;4.63;km/h;9
+Humidité du sol;41.98;%;4
+pH du sol;6.07;pH;5
+Pluviométrie;0.75;mm;7
+Luminosité;16428.35;lux;8
+Vitesse du vent;45.91;km/h;9
+pH du sol;6.71;pH;5
+Pluviométrie;6.85;mm;7
+Luminosité;11173.95;lux;8
+Vitesse du vent;15.54;km/h;9
+Humidité du sol;43.7;%;4
+Humidité du sol;78.62;%;4
+pH du sol;7.28;pH;5
+Pluviométrie;6.71;mm;7
+Luminosité;89063.69;lux;8
+Vitesse du vent;40.54;km/h;9
+pH du sol;6.84;pH;5
+Pluviométrie;6.74;mm;7
+Luminosité;18461.7;lux;8
+Vitesse du vent;8.75;km/h;9
+Humidité du sol;63.9;%;4
+Luminosité;53022.81;lux;8
+Vitesse du vent;11.27;km/h;9
+Pluviométrie;6.51;mm;7
+Humidité du sol;50.92;%;4
+pH du sol;6.18;pH;5
+Luminosité;64922.26;lux;8
+Vitesse du vent;13.54;km/h;9
+pH du sol;6.27;pH;5
+Pluviométrie;6.28;mm;7
+Humidité du sol;58.05;%;4
+Vitesse du vent;14.98;km/h;9
+Humidité du sol;60.24;%;4
+pH du sol;6.29;pH;5
+Pluviométrie;6.3;mm;7
+Luminosité;97049.53;lux;8
+Vitesse du vent;14.71;km/h;9
+Pluviométrie;6.41;mm;7
+Luminosité;62421.07;lux;8
+Humidité du sol;44.18;%;4
+pH du sol;7.2;pH;5
+Humidité du sol;44.75;%;4
+pH du sol;6.09;pH;5
+Pluviométrie;9.09;mm;7
+Luminosité;18836.48;lux;8
+Vitesse du vent;20.55;km/h;9
+Humidité du sol;61.89;%;4
+pH du sol;6.25;pH;5
+Pluviométrie;8.58;mm;7
+Luminosité;35483.49;lux;8
+Vitesse du vent;1.91;km/h;9
+Pluviométrie;0.11;mm;7
+Luminosité;77169.71;lux;8
+Vitesse du vent;47.78;km/h;9
+Humidité du sol;50.45;%;4
+pH du sol;6.72;pH;5
+Humidité du sol;56.15;%;4
+pH du sol;6.85;pH;5
+Pluviométrie;1.76;mm;7
+Luminosité;43385.42;lux;8
+Vitesse du vent;21.21;km/h;9
+Humidité du sol;53.6;%;4
+pH du sol;7.43;pH;5
+Pluviométrie;0.55;mm;7
+Luminosité;4313.52;lux;8
+Vitesse du vent;30.52;km/h;9
+Humidité du sol;60.55;%;4
+pH du sol;7.18;pH;5
+Pluviométrie;2.78;mm;7
+Luminosité;98087.15;lux;8
+Vitesse du vent;18.4;km/h;9
+Humidité du sol;49.46;%;4
+pH du sol;7.26;pH;5
+Pluviométrie;6.86;mm;7
+Luminosité;87545.07;lux;8
+Vitesse du vent;41.97;km/h;9
+Humidité du sol;78.42;%;4
+pH du sol;6.47;pH;5
+Pluviométrie;5.33;mm;7
+Luminosité;26693.62;lux;8
+Vitesse du vent;25.55;km/h;9
+Humidité du sol;75.41;%;4
+pH du sol;6.29;pH;5
+Pluviométrie;0.87;mm;7
+Luminosité;62869.03;lux;8
+Vitesse du vent;29.42;km/h;9
+Humidité du sol;71.94;%;4
+pH du sol;7.12;pH;5
+Pluviométrie;3.82;mm;7
+Luminosité;70266.46;lux;8
+Vitesse du vent;19.1;km/h;9
+Humidité du sol;58.29;%;4
+pH du sol;6.8;pH;5
+Pluviométrie;2.91;mm;7
+Luminosité;81700.6;lux;8
+Vitesse du vent;28.9;km/h;9
+Humidité du sol;59.47;%;4
+pH du sol;7.13;pH;5
+Pluviométrie;7.13;mm;7
+Luminosité;89306.02;lux;8
+Vitesse du vent;5.58;km/h;9
+Humidité du sol;62.56;%;4
+pH du sol;6.03;pH;5
+Pluviométrie;8.19;mm;7
+Luminosité;90478.78;lux;8
+Vitesse du vent;27.48;km/h;9
+Humidité du sol;79.3;%;4
+pH du sol;6.61;pH;5
+Pluviométrie;6.95;mm;7
+Luminosité;56730.33;lux;8
+Vitesse du vent;32.35;km/h;9
+Humidité du sol;71.82;%;4
+pH du sol;6.82;pH;5
+Pluviométrie;7.45;mm;7
+Luminosité;15562.07;lux;8
+Vitesse du vent;37.57;km/h;9
+Humidité du sol;62.85;%;4
+pH du sol;7.06;pH;5
+Pluviométrie;3.48;mm;7
+Luminosité;91316.3;lux;8
+Vitesse du vent;6.39;km/h;9
+Pluviométrie;8.96;mm;7
+Luminosité;33060.5;lux;8
+Vitesse du vent;21.75;km/h;9
+Humidité du sol;76.52;%;4
+pH du sol;6.3;pH;5
+Pluviométrie;7.35;mm;7
+Luminosité;35441.83;lux;8
+Vitesse du vent;31.51;km/h;9
+Humidité du sol;51.67;%;4
+pH du sol;7.05;pH;5
+pH du sol;6.78;pH;5
+Pluviométrie;5.69;mm;7
+Luminosité;26540.19;lux;8
+Vitesse du vent;30.94;km/h;9
+Humidité du sol;68.88;%;4
+Humidité du sol;65.58;%;4
+pH du sol;6.1;pH;5
+Pluviométrie;0.81;mm;7
+Luminosité;27350.56;lux;8
+Vitesse du vent;9.38;km/h;9
+Humidité du sol;45.08;%;4
+pH du sol;6.42;pH;5
+Pluviométrie;8.25;mm;7
+Luminosité;68191.41;lux;8
+Vitesse du vent;48.71;km/h;9
+Humidité du sol;73.35;%;4
+pH du sol;6.3;pH;5
+Pluviométrie;5.95;mm;7
+Luminosité;52809.36;lux;8
+Vitesse du vent;39.73;km/h;9
+Humidité du sol;64.86;%;4
+pH du sol;6.58;pH;5
+Pluviométrie;5.64;mm;7
+Luminosité;96750.37;lux;8
+Vitesse du vent;13.73;km/h;9
+pH du sol;6.09;pH;5
+Pluviométrie;6.47;mm;7
+Luminosité;63883.1;lux;8
+Vitesse du vent;7.79;km/h;9
+Humidité du sol;64.29;%;4
+Humidité du sol;52.29;%;4
+pH du sol;7.24;pH;5
+Pluviométrie;0.3;mm;7
+Luminosité;77654.66;lux;8
+Vitesse du vent;49.25;km/h;9
+Humidité du sol;49.21;%;4
+pH du sol;7.22;pH;5
+Pluviométrie;3.43;mm;7
+Luminosité;86683.12;lux;8
+Vitesse du vent;5.32;km/h;9
+Humidité du sol;74.75;%;4
+pH du sol;7.24;pH;5
+Pluviométrie;8.66;mm;7
+Luminosité;21039.48;lux;8
+Vitesse du vent;16.11;km/h;9
+Humidité du sol;61.42;%;4
+pH du sol;7.0;pH;5
+Pluviométrie;4.33;mm;7
+Luminosité;39318.98;lux;8
+Vitesse du vent;31.07;km/h;9
+Humidité du sol;64.47;%;4
+pH du sol;7.48;pH;5
+Pluviométrie;4.38;mm;7
+Luminosité;80269.21;lux;8
+Vitesse du vent;11.38;km/h;9
+Humidité du sol;45.25;%;4
+pH du sol;6.22;pH;5
+Pluviométrie;7.27;mm;7
+Luminosité;29470.99;lux;8
+Vitesse du vent;45.39;km/h;9
+Humidité du sol;50.05;%;4
+pH du sol;6.54;pH;5
+Pluviométrie;5.75;mm;7
+Luminosité;91455.67;lux;8
+Vitesse du vent;41.35;km/h;9
+Humidité du sol;44.85;%;4
+pH du sol;6.04;pH;5
+Pluviométrie;3.43;mm;7
+Luminosité;85148.48;lux;8
+Vitesse du vent;11.73;km/h;9
+Humidité du sol;65.48;%;4
+pH du sol;6.36;pH;5
+Pluviométrie;5.79;mm;7
+Luminosité;60143.51;lux;8
+Vitesse du vent;34.12;km/h;9
+Humidité du sol;43.49;%;4
+pH du sol;7.2;pH;5
+Pluviométrie;4.37;mm;7
+Luminosité;18787.4;lux;8
+Vitesse du vent;24.07;km/h;9
+Humidité du sol;66.17;%;4
+pH du sol;6.17;pH;5
+Pluviométrie;8.69;mm;7
+Luminosité;34397.6;lux;8
+Vitesse du vent;7.81;km/h;9
+Humidité du sol;44.79;%;4
+pH du sol;7.32;pH;5
+Pluviométrie;8.62;mm;7
+Luminosité;22233.26;lux;8
+Vitesse du vent;38.21;km/h;9
+Humidité du sol;69.99;%;4
+pH du sol;7.1;pH;5
+Pluviométrie;8.49;mm;7
+Luminosité;7799.04;lux;8
+Vitesse du vent;43.55;km/h;9
+Humidité du sol;52.6;%;4
+pH du sol;6.99;pH;5
+Pluviométrie;9.21;mm;7
+Luminosité;33331.37;lux;8
+Vitesse du vent;0.77;km/h;9
+Humidité du sol;70.54;%;4
+pH du sol;6.07;pH;5
+Pluviométrie;2.23;mm;7
+Luminosité;99717.51;lux;8
+Vitesse du vent;37.91;km/h;9
+Humidité du sol;58.82;%;4
+pH du sol;7.1;pH;5
+Pluviométrie;8.58;mm;7
+Luminosité;46166.01;lux;8
+Vitesse du vent;26.98;km/h;9
+Humidité du sol;52.95;%;4
+pH du sol;7.5;pH;5
+Pluviométrie;4.28;mm;7
+Luminosité;50342.02;lux;8
+Vitesse du vent;46.49;km/h;9
+Humidité du sol;49.85;%;4
+pH du sol;6.16;pH;5
+Pluviométrie;8.5;mm;7
+Luminosité;75679.9;lux;8
+Vitesse du vent;28.92;km/h;9
+Humidité du sol;73.18;%;4
+pH du sol;6.93;pH;5
+Pluviométrie;6.65;mm;7
+Luminosité;40021.61;lux;8
+Vitesse du vent;46.46;km/h;9
+Humidité du sol;67.46;%;4
+pH du sol;6.61;pH;5
+Pluviométrie;4.27;mm;7
+Luminosité;87482.94;lux;8
+Vitesse du vent;32.65;km/h;9
+Humidité du sol;55.55;%;4
+pH du sol;6.68;pH;5
+Pluviométrie;0.7;mm;7
+Luminosité;93400.31;lux;8
+Vitesse du vent;7.96;km/h;9
+Humidité du sol;43.31;%;4
+pH du sol;7.28;pH;5
+Pluviométrie;5.5;mm;7
+Luminosité;21329.43;lux;8
+Vitesse du vent;8.35;km/h;9
+Humidité du sol;64.83;%;4
+pH du sol;6.31;pH;5
+Pluviométrie;1.26;mm;7
+Luminosité;32775.53;lux;8
+Vitesse du vent;22.02;km/h;9
+Humidité du sol;58.78;%;4
+pH du sol;6.36;pH;5
+Pluviométrie;1.61;mm;7
+Luminosité;73031.5;lux;8
+Vitesse du vent;0.13;km/h;9
+Humidité du sol;66.44;%;4
+pH du sol;7.27;pH;5
+Pluviométrie;7.81;mm;7
+Luminosité;92248.73;lux;8
+Vitesse du vent;2.91;km/h;9
+Humidité du sol;71.26;%;4
+pH du sol;7.21;pH;5
+Pluviométrie;5.41;mm;7
+Luminosité;31942.66;lux;8
+Vitesse du vent;5.38;km/h;9
+Humidité du sol;56.75;%;4
+pH du sol;6.17;pH;5
+Pluviométrie;9.75;mm;7
+Luminosité;5609.86;lux;8
+Vitesse du vent;41.14;km/h;9
+Humidité du sol;46.27;%;4
+pH du sol;6.01;pH;5
+Pluviométrie;6.06;mm;7
+Luminosité;97972.72;lux;8
+Vitesse du vent;7.23;km/h;9
+Humidité du sol;64.68;%;4
+pH du sol;7.09;pH;5
+Pluviométrie;2.16;mm;7
+Luminosité;22723.9;lux;8
+Vitesse du vent;40.49;km/h;9
+Humidité du sol;62.2;%;4
+pH du sol;6.15;pH;5
+Pluviométrie;1.52;mm;7
+Luminosité;94772.75;lux;8
+Vitesse du vent;16.79;km/h;9
+Humidité du sol;65.03;%;4
+pH du sol;6.2;pH;5
+Pluviométrie;7.78;mm;7
+Luminosité;46993.46;lux;8
+Vitesse du vent;19.65;km/h;9
+Humidité du sol;71.88;%;4
+pH du sol;6.51;pH;5
+Pluviométrie;0.07;mm;7
+Luminosité;27662.97;lux;8
+Vitesse du vent;2.44;km/h;9
+Humidité du sol;73.21;%;4
+pH du sol;6.34;pH;5
+Pluviométrie;8.58;mm;7
+Luminosité;72841.69;lux;8
+Vitesse du vent;17.12;km/h;9
+Humidité du sol;60.77;%;4
+pH du sol;7.42;pH;5
+Pluviométrie;6.02;mm;7
+Luminosité;66306.38;lux;8
+Vitesse du vent;18.62;km/h;9
+Humidité du sol;78.18;%;4
+pH du sol;6.52;pH;5
+Pluviométrie;5.02;mm;7
+Luminosité;43479.88;lux;8
+Vitesse du vent;16.92;km/h;9
+Humidité du sol;77.82;%;4
+pH du sol;6.37;pH;5
+Pluviométrie;6.6;mm;7
+Luminosité;69019.92;lux;8
+Vitesse du vent;18.75;km/h;9
+Humidité du sol;51.95;%;4
+pH du sol;7.17;pH;5
+Pluviométrie;2.5;mm;7
+Luminosité;10423.25;lux;8
+Vitesse du vent;26.06;km/h;9
+pH du sol;6.73;pH;5
+Pluviométrie;9.97;mm;7
+Luminosité;7126.02;lux;8
+Vitesse du vent;28.33;km/h;9
+Humidité du sol;68.12;%;4
+Humidité du sol;64.3;%;4
+pH du sol;7.14;pH;5
+Pluviométrie;4.06;mm;7
+Luminosité;47418.34;lux;8
+Vitesse du vent;6.12;km/h;9
+Humidité du sol;41.6;%;4
+pH du sol;6.12;pH;5
+Pluviométrie;0.03;mm;7
+Luminosité;91998.36;lux;8
+Vitesse du vent;41.12;km/h;9
+Humidité du sol;45.11;%;4
+pH du sol;7.37;pH;5
+Pluviométrie;3.04;mm;7
+Luminosité;97190.59;lux;8
+Vitesse du vent;37.33;km/h;9
+Humidité du sol;41.22;%;4
+pH du sol;6.98;pH;5
+Pluviométrie;6.59;mm;7
+Luminosité;58494.25;lux;8
+Vitesse du vent;15.09;km/h;9
+Humidité du sol;47.61;%;4
+pH du sol;6.49;pH;5
+Pluviométrie;3.01;mm;7
+Luminosité;4349.98;lux;8
+Vitesse du vent;7.87;km/h;9
+Humidité du sol;45.81;%;4
+pH du sol;7.02;pH;5
+Pluviométrie;1.87;mm;7
+Luminosité;24418.2;lux;8
+Vitesse du vent;22.59;km/h;9
+Humidité du sol;63.66;%;4
+pH du sol;6.47;pH;5
+Pluviométrie;8.74;mm;7
+Luminosité;6323.7;lux;8
+Vitesse du vent;45.93;km/h;9
+Humidité du sol;77.87;%;4
+pH du sol;6.06;pH;5
+Pluviométrie;8.31;mm;7
+Luminosité;32930.93;lux;8
+Vitesse du vent;22.88;km/h;9
+Humidité du sol;59.33;%;4
+pH du sol;7.43;pH;5
+Pluviométrie;8.06;mm;7
+Luminosité;39346.9;lux;8
+Vitesse du vent;16.08;km/h;9
+Humidité du sol;54.69;%;4
+pH du sol;7.48;pH;5
+Pluviométrie;0.11;mm;7
+Luminosité;92501.93;lux;8
+Vitesse du vent;38.22;km/h;9
+Humidité du sol;64.51;%;4
+pH du sol;6.91;pH;5
+Pluviométrie;4.09;mm;7
+Luminosité;70445.31;lux;8
+Vitesse du vent;8.05;km/h;9
+Humidité du sol;63.92;%;4
+pH du sol;6.96;pH;5
+Pluviométrie;5.82;mm;7
+Luminosité;1870.27;lux;8
+Vitesse du vent;36.96;km/h;9
+Humidité du sol;71.46;%;4
+pH du sol;6.06;pH;5
+Pluviométrie;3.37;mm;7
+Luminosité;48019.49;lux;8
+Vitesse du vent;3.79;km/h;9
+Humidité du sol;51.39;%;4
+pH du sol;6.2;pH;5
+Pluviométrie;4.87;mm;7
+Luminosité;3112.6;lux;8
+Vitesse du vent;1.15;km/h;9
+Humidité du sol;69.33;%;4
+pH du sol;6.91;pH;5
+Pluviométrie;5.13;mm;7
+Luminosité;77026.83;lux;8
+Vitesse du vent;30.12;km/h;9
+Humidité du sol;78.92;%;4
+pH du sol;7.42;pH;5
+Pluviométrie;3.09;mm;7
+Luminosité;71695.39;lux;8
+Vitesse du vent;48.63;km/h;9
+Humidité du sol;57.36;%;4
+pH du sol;7.47;pH;5
+Pluviométrie;8.17;mm;7
+Luminosité;27096.89;lux;8
+Vitesse du vent;1.48;km/h;9
+Humidité du sol;65.8;%;4
+pH du sol;7.19;pH;5
+Pluviométrie;3.28;mm;7
+Luminosité;44181.66;lux;8
+Vitesse du vent;22.96;km/h;9
+Humidité du sol;57.88;%;4
+pH du sol;7.12;pH;5
+Pluviométrie;2.5;mm;7
+Luminosité;12844.02;lux;8
+Vitesse du vent;15.49;km/h;9
+Humidité du sol;59.01;%;4
+pH du sol;6.89;pH;5
+Pluviométrie;2.6;mm;7
+Luminosité;47281.62;lux;8
+Vitesse du vent;33.53;km/h;9
+Humidité du sol;41.33;%;4
+pH du sol;7.28;pH;5
+Pluviométrie;7.42;mm;7
+Luminosité;67142.0;lux;8
+Vitesse du vent;36.22;km/h;9
+Humidité du sol;40.91;%;4
+pH du sol;6.49;pH;5
+Pluviométrie;5.41;mm;7
+Luminosité;15006.19;lux;8
+Vitesse du vent;13.75;km/h;9
+Humidité du sol;71.58;%;4
+pH du sol;6.71;pH;5
+Pluviométrie;1.95;mm;7
+Luminosité;72554.78;lux;8
+Vitesse du vent;0.1;km/h;9
+Humidité du sol;64.7;%;4
+pH du sol;6.08;pH;5
+Pluviométrie;1.17;mm;7
+Luminosité;6423.57;lux;8
+Vitesse du vent;2.85;km/h;9
+Humidité du sol;76.76;%;4
+pH du sol;7.26;pH;5
+Pluviométrie;0.59;mm;7
+Luminosité;33945.25;lux;8
+Vitesse du vent;29.18;km/h;9
+Luminosité;48848.87;lux;8
+Vitesse du vent;9.64;km/h;9
+Humidité du sol;75.43;%;4
+pH du sol;6.08;pH;5
+Pluviométrie;9.69;mm;7
+Humidité du sol;74.2;%;4
+pH du sol;7.09;pH;5
+Pluviométrie;2.48;mm;7
+Luminosité;41512.29;lux;8
+Vitesse du vent;25.82;km/h;9
+Humidité du sol;58.51;%;4
+pH du sol;6.86;pH;5
+Pluviométrie;0.83;mm;7
+Luminosité;41888.05;lux;8
+Vitesse du vent;26.89;km/h;9
+Humidité du sol;44.14;%;4
+pH du sol;6.46;pH;5
+Pluviométrie;8.71;mm;7
+Luminosité;15312.63;lux;8
+Vitesse du vent;30.06;km/h;9
+Humidité du sol;71.33;%;4
+pH du sol;6.36;pH;5
+Pluviométrie;0.46;mm;7
+Luminosité;48320.23;lux;8
+Vitesse du vent;37.6;km/h;9
+Humidité du sol;57.31;%;4
+pH du sol;6.02;pH;5
+Pluviométrie;9.91;mm;7
+Luminosité;47688.49;lux;8
+Vitesse du vent;33.0;km/h;9
+Humidité du sol;78.13;%;4
+pH du sol;6.57;pH;5
+Pluviométrie;3.05;mm;7
+Luminosité;30571.72;lux;8
+Vitesse du vent;25.89;km/h;9
+Humidité du sol;51.36;%;4
+pH du sol;6.57;pH;5
+Pluviométrie;1.31;mm;7
+Luminosité;32121.06;lux;8
+Vitesse du vent;21.19;km/h;9
+Humidité du sol;53.85;%;4
+pH du sol;6.42;pH;5
+Pluviométrie;6.58;mm;7
+Luminosité;44505.77;lux;8
+Vitesse du vent;27.89;km/h;9
+Humidité du sol;75.48;%;4
+pH du sol;6.11;pH;5
+Pluviométrie;5.99;mm;7
+Luminosité;30293.71;lux;8
+Vitesse du vent;10.91;km/h;9
+Humidité du sol;43.75;%;4
+pH du sol;6.66;pH;5
+Pluviométrie;3.22;mm;7
+Luminosité;28165.28;lux;8
+Vitesse du vent;15.51;km/h;9
+Humidité du sol;41.29;%;4
+pH du sol;7.28;pH;5
+Pluviométrie;4.38;mm;7
+Luminosité;8529.59;lux;8
+Vitesse du vent;0.91;km/h;9
+Humidité du sol;64.52;%;4
+pH du sol;7.14;pH;5
+Pluviométrie;9.35;mm;7
+Luminosité;86232.08;lux;8
+Vitesse du vent;14.87;km/h;9
+Humidité du sol;50.27;%;4
+pH du sol;6.59;pH;5
+Pluviométrie;4.66;mm;7
+Luminosité;41307.55;lux;8
+Vitesse du vent;19.69;km/h;9
+Humidité du sol;60.79;%;4
+pH du sol;6.46;pH;5
+Pluviométrie;4.51;mm;7
+Luminosité;22523.47;lux;8
+Vitesse du vent;0.42;km/h;9
+Humidité du sol;55.93;%;4
+pH du sol;7.27;pH;5
+Pluviométrie;2.31;mm;7
+Luminosité;5354.91;lux;8
+Vitesse du vent;38.61;km/h;9
+Humidité du sol;45.13;%;4
+pH du sol;7.26;pH;5
+Pluviométrie;4.58;mm;7
+Luminosité;11918.44;lux;8
+Vitesse du vent;44.81;km/h;9
+Humidité du sol;47.01;%;4
+pH du sol;6.12;pH;5
+Pluviométrie;2.25;mm;7
+Luminosité;31350.26;lux;8
+Vitesse du vent;26.37;km/h;9
+Humidité du sol;50.93;%;4
+pH du sol;6.64;pH;5
+Pluviométrie;3.17;mm;7
+Luminosité;70051.79;lux;8
+Vitesse du vent;27.14;km/h;9
+Humidité du sol;44.2;%;4
+pH du sol;7.12;pH;5
+Pluviométrie;4.11;mm;7
+Luminosité;28162.83;lux;8
+Vitesse du vent;19.9;km/h;9
+Humidité du sol;65.0;%;4
+pH du sol;6.37;pH;5
+Pluviométrie;7.65;mm;7
+Luminosité;52319.95;lux;8
+Vitesse du vent;27.39;km/h;9
+Pluviométrie;2.45;mm;7
+Luminosité;36137.39;lux;8
+Vitesse du vent;13.65;km/h;9
+Humidité du sol;50.63;%;4
+pH du sol;6.47;pH;5
+Humidité du sol;55.39;%;4
+pH du sol;7.32;pH;5
+Pluviométrie;9.94;mm;7
+Luminosité;77333.71;lux;8
+Vitesse du vent;37.59;km/h;9
+Humidité du sol;44.72;%;4
+pH du sol;6.29;pH;5
+Pluviométrie;6.37;mm;7
+Luminosité;76961.97;lux;8
+Vitesse du vent;28.52;km/h;9
+Humidité du sol;40.76;%;4
+pH du sol;6.45;pH;5
+Pluviométrie;8.7;mm;7
+Luminosité;82911.29;lux;8
+Vitesse du vent;17.19;km/h;9
+Humidité du sol;69.1;%;4
+pH du sol;6.81;pH;5
+Pluviométrie;4.52;mm;7
+Luminosité;20762.43;lux;8
+Vitesse du vent;19.25;km/h;9
+Humidité du sol;57.55;%;4
+pH du sol;7.49;pH;5
+Pluviométrie;1.49;mm;7
+Luminosité;9352.29;lux;8
+Vitesse du vent;36.28;km/h;9
+Humidité du sol;56.18;%;4
+pH du sol;6.44;pH;5
+Pluviométrie;5.19;mm;7
+Luminosité;77108.64;lux;8
+Vitesse du vent;18.24;km/h;9
+Humidité du sol;44.43;%;4
+pH du sol;7.05;pH;5
+Pluviométrie;6.93;mm;7
+Luminosité;14066.37;lux;8
+Vitesse du vent;14.22;km/h;9
+pH du sol;7.14;pH;5
+Pluviométrie;4.63;mm;7
+Luminosité;16116.73;lux;8
+Vitesse du vent;33.3;km/h;9
+Humidité du sol;74.93;%;4
+Humidité du sol;50.93;%;4
+pH du sol;6.5;pH;5
+Pluviométrie;9.13;mm;7
+Luminosité;67141.32;lux;8
+Vitesse du vent;13.59;km/h;9
+Humidité du sol;78.87;%;4
+pH du sol;7.39;pH;5
+Pluviométrie;0.2;mm;7
+Luminosité;6633.59;lux;8
+Vitesse du vent;8.71;km/h;9
+Humidité du sol;78.69;%;4
+pH du sol;6.3;pH;5
+Pluviométrie;0.8;mm;7
+Luminosité;24585.31;lux;8
+Vitesse du vent;38.48;km/h;9
+Humidité du sol;69.56;%;4
+pH du sol;7.46;pH;5
+Pluviométrie;4.5;mm;7
+Luminosité;70454.5;lux;8
+Vitesse du vent;29.74;km/h;9
+Humidité du sol;66.3;%;4
+pH du sol;6.56;pH;5
+Pluviométrie;5.42;mm;7
+Luminosité;9595.97;lux;8
+Vitesse du vent;36.46;km/h;9
+Humidité du sol;79.42;%;4
+pH du sol;7.43;pH;5
+Pluviométrie;5.3;mm;7
+Luminosité;11204.52;lux;8
+Vitesse du vent;24.55;km/h;9
+Humidité du sol;62.98;%;4
+pH du sol;6.45;pH;5
+Pluviométrie;3.29;mm;7
+Luminosité;50263.22;lux;8
+Vitesse du vent;6.29;km/h;9
+Humidité du sol;61.15;%;4
+pH du sol;7.38;pH;5
+Pluviométrie;6.99;mm;7
+Luminosité;64069.03;lux;8
+Vitesse du vent;27.77;km/h;9
+Humidité du sol;58.84;%;4
+pH du sol;6.49;pH;5
+Pluviométrie;0.05;mm;7
+Luminosité;83427.6;lux;8
+Vitesse du vent;22.03;km/h;9
+Humidité du sol;58.42;%;4
+pH du sol;6.03;pH;5
+Pluviométrie;1.47;mm;7
+Luminosité;73071.55;lux;8
+Vitesse du vent;19.91;km/h;9
+Humidité du sol;56.61;%;4
+pH du sol;6.97;pH;5
+Pluviométrie;5.55;mm;7
+Luminosité;83445.84;lux;8
+Vitesse du vent;45.59;km/h;9
+Humidité du sol;53.1;%;4
+pH du sol;6.25;pH;5
+Pluviométrie;8.22;mm;7
+Luminosité;15986.36;lux;8
+Vitesse du vent;47.3;km/h;9
+Luminosité;65518.21;lux;8
+Vitesse du vent;45.26;km/h;9
+Humidité du sol;60.97;%;4
+pH du sol;6.91;pH;5
+Pluviométrie;0.78;mm;7
+Humidité du sol;59.99;%;4
+pH du sol;6.23;pH;5
+Pluviométrie;6.03;mm;7
+Luminosité;83811.96;lux;8
+Vitesse du vent;47.49;km/h;9
+Humidité du sol;79.19;%;4
+pH du sol;6.25;pH;5
+Pluviométrie;1.42;mm;7
+Luminosité;75732.23;lux;8
+Vitesse du vent;43.28;km/h;9
+Humidité du sol;75.74;%;4
+pH du sol;7.36;pH;5
+Pluviométrie;3.01;mm;7
+Luminosité;44814.71;lux;8
+Vitesse du vent;6.41;km/h;9
+Humidité du sol;44.04;%;4
+pH du sol;6.08;pH;5
+Pluviométrie;0.81;mm;7
+Luminosité;35941.88;lux;8
+Vitesse du vent;47.33;km/h;9
+Humidité du sol;40.02;%;4
+pH du sol;6.85;pH;5
+Pluviométrie;8.79;mm;7
+Luminosité;28784.85;lux;8
+Vitesse du vent;27.22;km/h;9
+Humidité du sol;60.53;%;4
+pH du sol;7.45;pH;5
+Pluviométrie;3.44;mm;7
+Luminosité;43813.39;lux;8
+Vitesse du vent;25.56;km/h;9
+Humidité du sol;52.13;%;4
+pH du sol;6.83;pH;5
+Pluviométrie;0.72;mm;7
+Luminosité;8195.59;lux;8
+Vitesse du vent;28.16;km/h;9
+Humidité du sol;49.38;%;4
+pH du sol;6.78;pH;5
+Pluviométrie;6.83;mm;7
+Luminosité;6503.68;lux;8
+Vitesse du vent;3.13;km/h;9
+pH du sol;7.34;pH;5
+Pluviométrie;0.38;mm;7
+Luminosité;32852.63;lux;8
+Vitesse du vent;38.28;km/h;9
+Humidité du sol;62.54;%;4
+Humidité du sol;69.61;%;4
+pH du sol;7.38;pH;5
+Pluviométrie;8.17;mm;7
+Luminosité;66490.58;lux;8
+Vitesse du vent;41.01;km/h;9
+Humidité du sol;44.37;%;4
+pH du sol;6.11;pH;5
+Pluviométrie;5.7;mm;7
+Luminosité;89462.62;lux;8
+Vitesse du vent;1.81;km/h;9
+Humidité du sol;49.08;%;4
+pH du sol;6.41;pH;5
+Pluviométrie;7.57;mm;7
+Luminosité;46007.75;lux;8
+Vitesse du vent;1.05;km/h;9
+Humidité du sol;72.37;%;4
+pH du sol;6.26;pH;5
+Pluviométrie;1.21;mm;7
+Luminosité;59847.19;lux;8
+Vitesse du vent;24.87;km/h;9
+Humidité du sol;45.85;%;4
+pH du sol;6.97;pH;5
+Pluviométrie;5.36;mm;7
+Luminosité;66345.13;lux;8
+Vitesse du vent;19.68;km/h;9
+Humidité du sol;59.88;%;4
+pH du sol;6.2;pH;5
+Pluviométrie;0.01;mm;7
+Luminosité;53864.68;lux;8
+Vitesse du vent;0.58;km/h;9
+Humidité du sol;71.17;%;4
+pH du sol;7.43;pH;5
+Pluviométrie;3.89;mm;7
+Luminosité;51154.47;lux;8
+Vitesse du vent;33.87;km/h;9
+Humidité du sol;71.43;%;4
+pH du sol;6.35;pH;5
+Pluviométrie;0.27;mm;7
+Luminosité;54477.66;lux;8
+Vitesse du vent;28.82;km/h;9
+Humidité du sol;69.9;%;4
+pH du sol;6.92;pH;5
+Pluviométrie;8.52;mm;7
+Luminosité;20085.61;lux;8
+Vitesse du vent;9.23;km/h;9
+Humidité du sol;47.26;%;4
+pH du sol;7.2;pH;5
+Pluviométrie;5.61;mm;7
+Luminosité;66170.3;lux;8
+Vitesse du vent;15.81;km/h;9
+Humidité du sol;72.79;%;4
+pH du sol;7.33;pH;5
+Pluviométrie;6.99;mm;7
+Luminosité;17902.44;lux;8
+Vitesse du vent;30.73;km/h;9
+Humidité du sol;48.62;%;4
+pH du sol;6.41;pH;5
+Pluviométrie;7.08;mm;7
+Luminosité;94601.84;lux;8
+Vitesse du vent;15.51;km/h;9
+Humidité du sol;74.61;%;4
+pH du sol;6.86;pH;5
+Pluviométrie;7.2;mm;7
+Luminosité;48027.26;lux;8
+Vitesse du vent;8.06;km/h;9
+Humidité du sol;70.98;%;4
+pH du sol;6.72;pH;5
+Pluviométrie;1.22;mm;7
+Luminosité;69938.81;lux;8
+Vitesse du vent;10.32;km/h;9
+Humidité du sol;60.63;%;4
+pH du sol;6.45;pH;5
+Pluviométrie;4.21;mm;7
+Luminosité;52583.42;lux;8
+Vitesse du vent;7.99;km/h;9
+Humidité du sol;49.66;%;4
+pH du sol;6.64;pH;5
+Pluviométrie;9.25;mm;7
+Luminosité;18736.5;lux;8
+Vitesse du vent;42.2;km/h;9
+Humidité du sol;65.91;%;4
+pH du sol;6.43;pH;5
+Pluviométrie;7.39;mm;7
+Luminosité;4030.97;lux;8
+Vitesse du vent;30.98;km/h;9
+Humidité du sol;54.45;%;4
+pH du sol;6.37;pH;5
+Pluviométrie;3.66;mm;7
+Luminosité;77849.64;lux;8
+Vitesse du vent;44.84;km/h;9
+Humidité du sol;46.54;%;4
+pH du sol;6.53;pH;5
+Pluviométrie;7.3;mm;7
+Luminosité;1686.62;lux;8
+Vitesse du vent;43.3;km/h;9
+Humidité du sol;50.65;%;4
+pH du sol;7.24;pH;5
+Pluviométrie;1.57;mm;7
+Luminosité;12830.01;lux;8
+Vitesse du vent;2.51;km/h;9
+Humidité du sol;58.53;%;4
+pH du sol;6.75;pH;5
+Pluviométrie;6.34;mm;7
+Luminosité;34824.88;lux;8
+Vitesse du vent;14.45;km/h;9
+Humidité du sol;44.69;%;4
+pH du sol;6.95;pH;5
+Pluviométrie;1.25;mm;7
+Luminosité;24014.27;lux;8
+Vitesse du vent;24.56;km/h;9
+Humidité du sol;47.94;%;4
+pH du sol;7.46;pH;5
+Pluviométrie;3.05;mm;7
+Luminosité;32450.83;lux;8
+Vitesse du vent;8.08;km/h;9
+Humidité du sol;61.94;%;4
+pH du sol;6.5;pH;5
+Pluviométrie;2.73;mm;7
+Luminosité;77897.47;lux;8
+Vitesse du vent;41.8;km/h;9
+Humidité du sol;77.04;%;4
+pH du sol;6.68;pH;5
+Pluviométrie;7.4;mm;7
+Luminosité;48949.21;lux;8
+Vitesse du vent;43.48;km/h;9
+Humidité du sol;70.24;%;4
+pH du sol;6.93;pH;5
+Pluviométrie;4.4;mm;7
+Luminosité;40800.56;lux;8
+Vitesse du vent;49.63;km/h;9
+Humidité du sol;56.88;%;4
+pH du sol;6.3;pH;5
+Pluviométrie;8.72;mm;7
+Luminosité;96850.54;lux;8
+Vitesse du vent;13.09;km/h;9
+Humidité du sol;52.46;%;4
+pH du sol;6.69;pH;5
+Pluviométrie;6.43;mm;7
+Luminosité;74513.66;lux;8
+Vitesse du vent;32.65;km/h;9
+Pluviométrie;0.02;mm;7
+Luminosité;4902.59;lux;8
+Vitesse du vent;25.32;km/h;9
+Humidité du sol;67.3;%;4
+pH du sol;6.78;pH;5
+Humidité du sol;77.07;%;4
+pH du sol;6.47;pH;5
+Pluviométrie;1.01;mm;7
+Luminosité;26405.43;lux;8
+Vitesse du vent;44.41;km/h;9
+Humidité du sol;68.6;%;4
+pH du sol;7.07;pH;5
+Pluviométrie;3.96;mm;7
+Luminosité;45867.51;lux;8
+Vitesse du vent;8.18;km/h;9
+Humidité du sol;78.88;%;4
+pH du sol;6.64;pH;5
+Pluviométrie;3.63;mm;7
+Luminosité;59993.66;lux;8
+Vitesse du vent;11.61;km/h;9
+Humidité du sol;76.1;%;4
+pH du sol;6.75;pH;5
+Pluviométrie;0.65;mm;7
+Luminosité;88935.35;lux;8
+Vitesse du vent;7.86;km/h;9
+Humidité du sol;75.24;%;4
+pH du sol;7.49;pH;5
+Pluviométrie;0.25;mm;7
+Luminosité;61124.05;lux;8
+Vitesse du vent;16.93;km/h;9
+Humidité du sol;60.64;%;4
+pH du sol;6.31;pH;5
+Pluviométrie;6.36;mm;7
+Luminosité;26241.79;lux;8
+Vitesse du vent;28.88;km/h;9
+Humidité du sol;79.56;%;4
+pH du sol;7.06;pH;5
+Pluviométrie;5.89;mm;7
+Luminosité;77266.33;lux;8
+Vitesse du vent;31.32;km/h;9
+Humidité du sol;57.9;%;4
+pH du sol;7.15;pH;5
+Pluviométrie;1.67;mm;7
+Luminosité;85205.39;lux;8
+Vitesse du vent;31.32;km/h;9
+Humidité du sol;46.5;%;4
+pH du sol;6.82;pH;5
+Pluviométrie;6.94;mm;7
+Luminosité;84178.05;lux;8
+Vitesse du vent;48.68;km/h;9
+Humidité du sol;63.93;%;4
+pH du sol;7.21;pH;5
+Pluviométrie;7.28;mm;7
+Luminosité;63491.7;lux;8
+Vitesse du vent;36.72;km/h;9
+Humidité du sol;77.54;%;4
+pH du sol;6.03;pH;5
+Pluviométrie;3.26;mm;7
+Luminosité;75200.77;lux;8
+Vitesse du vent;6.69;km/h;9
+Humidité du sol;68.22;%;4
+pH du sol;6.59;pH;5
+Pluviométrie;5.46;mm;7
+Luminosité;27845.65;lux;8
+Vitesse du vent;23.46;km/h;9
+Humidité du sol;67.34;%;4
+pH du sol;7.11;pH;5
+Pluviométrie;1.48;mm;7
+Luminosité;77972.73;lux;8
+Vitesse du vent;27.95;km/h;9
+Humidité du sol;72.27;%;4
+pH du sol;7.04;pH;5
+Pluviométrie;3.73;mm;7
+Luminosité;92618.61;lux;8
+Vitesse du vent;23.38;km/h;9
+Humidité du sol;57.34;%;4
+pH du sol;6.4;pH;5
+Pluviométrie;1.46;mm;7
+Luminosité;93414.02;lux;8
+Vitesse du vent;17.03;km/h;9
+Humidité du sol;63.48;%;4
+pH du sol;7.47;pH;5
+Pluviométrie;9.58;mm;7
+Luminosité;87953.91;lux;8
+Vitesse du vent;32.87;km/h;9
+Humidité du sol;58.43;%;4
+pH du sol;6.93;pH;5
+Pluviométrie;4.87;mm;7
+Luminosité;6532.03;lux;8
+Vitesse du vent;41.13;km/h;9
+Humidité du sol;77.92;%;4
+pH du sol;7.47;pH;5
+Pluviométrie;2.28;mm;7
+Luminosité;98473.7;lux;8
+Vitesse du vent;48.74;km/h;9
+Humidité du sol;69.1;%;4
+pH du sol;6.31;pH;5
+Pluviométrie;4.19;mm;7
+Luminosité;41238.16;lux;8
+Vitesse du vent;41.23;km/h;9
+Luminosité;18311.5;lux;8
+Vitesse du vent;20.96;km/h;9
+Humidité du sol;44.61;%;4
+pH du sol;6.53;pH;5
+Pluviométrie;7.84;mm;7
+Humidité du sol;68.49;%;4
+pH du sol;6.94;pH;5
+Pluviométrie;0.02;mm;7
+Luminosité;94973.51;lux;8
+Vitesse du vent;16.6;km/h;9
+Humidité du sol;79.95;%;4
+pH du sol;6.17;pH;5
+Pluviométrie;9.37;mm;7
+Luminosité;99846.58;lux;8
+Vitesse du vent;4.98;km/h;9
+Humidité du sol;62.83;%;4
+pH du sol;6.72;pH;5
+Pluviométrie;3.03;mm;7
+Luminosité;4636.66;lux;8
+Vitesse du vent;14.57;km/h;9
+Vitesse du vent;21.27;km/h;9
+Humidité du sol;73.43;%;4
+pH du sol;6.82;pH;5
+Pluviométrie;8.36;mm;7
+Luminosité;42206.44;lux;8
+Humidité du sol;53.92;%;4
+pH du sol;6.79;pH;5
+Pluviométrie;0.9;mm;7
+Luminosité;62984.24;lux;8
+Vitesse du vent;20.74;km/h;9
+Humidité du sol;63.88;%;4
+pH du sol;6.04;pH;5
+Pluviométrie;4.75;mm;7
+Luminosité;33643.75;lux;8
+Vitesse du vent;20.44;km/h;9
+Humidité du sol;56.26;%;4
+pH du sol;7.42;pH;5
+Pluviométrie;3.12;mm;7
+Luminosité;11383.71;lux;8
+Vitesse du vent;27.26;km/h;9
+Humidité du sol;74.75;%;4
+pH du sol;7.16;pH;5
+Pluviométrie;9.44;mm;7
+Luminosité;67222.16;lux;8
+Vitesse du vent;10.33;km/h;9
+Humidité du sol;49.52;%;4
+pH du sol;6.9;pH;5
+Pluviométrie;0.79;mm;7
+Luminosité;91894.14;lux;8
+Vitesse du vent;9.65;km/h;9
+Humidité du sol;71.75;%;4
+pH du sol;7.19;pH;5
+Pluviométrie;8.76;mm;7
+Luminosité;44059.75;lux;8
+Vitesse du vent;30.68;km/h;9
+Humidité du sol;64.03;%;4
+pH du sol;7.37;pH;5
+Pluviométrie;4.12;mm;7
+Luminosité;20908.05;lux;8
+Vitesse du vent;13.84;km/h;9
+Humidité du sol;61.01;%;4
+pH du sol;7.13;pH;5
+Pluviométrie;4.48;mm;7
+Luminosité;54458.59;lux;8
+Vitesse du vent;45.36;km/h;9
+Humidité du sol;65.12;%;4
+pH du sol;7.3;pH;5
+Pluviométrie;9.05;mm;7
+Luminosité;98755.4;lux;8
+Vitesse du vent;49.43;km/h;9
+Humidité du sol;72.64;%;4
+pH du sol;7.47;pH;5
+Pluviométrie;0.82;mm;7
+Luminosité;3916.01;lux;8
+Vitesse du vent;10.48;km/h;9
+Humidité du sol;63.55;%;4
+pH du sol;7.06;pH;5
+Pluviométrie;0.64;mm;7
+Luminosité;72342.33;lux;8
+Vitesse du vent;41.34;km/h;9
+Humidité du sol;48.36;%;4
+pH du sol;7.34;pH;5
+Pluviométrie;4.44;mm;7
+Luminosité;67935.74;lux;8
+Vitesse du vent;45.12;km/h;9
+Humidité du sol;43.02;%;4
+pH du sol;6.27;pH;5
+Pluviométrie;7.91;mm;7
+Luminosité;73470.39;lux;8
+Vitesse du vent;39.21;km/h;9
+Humidité du sol;53.3;%;4
+pH du sol;6.58;pH;5
+Pluviométrie;0.04;mm;7
+Luminosité;58783.73;lux;8
+Vitesse du vent;9.51;km/h;9
+Humidité du sol;77.55;%;4
+pH du sol;6.13;pH;5
+Pluviométrie;6.0;mm;7
+Luminosité;43290.71;lux;8
+Vitesse du vent;20.36;km/h;9
+Luminosité;12714.75;lux;8
+Vitesse du vent;32.36;km/h;9
+Humidité du sol;78.73;%;4
+pH du sol;7.18;pH;5
+Pluviométrie;4.05;mm;7
+Humidité du sol;55.12;%;4
+pH du sol;6.11;pH;5
+Pluviométrie;4.15;mm;7
+Luminosité;4841.81;lux;8
+Vitesse du vent;21.57;km/h;9
+Humidité du sol;76.67;%;4
+pH du sol;7.4;pH;5
+Pluviométrie;6.31;mm;7
+Luminosité;73786.23;lux;8
+Vitesse du vent;14.24;km/h;9
+Humidité du sol;60.44;%;4
+pH du sol;6.35;pH;5
+Pluviométrie;5.77;mm;7
+Luminosité;67297.51;lux;8
+Vitesse du vent;41.25;km/h;9
+Humidité du sol;45.34;%;4
+pH du sol;7.3;pH;5
+Pluviométrie;9.93;mm;7
+Luminosité;5278.49;lux;8
+Vitesse du vent;11.94;km/h;9
+Humidité du sol;44.79;%;4
+pH du sol;6.89;pH;5
+Pluviométrie;6.87;mm;7
+Luminosité;73856.76;lux;8
+Vitesse du vent;25.64;km/h;9
+Humidité du sol;53.18;%;4
+pH du sol;7.46;pH;5
+Pluviométrie;9.19;mm;7
+Luminosité;75057.5;lux;8
+Vitesse du vent;26.84;km/h;9
+Humidité du sol;55.65;%;4
+pH du sol;6.74;pH;5
+Pluviométrie;8.66;mm;7
+Luminosité;930.98;lux;8
+Vitesse du vent;38.7;km/h;9
+Pluviométrie;6.32;mm;7
+Luminosité;78399.29;lux;8
+Vitesse du vent;12.69;km/h;9
+Humidité du sol;71.1;%;4
+pH du sol;7.1;pH;5
+Humidité du sol;69.76;%;4
+pH du sol;6.32;pH;5
+Pluviométrie;4.75;mm;7
+Luminosité;33654.78;lux;8
+Vitesse du vent;48.89;km/h;9
+Humidité du sol;77.03;%;4
+pH du sol;7.14;pH;5
+Pluviométrie;8.21;mm;7
+Luminosité;45544.91;lux;8
+Vitesse du vent;32.4;km/h;9
+Humidité du sol;69.4;%;4
+pH du sol;7.18;pH;5
+Pluviométrie;5.39;mm;7
+Luminosité;69169.18;lux;8
+Vitesse du vent;26.34;km/h;9
+Humidité du sol;72.03;%;4
+pH du sol;6.89;pH;5
+Pluviométrie;5.48;mm;7
+Luminosité;91161.52;lux;8
+Vitesse du vent;18.7;km/h;9
+Humidité du sol;73.23;%;4
+pH du sol;7.48;pH;5
+Pluviométrie;4.23;mm;7
+Luminosité;78409.62;lux;8
+Vitesse du vent;28.45;km/h;9
+Vitesse du vent;33.04;km/h;9
+Humidité du sol;63.0;%;4
+pH du sol;7.27;pH;5
+Pluviométrie;4.96;mm;7
+Luminosité;59591.01;lux;8
+Humidité du sol;76.1;%;4
+pH du sol;6.95;pH;5
+Pluviométrie;3.63;mm;7
+Luminosité;40097.55;lux;8
+Vitesse du vent;37.19;km/h;9
+Humidité du sol;74.89;%;4
+pH du sol;6.48;pH;5
+Pluviométrie;6.89;mm;7
+Luminosité;97412.42;lux;8
+Vitesse du vent;37.2;km/h;9
+Humidité du sol;53.92;%;4
+pH du sol;6.96;pH;5
+Pluviométrie;8.47;mm;7
+Luminosité;20560.66;lux;8
+Vitesse du vent;43.86;km/h;9
+Humidité du sol;43.73;%;4
+pH du sol;7.41;pH;5
+Pluviométrie;6.61;mm;7
+Luminosité;92365.24;lux;8
+Vitesse du vent;24.51;km/h;9
+Humidité du sol;56.38;%;4
+pH du sol;6.39;pH;5
+Pluviométrie;6.32;mm;7
+Luminosité;92921.83;lux;8
+Vitesse du vent;2.06;km/h;9
+Humidité du sol;66.01;%;4
+pH du sol;6.64;pH;5
+Pluviométrie;1.6;mm;7
+Luminosité;25264.84;lux;8
+Vitesse du vent;13.07;km/h;9
+Humidité du sol;64.24;%;4
+pH du sol;7.46;pH;5
+Pluviométrie;9.85;mm;7
+Luminosité;89063.19;lux;8
+Vitesse du vent;49.21;km/h;9
+Humidité du sol;56.52;%;4
+pH du sol;7.06;pH;5
+Pluviométrie;1.42;mm;7
+Luminosité;27848.83;lux;8
+Vitesse du vent;22.51;km/h;9
+Humidité du sol;60.48;%;4
+pH du sol;7.23;pH;5
+Pluviométrie;3.78;mm;7
+Luminosité;75737.74;lux;8
+Vitesse du vent;37.87;km/h;9
+Humidité du sol;50.68;%;4
+pH du sol;6.22;pH;5
+Pluviométrie;2.03;mm;7
+Luminosité;6328.88;lux;8
+Vitesse du vent;12.3;km/h;9
+Humidité du sol;64.45;%;4
+pH du sol;7.16;pH;5
+Pluviométrie;6.54;mm;7
+Luminosité;57514.88;lux;8
+Vitesse du vent;11.9;km/h;9
+Humidité du sol;46.84;%;4
+pH du sol;6.65;pH;5
+Pluviométrie;1.13;mm;7
+Luminosité;61228.73;lux;8
+Vitesse du vent;46.34;km/h;9
+Humidité du sol;45.79;%;4
+pH du sol;7.22;pH;5
+Pluviométrie;4.67;mm;7
+Luminosité;46868.74;lux;8
+Vitesse du vent;33.98;km/h;9
+Humidité du sol;58.54;%;4
+pH du sol;7.02;pH;5
+Pluviométrie;7.59;mm;7
+Luminosité;72084.52;lux;8
+Vitesse du vent;20.15;km/h;9
+Humidité du sol;78.73;%;4
+pH du sol;6.5;pH;5
+Pluviométrie;3.88;mm;7
+Luminosité;84236.97;lux;8
+Vitesse du vent;49.62;km/h;9
+Humidité du sol;48.46;%;4
+pH du sol;7.06;pH;5
+Pluviométrie;1.97;mm;7
+Luminosité;21229.14;lux;8
+Vitesse du vent;21.94;km/h;9
+Humidité du sol;68.96;%;4
+pH du sol;6.75;pH;5
+Pluviométrie;0.85;mm;7
+Luminosité;77930.7;lux;8
+Vitesse du vent;31.25;km/h;9
+Humidité du sol;57.42;%;4
+pH du sol;7.04;pH;5
+Pluviométrie;1.49;mm;7
+Luminosité;60871.12;lux;8
+Vitesse du vent;43.09;km/h;9
+Humidité du sol;52.45;%;4
+pH du sol;7.44;pH;5
+Pluviométrie;6.65;mm;7
+Luminosité;47720.7;lux;8
+Vitesse du vent;13.88;km/h;9
+Humidité du sol;50.98;%;4
+pH du sol;6.1;pH;5
+Pluviométrie;8.3;mm;7
+Luminosité;17409.97;lux;8
+Vitesse du vent;22.97;km/h;9
+Humidité du sol;66.84;%;4
+pH du sol;6.38;pH;5
+Pluviométrie;0.37;mm;7
+Luminosité;76438.07;lux;8
+Vitesse du vent;6.7;km/h;9
+Humidité du sol;66.58;%;4
+pH du sol;7.45;pH;5
+Pluviométrie;9.97;mm;7
+Luminosité;11126.41;lux;8
+Vitesse du vent;11.35;km/h;9
+Humidité du sol;53.99;%;4
+pH du sol;6.48;pH;5
+Pluviométrie;7.45;mm;7
+Luminosité;9873.19;lux;8
+Vitesse du vent;23.68;km/h;9
+Humidité du sol;57.73;%;4
+pH du sol;7.16;pH;5
+Pluviométrie;6.45;mm;7
+Luminosité;71443.83;lux;8
+Vitesse du vent;44.91;km/h;9
+Pluviométrie;6.92;mm;7
+Luminosité;96065.88;lux;8
+Vitesse du vent;43.16;km/h;9
+Humidité du sol;51.85;%;4
+pH du sol;7.28;pH;5
+Humidité du sol;42.12;%;4
+pH du sol;7.24;pH;5
+Pluviométrie;4.54;mm;7
+Luminosité;36226.61;lux;8
+Vitesse du vent;25.59;km/h;9
+Humidité du sol;47.36;%;4
+pH du sol;6.68;pH;5
+Pluviométrie;2.67;mm;7
+Luminosité;91546.2;lux;8
+Vitesse du vent;9.12;km/h;9
+Humidité du sol;49.68;%;4
+pH du sol;6.06;pH;5
+Pluviométrie;8.67;mm;7
+Luminosité;11507.89;lux;8
+Vitesse du vent;35.56;km/h;9
+Humidité du sol;55.91;%;4
+pH du sol;6.59;pH;5
+Pluviométrie;8.7;mm;7
+Luminosité;72924.71;lux;8
+Vitesse du vent;4.56;km/h;9
+Humidité du sol;72.72;%;4
+pH du sol;6.37;pH;5
+Pluviométrie;2.18;mm;7
+Luminosité;8582.81;lux;8
+Vitesse du vent;16.4;km/h;9
+Humidité du sol;52.31;%;4
+pH du sol;6.33;pH;5
+Pluviométrie;9.29;mm;7
+Luminosité;44374.47;lux;8
+Vitesse du vent;36.2;km/h;9
+Humidité du sol;62.6;%;4
+pH du sol;6.12;pH;5
+Pluviométrie;9.7;mm;7
+Luminosité;22884.92;lux;8
+Vitesse du vent;26.97;km/h;9
+Humidité du sol;59.67;%;4
+pH du sol;6.22;pH;5
+Pluviométrie;0.2;mm;7
+Luminosité;78267.27;lux;8
+Vitesse du vent;14.88;km/h;9
+pH du sol;6.38;pH;5
+Pluviométrie;4.73;mm;7
+Luminosité;65275.2;lux;8
+Vitesse du vent;45.27;km/h;9
+Humidité du sol;43.67;%;4
+Humidité du sol;43.63;%;4
+pH du sol;6.86;pH;5
+Pluviométrie;5.77;mm;7
+Luminosité;44157.02;lux;8
+Vitesse du vent;8.15;km/h;9
+Humidité du sol;79.43;%;4
+pH du sol;6.84;pH;5
+Pluviométrie;9.73;mm;7
+Luminosité;63989.12;lux;8
+Vitesse du vent;4.61;km/h;9
+Humidité du sol;78.64;%;4
+pH du sol;7.16;pH;5
+Pluviométrie;9.57;mm;7
+Luminosité;5530.3;lux;8
+Vitesse du vent;18.75;km/h;9
+Humidité du sol;61.28;%;4
+pH du sol;7.35;pH;5
+Pluviométrie;6.14;mm;7
+Luminosité;25081.4;lux;8
+Vitesse du vent;37.67;km/h;9
+Humidité du sol;58.22;%;4
+pH du sol;6.29;pH;5
+Pluviométrie;5.67;mm;7
+Luminosité;23709.41;lux;8
+Vitesse du vent;22.31;km/h;9
+Humidité du sol;55.64;%;4
+pH du sol;7.34;pH;5
+Pluviométrie;6.37;mm;7
+Luminosité;34254.63;lux;8
+Vitesse du vent;36.66;km/h;9
+Humidité du sol;40.37;%;4
+pH du sol;6.78;pH;5
+Pluviométrie;3.53;mm;7
+Luminosité;42831.14;lux;8
+Vitesse du vent;34.49;km/h;9
+Humidité du sol;50.91;%;4
+pH du sol;6.95;pH;5
+Pluviométrie;4.69;mm;7
+Luminosité;4748.4;lux;8
+Vitesse du vent;30.22;km/h;9
+Humidité du sol;42.76;%;4
+pH du sol;6.39;pH;5
+Pluviométrie;1.94;mm;7
+Luminosité;12913.07;lux;8
+Vitesse du vent;22.53;km/h;9
+Humidité du sol;72.87;%;4
+pH du sol;6.76;pH;5
+Pluviométrie;9.46;mm;7
+Luminosité;9291.22;lux;8
+Vitesse du vent;19.85;km/h;9
+Vitesse du vent;31.66;km/h;9
+Humidité du sol;46.85;%;4
+pH du sol;7.4;pH;5
+Pluviométrie;3.59;mm;7
+Luminosité;61943.18;lux;8
+Humidité du sol;61.09;%;4
+pH du sol;6.16;pH;5
+Pluviométrie;7.48;mm;7
+Luminosité;33609.65;lux;8
+Vitesse du vent;32.69;km/h;9
+Humidité du sol;58.46;%;4
+pH du sol;6.94;pH;5
+Pluviométrie;9.6;mm;7
+Luminosité;35990.76;lux;8
+Vitesse du vent;5.14;km/h;9
+Humidité du sol;61.29;%;4
+pH du sol;7.25;pH;5
+Pluviométrie;8.72;mm;7
+Luminosité;45747.21;lux;8
+Vitesse du vent;32.67;km/h;9
+Humidité du sol;59.23;%;4
+pH du sol;6.9;pH;5
+Pluviométrie;6.34;mm;7
+Luminosité;54202.34;lux;8
+Vitesse du vent;37.28;km/h;9
+Humidité du sol;63.8;%;4
+pH du sol;7.42;pH;5
+Pluviométrie;9.64;mm;7
+Luminosité;74120.77;lux;8
+Vitesse du vent;14.28;km/h;9
+Luminosité;32378.41;lux;8
+Vitesse du vent;41.82;km/h;9
+Humidité du sol;59.97;%;4
+pH du sol;6.71;pH;5
+Pluviométrie;9.6;mm;7
+Humidité du sol;45.34;%;4
+pH du sol;7.34;pH;5
+Pluviométrie;2.86;mm;7
+Luminosité;86601.0;lux;8
+Vitesse du vent;3.56;km/h;9
+Humidité du sol;76.39;%;4
+pH du sol;7.32;pH;5
+Pluviométrie;1.65;mm;7
+Luminosité;62513.99;lux;8
+Vitesse du vent;15.14;km/h;9
+Pluviométrie;3.79;mm;7
+Luminosité;28281.07;lux;8
+Vitesse du vent;12.34;km/h;9
+Humidité du sol;44.73;%;4
+pH du sol;6.05;pH;5
+Humidité du sol;46.95;%;4
+pH du sol;6.42;pH;5
+Pluviométrie;4.97;mm;7
+Luminosité;4561.51;lux;8
+Vitesse du vent;23.41;km/h;9
+Humidité du sol;77.36;%;4
+pH du sol;7.41;pH;5
+Pluviométrie;1.11;mm;7
+Luminosité;78004.14;lux;8
+Vitesse du vent;0.76;km/h;9
+Humidité du sol;48.23;%;4
+pH du sol;6.1;pH;5
+Pluviométrie;1.37;mm;7
+Luminosité;4504.34;lux;8
+Vitesse du vent;13.5;km/h;9
+Humidité du sol;50.91;%;4
+pH du sol;7.31;pH;5
+Pluviométrie;8.77;mm;7
+Luminosité;2340.06;lux;8
+Vitesse du vent;41.86;km/h;9
+Humidité du sol;41.12;%;4
+pH du sol;6.34;pH;5
+Pluviométrie;9.98;mm;7
+Luminosité;9523.97;lux;8
+Vitesse du vent;29.3;km/h;9
+pH du sol;7.01;pH;5
+Pluviométrie;1.39;mm;7
+Luminosité;96205.63;lux;8
+Vitesse du vent;16.94;km/h;9
+Humidité du sol;47.36;%;4
+Humidité du sol;77.5;%;4
+pH du sol;6.08;pH;5
+Pluviométrie;6.98;mm;7
+Luminosité;41072.08;lux;8
+Vitesse du vent;16.05;km/h;9
+Humidité du sol;66.64;%;4
+pH du sol;6.67;pH;5
+Pluviométrie;7.14;mm;7
+Luminosité;7665.18;lux;8
+Vitesse du vent;32.44;km/h;9
+Humidité du sol;61.05;%;4
+pH du sol;7.19;pH;5
+Pluviométrie;2.12;mm;7
+Luminosité;3395.34;lux;8
+Vitesse du vent;46.75;km/h;9
+Humidité du sol;64.62;%;4
+pH du sol;6.74;pH;5
+Pluviométrie;9.15;mm;7
+Luminosité;76538.52;lux;8
+Vitesse du vent;44.46;km/h;9
+Humidité du sol;47.65;%;4
+pH du sol;6.1;pH;5
+Pluviométrie;6.62;mm;7
+Luminosité;77077.98;lux;8
+Vitesse du vent;20.37;km/h;9
+Humidité du sol;70.1;%;4
+pH du sol;7.44;pH;5
+Pluviométrie;1.72;mm;7
+Luminosité;40710.82;lux;8
+Vitesse du vent;22.27;km/h;9
+Humidité du sol;46.24;%;4
+pH du sol;7.49;pH;5
+Pluviométrie;1.51;mm;7
+Luminosité;79123.06;lux;8
+Vitesse du vent;15.77;km/h;9
+Humidité du sol;48.76;%;4
+pH du sol;7.46;pH;5
+Pluviométrie;2.85;mm;7
+Luminosité;35119.25;lux;8
+Vitesse du vent;22.17;km/h;9
+Humidité du sol;54.6;%;4
+pH du sol;6.34;pH;5
+Pluviométrie;9.58;mm;7
+Luminosité;90860.7;lux;8
+Vitesse du vent;37.89;km/h;9
+Humidité du sol;57.91;%;4
+pH du sol;6.3;pH;5
+Pluviométrie;7.29;mm;7
+Luminosité;32581.42;lux;8
+Vitesse du vent;43.37;km/h;9
+Humidité du sol;77.7;%;4
+pH du sol;7.1;pH;5
+Pluviométrie;0.02;mm;7
+Luminosité;37890.33;lux;8
+Vitesse du vent;25.74;km/h;9
+Humidité du sol;47.33;%;4
+pH du sol;6.25;pH;5
+Pluviométrie;7.01;mm;7
+Luminosité;88871.72;lux;8
+Vitesse du vent;33.62;km/h;9
+Humidité du sol;51.36;%;4
+pH du sol;6.61;pH;5
+Pluviométrie;5.84;mm;7
+Luminosité;62798.18;lux;8
+Vitesse du vent;26.62;km/h;9
+Humidité du sol;79.66;%;4
+pH du sol;6.2;pH;5
+Pluviométrie;3.97;mm;7
+Luminosité;89066.79;lux;8
+Vitesse du vent;46.57;km/h;9
+Humidité du sol;64.05;%;4
+pH du sol;6.12;pH;5
+Pluviométrie;9.04;mm;7
+Luminosité;84136.16;lux;8
+Vitesse du vent;46.79;km/h;9
+Humidité du sol;52.72;%;4
+pH du sol;6.33;pH;5
+Pluviométrie;6.8;mm;7
+Luminosité;80892.85;lux;8
+Vitesse du vent;47.92;km/h;9
+Humidité du sol;42.08;%;4
+pH du sol;7.17;pH;5
+Pluviométrie;4.69;mm;7
+Luminosité;52066.04;lux;8
+Vitesse du vent;33.66;km/h;9
+Humidité du sol;63.06;%;4
+pH du sol;6.24;pH;5
+Pluviométrie;9.82;mm;7
+Luminosité;97470.16;lux;8
+Vitesse du vent;49.94;km/h;9
+Pluviométrie;6.49;mm;7
+Luminosité;62669.19;lux;8
+Vitesse du vent;30.68;km/h;9
+Humidité du sol;48.9;%;4
+pH du sol;7.31;pH;5
+Humidité du sol;58.85;%;4
+pH du sol;6.76;pH;5
+Pluviométrie;3.32;mm;7
+Luminosité;36003.39;lux;8
+Vitesse du vent;7.53;km/h;9
+Humidité du sol;43.44;%;4
+pH du sol;6.99;pH;5
+Pluviométrie;8.44;mm;7
+Luminosité;96071.91;lux;8
+Vitesse du vent;3.14;km/h;9
+Luminosité;46857.79;lux;8
+Vitesse du vent;2.92;km/h;9
+Humidité du sol;70.39;%;4
+pH du sol;6.05;pH;5
+Pluviométrie;3.83;mm;7
+Humidité du sol;51.17;%;4
+pH du sol;7.03;pH;5
+Pluviométrie;9.68;mm;7
+Luminosité;23933.19;lux;8
+Vitesse du vent;4.31;km/h;9
+Humidité du sol;56.14;%;4
+pH du sol;6.99;pH;5
+Pluviométrie;5.35;mm;7
+Luminosité;17311.52;lux;8
+Vitesse du vent;45.22;km/h;9
+Humidité du sol;60.18;%;4
+pH du sol;6.43;pH;5
+Pluviométrie;3.37;mm;7
+Luminosité;50947.4;lux;8
+Vitesse du vent;44.59;km/h;9
+Humidité du sol;42.69;%;4
+pH du sol;7.11;pH;5
+Pluviométrie;1.9;mm;7
+Luminosité;45147.17;lux;8
+Vitesse du vent;48.76;km/h;9
+Humidité du sol;48.86;%;4
+pH du sol;7.11;pH;5
+Pluviométrie;3.11;mm;7
+Luminosité;14544.97;lux;8
+Vitesse du vent;14.24;km/h;9
+Humidité du sol;41.17;%;4
+pH du sol;7.0;pH;5
+Pluviométrie;7.82;mm;7
+Luminosité;92408.56;lux;8
+Vitesse du vent;34.97;km/h;9
+Humidité du sol;52.2;%;4
+pH du sol;6.5;pH;5
+Pluviométrie;1.91;mm;7
+Luminosité;84336.56;lux;8
+Vitesse du vent;14.19;km/h;9
+Humidité du sol;67.23;%;4
+pH du sol;6.15;pH;5
+Pluviométrie;0.41;mm;7
+Luminosité;80179.18;lux;8
+Vitesse du vent;48.93;km/h;9
+Humidité du sol;45.16;%;4
+pH du sol;6.55;pH;5
+Pluviométrie;5.7;mm;7
+Luminosité;43964.27;lux;8
+Vitesse du vent;11.03;km/h;9
+Humidité du sol;69.32;%;4
+pH du sol;7.09;pH;5
+Pluviométrie;7.16;mm;7
+Luminosité;42134.73;lux;8
+Vitesse du vent;12.06;km/h;9
+Humidité du sol;73.52;%;4
+pH du sol;6.88;pH;5
+Pluviométrie;1.91;mm;7
+Luminosité;91807.05;lux;8
+Vitesse du vent;47.07;km/h;9
+Pluviométrie;2.85;mm;7
+Luminosité;18531.66;lux;8
+Vitesse du vent;22.98;km/h;9
+Humidité du sol;74.54;%;4
+pH du sol;6.09;pH;5
+Humidité du sol;63.13;%;4
+pH du sol;7.18;pH;5
+Pluviométrie;1.2;mm;7
+Luminosité;9651.11;lux;8
+Vitesse du vent;22.82;km/h;9
+Humidité du sol;68.34;%;4
+pH du sol;6.56;pH;5
+Pluviométrie;0.26;mm;7
+Luminosité;12159.92;lux;8
+Vitesse du vent;0.89;km/h;9
+Humidité du sol;42.42;%;4
+pH du sol;6.57;pH;5
+Pluviométrie;7.13;mm;7
+Luminosité;67150.08;lux;8
+Vitesse du vent;25.37;km/h;9
+Humidité du sol;74.02;%;4
+pH du sol;6.76;pH;5
+Pluviométrie;3.46;mm;7
+Luminosité;65268.26;lux;8
+Vitesse du vent;17.87;km/h;9
+Humidité du sol;61.22;%;4
+pH du sol;6.8;pH;5
+Pluviométrie;8.32;mm;7
+Luminosité;80681.73;lux;8
+Vitesse du vent;5.69;km/h;9
+Humidité du sol;77.53;%;4
+pH du sol;6.17;pH;5
+Pluviométrie;7.54;mm;7
+Luminosité;36616.58;lux;8
+Vitesse du vent;0.37;km/h;9
+Humidité du sol;53.14;%;4
+pH du sol;7.25;pH;5
+Pluviométrie;8.87;mm;7
+Luminosité;3849.24;lux;8
+Vitesse du vent;26.74;km/h;9
+Humidité du sol;65.29;%;4
+pH du sol;6.12;pH;5
+Pluviométrie;1.67;mm;7
+Luminosité;77403.64;lux;8
+Vitesse du vent;47.25;km/h;9
+Humidité du sol;57.93;%;4
+pH du sol;6.79;pH;5
+Pluviométrie;1.54;mm;7
+Luminosité;246.87;lux;8
+Vitesse du vent;13.94;km/h;9
+Pluviométrie;0.85;mm;7
+Luminosité;81068.83;lux;8
+Vitesse du vent;47.77;km/h;9
+Humidité du sol;56.0;%;4
+pH du sol;7.41;pH;5
+Humidité du sol;42.91;%;4
+pH du sol;7.22;pH;5
+Pluviométrie;2.53;mm;7
+Luminosité;41674.06;lux;8
+Vitesse du vent;40.75;km/h;9
+Humidité du sol;72.46;%;4
+pH du sol;7.41;pH;5
+Pluviométrie;3.79;mm;7
+Luminosité;3543.3;lux;8
+Vitesse du vent;21.01;km/h;9
+Humidité du sol;45.2;%;4
+pH du sol;6.25;pH;5
+Pluviométrie;3.81;mm;7
+Luminosité;73851.93;lux;8
+Vitesse du vent;49.73;km/h;9
+Humidité du sol;42.18;%;4
+pH du sol;6.08;pH;5
+Pluviométrie;9.19;mm;7
+Luminosité;91364.32;lux;8
+Vitesse du vent;43.08;km/h;9
+Pluviométrie;6.17;mm;7
+Luminosité;5310.87;lux;8
+Vitesse du vent;29.32;km/h;9
+Humidité du sol;54.56;%;4
+pH du sol;7.28;pH;5
+Humidité du sol;46.13;%;4
+pH du sol;6.53;pH;5
+Pluviométrie;7.4;mm;7
+Luminosité;83768.79;lux;8
+Vitesse du vent;15.07;km/h;9
+Humidité du sol;48.34;%;4
+pH du sol;6.85;pH;5
+Pluviométrie;7.34;mm;7
+Luminosité;24532.27;lux;8
+Vitesse du vent;6.57;km/h;9
+Humidité du sol;72.72;%;4
+pH du sol;6.13;pH;5
+Pluviométrie;2.37;mm;7
+Luminosité;43396.11;lux;8
+Vitesse du vent;11.08;km/h;9
+Humidité du sol;66.91;%;4
+pH du sol;6.23;pH;5
+Pluviométrie;6.76;mm;7
+Luminosité;60151.61;lux;8
+Vitesse du vent;26.39;km/h;9
+Humidité du sol;49.23;%;4
+pH du sol;7.49;pH;5
+Pluviométrie;1.34;mm;7
+Luminosité;59829.99;lux;8
+Vitesse du vent;32.41;km/h;9
+Humidité du sol;68.14;%;4
+pH du sol;6.29;pH;5
+Pluviométrie;6.14;mm;7
+Luminosité;3403.96;lux;8
+Vitesse du vent;10.48;km/h;9
+Humidité du sol;66.86;%;4
+pH du sol;7.45;pH;5
+Pluviométrie;9.1;mm;7
+Luminosité;77303.61;lux;8
+Vitesse du vent;10.25;km/h;9
+Humidité du sol;69.18;%;4
+pH du sol;6.23;pH;5
+Pluviométrie;5.07;mm;7
+Luminosité;20578.8;lux;8
+Vitesse du vent;45.25;km/h;9
+Humidité du sol;71.98;%;4
+pH du sol;7.44;pH;5
+Pluviométrie;9.62;mm;7
+Luminosité;7903.47;lux;8
+Vitesse du vent;13.41;km/h;9
+Humidité du sol;61.11;%;4
+pH du sol;7.44;pH;5
+Pluviométrie;1.68;mm;7
+Luminosité;43532.25;lux;8
+Vitesse du vent;18.7;km/h;9
+Humidité du sol;72.27;%;4
+pH du sol;7.02;pH;5
+Pluviométrie;9.19;mm;7
+Luminosité;63928.02;lux;8
+Vitesse du vent;7.64;km/h;9
+Humidité du sol;43.84;%;4
+pH du sol;6.11;pH;5
+Pluviométrie;0.61;mm;7
+Luminosité;40106.18;lux;8
+Vitesse du vent;12.89;km/h;9
+Humidité du sol;79.33;%;4
+pH du sol;6.85;pH;5
+Pluviométrie;6.5;mm;7
+Luminosité;44242.37;lux;8
+Vitesse du vent;33.82;km/h;9
+Humidité du sol;68.09;%;4
+pH du sol;6.32;pH;5
+Pluviométrie;5.81;mm;7
+Luminosité;25430.58;lux;8
+Vitesse du vent;21.25;km/h;9
+Humidité du sol;43.59;%;4
+pH du sol;6.35;pH;5
+Pluviométrie;0.49;mm;7
+Luminosité;80751.51;lux;8
+Vitesse du vent;31.18;km/h;9
+Humidité du sol;77.34;%;4
+pH du sol;6.64;pH;5
+Pluviométrie;8.99;mm;7
+Luminosité;95781.34;lux;8
+Vitesse du vent;24.23;km/h;9
+Humidité du sol;41.19;%;4
+pH du sol;7.25;pH;5
+Pluviométrie;7.32;mm;7
+Luminosité;71767.0;lux;8
+Vitesse du vent;13.62;km/h;9
+Humidité du sol;51.15;%;4
+pH du sol;6.37;pH;5
+Pluviométrie;6.83;mm;7
+Luminosité;49155.29;lux;8
+Vitesse du vent;24.54;km/h;9
+Humidité du sol;62.39;%;4
+pH du sol;6.01;pH;5
+Pluviométrie;6.6;mm;7
+Luminosité;19706.79;lux;8
+Vitesse du vent;39.22;km/h;9
+Humidité du sol;52.02;%;4
+pH du sol;6.76;pH;5
+Pluviométrie;7.0;mm;7
+Luminosité;24824.66;lux;8
+Vitesse du vent;19.22;km/h;9
+Humidité du sol;40.53;%;4
+pH du sol;6.33;pH;5
+Pluviométrie;8.05;mm;7
+Luminosité;17665.62;lux;8
+Vitesse du vent;41.59;km/h;9
+Humidité du sol;45.94;%;4
+pH du sol;6.84;pH;5
+Pluviométrie;0.94;mm;7
+Luminosité;7532.8;lux;8
+Vitesse du vent;32.44;km/h;9
+Humidité du sol;59.63;%;4
+pH du sol;7.25;pH;5
+Pluviométrie;7.65;mm;7
+Luminosité;14519.6;lux;8
+Vitesse du vent;19.84;km/h;9
+Humidité du sol;66.69;%;4
+pH du sol;6.76;pH;5
+Pluviométrie;5.57;mm;7
+Luminosité;49267.88;lux;8
+Vitesse du vent;41.46;km/h;9
+Humidité du sol;60.84;%;4
+pH du sol;6.52;pH;5
+Pluviométrie;8.58;mm;7
+Luminosité;23897.35;lux;8
+Vitesse du vent;30.26;km/h;9
+Humidité du sol;45.35;%;4
+pH du sol;7.14;pH;5
+Pluviométrie;3.54;mm;7
+Luminosité;25357.17;lux;8
+Vitesse du vent;33.85;km/h;9
+pH du sol;7.46;pH;5
+Pluviométrie;6.98;mm;7
+Luminosité;95801.64;lux;8
+Vitesse du vent;22.25;km/h;9
+Humidité du sol;49.06;%;4
+Humidité du sol;45.63;%;4
+pH du sol;6.2;pH;5
+Pluviométrie;4.85;mm;7
+Luminosité;54372.94;lux;8
+Vitesse du vent;2.84;km/h;9
+Humidité du sol;45.01;%;4
+pH du sol;6.87;pH;5
+Pluviométrie;6.91;mm;7
+Luminosité;69526.21;lux;8
+Vitesse du vent;15.35;km/h;9
+Humidité du sol;75.4;%;4
+pH du sol;6.57;pH;5
+Pluviométrie;5.04;mm;7
+Luminosité;33454.64;lux;8
+Vitesse du vent;42.82;km/h;9
+Humidité du sol;48.31;%;4
+pH du sol;6.27;pH;5
+Pluviométrie;4.77;mm;7
+Luminosité;9614.56;lux;8
+Vitesse du vent;9.21;km/h;9
+Humidité du sol;59.97;%;4
+pH du sol;6.49;pH;5
+Pluviométrie;7.37;mm;7
+Luminosité;96006.27;lux;8
+Vitesse du vent;37.95;km/h;9
+Humidité du sol;62.69;%;4
+pH du sol;7.48;pH;5
+Pluviométrie;2.15;mm;7
+Luminosité;49197.02;lux;8
+Vitesse du vent;31.53;km/h;9
+Humidité du sol;43.66;%;4
+pH du sol;6.34;pH;5
+Pluviométrie;8.36;mm;7
+Luminosité;58958.05;lux;8
+Vitesse du vent;33.91;km/h;9
+Humidité du sol;42.78;%;4
+pH du sol;6.42;pH;5
+Pluviométrie;8.53;mm;7
+Luminosité;18448.92;lux;8
+Vitesse du vent;9.02;km/h;9
+Humidité du sol;63.61;%;4
+pH du sol;7.12;pH;5
+Pluviométrie;1.75;mm;7
+Luminosité;41028.47;lux;8
+Vitesse du vent;45.41;km/h;9
+Humidité du sol;64.82;%;4
+pH du sol;6.93;pH;5
+Pluviométrie;5.04;mm;7
+Luminosité;96318.29;lux;8
+Vitesse du vent;19.59;km/h;9
+Humidité du sol;70.74;%;4
+pH du sol;6.49;pH;5
+Pluviométrie;1.93;mm;7
+Luminosité;51715.45;lux;8
+Vitesse du vent;9.91;km/h;9
+Humidité du sol;55.9;%;4
+pH du sol;6.67;pH;5
+Pluviométrie;4.79;mm;7
+Luminosité;41041.36;lux;8
+Vitesse du vent;23.55;km/h;9
+Humidité du sol;48.53;%;4
+pH du sol;7.1;pH;5
+Pluviométrie;4.53;mm;7
+Luminosité;702.61;lux;8
+Vitesse du vent;30.88;km/h;9
+Humidité du sol;64.68;%;4
+pH du sol;6.49;pH;5
+Pluviométrie;3.19;mm;7
+Luminosité;51658.81;lux;8
+Vitesse du vent;7.11;km/h;9
+Humidité du sol;67.95;%;4
+pH du sol;7.06;pH;5
+Pluviométrie;8.75;mm;7
+Luminosité;7029.63;lux;8
+Vitesse du vent;15.02;km/h;9
+Humidité du sol;55.27;%;4
+pH du sol;7.24;pH;5
+Pluviométrie;1.89;mm;7
+Luminosité;88060.96;lux;8
+Vitesse du vent;48.43;km/h;9
+Humidité du sol;40.34;%;4
+pH du sol;7.31;pH;5
+Pluviométrie;1.31;mm;7
+Luminosité;12572.33;lux;8
+Vitesse du vent;28.42;km/h;9
+Humidité du sol;70.54;%;4
+pH du sol;6.03;pH;5
+Pluviométrie;0.84;mm;7
+Luminosité;54092.46;lux;8
+Vitesse du vent;36.57;km/h;9
+Humidité du sol;51.86;%;4
+pH du sol;6.7;pH;5
+Pluviométrie;9.15;mm;7
+Luminosité;76508.19;lux;8
+Vitesse du vent;20.67;km/h;9
+Humidité du sol;73.44;%;4
+pH du sol;7.14;pH;5
+Pluviométrie;5.92;mm;7
+Luminosité;64245.92;lux;8
+Vitesse du vent;16.42;km/h;9
+Humidité du sol;53.64;%;4
+pH du sol;7.45;pH;5
+Pluviométrie;1.88;mm;7
+Luminosité;78806.61;lux;8
+Vitesse du vent;23.23;km/h;9
+Humidité du sol;69.71;%;4
+pH du sol;6.78;pH;5
+Pluviométrie;4.93;mm;7
+Luminosité;41803.39;lux;8
+Vitesse du vent;44.85;km/h;9
+Humidité du sol;68.55;%;4
+pH du sol;7.25;pH;5
+Pluviométrie;7.41;mm;7
+Luminosité;14748.05;lux;8
+Vitesse du vent;41.56;km/h;9
+Humidité du sol;74.82;%;4
+pH du sol;7.04;pH;5
+Pluviométrie;2.46;mm;7
+Luminosité;49160.48;lux;8
+Vitesse du vent;41.72;km/h;9
+Humidité du sol;61.95;%;4
+pH du sol;6.98;pH;5
+Pluviométrie;4.19;mm;7
+Luminosité;6885.56;lux;8
+Vitesse du vent;22.59;km/h;9
+Humidité du sol;40.89;%;4
+pH du sol;6.07;pH;5
+Pluviométrie;7.03;mm;7
+Luminosité;69447.64;lux;8
+Vitesse du vent;6.15;km/h;9
+Humidité du sol;72.25;%;4
+pH du sol;6.5;pH;5
+Pluviométrie;1.34;mm;7
+Luminosité;48238.38;lux;8
+Vitesse du vent;3.49;km/h;9
+Humidité du sol;47.76;%;4
+pH du sol;6.65;pH;5
+Pluviométrie;3.03;mm;7
+Luminosité;32838.77;lux;8
+Vitesse du vent;45.9;km/h;9
+Humidité du sol;45.2;%;4
+pH du sol;7.04;pH;5
+Pluviométrie;1.93;mm;7
+Luminosité;80190.03;lux;8
+Vitesse du vent;16.14;km/h;9
+pH du sol;6.14;pH;5
+Pluviométrie;5.44;mm;7
+Luminosité;22294.87;lux;8
+Vitesse du vent;42.92;km/h;9
+Humidité du sol;48.97;%;4
+Humidité du sol;49.71;%;4
+pH du sol;6.34;pH;5
+Pluviométrie;8.13;mm;7
+Luminosité;73773.74;lux;8
+Vitesse du vent;7.52;km/h;9
+Humidité du sol;71.7;%;4
+pH du sol;6.89;pH;5
+Pluviométrie;8.82;mm;7
+Luminosité;90105.02;lux;8
+Vitesse du vent;11.31;km/h;9
+Humidité du sol;40.65;%;4
+pH du sol;7.13;pH;5
+Pluviométrie;2.3;mm;7
+Luminosité;16630.97;lux;8
+Vitesse du vent;8.26;km/h;9
+Humidité du sol;79.34;%;4
+pH du sol;7.46;pH;5
+Pluviométrie;6.35;mm;7
+Luminosité;46095.84;lux;8
+Vitesse du vent;42.37;km/h;9
+Pluviométrie;3.48;mm;7
+Luminosité;90943.25;lux;8
+Vitesse du vent;45.0;km/h;9
+Humidité du sol;58.86;%;4
+pH du sol;6.91;pH;5
+Humidité du sol;66.69;%;4
+pH du sol;7.26;pH;5
+Pluviométrie;0.35;mm;7
+Luminosité;6606.86;lux;8
+Vitesse du vent;33.63;km/h;9
+Humidité du sol;65.72;%;4
+pH du sol;6.75;pH;5
+Pluviométrie;3.11;mm;7
+Luminosité;67377.75;lux;8
+Vitesse du vent;11.02;km/h;9
+Humidité du sol;59.72;%;4
+pH du sol;6.36;pH;5
+Pluviométrie;9.23;mm;7
+Luminosité;5245.21;lux;8
+Vitesse du vent;27.17;km/h;9
+Humidité du sol;54.63;%;4
+pH du sol;6.89;pH;5
+Pluviométrie;4.39;mm;7
+Luminosité;5014.03;lux;8
+Vitesse du vent;46.39;km/h;9
+Luminosité;63663.51;lux;8
+Vitesse du vent;49.69;km/h;9
+Humidité du sol;68.54;%;4
+pH du sol;7.04;pH;5
+Pluviométrie;0.0;mm;7
+Humidité du sol;60.64;%;4
+pH du sol;6.94;pH;5
+Pluviométrie;4.83;mm;7
+Luminosité;36202.07;lux;8
+Vitesse du vent;39.54;km/h;9
+Humidité du sol;45.78;%;4
+pH du sol;6.2;pH;5
+Pluviométrie;4.68;mm;7
+Luminosité;79674.88;lux;8
+Vitesse du vent;43.83;km/h;9
+Humidité du sol;73.09;%;4
+pH du sol;6.09;pH;5
+Pluviométrie;0.95;mm;7
+Luminosité;62279.97;lux;8
+Vitesse du vent;33.83;km/h;9
+Humidité du sol;68.8;%;4
+pH du sol;6.28;pH;5
+Pluviométrie;2.55;mm;7
+Luminosité;33946.53;lux;8
+Vitesse du vent;39.95;km/h;9
+Humidité du sol;64.6;%;4
+pH du sol;6.31;pH;5
+Pluviométrie;2.57;mm;7
+Luminosité;73014.21;lux;8
+Vitesse du vent;28.69;km/h;9
+Humidité du sol;45.6;%;4
+pH du sol;7.36;pH;5
+Pluviométrie;4.68;mm;7
+Luminosité;88601.34;lux;8
+Vitesse du vent;47.57;km/h;9
+Humidité du sol;49.83;%;4
+pH du sol;7.14;pH;5
+Pluviométrie;4.18;mm;7
+Luminosité;45289.91;lux;8
+Vitesse du vent;7.32;km/h;9
+Pluviométrie;7.5;mm;7
+Luminosité;55205.3;lux;8
+Vitesse du vent;49.95;km/h;9
+Humidité du sol;74.24;%;4
+pH du sol;6.57;pH;5
+Humidité du sol;74.15;%;4
+pH du sol;7.33;pH;5
+Pluviométrie;3.3;mm;7
+Luminosité;27890.92;lux;8
+Vitesse du vent;5.87;km/h;9
+Humidité du sol;52.1;%;4
+pH du sol;6.23;pH;5
+Pluviométrie;6.13;mm;7
+Luminosité;76979.7;lux;8
+Vitesse du vent;8.9;km/h;9
+Humidité du sol;62.32;%;4
+pH du sol;6.88;pH;5
+Pluviométrie;8.96;mm;7
+Luminosité;55946.18;lux;8
+Vitesse du vent;23.07;km/h;9
+Humidité du sol;71.81;%;4
+pH du sol;6.79;pH;5
+Pluviométrie;1.27;mm;7
+Luminosité;17381.33;lux;8
+Vitesse du vent;8.78;km/h;9
+Humidité du sol;47.98;%;4
+pH du sol;7.29;pH;5
+Pluviométrie;9.74;mm;7
+Luminosité;18166.58;lux;8
+Vitesse du vent;32.33;km/h;9
+Humidité du sol;67.3;%;4
+pH du sol;6.3;pH;5
+Pluviométrie;7.52;mm;7
+Luminosité;38714.84;lux;8
+Vitesse du vent;49.71;km/h;9
+Humidité du sol;73.93;%;4
+pH du sol;6.43;pH;5
+Pluviométrie;0.38;mm;7
+Luminosité;22439.34;lux;8
+Vitesse du vent;27.33;km/h;9
+Humidité du sol;46.36;%;4
+pH du sol;6.35;pH;5
+Pluviométrie;2.97;mm;7
+Luminosité;2309.36;lux;8
+Vitesse du vent;2.37;km/h;9
+Humidité du sol;78.35;%;4
+pH du sol;7.41;pH;5
+Pluviométrie;6.51;mm;7
+Luminosité;20747.79;lux;8
+Vitesse du vent;6.83;km/h;9
+Humidité du sol;48.29;%;4
+pH du sol;7.45;pH;5
+Pluviométrie;2.42;mm;7
+Luminosité;13148.4;lux;8
+Vitesse du vent;7.42;km/h;9
+Humidité du sol;67.04;%;4
+pH du sol;6.82;pH;5
+Pluviométrie;7.55;mm;7
+Luminosité;48574.82;lux;8
+Vitesse du vent;20.55;km/h;9
+Humidité du sol;68.73;%;4
+pH du sol;6.68;pH;5
+Pluviométrie;1.75;mm;7
+Luminosité;40242.65;lux;8
+Vitesse du vent;19.94;km/h;9
+Humidité du sol;54.64;%;4
+pH du sol;6.76;pH;5
+Pluviométrie;6.75;mm;7
+Luminosité;74750.22;lux;8
+Vitesse du vent;24.03;km/h;9
+Humidité du sol;73.64;%;4
+pH du sol;6.61;pH;5
+Pluviométrie;2.15;mm;7
+Luminosité;96390.21;lux;8
+Vitesse du vent;47.26;km/h;9
+Humidité du sol;56.73;%;4
+pH du sol;6.73;pH;5
+Pluviométrie;6.35;mm;7
+Luminosité;3574.94;lux;8
+Vitesse du vent;33.34;km/h;9
+Humidité du sol;77.67;%;4
+pH du sol;6.52;pH;5
+Pluviométrie;4.44;mm;7
+Luminosité;84249.78;lux;8
+Vitesse du vent;21.88;km/h;9
+Humidité du sol;77.25;%;4
+pH du sol;7.13;pH;5
+Pluviométrie;4.41;mm;7
+Luminosité;18405.47;lux;8
+Vitesse du vent;28.85;km/h;9
+Humidité du sol;41.05;%;4
+pH du sol;6.98;pH;5
+Pluviométrie;3.68;mm;7
+Luminosité;59383.47;lux;8
+Vitesse du vent;9.19;km/h;9
+Humidité du sol;40.82;%;4
+pH du sol;6.83;pH;5
+Pluviométrie;2.16;mm;7
+Luminosité;69718.11;lux;8
+Vitesse du vent;47.4;km/h;9
+Humidité du sol;44.81;%;4
+pH du sol;6.96;pH;5
+Pluviométrie;8.51;mm;7
+Luminosité;16846.64;lux;8
+Vitesse du vent;17.07;km/h;9
+Luminosité;78080.45;lux;8
+Vitesse du vent;10.28;km/h;9
+Humidité du sol;45.6;%;4
+pH du sol;6.28;pH;5
+Pluviométrie;7.04;mm;7
+Humidité du sol;62.55;%;4
+pH du sol;7.12;pH;5
+Pluviométrie;9.66;mm;7
+Luminosité;45126.2;lux;8
+Vitesse du vent;3.06;km/h;9
+Humidité du sol;76.19;%;4
+pH du sol;6.58;pH;5
+Pluviométrie;1.48;mm;7
+Luminosité;39361.04;lux;8
+Vitesse du vent;0.77;km/h;9
+Humidité du sol;62.54;%;4
+pH du sol;6.55;pH;5
+Pluviométrie;9.42;mm;7
+Luminosité;17709.42;lux;8
+Vitesse du vent;13.3;km/h;9
+Humidité du sol;48.74;%;4
+pH du sol;6.55;pH;5
+Pluviométrie;0.55;mm;7
+Luminosité;64443.9;lux;8
+Vitesse du vent;44.79;km/h;9
+Humidité du sol;47.87;%;4
+pH du sol;7.06;pH;5
+Pluviométrie;0.14;mm;7
+Luminosité;32624.98;lux;8
+Vitesse du vent;11.79;km/h;9
+pH du sol;7.01;pH;5
+Pluviométrie;8.29;mm;7
+Luminosité;52685.54;lux;8
+Vitesse du vent;33.31;km/h;9
+Humidité du sol;65.37;%;4
+Humidité du sol;51.68;%;4
+pH du sol;6.5;pH;5
+Pluviométrie;4.62;mm;7
+Luminosité;80649.72;lux;8
+Vitesse du vent;2.24;km/h;9
+Humidité du sol;60.37;%;4
+pH du sol;7.12;pH;5
+Pluviométrie;9.87;mm;7
+Luminosité;3871.84;lux;8
+Vitesse du vent;33.33;km/h;9
+Humidité du sol;59.75;%;4
+pH du sol;6.34;pH;5
+Pluviométrie;4.37;mm;7
+Luminosité;7078.1;lux;8
+Vitesse du vent;32.42;km/h;9
+Humidité du sol;78.1;%;4
+pH du sol;7.08;pH;5
+Pluviométrie;8.6;mm;7
+Luminosité;56299.76;lux;8
+Vitesse du vent;43.36;km/h;9
+Humidité du sol;63.93;%;4
+pH du sol;7.22;pH;5
+Pluviométrie;5.28;mm;7
+Luminosité;61388.74;lux;8
+Vitesse du vent;27.86;km/h;9
+Humidité du sol;56.34;%;4
+pH du sol;7.46;pH;5
+Pluviométrie;6.42;mm;7
+Luminosité;45874.76;lux;8
+Vitesse du vent;31.49;km/h;9
+Pluviométrie;6.93;mm;7
+Luminosité;57707.96;lux;8
+Vitesse du vent;5.46;km/h;9
+Humidité du sol;50.78;%;4
+pH du sol;7.4;pH;5
+Humidité du sol;61.64;%;4
+pH du sol;6.51;pH;5
+Pluviométrie;6.69;mm;7
+Luminosité;52101.28;lux;8
+Vitesse du vent;5.8;km/h;9
+Humidité du sol;66.81;%;4
+pH du sol;6.81;pH;5
+Pluviométrie;0.97;mm;7
+Luminosité;50207.16;lux;8
+Vitesse du vent;10.41;km/h;9
+Humidité du sol;74.33;%;4
+pH du sol;6.03;pH;5
+Pluviométrie;4.55;mm;7
+Luminosité;43832.96;lux;8
+Vitesse du vent;48.59;km/h;9
+Humidité du sol;66.77;%;4
+pH du sol;7.45;pH;5
+Pluviométrie;5.43;mm;7
+Luminosité;46880.1;lux;8
+Vitesse du vent;36.9;km/h;9
+Pluviométrie;0.62;mm;7
+Luminosité;87253.8;lux;8
+Vitesse du vent;43.79;km/h;9
+Humidité du sol;76.4;%;4
+pH du sol;6.31;pH;5
+Humidité du sol;60.26;%;4
+pH du sol;6.43;pH;5
+Pluviométrie;2.84;mm;7
+Luminosité;8615.08;lux;8
+Vitesse du vent;8.08;km/h;9
+Humidité du sol;74.33;%;4
+pH du sol;7.22;pH;5
+Pluviométrie;2.91;mm;7
+Luminosité;68054.22;lux;8
+Vitesse du vent;39.04;km/h;9
+Humidité du sol;49.42;%;4
+pH du sol;6.53;pH;5
+Pluviométrie;7.24;mm;7
+Luminosité;68533.46;lux;8
+Vitesse du vent;4.13;km/h;9
+Humidité du sol;71.5;%;4
+pH du sol;7.4;pH;5
+Pluviométrie;3.1;mm;7
+Luminosité;80799.19;lux;8
+Vitesse du vent;35.72;km/h;9
+Humidité du sol;71.4;%;4
+pH du sol;6.42;pH;5
+Pluviométrie;0.53;mm;7
+Luminosité;95520.84;lux;8
+Vitesse du vent;47.28;km/h;9
+Humidité du sol;45.4;%;4
+pH du sol;6.56;pH;5
+Pluviométrie;9.4;mm;7
+Luminosité;91058.99;lux;8
+Vitesse du vent;7.39;km/h;9
+Humidité du sol;70.78;%;4
+pH du sol;7.14;pH;5
+Pluviométrie;4.99;mm;7
+Luminosité;63392.74;lux;8
+Vitesse du vent;33.27;km/h;9
+Humidité du sol;75.09;%;4
+pH du sol;7.25;pH;5
+Pluviométrie;9.55;mm;7
+Luminosité;77717.74;lux;8
+Vitesse du vent;47.09;km/h;9
+Humidité du sol;47.47;%;4
+pH du sol;6.39;pH;5
+Pluviométrie;2.92;mm;7
+Luminosité;34349.43;lux;8
+Vitesse du vent;25.39;km/h;9
+Humidité du sol;74.98;%;4
+pH du sol;6.24;pH;5
+Pluviométrie;3.65;mm;7
+Luminosité;31023.99;lux;8
+Vitesse du vent;4.74;km/h;9
+Humidité du sol;50.36;%;4
+pH du sol;6.3;pH;5
+Pluviométrie;9.63;mm;7
+Luminosité;74997.51;lux;8
+Vitesse du vent;15.74;km/h;9
+Humidité du sol;71.47;%;4
+pH du sol;6.95;pH;5
+Pluviométrie;6.22;mm;7
+Luminosité;91168.11;lux;8
+Vitesse du vent;30.68;km/h;9
+Humidité du sol;73.09;%;4
+pH du sol;6.14;pH;5
+Pluviométrie;9.35;mm;7
+Luminosité;53013.61;lux;8
+Vitesse du vent;21.24;km/h;9
+Humidité du sol;77.85;%;4
+pH du sol;6.15;pH;5
+Pluviométrie;3.47;mm;7
+Luminosité;15127.44;lux;8
+Vitesse du vent;3.88;km/h;9
+Humidité du sol;79.84;%;4
+pH du sol;6.24;pH;5
+Pluviométrie;3.01;mm;7
+Luminosité;77918.2;lux;8
+Vitesse du vent;9.63;km/h;9
+Humidité du sol;54.31;%;4
+pH du sol;7.0;pH;5
+Pluviométrie;0.07;mm;7
+Luminosité;78402.29;lux;8
+Vitesse du vent;32.03;km/h;9
+Humidité du sol;51.68;%;4
+pH du sol;6.65;pH;5
+Pluviométrie;9.12;mm;7
+Luminosité;70818.42;lux;8
+Vitesse du vent;3.93;km/h;9
+pH du sol;6.53;pH;5
+Pluviométrie;1.33;mm;7
+Luminosité;78939.93;lux;8
+Vitesse du vent;4.32;km/h;9
+Humidité du sol;48.7;%;4
+Humidité du sol;78.86;%;4
+pH du sol;7.23;pH;5
+Pluviométrie;0.59;mm;7
+Luminosité;79397.82;lux;8
+Vitesse du vent;7.68;km/h;9
+Humidité du sol;41.52;%;4
+pH du sol;6.11;pH;5
+Pluviométrie;4.52;mm;7
+Luminosité;56411.3;lux;8
+Vitesse du vent;17.33;km/h;9
+Pluviométrie;4.45;mm;7
+Luminosité;54490.28;lux;8
+Vitesse du vent;16.51;km/h;9
+Humidité du sol;74.81;%;4
+pH du sol;6.23;pH;5
+Humidité du sol;63.44;%;4
+pH du sol;6.61;pH;5
+Pluviométrie;6.98;mm;7
+Luminosité;31812.35;lux;8
+Vitesse du vent;13.28;km/h;9
+Humidité du sol;76.48;%;4
+pH du sol;7.18;pH;5
+Pluviométrie;7.1;mm;7
+Luminosité;39836.69;lux;8
+Vitesse du vent;13.99;km/h;9
+Vitesse du vent;37.42;km/h;9
+Humidité du sol;62.89;%;4
+pH du sol;6.35;pH;5
+Pluviométrie;1.61;mm;7
+Luminosité;11940.88;lux;8
+Humidité du sol;44.25;%;4
+pH du sol;6.65;pH;5
+Pluviométrie;7.64;mm;7
+Luminosité;35870.24;lux;8
+Vitesse du vent;35.0;km/h;9
+Humidité du sol;60.78;%;4
+pH du sol;6.27;pH;5
+Pluviométrie;6.45;mm;7
+Luminosité;71157.29;lux;8
+Vitesse du vent;21.23;km/h;9
+Humidité du sol;78.67;%;4
+pH du sol;7.23;pH;5
+Pluviométrie;6.99;mm;7
+Luminosité;92282.54;lux;8
+Vitesse du vent;9.75;km/h;9
+pH du sol;6.77;pH;5
+Pluviométrie;1.12;mm;7
+Luminosité;42023.96;lux;8
+Vitesse du vent;44.39;km/h;9
+Humidité du sol;70.16;%;4
+Humidité du sol;51.8;%;4
+pH du sol;6.53;pH;5
+Pluviométrie;8.57;mm;7
+Luminosité;64594.82;lux;8
+Vitesse du vent;4.68;km/h;9
+Humidité du sol;43.73;%;4
+pH du sol;7.23;pH;5
+Pluviométrie;1.43;mm;7
+Luminosité;94861.43;lux;8
+Vitesse du vent;47.78;km/h;9
+Humidité du sol;76.49;%;4
+pH du sol;6.18;pH;5
+Pluviométrie;9.66;mm;7
+Luminosité;85936.64;lux;8
+Vitesse du vent;35.3;km/h;9
+Humidité du sol;64.21;%;4
+pH du sol;6.02;pH;5
+Pluviométrie;5.37;mm;7
+Luminosité;5125.74;lux;8
+Vitesse du vent;22.04;km/h;9
+Humidité du sol;45.0;%;4
+pH du sol;6.02;pH;5
+Pluviométrie;4.37;mm;7
+Luminosité;34843.15;lux;8
+Vitesse du vent;15.86;km/h;9
+Humidité du sol;74.68;%;4
+pH du sol;6.24;pH;5
+Pluviométrie;0.94;mm;7
+Luminosité;15173.33;lux;8
+Vitesse du vent;47.99;km/h;9
+Humidité du sol;72.76;%;4
+pH du sol;6.49;pH;5
+Pluviométrie;7.73;mm;7
+Luminosité;89279.73;lux;8
+Vitesse du vent;48.12;km/h;9
+Humidité du sol;55.91;%;4
+pH du sol;7.46;pH;5
+Pluviométrie;6.69;mm;7
+Luminosité;5059.64;lux;8
+Vitesse du vent;12.33;km/h;9
+Humidité du sol;78.64;%;4
+pH du sol;7.11;pH;5
+Pluviométrie;8.64;mm;7
+Luminosité;11721.08;lux;8
+Vitesse du vent;8.95;km/h;9
+Humidité du sol;66.72;%;4
+pH du sol;7.36;pH;5
+Pluviométrie;0.26;mm;7
+Luminosité;50034.9;lux;8
+Vitesse du vent;17.89;km/h;9
+Humidité du sol;41.23;%;4
+pH du sol;6.14;pH;5
+Pluviométrie;8.7;mm;7
+Luminosité;40082.34;lux;8
+Vitesse du vent;7.9;km/h;9
+Humidité du sol;66.67;%;4
+pH du sol;6.76;pH;5
+Pluviométrie;2.16;mm;7
+Luminosité;68035.06;lux;8
+Vitesse du vent;40.38;km/h;9
+Humidité du sol;75.58;%;4
+pH du sol;6.8;pH;5
+Pluviométrie;7.5;mm;7
+Luminosité;89428.77;lux;8
+Vitesse du vent;17.31;km/h;9
+Humidité du sol;73.65;%;4
+pH du sol;7.09;pH;5
+Pluviométrie;9.77;mm;7
+Luminosité;51799.21;lux;8
+Vitesse du vent;47.43;km/h;9
+Humidité du sol;49.21;%;4
+pH du sol;6.16;pH;5
+Pluviométrie;3.0;mm;7
+Luminosité;17550.47;lux;8
+Vitesse du vent;40.7;km/h;9
+Humidité du sol;74.34;%;4
+pH du sol;6.91;pH;5
+Pluviométrie;2.88;mm;7
+Luminosité;39914.34;lux;8
+Vitesse du vent;46.86;km/h;9
+Humidité du sol;78.9;%;4
+pH du sol;6.09;pH;5
+Pluviométrie;7.28;mm;7
+Luminosité;61586.55;lux;8
+Vitesse du vent;7.51;km/h;9
+Pluviométrie;4.97;mm;7
+Luminosité;87910.76;lux;8
+Vitesse du vent;3.51;km/h;9
+Humidité du sol;63.91;%;4
+pH du sol;7.48;pH;5
+Humidité du sol;48.02;%;4
+pH du sol;6.39;pH;5
+Pluviométrie;1.94;mm;7
+Luminosité;92896.94;lux;8
+Vitesse du vent;13.24;km/h;9
+Humidité du sol;75.59;%;4
+pH du sol;6.06;pH;5
+Pluviométrie;5.46;mm;7
+Luminosité;52308.18;lux;8
+Vitesse du vent;22.91;km/h;9
+Humidité du sol;77.19;%;4
+pH du sol;6.94;pH;5
+Pluviométrie;4.13;mm;7
+Luminosité;81676.32;lux;8
+Vitesse du vent;42.98;km/h;9
+Humidité du sol;72.33;%;4
+pH du sol;6.22;pH;5
+Pluviométrie;0.4;mm;7
+Luminosité;32352.89;lux;8
+Vitesse du vent;0.59;km/h;9
+Vitesse du vent;41.2;km/h;9
+Humidité du sol;66.18;%;4
+pH du sol;6.48;pH;5
+Pluviométrie;1.71;mm;7
+Luminosité;37799.96;lux;8
+Humidité du sol;73.3;%;4
+pH du sol;6.12;pH;5
+Pluviométrie;8.11;mm;7
+Luminosité;95222.01;lux;8
+Vitesse du vent;5.6;km/h;9
+Humidité du sol;65.88;%;4
+pH du sol;6.36;pH;5
+Pluviométrie;9.61;mm;7
+Luminosité;72693.18;lux;8
+Vitesse du vent;4.72;km/h;9
+Humidité du sol;72.76;%;4
+pH du sol;6.94;pH;5
+Pluviométrie;0.41;mm;7
+Luminosité;39744.73;lux;8
+Vitesse du vent;47.46;km/h;9
+Humidité du sol;62.89;%;4
+pH du sol;6.56;pH;5
+Pluviométrie;3.48;mm;7
+Luminosité;31718.16;lux;8
+Vitesse du vent;15.36;km/h;9
+Humidité du sol;67.49;%;4
+pH du sol;6.35;pH;5
+Pluviométrie;9.77;mm;7
+Luminosité;60371.14;lux;8
+Vitesse du vent;26.22;km/h;9
+Humidité du sol;51.83;%;4
+pH du sol;7.0;pH;5
+Pluviométrie;4.14;mm;7
+Luminosité;91315.76;lux;8
+Vitesse du vent;14.07;km/h;9
+Humidité du sol;63.44;%;4
+pH du sol;6.16;pH;5
+Pluviométrie;1.72;mm;7
+Luminosité;53585.88;lux;8
+Vitesse du vent;28.8;km/h;9
+Humidité du sol;55.43;%;4
+pH du sol;6.73;pH;5
+Pluviométrie;8.84;mm;7
+Luminosité;19998.77;lux;8
+Vitesse du vent;45.91;km/h;9
+Humidité du sol;47.67;%;4
+pH du sol;6.34;pH;5
+Pluviométrie;2.8;mm;7
+Luminosité;26794.97;lux;8
+Vitesse du vent;5.32;km/h;9
+Humidité du sol;72.58;%;4
+pH du sol;6.75;pH;5
+Pluviométrie;9.6;mm;7
+Luminosité;87612.23;lux;8
+Vitesse du vent;25.97;km/h;9
+Humidité du sol;56.16;%;4
+pH du sol;6.54;pH;5
+Pluviométrie;3.08;mm;7
+Luminosité;4848.53;lux;8
+Vitesse du vent;46.01;km/h;9
+Humidité du sol;56.08;%;4
+pH du sol;6.58;pH;5
+Pluviométrie;1.86;mm;7
+Luminosité;30850.77;lux;8
+Vitesse du vent;30.35;km/h;9
+Humidité du sol;46.01;%;4
+pH du sol;6.59;pH;5
+Pluviométrie;5.39;mm;7
+Luminosité;32245.09;lux;8
+Vitesse du vent;40.33;km/h;9
+Humidité du sol;44.64;%;4
+pH du sol;6.64;pH;5
+Pluviométrie;9.06;mm;7
+Luminosité;70652.52;lux;8
+Vitesse du vent;36.63;km/h;9
+Humidité du sol;67.08;%;4
+pH du sol;7.12;pH;5
+Pluviométrie;5.55;mm;7
+Luminosité;37637.47;lux;8
+Vitesse du vent;47.69;km/h;9
+Humidité du sol;76.88;%;4
+pH du sol;6.06;pH;5
+Pluviométrie;8.16;mm;7
+Luminosité;62184.46;lux;8
+Vitesse du vent;10.08;km/h;9
+Humidité du sol;47.55;%;4
+pH du sol;6.16;pH;5
+Pluviométrie;7.18;mm;7
+Luminosité;75242.32;lux;8
+Vitesse du vent;4.95;km/h;9
+Humidité du sol;62.37;%;4
+pH du sol;6.78;pH;5
+Pluviométrie;1.05;mm;7
+Luminosité;32131.95;lux;8
+Vitesse du vent;20.18;km/h;9
+Humidité du sol;45.51;%;4
+pH du sol;6.24;pH;5
+Pluviométrie;5.71;mm;7
+Luminosité;66124.9;lux;8
+Vitesse du vent;25.35;km/h;9
+Humidité du sol;76.79;%;4
+pH du sol;6.03;pH;5
+Pluviométrie;2.35;mm;7
+Luminosité;74789.28;lux;8
+Vitesse du vent;0.06;km/h;9
+Humidité du sol;76.0;%;4
+pH du sol;7.15;pH;5
+Pluviométrie;8.9;mm;7
+Luminosité;45005.69;lux;8
+Vitesse du vent;41.35;km/h;9
+Humidité du sol;57.04;%;4
+pH du sol;7.16;pH;5
+Pluviométrie;4.61;mm;7
+Luminosité;15861.73;lux;8
+Vitesse du vent;40.78;km/h;9
+Humidité du sol;41.13;%;4
+pH du sol;7.21;pH;5
+Pluviométrie;6.77;mm;7
+Luminosité;36837.23;lux;8
+Vitesse du vent;37.08;km/h;9
+Humidité du sol;68.9;%;4
+pH du sol;7.19;pH;5
+Pluviométrie;0.5;mm;7
+Luminosité;48366.11;lux;8
+Vitesse du vent;41.1;km/h;9
+Humidité du sol;60.08;%;4
+pH du sol;6.81;pH;5
+Pluviométrie;5.29;mm;7
+Luminosité;53700.14;lux;8
+Vitesse du vent;26.65;km/h;9
+Humidité du sol;75.55;%;4
+pH du sol;6.3;pH;5
+Pluviométrie;9.07;mm;7
+Luminosité;98060.27;lux;8
+Vitesse du vent;41.81;km/h;9
+Humidité du sol;65.73;%;4
+pH du sol;6.35;pH;5
+Pluviométrie;1.13;mm;7
+Luminosité;98095.67;lux;8
+Vitesse du vent;13.43;km/h;9
+Humidité du sol;78.51;%;4
+pH du sol;7.48;pH;5
+Pluviométrie;8.7;mm;7
+Luminosité;34918.78;lux;8
+Vitesse du vent;36.28;km/h;9
+Humidité du sol;72.4;%;4
+pH du sol;6.27;pH;5
+Pluviométrie;4.51;mm;7
+Luminosité;68902.79;lux;8
+Vitesse du vent;20.2;km/h;9
+Humidité du sol;65.93;%;4
+pH du sol;6.7;pH;5
+Pluviométrie;1.7;mm;7
+Luminosité;1218.99;lux;8
+Vitesse du vent;17.13;km/h;9
+Humidité du sol;48.03;%;4
+pH du sol;6.28;pH;5
+Pluviométrie;6.62;mm;7
+Luminosité;58932.66;lux;8
+Vitesse du vent;48.95;km/h;9
+Humidité du sol;62.31;%;4
+pH du sol;6.26;pH;5
+Pluviométrie;4.45;mm;7
+Luminosité;31576.75;lux;8
+Vitesse du vent;34.61;km/h;9
+Humidité du sol;61.98;%;4
+pH du sol;6.73;pH;5
+Pluviométrie;0.37;mm;7
+Luminosité;78033.09;lux;8
+Vitesse du vent;41.22;km/h;9
+Pluviométrie;5.67;mm;7
+Luminosité;56539.82;lux;8
+Vitesse du vent;10.71;km/h;9
+Humidité du sol;79.02;%;4
+pH du sol;7.14;pH;5
+Humidité du sol;73.1;%;4
+pH du sol;6.36;pH;5
+Pluviométrie;6.08;mm;7
+Luminosité;71182.51;lux;8
+Vitesse du vent;5.84;km/h;9
+Humidité du sol;77.09;%;4
+pH du sol;6.01;pH;5
+Pluviométrie;1.8;mm;7
+Luminosité;50468.59;lux;8
+Vitesse du vent;33.45;km/h;9
+Humidité du sol;67.05;%;4
+pH du sol;6.76;pH;5
+Pluviométrie;8.37;mm;7
+Luminosité;49179.85;lux;8
+Vitesse du vent;34.21;km/h;9
+Humidité du sol;55.45;%;4
+pH du sol;7.39;pH;5
+Pluviométrie;5.74;mm;7
+Luminosité;87780.02;lux;8
+Vitesse du vent;17.82;km/h;9
+Humidité du sol;43.62;%;4
+pH du sol;6.64;pH;5
+Pluviométrie;2.62;mm;7
+Luminosité;63759.63;lux;8
+Vitesse du vent;10.07;km/h;9
+Humidité du sol;46.64;%;4
+pH du sol;7.15;pH;5
+Pluviométrie;7.28;mm;7
+Luminosité;89295.24;lux;8
+Vitesse du vent;32.72;km/h;9
+Humidité du sol;40.86;%;4
+pH du sol;6.04;pH;5
+Pluviométrie;7.94;mm;7
+Luminosité;6760.57;lux;8
+Vitesse du vent;7.32;km/h;9
+Humidité du sol;63.96;%;4
+pH du sol;6.37;pH;5
+Pluviométrie;0.31;mm;7
+Luminosité;8371.39;lux;8
+Vitesse du vent;24.32;km/h;9
+Humidité du sol;42.42;%;4
+pH du sol;6.37;pH;5
+Pluviométrie;5.33;mm;7
+Luminosité;69387.76;lux;8
+Vitesse du vent;17.97;km/h;9
+Luminosité;81031.66;lux;8
+Vitesse du vent;18.46;km/h;9
+Humidité du sol;65.31;%;4
+pH du sol;7.21;pH;5
+Pluviométrie;8.26;mm;7
+Humidité du sol;46.95;%;4
+pH du sol;6.96;pH;5
+Pluviométrie;1.4;mm;7
+Luminosité;45231.34;lux;8
+Vitesse du vent;46.26;km/h;9
+Humidité du sol;61.07;%;4
+pH du sol;6.18;pH;5
+Pluviométrie;3.94;mm;7
+Luminosité;80392.83;lux;8
+Vitesse du vent;39.25;km/h;9
+Humidité du sol;62.96;%;4
+pH du sol;6.75;pH;5
+Pluviométrie;1.88;mm;7
+Luminosité;88934.7;lux;8
+Vitesse du vent;0.41;km/h;9
+Humidité du sol;72.36;%;4
+pH du sol;7.42;pH;5
+Pluviométrie;4.48;mm;7
+Luminosité;39808.66;lux;8
+Vitesse du vent;27.21;km/h;9
+Humidité du sol;71.54;%;4
+pH du sol;7.22;pH;5
+Pluviométrie;8.14;mm;7
+Luminosité;19134.5;lux;8
+Vitesse du vent;37.41;km/h;9
+Humidité du sol;75.57;%;4
+pH du sol;7.15;pH;5
+Pluviométrie;3.86;mm;7
+Luminosité;22886.05;lux;8
+Vitesse du vent;9.48;km/h;9
+Humidité du sol;50.03;%;4
+pH du sol;6.68;pH;5
+Pluviométrie;8.49;mm;7
+Luminosité;38561.76;lux;8
+Vitesse du vent;30.02;km/h;9
+Humidité du sol;77.1;%;4
+pH du sol;7.21;pH;5
+Pluviométrie;0.52;mm;7
+Luminosité;97750.3;lux;8
+Vitesse du vent;10.71;km/h;9
+Humidité du sol;66.15;%;4
+pH du sol;6.69;pH;5
+Pluviométrie;2.81;mm;7
+Luminosité;63173.51;lux;8
+Vitesse du vent;2.73;km/h;9
+Humidité du sol;44.3;%;4
+pH du sol;6.93;pH;5
+Pluviométrie;7.3;mm;7
+Luminosité;47901.65;lux;8
+Vitesse du vent;4.68;km/h;9
+Humidité du sol;45.48;%;4
+pH du sol;7.46;pH;5
+Pluviométrie;9.24;mm;7
+Luminosité;21401.97;lux;8
+Vitesse du vent;10.99;km/h;9
+Humidité du sol;74.43;%;4
+pH du sol;7.38;pH;5
+Pluviométrie;0.32;mm;7
+Luminosité;35618.87;lux;8
+Vitesse du vent;10.11;km/h;9
+pH du sol;6.46;pH;5
+Pluviométrie;4.87;mm;7
+Luminosité;93994.37;lux;8
+Vitesse du vent;37.49;km/h;9
+Humidité du sol;43.37;%;4
+Humidité du sol;40.03;%;4
+pH du sol;6.75;pH;5
+Pluviométrie;8.59;mm;7
+Luminosité;42716.61;lux;8
+Vitesse du vent;7.58;km/h;9
+Humidité du sol;56.12;%;4
+pH du sol;6.71;pH;5
+Pluviométrie;9.39;mm;7
+Luminosité;92666.35;lux;8
+Vitesse du vent;34.23;km/h;9
+Pluviométrie;4.89;mm;7
+Luminosité;11441.24;lux;8
+Vitesse du vent;48.36;km/h;9
+Humidité du sol;49.0;%;4
+pH du sol;6.94;pH;5
+Humidité du sol;70.54;%;4
+pH du sol;6.42;pH;5
+Pluviométrie;9.55;mm;7
+Luminosité;10186.76;lux;8
+Vitesse du vent;47.82;km/h;9
+Humidité du sol;52.65;%;4
+pH du sol;6.93;pH;5
+Pluviométrie;2.32;mm;7
+Luminosité;35991.08;lux;8
+Vitesse du vent;16.81;km/h;9
+pH du sol;6.43;pH;5
+Pluviométrie;1.61;mm;7
+Luminosité;91310.56;lux;8
+Vitesse du vent;37.59;km/h;9
+Humidité du sol;67.97;%;4
+Humidité du sol;46.38;%;4
+pH du sol;7.09;pH;5
+Pluviométrie;4.23;mm;7
+Luminosité;16680.75;lux;8
+Vitesse du vent;6.73;km/h;9
+Pluviométrie;3.93;mm;7
+Luminosité;1606.08;lux;8
+Vitesse du vent;8.69;km/h;9
+Humidité du sol;52.43;%;4
+pH du sol;7.17;pH;5
+Humidité du sol;66.83;%;4
+pH du sol;7.04;pH;5
+Pluviométrie;9.04;mm;7
+Luminosité;21617.27;lux;8
+Vitesse du vent;49.29;km/h;9
+Humidité du sol;53.44;%;4
+pH du sol;7.11;pH;5
+Pluviométrie;2.08;mm;7
+Luminosité;98417.6;lux;8
+Vitesse du vent;7.17;km/h;9
+Humidité du sol;79.23;%;4
+pH du sol;7.13;pH;5
+Pluviométrie;8.15;mm;7
+Luminosité;22273.93;lux;8
+Vitesse du vent;12.86;km/h;9
+Humidité du sol;56.96;%;4
+pH du sol;6.24;pH;5
+Pluviométrie;7.05;mm;7
+Luminosité;77752.96;lux;8
+Vitesse du vent;13.81;km/h;9
+Pluviométrie;9.92;mm;7
+Luminosité;36372.69;lux;8
+Vitesse du vent;15.0;km/h;9
+Humidité du sol;50.08;%;4
+pH du sol;7.33;pH;5
+Humidité du sol;62.94;%;4
+pH du sol;6.87;pH;5
+Pluviométrie;9.74;mm;7
+Luminosité;55295.16;lux;8
+Vitesse du vent;27.63;km/h;9
+Humidité du sol;45.21;%;4
+pH du sol;6.22;pH;5
+Pluviométrie;0.05;mm;7
+Luminosité;68862.77;lux;8
+Vitesse du vent;44.77;km/h;9
+Humidité du sol;42.16;%;4
+pH du sol;7.17;pH;5
+Pluviométrie;0.52;mm;7
+Luminosité;91928.44;lux;8
+Vitesse du vent;41.99;km/h;9
+Humidité du sol;73.01;%;4
+pH du sol;6.75;pH;5
+Pluviométrie;7.09;mm;7
+Luminosité;84088.72;lux;8
+Vitesse du vent;19.67;km/h;9
+Humidité du sol;50.36;%;4
+pH du sol;7.37;pH;5
+Pluviométrie;5.01;mm;7
+Luminosité;82421.64;lux;8
+Vitesse du vent;0.65;km/h;9
+Humidité du sol;61.39;%;4
+pH du sol;6.55;pH;5
+Pluviométrie;3.25;mm;7
+Luminosité;86017.21;lux;8
+Vitesse du vent;4.81;km/h;9
+Humidité du sol;51.45;%;4
+pH du sol;6.6;pH;5
+Pluviométrie;1.48;mm;7
+Luminosité;92244.38;lux;8
+Vitesse du vent;0.96;km/h;9
+Humidité du sol;70.85;%;4
+pH du sol;6.58;pH;5
+Pluviométrie;6.65;mm;7
+Luminosité;3134.41;lux;8
+Vitesse du vent;0.18;km/h;9
+Humidité du sol;64.95;%;4
+pH du sol;6.18;pH;5
+Pluviométrie;0.78;mm;7
+Luminosité;6799.86;lux;8
+Vitesse du vent;36.84;km/h;9
+Humidité du sol;41.2;%;4
+pH du sol;7.24;pH;5
+Pluviométrie;9.64;mm;7
+Luminosité;95344.71;lux;8
+Vitesse du vent;36.82;km/h;9
+Pluviométrie;9.83;mm;7
+Luminosité;15464.94;lux;8
+Vitesse du vent;6.69;km/h;9
+Humidité du sol;74.36;%;4
+pH du sol;6.14;pH;5
+Humidité du sol;54.83;%;4
+pH du sol;6.85;pH;5
+Pluviométrie;7.82;mm;7
+Luminosité;83895.21;lux;8
+Vitesse du vent;11.34;km/h;9
+Humidité du sol;59.49;%;4
+pH du sol;6.17;pH;5
+Pluviométrie;6.73;mm;7
+Luminosité;51240.13;lux;8
+Vitesse du vent;0.08;km/h;9
+Humidité du sol;62.79;%;4
+pH du sol;6.14;pH;5
+Pluviométrie;1.63;mm;7
+Luminosité;74326.86;lux;8
+Vitesse du vent;38.49;km/h;9
+pH du sol;6.58;pH;5
+Pluviométrie;2.55;mm;7
+Luminosité;52349.97;lux;8
+Vitesse du vent;36.75;km/h;9
+Humidité du sol;58.26;%;4
+Humidité du sol;48.71;%;4
+pH du sol;7.04;pH;5
+Pluviométrie;3.88;mm;7
+Luminosité;74442.78;lux;8
+Vitesse du vent;23.48;km/h;9
+Humidité du sol;69.67;%;4
+pH du sol;7.24;pH;5
+Pluviométrie;2.38;mm;7
+Luminosité;39098.12;lux;8
+Vitesse du vent;33.64;km/h;9
+Humidité du sol;59.77;%;4
+pH du sol;7.35;pH;5
+Pluviométrie;0.62;mm;7
+Luminosité;45270.72;lux;8
+Vitesse du vent;38.9;km/h;9
+Humidité du sol;69.95;%;4
+pH du sol;7.33;pH;5
+Pluviométrie;9.62;mm;7
+Luminosité;70207.44;lux;8
+Vitesse du vent;38.33;km/h;9
+Humidité du sol;48.47;%;4
+pH du sol;7.22;pH;5
+Pluviométrie;0.87;mm;7
+Luminosité;8402.96;lux;8
+Vitesse du vent;16.69;km/h;9
+Humidité du sol;73.58;%;4
+pH du sol;6.89;pH;5
+Pluviométrie;0.08;mm;7
+Luminosité;20575.6;lux;8
+Vitesse du vent;11.02;km/h;9
+Humidité du sol;46.38;%;4
+pH du sol;6.77;pH;5
+Pluviométrie;8.94;mm;7
+Luminosité;6622.01;lux;8
+Vitesse du vent;30.75;km/h;9
+Humidité du sol;77.24;%;4
+pH du sol;7.35;pH;5
+Pluviométrie;6.19;mm;7
+Luminosité;98384.96;lux;8
+Vitesse du vent;34.98;km/h;9
+Humidité du sol;73.42;%;4
+pH du sol;6.32;pH;5
+Pluviométrie;8.49;mm;7
+Luminosité;94305.49;lux;8
+Vitesse du vent;34.79;km/h;9
+Humidité du sol;71.2;%;4
+pH du sol;6.4;pH;5
+Pluviométrie;2.64;mm;7
+Luminosité;20445.29;lux;8
+Vitesse du vent;10.4;km/h;9
+Humidité du sol;79.56;%;4
+pH du sol;6.8;pH;5
+Pluviométrie;7.86;mm;7
+Luminosité;73377.27;lux;8
+Vitesse du vent;16.0;km/h;9
+Humidité du sol;78.92;%;4
+pH du sol;6.99;pH;5
+Pluviométrie;7.19;mm;7
+Luminosité;24038.25;lux;8
+Vitesse du vent;18.0;km/h;9
+Humidité du sol;43.06;%;4
+pH du sol;7.31;pH;5
+Pluviométrie;2.35;mm;7
+Luminosité;37118.28;lux;8
+Vitesse du vent;9.09;km/h;9
+Humidité du sol;45.44;%;4
+pH du sol;7.11;pH;5
+Pluviométrie;2.18;mm;7
+Luminosité;29669.81;lux;8
+Vitesse du vent;39.95;km/h;9
+Humidité du sol;78.93;%;4
+pH du sol;6.74;pH;5
+Pluviométrie;3.49;mm;7
+Luminosité;34709.96;lux;8
+Vitesse du vent;24.92;km/h;9
+Humidité du sol;78.17;%;4
+pH du sol;7.33;pH;5
+Pluviométrie;5.85;mm;7
+Luminosité;68154.85;lux;8
+Vitesse du vent;18.76;km/h;9
+Vitesse du vent;15.73;km/h;9
+Humidité du sol;52.63;%;4
+pH du sol;6.24;pH;5
+Pluviométrie;5.97;mm;7
+Luminosité;24054.83;lux;8
+Humidité du sol;71.56;%;4
+pH du sol;6.41;pH;5
+Pluviométrie;5.34;mm;7
+Luminosité;39911.23;lux;8
+Vitesse du vent;48.27;km/h;9
+Humidité du sol;50.96;%;4
+pH du sol;6.23;pH;5
+Pluviométrie;4.39;mm;7
+Luminosité;12950.57;lux;8
+Vitesse du vent;27.83;km/h;9
+Vitesse du vent;26.51;km/h;9
+Humidité du sol;69.05;%;4
+pH du sol;6.23;pH;5
+Pluviométrie;9.59;mm;7
+Luminosité;63894.76;lux;8
+Humidité du sol;61.67;%;4
+pH du sol;7.48;pH;5
+Pluviométrie;2.95;mm;7
+Luminosité;36020.02;lux;8
+Vitesse du vent;41.29;km/h;9
+Humidité du sol;62.76;%;4
+pH du sol;6.24;pH;5
+Pluviométrie;5.81;mm;7
+Luminosité;59221.08;lux;8
+Vitesse du vent;18.51;km/h;9
+Humidité du sol;72.28;%;4
+pH du sol;7.27;pH;5
+Pluviométrie;6.23;mm;7
+Luminosité;69274.54;lux;8
+Vitesse du vent;21.67;km/h;9
+Humidité du sol;44.53;%;4
+pH du sol;6.75;pH;5
+Pluviométrie;8.59;mm;7
+Luminosité;98805.25;lux;8
+Vitesse du vent;47.73;km/h;9
+Humidité du sol;76.07;%;4
+pH du sol;6.84;pH;5
+Pluviométrie;7.17;mm;7
+Luminosité;8499.04;lux;8
+Vitesse du vent;0.28;km/h;9
+Humidité du sol;40.39;%;4
+pH du sol;6.35;pH;5
+Pluviométrie;8.47;mm;7
+Luminosité;59007.3;lux;8
+Vitesse du vent;5.57;km/h;9
+Humidité du sol;61.65;%;4
+pH du sol;6.65;pH;5
+Pluviométrie;6.99;mm;7
+Luminosité;35733.08;lux;8
+Vitesse du vent;31.67;km/h;9
+Pluviométrie;8.31;mm;7
+Luminosité;47762.08;lux;8
+Vitesse du vent;25.32;km/h;9
+Humidité du sol;73.59;%;4
+pH du sol;7.16;pH;5
+Humidité du sol;67.3;%;4
+pH du sol;6.2;pH;5
+Pluviométrie;9.83;mm;7
+Luminosité;8831.91;lux;8
+Vitesse du vent;16.17;km/h;9
+Humidité du sol;66.64;%;4
+pH du sol;6.25;pH;5
+Pluviométrie;0.49;mm;7
+Luminosité;4842.14;lux;8
+Vitesse du vent;2.92;km/h;9
+Humidité du sol;63.96;%;4
+pH du sol;6.35;pH;5
+Pluviométrie;2.51;mm;7
+Luminosité;45094.44;lux;8
+Vitesse du vent;22.46;km/h;9
+Humidité du sol;41.81;%;4
+pH du sol;7.11;pH;5
+Pluviométrie;0.36;mm;7
+Luminosité;56124.2;lux;8
+Vitesse du vent;47.95;km/h;9
+Humidité du sol;71.22;%;4
+pH du sol;6.52;pH;5
+Pluviométrie;2.94;mm;7
+Luminosité;72248.94;lux;8
+Vitesse du vent;44.57;km/h;9
+pH du sol;7.33;pH;5
+Pluviométrie;4.73;mm;7
+Luminosité;99812.65;lux;8
+Vitesse du vent;41.08;km/h;9
+Humidité du sol;68.25;%;4
+Humidité du sol;76.29;%;4
+pH du sol;6.45;pH;5
+Pluviométrie;3.37;mm;7
+Luminosité;34129.22;lux;8
+Vitesse du vent;48.38;km/h;9
+Humidité du sol;55.98;%;4
+pH du sol;6.7;pH;5
+Pluviométrie;7.21;mm;7
+Luminosité;32116.19;lux;8
+Vitesse du vent;37.29;km/h;9
+Humidité du sol;67.7;%;4
+pH du sol;6.6;pH;5
+Pluviométrie;5.39;mm;7
+Luminosité;99328.94;lux;8
+Vitesse du vent;34.98;km/h;9
+Humidité du sol;67.87;%;4
+pH du sol;6.21;pH;5
+Pluviométrie;3.33;mm;7
+Luminosité;23269.64;lux;8
+Vitesse du vent;16.19;km/h;9
+Humidité du sol;58.12;%;4
+pH du sol;6.82;pH;5
+Pluviométrie;7.19;mm;7
+Luminosité;62212.43;lux;8
+Vitesse du vent;18.17;km/h;9
+Humidité du sol;41.02;%;4
+pH du sol;6.02;pH;5
+Pluviométrie;9.7;mm;7
+Luminosité;51618.85;lux;8
+Vitesse du vent;8.11;km/h;9
+Humidité du sol;52.57;%;4
+pH du sol;6.8;pH;5
+Pluviométrie;7.06;mm;7
+Luminosité;15637.12;lux;8
+Vitesse du vent;27.59;km/h;9
+Humidité du sol;50.7;%;4
+pH du sol;6.43;pH;5
+Pluviométrie;8.0;mm;7
+Luminosité;27649.58;lux;8
+Vitesse du vent;20.96;km/h;9
+Humidité du sol;73.28;%;4
+pH du sol;7.13;pH;5
+Pluviométrie;6.62;mm;7
+Luminosité;76450.23;lux;8
+Vitesse du vent;21.43;km/h;9
+Humidité du sol;78.31;%;4
+pH du sol;7.12;pH;5
+Pluviométrie;1.06;mm;7
+Luminosité;22756.13;lux;8
+Vitesse du vent;49.23;km/h;9
+Humidité du sol;54.96;%;4
+pH du sol;6.86;pH;5
+Pluviométrie;4.09;mm;7
+Luminosité;50319.01;lux;8
+Vitesse du vent;31.11;km/h;9
+Vitesse du vent;31.28;km/h;9
+Humidité du sol;77.72;%;4
+pH du sol;6.31;pH;5
+Pluviométrie;3.48;mm;7
+Luminosité;7105.7;lux;8
+Humidité du sol;41.22;%;4
+pH du sol;6.75;pH;5
+Pluviométrie;1.01;mm;7
+Luminosité;88209.18;lux;8
+Vitesse du vent;20.87;km/h;9
+Humidité du sol;49.83;%;4
+pH du sol;6.41;pH;5
+Pluviométrie;9.0;mm;7
+Luminosité;7660.59;lux;8
+Vitesse du vent;15.5;km/h;9
+Humidité du sol;62.08;%;4
+pH du sol;7.15;pH;5
+Pluviométrie;3.43;mm;7
+Luminosité;25867.18;lux;8
+Vitesse du vent;5.54;km/h;9
+Humidité du sol;61.3;%;4
+pH du sol;6.93;pH;5
+Pluviométrie;1.58;mm;7
+Luminosité;24745.09;lux;8
+Vitesse du vent;32.88;km/h;9
+Humidité du sol;66.99;%;4
+pH du sol;6.69;pH;5
+Pluviométrie;1.23;mm;7
+Luminosité;96145.91;lux;8
+Vitesse du vent;19.18;km/h;9
+Humidité du sol;77.72;%;4
+pH du sol;6.32;pH;5
+Pluviométrie;3.48;mm;7
+Luminosité;1456.86;lux;8
+Vitesse du vent;43.96;km/h;9
+Humidité du sol;64.94;%;4
+pH du sol;6.82;pH;5
+Pluviométrie;7.91;mm;7
+Luminosité;47264.03;lux;8
+Vitesse du vent;29.49;km/h;9
+Humidité du sol;63.79;%;4
+pH du sol;6.89;pH;5
+Pluviométrie;1.76;mm;7
+Luminosité;72185.96;lux;8
+Vitesse du vent;12.12;km/h;9
+Humidité du sol;69.41;%;4
+pH du sol;7.32;pH;5
+Pluviométrie;6.35;mm;7
+Luminosité;27899.78;lux;8
+Vitesse du vent;35.67;km/h;9
+Humidité du sol;74.83;%;4
+pH du sol;6.86;pH;5
+Pluviométrie;6.03;mm;7
+Luminosité;4522.72;lux;8
+Vitesse du vent;13.08;km/h;9
+Humidité du sol;44.83;%;4
+pH du sol;6.45;pH;5
+Pluviométrie;7.69;mm;7
+Luminosité;49603.91;lux;8
+Vitesse du vent;37.6;km/h;9
+Humidité du sol;65.67;%;4
+pH du sol;6.84;pH;5
+Pluviométrie;9.61;mm;7
+Luminosité;3372.97;lux;8
+Vitesse du vent;9.49;km/h;9
+Pluviométrie;9.83;mm;7
+Luminosité;55385.91;lux;8
+Vitesse du vent;28.15;km/h;9
+Humidité du sol;41.02;%;4
+pH du sol;6.58;pH;5
+Humidité du sol;62.34;%;4
+pH du sol;6.3;pH;5
+Pluviométrie;8.85;mm;7
+Luminosité;97755.03;lux;8
+Vitesse du vent;15.91;km/h;9
+Humidité du sol;54.75;%;4
+pH du sol;6.82;pH;5
+Pluviométrie;4.99;mm;7
+Luminosité;11516.66;lux;8
+Vitesse du vent;33.41;km/h;9
+Humidité du sol;63.43;%;4
+pH du sol;6.79;pH;5
+Pluviométrie;1.05;mm;7
+Luminosité;65145.07;lux;8
+Vitesse du vent;1.44;km/h;9
+Humidité du sol;68.69;%;4
+pH du sol;6.16;pH;5
+Pluviométrie;8.65;mm;7
+Luminosité;35550.07;lux;8
+Vitesse du vent;46.88;km/h;9
+Humidité du sol;61.66;%;4
+pH du sol;6.76;pH;5
+Pluviométrie;0.7;mm;7
+Luminosité;67119.62;lux;8
+Vitesse du vent;30.76;km/h;9
+Humidité du sol;52.48;%;4
+pH du sol;7.27;pH;5
+Pluviométrie;5.33;mm;7
+Luminosité;48166.2;lux;8
+Vitesse du vent;15.2;km/h;9
+Humidité du sol;79.59;%;4
+pH du sol;7.27;pH;5
+Pluviométrie;2.47;mm;7
+Luminosité;93012.11;lux;8
+Vitesse du vent;35.96;km/h;9
+Humidité du sol;79.62;%;4
+pH du sol;7.1;pH;5
+Pluviométrie;6.46;mm;7
+Luminosité;78357.32;lux;8
+Vitesse du vent;30.85;km/h;9
+Humidité du sol;56.6;%;4
+pH du sol;6.02;pH;5
+Pluviométrie;9.76;mm;7
+Luminosité;83084.63;lux;8
+Vitesse du vent;17.27;km/h;9
+Humidité du sol;73.84;%;4
+pH du sol;6.07;pH;5
+Pluviométrie;8.42;mm;7
+Luminosité;29571.61;lux;8
+Vitesse du vent;22.4;km/h;9
+Humidité du sol;59.6;%;4
+pH du sol;6.78;pH;5
+Pluviométrie;3.33;mm;7
+Luminosité;5241.79;lux;8
+Vitesse du vent;9.74;km/h;9
+Humidité du sol;76.28;%;4
+pH du sol;6.52;pH;5
+Pluviométrie;9.61;mm;7
+Luminosité;19620.57;lux;8
+Vitesse du vent;29.42;km/h;9
+Pluviométrie;5.53;mm;7
+Luminosité;37241.84;lux;8
+Vitesse du vent;13.74;km/h;9
+Humidité du sol;49.39;%;4
+pH du sol;6.37;pH;5
+Humidité du sol;74.1;%;4
+pH du sol;6.14;pH;5
+Pluviométrie;3.67;mm;7
+Luminosité;88791.1;lux;8
+Vitesse du vent;13.34;km/h;9
+Humidité du sol;71.62;%;4
+pH du sol;6.21;pH;5
+Pluviométrie;8.43;mm;7
+Luminosité;12268.94;lux;8
+Vitesse du vent;21.41;km/h;9
+Humidité du sol;60.18;%;4
+pH du sol;6.84;pH;5
+Pluviométrie;1.72;mm;7
+Luminosité;70320.62;lux;8
+Vitesse du vent;44.35;km/h;9
+Pluviométrie;1.55;mm;7
+Luminosité;633.89;lux;8
+Vitesse du vent;26.92;km/h;9
+Humidité du sol;60.02;%;4
+pH du sol;7.42;pH;5
+Humidité du sol;57.37;%;4
+pH du sol;6.62;pH;5
+Pluviométrie;8.34;mm;7
+Luminosité;38260.6;lux;8
+Vitesse du vent;32.94;km/h;9
+Humidité du sol;49.92;%;4
+pH du sol;7.23;pH;5
+Pluviométrie;0.51;mm;7
+Luminosité;22210.06;lux;8
+Vitesse du vent;12.32;km/h;9
+Humidité du sol;51.96;%;4
+pH du sol;6.05;pH;5
+Pluviométrie;1.91;mm;7
+Luminosité;69682.83;lux;8
+Vitesse du vent;35.56;km/h;9
+Humidité du sol;79.67;%;4
+pH du sol;7.4;pH;5
+Pluviométrie;7.69;mm;7
+Luminosité;63165.93;lux;8
+Vitesse du vent;6.53;km/h;9
+Pluviométrie;3.11;mm;7
+Luminosité;49536.23;lux;8
+Vitesse du vent;20.59;km/h;9
+Humidité du sol;48.65;%;4
+pH du sol;6.56;pH;5
+Humidité du sol;79.34;%;4
+pH du sol;6.61;pH;5
+Pluviométrie;6.64;mm;7
+Luminosité;22950.51;lux;8
+Vitesse du vent;17.37;km/h;9
+Humidité du sol;51.19;%;4
+pH du sol;6.27;pH;5
+Pluviométrie;0.41;mm;7
+Luminosité;58297.3;lux;8
+Vitesse du vent;12.55;km/h;9
+Humidité du sol;77.05;%;4
+pH du sol;7.4;pH;5
+Pluviométrie;1.41;mm;7
+Luminosité;90111.42;lux;8
+Vitesse du vent;20.88;km/h;9
+pH du sol;6.7;pH;5
+Pluviométrie;5.42;mm;7
+Luminosité;27832.91;lux;8
+Vitesse du vent;40.74;km/h;9
+Humidité du sol;57.53;%;4
+Humidité du sol;77.29;%;4
+pH du sol;7.37;pH;5
+Pluviométrie;6.64;mm;7
+Luminosité;27416.56;lux;8
+Vitesse du vent;32.24;km/h;9
+Humidité du sol;52.66;%;4
+pH du sol;6.35;pH;5
+Pluviométrie;3.3;mm;7
+Luminosité;40704.89;lux;8
+Vitesse du vent;24.78;km/h;9
+Humidité du sol;69.78;%;4
+pH du sol;7.28;pH;5
+Pluviométrie;6.67;mm;7
+Luminosité;85996.17;lux;8
+Vitesse du vent;44.5;km/h;9
+Pluviométrie;5.43;mm;7
+Luminosité;46540.99;lux;8
+Vitesse du vent;28.53;km/h;9
+Humidité du sol;62.44;%;4
+pH du sol;6.1;pH;5
+Humidité du sol;46.78;%;4
+pH du sol;6.31;pH;5
+Pluviométrie;3.49;mm;7
+Luminosité;80112.61;lux;8
+Vitesse du vent;35.21;km/h;9
+Humidité du sol;44.01;%;4
+pH du sol;6.11;pH;5
+Pluviométrie;0.05;mm;7
+Luminosité;6047.64;lux;8
+Vitesse du vent;37.57;km/h;9
+Humidité du sol;54.77;%;4
+pH du sol;6.04;pH;5
+Pluviométrie;0.72;mm;7
+Luminosité;79105.2;lux;8
+Vitesse du vent;14.1;km/h;9
+Humidité du sol;56.51;%;4
+pH du sol;7.2;pH;5
+Pluviométrie;7.97;mm;7
+Luminosité;51134.4;lux;8
+Vitesse du vent;26.59;km/h;9
+Humidité du sol;62.81;%;4
+pH du sol;6.57;pH;5
+Pluviométrie;1.65;mm;7
+Luminosité;22072.97;lux;8
+Vitesse du vent;45.29;km/h;9
+Humidité du sol;70.15;%;4
+pH du sol;6.85;pH;5
+Pluviométrie;2.29;mm;7
+Luminosité;15724.58;lux;8
+Vitesse du vent;0.31;km/h;9
+Humidité du sol;78.8;%;4
+pH du sol;6.04;pH;5
+Pluviométrie;5.6;mm;7
+Luminosité;52019.11;lux;8
+Vitesse du vent;43.87;km/h;9
+Humidité du sol;65.66;%;4
+pH du sol;6.17;pH;5
+Pluviométrie;5.72;mm;7
+Luminosité;37466.86;lux;8
+Vitesse du vent;44.01;km/h;9
+Humidité du sol;62.97;%;4
+pH du sol;6.33;pH;5
+Pluviométrie;8.91;mm;7
+Luminosité;46669.04;lux;8
+Vitesse du vent;47.85;km/h;9
+Humidité du sol;53.05;%;4
+pH du sol;6.85;pH;5
+Pluviométrie;0.86;mm;7
+Luminosité;57104.74;lux;8
+Vitesse du vent;17.64;km/h;9
+Humidité du sol;66.89;%;4
+pH du sol;7.09;pH;5
+Pluviométrie;1.31;mm;7
+Luminosité;79204.33;lux;8
+Vitesse du vent;14.37;km/h;9
+Pluviométrie;6.84;mm;7
+Luminosité;80596.66;lux;8
+Vitesse du vent;11.27;km/h;9
+Humidité du sol;69.66;%;4
+pH du sol;6.22;pH;5
+Humidité du sol;47.76;%;4
+pH du sol;6.37;pH;5
+Pluviométrie;9.35;mm;7
+Luminosité;23257.7;lux;8
+Vitesse du vent;19.33;km/h;9
+Humidité du sol;49.21;%;4
+pH du sol;7.45;pH;5
+Pluviométrie;6.97;mm;7
+Luminosité;51214.55;lux;8
+Vitesse du vent;48.48;km/h;9
+Humidité du sol;45.43;%;4
+pH du sol;6.55;pH;5
+Pluviométrie;7.59;mm;7
+Luminosité;70261.0;lux;8
+Vitesse du vent;35.28;km/h;9
+Humidité du sol;48.45;%;4
+pH du sol;6.78;pH;5
+Pluviométrie;1.8;mm;7
+Luminosité;23695.76;lux;8
+Vitesse du vent;49.18;km/h;9
+Humidité du sol;41.94;%;4
+pH du sol;6.72;pH;5
+Pluviométrie;5.05;mm;7
+Luminosité;47257.11;lux;8
+Vitesse du vent;7.93;km/h;9
+Humidité du sol;48.35;%;4
+pH du sol;7.47;pH;5
+Pluviométrie;6.71;mm;7
+Luminosité;36307.37;lux;8
+Vitesse du vent;1.38;km/h;9
+Humidité du sol;71.46;%;4
+pH du sol;7.31;pH;5
+Pluviométrie;3.62;mm;7
+Luminosité;60469.9;lux;8
+Vitesse du vent;46.42;km/h;9
+pH du sol;6.77;pH;5
+Pluviométrie;9.65;mm;7
+Luminosité;54247.37;lux;8
+Vitesse du vent;28.39;km/h;9
+Humidité du sol;56.59;%;4
+Humidité du sol;75.91;%;4
+pH du sol;6.82;pH;5
+Pluviométrie;8.77;mm;7
+Luminosité;76239.13;lux;8
+Vitesse du vent;2.6;km/h;9
+Humidité du sol;62.3;%;4
+pH du sol;6.34;pH;5
+Pluviométrie;4.55;mm;7
+Luminosité;99030.93;lux;8
+Vitesse du vent;49.46;km/h;9
+Humidité du sol;45.35;%;4
+pH du sol;6.84;pH;5
+Pluviométrie;1.68;mm;7
+Luminosité;23452.02;lux;8
+Vitesse du vent;20.54;km/h;9
+Humidité du sol;47.61;%;4
+pH du sol;6.17;pH;5
+Pluviométrie;6.38;mm;7
+Luminosité;16727.01;lux;8
+Vitesse du vent;41.48;km/h;9
+Humidité du sol;70.54;%;4
+pH du sol;7.28;pH;5
+Pluviométrie;0.21;mm;7
+Luminosité;24017.43;lux;8
+Vitesse du vent;2.57;km/h;9
+Humidité du sol;57.75;%;4
+pH du sol;7.13;pH;5
+Pluviométrie;2.41;mm;7
+Luminosité;77166.72;lux;8
+Vitesse du vent;2.07;km/h;9
+Humidité du sol;47.98;%;4
+pH du sol;7.23;pH;5
+Pluviométrie;1.18;mm;7
+Luminosité;82283.41;lux;8
+Vitesse du vent;3.93;km/h;9
+Humidité du sol;62.63;%;4
+pH du sol;6.39;pH;5
+Pluviométrie;7.44;mm;7
+Luminosité;71887.07;lux;8
+Vitesse du vent;41.79;km/h;9
+Humidité du sol;53.88;%;4
+pH du sol;6.83;pH;5
+Pluviométrie;2.97;mm;7
+Luminosité;33331.37;lux;8
+Vitesse du vent;6.82;km/h;9
+Humidité du sol;51.68;%;4
+pH du sol;6.35;pH;5
+Pluviométrie;8.35;mm;7
+Luminosité;22794.15;lux;8
+Vitesse du vent;25.51;km/h;9
+Humidité du sol;49.83;%;4
+pH du sol;6.37;pH;5
+Pluviométrie;2.39;mm;7
+Luminosité;53161.33;lux;8
+Vitesse du vent;38.57;km/h;9
+Humidité du sol;46.69;%;4
+pH du sol;7.07;pH;5
+Pluviométrie;8.74;mm;7
+Luminosité;85061.92;lux;8
+Vitesse du vent;26.26;km/h;9
+Humidité du sol;62.86;%;4
+pH du sol;6.45;pH;5
+Pluviométrie;6.46;mm;7
+Luminosité;13193.2;lux;8
+Vitesse du vent;40.94;km/h;9
+Humidité du sol;64.74;%;4
+pH du sol;6.06;pH;5
+Pluviométrie;5.74;mm;7
+Luminosité;17613.98;lux;8
+Vitesse du vent;40.01;km/h;9
+Humidité du sol;64.82;%;4
+pH du sol;6.52;pH;5
+Pluviométrie;5.2;mm;7
+Luminosité;88988.96;lux;8
+Vitesse du vent;43.06;km/h;9
+Humidité du sol;62.55;%;4
+pH du sol;7.5;pH;5
+Pluviométrie;7.24;mm;7
+Luminosité;21100.24;lux;8
+Vitesse du vent;26.61;km/h;9
+Humidité du sol;57.25;%;4
+pH du sol;6.52;pH;5
+Pluviométrie;3.11;mm;7
+Luminosité;76483.19;lux;8
+Vitesse du vent;23.37;km/h;9
+Humidité du sol;59.57;%;4
+pH du sol;6.4;pH;5
+Pluviométrie;6.4;mm;7
+Luminosité;55872.67;lux;8
+Vitesse du vent;22.76;km/h;9
+Humidité du sol;66.06;%;4
+pH du sol;6.15;pH;5
+Pluviométrie;8.24;mm;7
+Luminosité;49192.32;lux;8
+Vitesse du vent;15.97;km/h;9
+Humidité du sol;75.46;%;4
+pH du sol;6.56;pH;5
+Pluviométrie;5.56;mm;7
+Luminosité;13773.94;lux;8
+Vitesse du vent;49.75;km/h;9
+Humidité du sol;44.29;%;4
+pH du sol;7.1;pH;5
+Pluviométrie;5.45;mm;7
+Luminosité;5148.45;lux;8
+Vitesse du vent;34.58;km/h;9
+Humidité du sol;40.49;%;4
+pH du sol;7.48;pH;5
+Pluviométrie;5.66;mm;7
+Luminosité;8672.7;lux;8
+Vitesse du vent;21.1;km/h;9
+Humidité du sol;43.86;%;4
+pH du sol;6.08;pH;5
+Pluviométrie;1.29;mm;7
+Luminosité;35158.64;lux;8
+Vitesse du vent;4.75;km/h;9
+Humidité du sol;72.5;%;4
+pH du sol;7.49;pH;5
+Pluviométrie;2.84;mm;7
+Luminosité;71481.15;lux;8
+Vitesse du vent;47.35;km/h;9
+Humidité du sol;69.24;%;4
+pH du sol;6.55;pH;5
+Pluviométrie;3.93;mm;7
+Luminosité;5861.71;lux;8
+Vitesse du vent;12.32;km/h;9
+Humidité du sol;76.66;%;4
+pH du sol;7.33;pH;5
+Pluviométrie;9.43;mm;7
+Luminosité;98556.75;lux;8
+Vitesse du vent;49.16;km/h;9
+Humidité du sol;74.63;%;4
+pH du sol;7.34;pH;5
+Pluviométrie;9.02;mm;7
+Luminosité;15060.74;lux;8
+Vitesse du vent;25.71;km/h;9
+pH du sol;7.45;pH;5
+Pluviométrie;8.67;mm;7
+Luminosité;12047.6;lux;8
+Vitesse du vent;27.1;km/h;9
+Humidité du sol;46.79;%;4
+Humidité du sol;47.09;%;4
+pH du sol;7.42;pH;5
+Pluviométrie;2.34;mm;7
+Luminosité;5127.0;lux;8
+Vitesse du vent;24.86;km/h;9
+Humidité du sol;59.15;%;4
+pH du sol;6.46;pH;5
+Pluviométrie;0.1;mm;7
+Luminosité;44717.48;lux;8
+Vitesse du vent;15.2;km/h;9
+Humidité du sol;79.85;%;4
+pH du sol;7.46;pH;5
+Pluviométrie;8.86;mm;7
+Luminosité;71325.35;lux;8
+Vitesse du vent;20.9;km/h;9
+Humidité du sol;41.12;%;4
+pH du sol;7.21;pH;5
+Pluviométrie;1.29;mm;7
+Luminosité;71757.74;lux;8
+Vitesse du vent;46.4;km/h;9
+pH du sol;7.49;pH;5
+Pluviométrie;5.21;mm;7
+Luminosité;62363.9;lux;8
+Vitesse du vent;40.32;km/h;9
+Humidité du sol;65.54;%;4
+Humidité du sol;40.24;%;4
+pH du sol;6.63;pH;5
+Pluviométrie;3.93;mm;7
+Luminosité;71849.2;lux;8
+Vitesse du vent;20.39;km/h;9
+Humidité du sol;43.54;%;4
+pH du sol;7.22;pH;5
+Pluviométrie;0.91;mm;7
+Luminosité;76301.24;lux;8
+Vitesse du vent;24.77;km/h;9
+Humidité du sol;62.62;%;4
+pH du sol;6.32;pH;5
+Pluviométrie;5.09;mm;7
+Luminosité;63626.0;lux;8
+Vitesse du vent;40.31;km/h;9
+Humidité du sol;58.33;%;4
+pH du sol;6.1;pH;5
+Pluviométrie;7.7;mm;7
+Luminosité;77092.39;lux;8
+Vitesse du vent;5.4;km/h;9
+Humidité du sol;55.88;%;4
+pH du sol;6.49;pH;5
+Pluviométrie;2.7;mm;7
+Luminosité;36220.45;lux;8
+Vitesse du vent;43.05;km/h;9
+Humidité du sol;48.37;%;4
+pH du sol;7.39;pH;5
+Pluviométrie;6.3;mm;7
+Luminosité;39608.41;lux;8
+Vitesse du vent;39.49;km/h;9
+Humidité du sol;59.17;%;4
+pH du sol;6.14;pH;5
+Pluviométrie;1.46;mm;7
+Luminosité;16343.95;lux;8
+Vitesse du vent;17.5;km/h;9
+Humidité du sol;48.91;%;4
+pH du sol;6.69;pH;5
+Pluviométrie;7.11;mm;7
+Luminosité;63506.99;lux;8
+Vitesse du vent;30.33;km/h;9
+Humidité du sol;50.28;%;4
+pH du sol;7.07;pH;5
+Pluviométrie;3.98;mm;7
+Luminosité;96366.81;lux;8
+Vitesse du vent;11.9;km/h;9
+Humidité du sol;42.84;%;4
+pH du sol;6.89;pH;5
+Pluviométrie;8.52;mm;7
+Luminosité;45080.98;lux;8
+Vitesse du vent;15.27;km/h;9
+Humidité du sol;51.74;%;4
+pH du sol;6.11;pH;5
+Pluviométrie;6.72;mm;7
+Luminosité;32143.19;lux;8
+Vitesse du vent;46.36;km/h;9
+pH du sol;7.06;pH;5
+Pluviométrie;7.49;mm;7
+Luminosité;87815.18;lux;8
+Vitesse du vent;41.38;km/h;9
+Humidité du sol;46.16;%;4
+Humidité du sol;74.94;%;4
+pH du sol;6.04;pH;5
+Pluviométrie;5.34;mm;7
+Luminosité;55928.91;lux;8
+Vitesse du vent;49.84;km/h;9
+Humidité du sol;48.29;%;4
+pH du sol;6.68;pH;5
+Pluviométrie;6.7;mm;7
+Luminosité;74538.31;lux;8
+Vitesse du vent;30.69;km/h;9
+Humidité du sol;61.89;%;4
+pH du sol;6.16;pH;5
+Pluviométrie;6.72;mm;7
+Luminosité;51253.3;lux;8
+Vitesse du vent;29.43;km/h;9
+Humidité du sol;64.12;%;4
+pH du sol;6.22;pH;5
+Pluviométrie;2.86;mm;7
+Luminosité;24445.59;lux;8
+Vitesse du vent;0.07;km/h;9
+Humidité du sol;48.6;%;4
+pH du sol;6.53;pH;5
+Pluviométrie;0.37;mm;7
+Luminosité;92025.98;lux;8
+Vitesse du vent;26.3;km/h;9
+Humidité du sol;59.56;%;4
+pH du sol;6.79;pH;5
+Pluviométrie;4.42;mm;7
+Luminosité;49501.06;lux;8
+Vitesse du vent;2.27;km/h;9
+Humidité du sol;66.82;%;4
+pH du sol;6.55;pH;5
+Pluviométrie;6.2;mm;7
+Luminosité;71919.82;lux;8
+Vitesse du vent;43.98;km/h;9
+Humidité du sol;48.31;%;4
+pH du sol;7.18;pH;5
+Pluviométrie;3.89;mm;7
+Luminosité;65841.27;lux;8
+Vitesse du vent;14.57;km/h;9
+Pluviométrie;8.93;mm;7
+Luminosité;44847.32;lux;8
+Vitesse du vent;11.98;km/h;9
+Humidité du sol;56.13;%;4
+pH du sol;6.65;pH;5
+Humidité du sol;61.51;%;4
+pH du sol;6.05;pH;5
+Pluviométrie;2.53;mm;7
+Luminosité;33460.28;lux;8
+Vitesse du vent;0.52;km/h;9
+Humidité du sol;77.28;%;4
+pH du sol;6.19;pH;5
+Pluviométrie;3.2;mm;7
+Luminosité;52646.14;lux;8
+Vitesse du vent;3.88;km/h;9
+Humidité du sol;56.04;%;4
+pH du sol;6.93;pH;5
+Pluviométrie;2.89;mm;7
+Luminosité;59691.62;lux;8
+Vitesse du vent;10.48;km/h;9
+pH du sol;7.26;pH;5
+Pluviométrie;0.59;mm;7
+Luminosité;88425.47;lux;8
+Vitesse du vent;7.33;km/h;9
+Humidité du sol;64.56;%;4
+Humidité du sol;59.38;%;4
+pH du sol;6.02;pH;5
+Pluviométrie;1.77;mm;7
+Luminosité;39487.22;lux;8
+Vitesse du vent;28.01;km/h;9
+Humidité du sol;44.01;%;4
+pH du sol;7.15;pH;5
+Pluviométrie;8.76;mm;7
+Luminosité;15662.5;lux;8
+Vitesse du vent;30.62;km/h;9
+Humidité du sol;41.51;%;4
+pH du sol;6.33;pH;5
+Pluviométrie;0.02;mm;7
+Luminosité;30510.36;lux;8
+Vitesse du vent;29.14;km/h;9
+Humidité du sol;78.01;%;4
+pH du sol;7.15;pH;5
+Pluviométrie;9.68;mm;7
+Luminosité;79603.52;lux;8
+Vitesse du vent;31.73;km/h;9
+Humidité du sol;62.0;%;4
+pH du sol;7.38;pH;5
+Pluviométrie;5.95;mm;7
+Luminosité;53566.98;lux;8
+Vitesse du vent;10.04;km/h;9
+Humidité du sol;40.86;%;4
+pH du sol;6.37;pH;5
+Pluviométrie;9.8;mm;7
+Luminosité;73280.3;lux;8
+Vitesse du vent;48.89;km/h;9
+Humidité du sol;50.86;%;4
+pH du sol;7.33;pH;5
+Pluviométrie;7.67;mm;7
+Luminosité;14805.88;lux;8
+Vitesse du vent;36.03;km/h;9
+Humidité du sol;71.65;%;4
+pH du sol;7.4;pH;5
+Pluviométrie;9.47;mm;7
+Luminosité;1877.2;lux;8
+Vitesse du vent;20.76;km/h;9
+Humidité du sol;65.71;%;4
+pH du sol;7.11;pH;5
+Pluviométrie;8.9;mm;7
+Luminosité;29901.08;lux;8
+Vitesse du vent;20.54;km/h;9
+pH du sol;6.18;pH;5
+Pluviométrie;1.45;mm;7
+Luminosité;42983.19;lux;8
+Vitesse du vent;26.96;km/h;9
+Humidité du sol;72.35;%;4
+Humidité du sol;57.8;%;4
+pH du sol;6.61;pH;5
+Pluviométrie;4.0;mm;7
+Luminosité;34798.38;lux;8
+Vitesse du vent;45.44;km/h;9
+Humidité du sol;48.87;%;4
+pH du sol;7.12;pH;5
+Pluviométrie;8.36;mm;7
+Luminosité;59552.18;lux;8
+Vitesse du vent;7.66;km/h;9
+Humidité du sol;69.48;%;4
+pH du sol;6.54;pH;5
+Pluviométrie;2.73;mm;7
+Luminosité;95732.78;lux;8
+Vitesse du vent;0.91;km/h;9
+pH du sol;6.59;pH;5
+Pluviométrie;6.16;mm;7
+Luminosité;79260.8;lux;8
+Vitesse du vent;2.45;km/h;9
+Humidité du sol;48.18;%;4
+Humidité du sol;53.56;%;4
+pH du sol;7.28;pH;5
+Pluviométrie;2.35;mm;7
+Luminosité;89884.48;lux;8
+Vitesse du vent;30.03;km/h;9
+Humidité du sol;59.96;%;4
+pH du sol;6.82;pH;5
+Pluviométrie;5.64;mm;7
+Luminosité;93182.36;lux;8
+Vitesse du vent;37.13;km/h;9
+Humidité du sol;72.11;%;4
+pH du sol;6.52;pH;5
+Pluviométrie;9.11;mm;7
+Luminosité;22836.61;lux;8
+Vitesse du vent;29.56;km/h;9
+Humidité du sol;75.79;%;4
+pH du sol;7.36;pH;5
+Pluviométrie;9.71;mm;7
+Luminosité;27384.13;lux;8
+Vitesse du vent;23.59;km/h;9
+Humidité du sol;78.73;%;4
+pH du sol;6.28;pH;5
+Pluviométrie;4.23;mm;7
+Luminosité;89918.2;lux;8
+Vitesse du vent;13.66;km/h;9
+Humidité du sol;59.23;%;4
+pH du sol;7.34;pH;5
+Pluviométrie;3.63;mm;7
+Luminosité;78291.91;lux;8
+Vitesse du vent;25.76;km/h;9
+Humidité du sol;56.17;%;4
+pH du sol;6.58;pH;5
+Pluviométrie;0.52;mm;7
+Luminosité;94802.35;lux;8
+Vitesse du vent;13.07;km/h;9
+Humidité du sol;73.94;%;4
+pH du sol;7.12;pH;5
+Pluviométrie;6.86;mm;7
+Luminosité;35048.54;lux;8
+Vitesse du vent;19.01;km/h;9
+Humidité du sol;58.35;%;4
+pH du sol;6.65;pH;5
+Pluviométrie;0.52;mm;7
+Luminosité;55152.01;lux;8
+Vitesse du vent;17.52;km/h;9
+Humidité du sol;76.15;%;4
+pH du sol;6.78;pH;5
+Pluviométrie;8.79;mm;7
+Luminosité;47350.02;lux;8
+Vitesse du vent;25.01;km/h;9
+Humidité du sol;49.78;%;4
+pH du sol;6.41;pH;5
+Pluviométrie;8.18;mm;7
+Luminosité;4475.19;lux;8
+Vitesse du vent;40.92;km/h;9
+Humidité du sol;70.44;%;4
+pH du sol;6.44;pH;5
+Pluviométrie;8.58;mm;7
+Luminosité;7748.4;lux;8
+Vitesse du vent;38.93;km/h;9
+Humidité du sol;60.65;%;4
+pH du sol;7.11;pH;5
+Pluviométrie;1.88;mm;7
+Luminosité;23006.43;lux;8
+Vitesse du vent;44.16;km/h;9
+Humidité du sol;76.98;%;4
+pH du sol;7.08;pH;5
+Pluviométrie;4.18;mm;7
+Luminosité;43087.03;lux;8
+Vitesse du vent;9.7;km/h;9
+Humidité du sol;48.63;%;4
+pH du sol;6.69;pH;5
+Pluviométrie;5.8;mm;7
+Luminosité;46602.13;lux;8
+Vitesse du vent;44.17;km/h;9
+Humidité du sol;77.79;%;4
+pH du sol;6.26;pH;5
+Pluviométrie;3.08;mm;7
+Luminosité;3189.78;lux;8
+Vitesse du vent;24.43;km/h;9
+Humidité du sol;49.89;%;4
+pH du sol;7.09;pH;5
+Pluviométrie;3.25;mm;7
+Luminosité;57613.95;lux;8
+Vitesse du vent;30.94;km/h;9
+Humidité du sol;50.55;%;4
+pH du sol;7.18;pH;5
+Pluviométrie;9.81;mm;7
+Luminosité;23690.41;lux;8
+Vitesse du vent;32.99;km/h;9
+Humidité du sol;66.58;%;4
+pH du sol;6.34;pH;5
+Pluviométrie;5.61;mm;7
+Luminosité;5081.39;lux;8
+Vitesse du vent;9.55;km/h;9
+Humidité du sol;70.71;%;4
+pH du sol;6.94;pH;5
+Pluviométrie;5.13;mm;7
+Luminosité;47419.02;lux;8
+Vitesse du vent;35.13;km/h;9
+Humidité du sol;77.0;%;4
+pH du sol;6.62;pH;5
+Pluviométrie;2.53;mm;7
+Luminosité;25113.43;lux;8
+Vitesse du vent;0.44;km/h;9
+Humidité du sol;72.24;%;4
+pH du sol;6.65;pH;5
+Pluviométrie;7.83;mm;7
+Luminosité;94577.51;lux;8
+Vitesse du vent;11.33;km/h;9
+Humidité du sol;75.13;%;4
+pH du sol;6.29;pH;5
+Pluviométrie;6.06;mm;7
+Luminosité;33725.76;lux;8
+Vitesse du vent;49.09;km/h;9
+Humidité du sol;59.48;%;4
+pH du sol;7.42;pH;5
+Pluviométrie;1.09;mm;7
+Luminosité;95515.91;lux;8
+Vitesse du vent;20.51;km/h;9
+Humidité du sol;78.8;%;4
+pH du sol;6.55;pH;5
+Pluviométrie;2.53;mm;7
+Luminosité;35973.93;lux;8
+Vitesse du vent;3.63;km/h;9
+Humidité du sol;62.56;%;4
+pH du sol;6.61;pH;5
+Pluviométrie;7.23;mm;7
+Luminosité;83028.33;lux;8
+Vitesse du vent;47.14;km/h;9
+Luminosité;74021.3;lux;8
+Vitesse du vent;46.9;km/h;9
+Humidité du sol;74.92;%;4
+pH du sol;6.99;pH;5
+Pluviométrie;5.17;mm;7
+Humidité du sol;62.6;%;4
+pH du sol;7.26;pH;5
+Pluviométrie;2.5;mm;7
+Luminosité;63372.26;lux;8
+Vitesse du vent;48.19;km/h;9
+Humidité du sol;47.9;%;4
+pH du sol;6.61;pH;5
+Pluviométrie;5.26;mm;7
+Luminosité;36225.33;lux;8
+Vitesse du vent;41.67;km/h;9
+Humidité du sol;67.6;%;4
+pH du sol;6.21;pH;5
+Pluviométrie;9.51;mm;7
+Luminosité;32904.06;lux;8
+Vitesse du vent;40.07;km/h;9
+Humidité du sol;70.6;%;4
+pH du sol;7.02;pH;5
+Pluviométrie;9.04;mm;7
+Luminosité;10836.48;lux;8
+Vitesse du vent;29.9;km/h;9
+Humidité du sol;60.19;%;4
+pH du sol;6.24;pH;5
+Pluviométrie;1.45;mm;7
+Luminosité;6938.58;lux;8
+Vitesse du vent;37.24;km/h;9
+Humidité du sol;73.36;%;4
+pH du sol;6.35;pH;5
+Pluviométrie;2.85;mm;7
+Luminosité;17664.09;lux;8
+Vitesse du vent;0.12;km/h;9
+Humidité du sol;55.4;%;4
+pH du sol;6.83;pH;5
+Pluviométrie;7.32;mm;7
+Luminosité;24150.34;lux;8
+Vitesse du vent;19.57;km/h;9
+Pluviométrie;1.71;mm;7
+Luminosité;22572.71;lux;8
+Vitesse du vent;26.35;km/h;9
+Humidité du sol;60.97;%;4
+pH du sol;7.15;pH;5
+Humidité du sol;72.88;%;4
+pH du sol;6.94;pH;5
+Pluviométrie;2.01;mm;7
+Luminosité;10427.55;lux;8
+Vitesse du vent;4.85;km/h;9
+Humidité du sol;60.0;%;4
+pH du sol;6.01;pH;5
+Pluviométrie;4.9;mm;7
+Luminosité;4117.91;lux;8
+Vitesse du vent;13.15;km/h;9
+Humidité du sol;54.36;%;4
+pH du sol;7.34;pH;5
+Pluviométrie;4.27;mm;7
+Luminosité;12495.59;lux;8
+Vitesse du vent;0.61;km/h;9
+Humidité du sol;43.51;%;4
+pH du sol;6.55;pH;5
+Pluviométrie;5.41;mm;7
+Luminosité;1920.81;lux;8
+Vitesse du vent;10.2;km/h;9
+Humidité du sol;58.4;%;4
+pH du sol;6.52;pH;5
+Pluviométrie;9.74;mm;7
+Luminosité;11287.85;lux;8
+Vitesse du vent;0.05;km/h;9
+Humidité du sol;45.06;%;4
+pH du sol;6.04;pH;5
+Pluviométrie;0.86;mm;7
+Luminosité;23993.02;lux;8
+Vitesse du vent;35.13;km/h;9
+Humidité du sol;47.27;%;4
+pH du sol;7.04;pH;5
+Pluviométrie;6.15;mm;7
+Luminosité;632.14;lux;8
+Vitesse du vent;2.65;km/h;9
+Humidité du sol;59.63;%;4
+pH du sol;6.17;pH;5
+Pluviométrie;9.97;mm;7
+Luminosité;33892.79;lux;8
+Vitesse du vent;43.48;km/h;9
+Humidité du sol;70.99;%;4
+pH du sol;6.49;pH;5
+Pluviométrie;4.79;mm;7
+Luminosité;48100.62;lux;8
+Vitesse du vent;24.86;km/h;9
+Humidité du sol;57.17;%;4
+pH du sol;6.16;pH;5
+Pluviométrie;7.15;mm;7
+Luminosité;89735.09;lux;8
+Vitesse du vent;43.52;km/h;9
+Pluviométrie;0.57;mm;7
+Luminosité;5305.92;lux;8
+Vitesse du vent;31.38;km/h;9
+Humidité du sol;66.7;%;4
+pH du sol;6.93;pH;5
+Humidité du sol;76.07;%;4
+pH du sol;7.22;pH;5
+Pluviométrie;8.49;mm;7
+Luminosité;42529.32;lux;8
+Vitesse du vent;17.03;km/h;9
+Humidité du sol;42.81;%;4
+pH du sol;6.92;pH;5
+Pluviométrie;4.54;mm;7
+Luminosité;56883.07;lux;8
+Vitesse du vent;4.63;km/h;9
+Humidité du sol;61.57;%;4
+pH du sol;6.55;pH;5
+Pluviométrie;3.11;mm;7
+Luminosité;26640.34;lux;8
+Vitesse du vent;43.49;km/h;9
+Humidité du sol;71.23;%;4
+pH du sol;6.7;pH;5
+Pluviométrie;3.02;mm;7
+Luminosité;47312.35;lux;8
+Vitesse du vent;3.29;km/h;9
+Humidité du sol;69.03;%;4
+pH du sol;7.05;pH;5
+Pluviométrie;1.65;mm;7
+Luminosité;33688.5;lux;8
+Vitesse du vent;19.16;km/h;9
+Humidité du sol;67.13;%;4
+pH du sol;6.89;pH;5
+Pluviométrie;6.03;mm;7
+Luminosité;83667.46;lux;8
+Vitesse du vent;35.56;km/h;9
+Humidité du sol;76.71;%;4
+pH du sol;6.52;pH;5
+Pluviométrie;1.34;mm;7
+Luminosité;89828.64;lux;8
+Vitesse du vent;2.76;km/h;9
+Humidité du sol;47.2;%;4
+pH du sol;6.29;pH;5
+Pluviométrie;2.42;mm;7
+Luminosité;92732.92;lux;8
+Vitesse du vent;9.41;km/h;9
+Humidité du sol;69.14;%;4
+pH du sol;7.07;pH;5
+Pluviométrie;1.84;mm;7
+Luminosité;16932.09;lux;8
+Vitesse du vent;29.29;km/h;9
+Humidité du sol;44.76;%;4
+pH du sol;6.3;pH;5
+Pluviométrie;2.72;mm;7
+Luminosité;73925.37;lux;8
+Vitesse du vent;13.36;km/h;9
+Humidité du sol;60.48;%;4
+pH du sol;6.46;pH;5
+Pluviométrie;6.72;mm;7
+Luminosité;41878.09;lux;8
+Vitesse du vent;33.56;km/h;9
+Humidité du sol;61.72;%;4
+pH du sol;6.13;pH;5
+Pluviométrie;0.25;mm;7
+Luminosité;21404.41;lux;8
+Vitesse du vent;34.87;km/h;9
+Humidité du sol;60.45;%;4
+pH du sol;7.44;pH;5
+Pluviométrie;7.77;mm;7
+Luminosité;47714.49;lux;8
+Vitesse du vent;38.59;km/h;9
+Humidité du sol;61.7;%;4
+pH du sol;6.51;pH;5
+Pluviométrie;8.15;mm;7
+Luminosité;57856.66;lux;8
+Vitesse du vent;0.1;km/h;9
+Humidité du sol;70.03;%;4
+pH du sol;6.78;pH;5
+Pluviométrie;9.76;mm;7
+Luminosité;13451.76;lux;8
+Vitesse du vent;46.29;km/h;9
+Pluviométrie;9.57;mm;7
+Luminosité;79723.72;lux;8
+Vitesse du vent;35.05;km/h;9
+Humidité du sol;55.97;%;4
+pH du sol;7.41;pH;5
+Humidité du sol;59.03;%;4
+pH du sol;6.51;pH;5
+Pluviométrie;7.9;mm;7
+Luminosité;44052.75;lux;8
+Vitesse du vent;2.0;km/h;9
+Humidité du sol;59.42;%;4
+pH du sol;6.16;pH;5
+Pluviométrie;6.12;mm;7
+Luminosité;1915.39;lux;8
+Vitesse du vent;17.09;km/h;9
+Humidité du sol;79.2;%;4
+pH du sol;7.15;pH;5
+Pluviométrie;5.31;mm;7
+Luminosité;93238.39;lux;8
+Vitesse du vent;30.91;km/h;9
+Humidité du sol;77.84;%;4
+pH du sol;6.08;pH;5
+Pluviométrie;6.75;mm;7
+Luminosité;17508.12;lux;8
+Vitesse du vent;48.18;km/h;9
+Humidité du sol;52.09;%;4
+pH du sol;6.73;pH;5
+Pluviométrie;0.63;mm;7
+Luminosité;42868.04;lux;8
+Vitesse du vent;11.85;km/h;9
+Humidité du sol;62.82;%;4
+pH du sol;6.56;pH;5
+Pluviométrie;6.26;mm;7
+Luminosité;85529.13;lux;8
+Vitesse du vent;8.97;km/h;9
+Humidité du sol;77.6;%;4
+pH du sol;6.71;pH;5
+Pluviométrie;3.95;mm;7
+Luminosité;77631.44;lux;8
+Vitesse du vent;35.51;km/h;9
+Humidité du sol;67.48;%;4
+pH du sol;6.35;pH;5
+Pluviométrie;3.46;mm;7
+Luminosité;15532.62;lux;8
+Vitesse du vent;19.65;km/h;9
+Humidité du sol;77.67;%;4
+pH du sol;6.78;pH;5
+Pluviométrie;5.54;mm;7
+Luminosité;26901.72;lux;8
+Vitesse du vent;17.91;km/h;9
+Humidité du sol;70.97;%;4
+pH du sol;6.28;pH;5
+Pluviométrie;6.46;mm;7
+Luminosité;40216.02;lux;8
+Vitesse du vent;14.61;km/h;9
+Humidité du sol;71.46;%;4
+pH du sol;6.49;pH;5
+Pluviométrie;5.25;mm;7
+Luminosité;78843.12;lux;8
+Vitesse du vent;42.68;km/h;9
+Humidité du sol;73.84;%;4
+pH du sol;6.51;pH;5
+Pluviométrie;5.93;mm;7
+Luminosité;30161.89;lux;8
+Vitesse du vent;28.05;km/h;9
+Humidité du sol;61.91;%;4
+pH du sol;6.91;pH;5
+Pluviométrie;2.54;mm;7
+Luminosité;49595.37;lux;8
+Vitesse du vent;40.16;km/h;9
+Humidité du sol;70.73;%;4
+pH du sol;7.28;pH;5
+Pluviométrie;5.66;mm;7
+Luminosité;93832.28;lux;8
+Vitesse du vent;48.56;km/h;9
+Humidité du sol;44.62;%;4
+pH du sol;7.26;pH;5
+Pluviométrie;5.12;mm;7
+Luminosité;48514.04;lux;8
+Vitesse du vent;38.8;km/h;9
+Humidité du sol;46.61;%;4
+pH du sol;7.43;pH;5
+Pluviométrie;7.03;mm;7
+Luminosité;77367.94;lux;8
+Vitesse du vent;12.18;km/h;9
+Humidité du sol;62.69;%;4
+pH du sol;6.34;pH;5
+Pluviométrie;7.74;mm;7
+Luminosité;66881.37;lux;8
+Vitesse du vent;33.24;km/h;9
+Humidité du sol;76.22;%;4
+pH du sol;6.09;pH;5
+Pluviométrie;6.6;mm;7
+Luminosité;84087.64;lux;8
+Vitesse du vent;3.74;km/h;9
+Humidité du sol;47.26;%;4
+pH du sol;7.03;pH;5
+Pluviométrie;0.18;mm;7
+Luminosité;25526.3;lux;8
+Vitesse du vent;37.42;km/h;9
+Humidité du sol;74.03;%;4
+pH du sol;6.17;pH;5
+Pluviométrie;0.21;mm;7
+Luminosité;60799.6;lux;8
+Vitesse du vent;14.2;km/h;9
+Humidité du sol;71.26;%;4
+pH du sol;6.6;pH;5
+Pluviométrie;0.37;mm;7
+Luminosité;47478.56;lux;8
+Vitesse du vent;9.88;km/h;9
+Humidité du sol;64.11;%;4
+pH du sol;6.02;pH;5
+Pluviométrie;5.9;mm;7
+Luminosité;54429.95;lux;8
+Vitesse du vent;7.05;km/h;9
+Humidité du sol;73.87;%;4
+pH du sol;7.13;pH;5
+Pluviométrie;6.17;mm;7
+Luminosité;14915.78;lux;8
+Vitesse du vent;40.45;km/h;9
+Humidité du sol;72.86;%;4
+pH du sol;6.3;pH;5
+Pluviométrie;3.52;mm;7
+Luminosité;86950.18;lux;8
+Vitesse du vent;4.22;km/h;9
+Humidité du sol;69.95;%;4
+pH du sol;6.52;pH;5
+Pluviométrie;0.77;mm;7
+Luminosité;65493.27;lux;8
+Vitesse du vent;1.65;km/h;9
+Humidité du sol;54.08;%;4
+pH du sol;6.88;pH;5
+Pluviométrie;4.84;mm;7
+Luminosité;22399.47;lux;8
+Vitesse du vent;1.02;km/h;9
+Humidité du sol;64.7;%;4
+pH du sol;7.02;pH;5
+Pluviométrie;1.6;mm;7
+Luminosité;83930.92;lux;8
+Vitesse du vent;1.46;km/h;9
+Humidité du sol;43.99;%;4
+pH du sol;6.59;pH;5
+Pluviométrie;8.74;mm;7
+Luminosité;55716.71;lux;8
+Vitesse du vent;49.6;km/h;9
+Humidité du sol;77.9;%;4
+pH du sol;7.34;pH;5
+Pluviométrie;8.17;mm;7
+Luminosité;87205.06;lux;8
+Vitesse du vent;48.54;km/h;9
+Humidité du sol;66.32;%;4
+pH du sol;6.87;pH;5
+Pluviométrie;4.33;mm;7
+Luminosité;35005.33;lux;8
+Vitesse du vent;30.5;km/h;9
+Humidité du sol;53.12;%;4
+pH du sol;6.22;pH;5
+Pluviométrie;9.11;mm;7
+Luminosité;59879.27;lux;8
+Vitesse du vent;0.61;km/h;9
+Humidité du sol;69.69;%;4
+pH du sol;7.04;pH;5
+Pluviométrie;9.16;mm;7
+Luminosité;78310.51;lux;8
+Vitesse du vent;41.74;km/h;9
+Humidité du sol;42.27;%;4
+pH du sol;6.67;pH;5
+Pluviométrie;2.54;mm;7
+Luminosité;40534.71;lux;8
+Vitesse du vent;42.32;km/h;9
+Humidité du sol;65.44;%;4
+pH du sol;6.13;pH;5
+Pluviométrie;7.24;mm;7
+Luminosité;69609.72;lux;8
+Vitesse du vent;12.82;km/h;9
+Humidité du sol;54.46;%;4
+pH du sol;6.93;pH;5
+Pluviométrie;2.64;mm;7
+Luminosité;10829.98;lux;8
+Vitesse du vent;46.05;km/h;9
+Humidité du sol;57.19;%;4
+pH du sol;7.49;pH;5
+Pluviométrie;1.09;mm;7
+Luminosité;4581.91;lux;8
+Vitesse du vent;15.66;km/h;9
+Humidité du sol;40.29;%;4
+pH du sol;6.47;pH;5
+Pluviométrie;3.89;mm;7
+Luminosité;57629.94;lux;8
+Vitesse du vent;14.68;km/h;9
+Humidité du sol;73.43;%;4
+pH du sol;7.4;pH;5
+Pluviométrie;0.55;mm;7
+Luminosité;56097.22;lux;8
+Vitesse du vent;11.22;km/h;9
+Humidité du sol;68.42;%;4
+pH du sol;7.04;pH;5
+Pluviométrie;5.59;mm;7
+Luminosité;10738.37;lux;8
+Vitesse du vent;47.9;km/h;9
+Humidité du sol;59.8;%;4
+pH du sol;6.44;pH;5
+Pluviométrie;2.4;mm;7
+Luminosité;53156.73;lux;8
+Vitesse du vent;26.24;km/h;9
+Humidité du sol;67.51;%;4
+pH du sol;7.35;pH;5
+Pluviométrie;1.18;mm;7
+Luminosité;51630.36;lux;8
+Vitesse du vent;26.24;km/h;9
+Humidité du sol;45.7;%;4
+pH du sol;6.36;pH;5
+Pluviométrie;5.42;mm;7
+Luminosité;99855.45;lux;8
+Vitesse du vent;3.76;km/h;9
+Humidité du sol;66.26;%;4
+pH du sol;7.01;pH;5
+Pluviométrie;6.78;mm;7
+Luminosité;29258.77;lux;8
+Vitesse du vent;1.39;km/h;9
+Humidité du sol;65.44;%;4
+pH du sol;6.44;pH;5
+Pluviométrie;6.91;mm;7
+Luminosité;32785.25;lux;8
+Vitesse du vent;3.34;km/h;9
+Humidité du sol;52.02;%;4
+pH du sol;6.23;pH;5
+Pluviométrie;5.64;mm;7
+Luminosité;87877.41;lux;8
+Vitesse du vent;42.81;km/h;9
+Humidité du sol;42.77;%;4
+pH du sol;6.33;pH;5
+Pluviométrie;4.91;mm;7
+Luminosité;21942.01;lux;8
+Vitesse du vent;26.55;km/h;9
+Humidité du sol;70.97;%;4
+pH du sol;7.27;pH;5
+Pluviométrie;1.97;mm;7
+Luminosité;83233.05;lux;8
+Vitesse du vent;13.92;km/h;9
+Humidité du sol;63.44;%;4
+pH du sol;6.6;pH;5
+Pluviométrie;7.05;mm;7
+Luminosité;94275.8;lux;8
+Vitesse du vent;20.95;km/h;9
+Vitesse du vent;28.67;km/h;9
+Humidité du sol;61.91;%;4
+pH du sol;6.0;pH;5
+Pluviométrie;1.55;mm;7
+Luminosité;85732.04;lux;8
+Humidité du sol;46.77;%;4
+pH du sol;7.14;pH;5
+Pluviométrie;7.22;mm;7
+Luminosité;12569.9;lux;8
+Vitesse du vent;1.55;km/h;9
+Humidité du sol;48.48;%;4
+pH du sol;6.17;pH;5
+Pluviométrie;3.78;mm;7
+Luminosité;29263.92;lux;8
+Vitesse du vent;34.22;km/h;9
+Humidité du sol;74.7;%;4
+pH du sol;6.77;pH;5
+Pluviométrie;0.56;mm;7
+Luminosité;4751.98;lux;8
+Vitesse du vent;25.22;km/h;9
+Humidité du sol;72.85;%;4
+pH du sol;6.22;pH;5
+Pluviométrie;6.88;mm;7
+Luminosité;34307.21;lux;8
+Vitesse du vent;17.91;km/h;9
+Humidité du sol;49.27;%;4
+pH du sol;6.31;pH;5
+Pluviométrie;8.4;mm;7
+Luminosité;52071.83;lux;8
+Vitesse du vent;35.07;km/h;9
+Humidité du sol;57.01;%;4
+pH du sol;6.56;pH;5
+Pluviométrie;0.72;mm;7
+Luminosité;61992.9;lux;8
+Vitesse du vent;19.64;km/h;9
+Humidité du sol;57.4;%;4
+pH du sol;6.85;pH;5
+Pluviométrie;2.16;mm;7
+Luminosité;78813.7;lux;8
+Vitesse du vent;5.77;km/h;9
+Humidité du sol;42.59;%;4
+pH du sol;6.85;pH;5
+Pluviométrie;1.78;mm;7
+Luminosité;84098.38;lux;8
+Vitesse du vent;49.28;km/h;9
+Humidité du sol;54.52;%;4
+pH du sol;7.38;pH;5
+Pluviométrie;1.22;mm;7
+Luminosité;17324.71;lux;8
+Vitesse du vent;47.97;km/h;9
+Humidité du sol;41.81;%;4
+pH du sol;6.35;pH;5
+Pluviométrie;6.02;mm;7
+Luminosité;17809.43;lux;8
+Vitesse du vent;3.53;km/h;9
+Humidité du sol;76.34;%;4
+pH du sol;6.02;pH;5
+Pluviométrie;3.44;mm;7
+Luminosité;39705.73;lux;8
+Vitesse du vent;40.98;km/h;9
+Humidité du sol;55.31;%;4
+pH du sol;6.96;pH;5
+Pluviométrie;9.38;mm;7
+Luminosité;82243.68;lux;8
+Vitesse du vent;30.5;km/h;9
+Humidité du sol;59.85;%;4
+pH du sol;6.9;pH;5
+Pluviométrie;7.89;mm;7
+Luminosité;11712.52;lux;8
+Vitesse du vent;3.3;km/h;9
+Humidité du sol;66.45;%;4
+pH du sol;6.51;pH;5
+Pluviométrie;2.02;mm;7
+Luminosité;51228.53;lux;8
+Vitesse du vent;42.7;km/h;9
+Humidité du sol;63.95;%;4
+pH du sol;6.26;pH;5
+Pluviométrie;8.86;mm;7
+Luminosité;49512.2;lux;8
+Vitesse du vent;38.79;km/h;9
+Humidité du sol;43.89;%;4
+pH du sol;6.63;pH;5
+Pluviométrie;8.86;mm;7
+Luminosité;77061.31;lux;8
+Vitesse du vent;10.77;km/h;9
+Humidité du sol;72.55;%;4
+pH du sol;6.86;pH;5
+Pluviométrie;3.47;mm;7
+Luminosité;72276.99;lux;8
+Vitesse du vent;39.53;km/h;9
+Humidité du sol;68.73;%;4
+pH du sol;6.15;pH;5
+Pluviométrie;0.35;mm;7
+Luminosité;22351.45;lux;8
+Vitesse du vent;48.62;km/h;9
+Luminosité;70201.1;lux;8
+Vitesse du vent;30.98;km/h;9
+Humidité du sol;45.44;%;4
+pH du sol;6.86;pH;5
+Pluviométrie;5.3;mm;7
+Humidité du sol;78.46;%;4
+pH du sol;7.48;pH;5
+Pluviométrie;5.57;mm;7
+Luminosité;30739.19;lux;8
+Vitesse du vent;28.54;km/h;9
+Humidité du sol;76.47;%;4
+pH du sol;6.84;pH;5
+Pluviométrie;1.0;mm;7
+Luminosité;62702.54;lux;8
+Vitesse du vent;25.96;km/h;9
+Humidité du sol;40.69;%;4
+pH du sol;6.89;pH;5
+Pluviométrie;8.76;mm;7
+Luminosité;11152.99;lux;8
+Vitesse du vent;9.93;km/h;9
+Humidité du sol;50.59;%;4
+pH du sol;7.02;pH;5
+Pluviométrie;2.15;mm;7
+Luminosité;73882.34;lux;8
+Vitesse du vent;7.69;km/h;9
+Pluviométrie;8.93;mm;7
+Luminosité;96552.96;lux;8
+Vitesse du vent;1.11;km/h;9
+Humidité du sol;41.86;%;4
+pH du sol;6.48;pH;5
+Humidité du sol;40.53;%;4
+pH du sol;6.18;pH;5
+Pluviométrie;8.5;mm;7
+Luminosité;83977.57;lux;8
+Vitesse du vent;37.77;km/h;9
+Humidité du sol;49.7;%;4
+pH du sol;6.74;pH;5
+Pluviométrie;0.72;mm;7
+Luminosité;6592.08;lux;8
+Vitesse du vent;7.05;km/h;9
+Humidité du sol;41.96;%;4
+pH du sol;7.2;pH;5
+Pluviométrie;6.95;mm;7
+Luminosité;55173.08;lux;8
+Vitesse du vent;27.1;km/h;9
+Pluviométrie;3.86;mm;7
+Luminosité;79498.4;lux;8
+Vitesse du vent;12.63;km/h;9
+Humidité du sol;63.77;%;4
+pH du sol;7.03;pH;5
+Humidité du sol;43.14;%;4
+pH du sol;6.21;pH;5
+Pluviométrie;4.29;mm;7
+Luminosité;66964.65;lux;8
+Vitesse du vent;15.53;km/h;9
+Humidité du sol;57.58;%;4
+pH du sol;6.83;pH;5
+Pluviométrie;8.34;mm;7
+Luminosité;24239.64;lux;8
+Vitesse du vent;27.0;km/h;9
+Humidité du sol;74.52;%;4
+pH du sol;7.48;pH;5
+Pluviométrie;9.98;mm;7
+Luminosité;88161.14;lux;8
+Vitesse du vent;13.64;km/h;9
+Luminosité;75204.93;lux;8
+Vitesse du vent;26.9;km/h;9
+Humidité du sol;79.7;%;4
+pH du sol;6.51;pH;5
+Pluviométrie;7.09;mm;7
+Humidité du sol;47.49;%;4
+pH du sol;6.44;pH;5
+Pluviométrie;8.74;mm;7
+Luminosité;29936.49;lux;8
+Vitesse du vent;46.36;km/h;9
+Humidité du sol;59.7;%;4
+pH du sol;6.01;pH;5
+Pluviométrie;1.0;mm;7
+Luminosité;51660.69;lux;8
+Vitesse du vent;1.1;km/h;9
+Humidité du sol;62.59;%;4
+pH du sol;6.94;pH;5
+Pluviométrie;4.28;mm;7
+Luminosité;13255.97;lux;8
+Vitesse du vent;13.38;km/h;9
+Humidité du sol;64.72;%;4
+pH du sol;6.24;pH;5
+Pluviométrie;2.08;mm;7
+Luminosité;77429.24;lux;8
+Vitesse du vent;30.19;km/h;9
+Humidité du sol;67.2;%;4
+Vitesse du vent;12.5;km/h;9
+Luminosité;45000.0;lux;8
+pH du sol;6.8;pH;5
+Pluviométrie;0.8;mm;7
+
+Total relevés : 5597

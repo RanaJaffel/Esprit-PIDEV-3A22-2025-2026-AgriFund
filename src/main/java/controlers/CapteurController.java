@@ -12,41 +12,53 @@ import services.ServiceCapteur;
 import java.sql.SQLException;
 import java.awt.Desktop;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CapteurController {
 
-    @FXML private TableView<capteur> tableCapteur;
+    @FXML private TableView<capteur>            tableCapteur;
     @FXML private TableColumn<capteur, Integer> colId;
-    @FXML private TableColumn<capteur, String> colType;
-    @FXML private TableColumn<capteur, String> colLocalisation;
-    @FXML private TableColumn<capteur, String> colStatut;
+    @FXML private TableColumn<capteur, String>  colType;
+    @FXML private TableColumn<capteur, String>  colLocalisation;
+    @FXML private TableColumn<capteur, String>  colStatut;
     @FXML private TableColumn<capteur, Integer> colProjet;
 
-    @FXML private TextField tfType;
-    @FXML private TextField tfLocalisation;
-
+    @FXML private TextField        tfType;
+    @FXML private TextField        tfLocalisation;
     @FXML private ComboBox<String> cbStatut;
-    @FXML private ComboBox<Integer> cbProjet;
-    @FXML
-    private Label lblGeo;// ← NOUVEAU
+    @FXML private ComboBox<String> cbProjet;   // ← String (nom) au lieu de Integer
+    @FXML private Label            lblGeo;
 
-    private final ServiceCapteur service = new ServiceCapteur();
-    private final ApiGeoService geoService = new ApiGeoService();
+    private final ServiceCapteur service    = new ServiceCapteur();
+    private final ApiGeoService  geoService = new ApiGeoService();
 
+    // nom → id  (pour sauvegarder l'ID en base)
+    private final Map<String, Integer> nomToId = new HashMap<>();
+    // id  → nom (pour afficher le nom quand on sélectionne une ligne)
+    private final Map<Integer, String> idToNom = new HashMap<>();
+
+    // ═══════════════════════════════════════════════
     @FXML
     public void initialize() {
-
-        try {
-            service.verifierEtatCapteurs(); // 🔥 MÉTIER AVANCÉ
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        try { service.verifierEtatCapteurs(); }
+        catch (Exception e) { e.printStackTrace(); }
 
         colId.setCellValueFactory(new PropertyValueFactory<>("idCapteur"));
         colType.setCellValueFactory(new PropertyValueFactory<>("typeCapteur"));
         colLocalisation.setCellValueFactory(new PropertyValueFactory<>("localisation"));
         colStatut.setCellValueFactory(new PropertyValueFactory<>("statut"));
         colProjet.setCellValueFactory(new PropertyValueFactory<>("idProjet"));
+
+        // Colonne Projet : affiche le NOM du projet
+        colProjet.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(Integer idProjet, boolean empty) {
+                super.updateItem(idProjet, empty);
+                setText(empty || idProjet == null ? null
+                        : idToNom.getOrDefault(idProjet, "Projet #" + idProjet));
+            }
+        });
 
         cbStatut.setItems(FXCollections.observableArrayList("ACTIF", "INACTIF"));
 
@@ -56,63 +68,62 @@ public class CapteurController {
         gererSelection();
     }
 
-    // ✅ NOUVELLE MÉTHODE
+    // ── Charge projets et remplit les deux maps ─────────────
     private void chargerProjets() {
         try {
-            ObservableList<Integer> ids =
-                    FXCollections.observableArrayList(service.getIdsProjets());
-            cbProjet.setItems(ids);
+            Map<Integer, String> map = service.getProjetsMap();
+            nomToId.clear();
+            idToNom.clear();
+
+            ObservableList<String> noms = FXCollections.observableArrayList();
+            for (Map.Entry<Integer, String> entry : map.entrySet()) {
+                nomToId.put(entry.getValue(), entry.getKey());
+                idToNom.put(entry.getKey(), entry.getValue());
+                noms.add(entry.getValue());
+            }
+            cbProjet.setItems(noms);
+
         } catch (SQLException e) {
-            afficherErreur("Erreur projets", "Impossible de charger les projets : " + e.getMessage());
+            afficherErreur("Erreur projets",
+                    "Impossible de charger les projets : " + e.getMessage());
         }
     }
 
     private void chargerCapteurs() {
         try {
-            ObservableList<capteur> list =
-                    FXCollections.observableArrayList(service.afficher());
-            tableCapteur.setItems(list);
+            tableCapteur.setItems(
+                    FXCollections.observableArrayList(service.afficher()));
         } catch (SQLException e) {
             afficherErreur("Erreur de chargement", e.getMessage());
         }
     }
 
+    // ── Ajouter ─────────────────────────────────────────────
     @FXML
     private void ajouterCapteur() {
         if (!formulaireValide()) return;
-
         try {
             capteur c = new capteur();
             c.setTypeCapteur(tfType.getText().trim());
             c.setLocalisation(tfLocalisation.getText().trim());
             c.setStatut(cbStatut.getValue());
-            c.setIdProjet(cbProjet.getValue());  // peut être null
+            c.setIdProjet(getSelectedProjetId());
 
-            // ===== 2ᵉ API : validation de la localisation via OpenStreetMap =====
-            ApiGeoService.Coordinates coords =
-                    geoService.geocode(c.getLocalisation());
-
+            ApiGeoService.Coordinates coords = geoService.geocode(c.getLocalisation());
             if (coords == null) {
-                afficherErreur(
-                        "Localisation introuvable",
-                        "Impossible de trouver cette localisation sur la carte.\n" +
-                                "Merci de vérifier le nom (ex: 'Sfax, Tunisie', 'Tunis, Tunisia')."
-                );
-                return; // on n'enregistre pas un capteur avec une localisation inconnue
+                afficherErreur("Localisation introuvable",
+                        "Impossible de trouver cette localisation.\n" +
+                                "Ex: 'Sfax, Tunisie' ou 'Tunis, Tunisia'.");
+                return;
             }
 
-            // (Optionnel mais sympa pour la soutenance) :
-            // montrer à l'utilisateur les coordonnées trouvées
             Alert info = new Alert(Alert.AlertType.INFORMATION);
             info.setTitle("Localisation validée");
             info.setHeaderText("Coordonnées GPS détectées");
-            info.setContentText(
-                    "Latitude  : " + coords.getLat() + "\n" +
-                            "Longitude : " + coords.getLon()
-            );
+            info.setContentText("Latitude  : " + coords.getLat()
+                    + "\nLongitude : " + coords.getLon());
             info.showAndWait();
 
-            // ===== Enregistrement en base =====
             service.ajouter(c);
             chargerCapteurs();
             clearForm();
@@ -122,6 +133,7 @@ public class CapteurController {
         }
     }
 
+    // ── Modifier ────────────────────────────────────────────
     @FXML
     private void modifierCapteur() {
         capteur selected = tableCapteur.getSelectionModel().getSelectedItem();
@@ -129,24 +141,22 @@ public class CapteurController {
             afficherErreur("Modification", "Veuillez sélectionner un capteur");
             return;
         }
-
         if (!formulaireValide()) return;
-
         try {
             selected.setTypeCapteur(tfType.getText().trim());
             selected.setLocalisation(tfLocalisation.getText().trim());
             selected.setStatut(cbStatut.getValue());
-            selected.setIdProjet(cbProjet.getValue());  // ← NOUVEAU
+            selected.setIdProjet(getSelectedProjetId());
 
             service.modifier(selected);
             chargerCapteurs();
             clearForm();
-
         } catch (Exception e) {
             afficherErreur("Modification impossible", e.getMessage());
         }
     }
 
+    // ── Supprimer ───────────────────────────────────────────
     @FXML
     private void supprimerCapteur() {
         capteur selected = tableCapteur.getSelectionModel().getSelectedItem();
@@ -154,7 +164,6 @@ public class CapteurController {
             afficherErreur("Suppression", "Veuillez sélectionner un capteur");
             return;
         }
-
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Confirmation");
         confirm.setHeaderText("Supprimer le capteur ?");
@@ -171,6 +180,7 @@ public class CapteurController {
         }
     }
 
+    // ── Sélection ligne → remplir formulaire ────────────────
     private void gererSelection() {
         tableCapteur.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldVal, c) -> {
@@ -178,65 +188,69 @@ public class CapteurController {
                         tfType.setText(c.getTypeCapteur());
                         tfLocalisation.setText(c.getLocalisation());
                         cbStatut.setValue(c.getStatut());
-                        cbProjet.setValue(c.getIdProjet());  // ← NOUVEAU
+                        // Afficher le NOM, pas l'ID
+                        cbProjet.setValue(c.getIdProjet() != null
+                                ? idToNom.getOrDefault(c.getIdProjet(),
+                                "Projet #" + c.getIdProjet())
+                                : null);
                     }
                 }
         );
     }
 
+    // ── Helper : nom sélectionné → ID ───────────────────────
+    private Integer getSelectedProjetId() {
+        String nom = cbProjet.getValue();
+        return (nom == null || nom.isBlank()) ? null : nomToId.get(nom);
+    }
+
+    // ── Badge statut ────────────────────────────────────────
     private void styliserStatut() {
         colStatut.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(String statut, boolean empty) {
                 super.updateItem(statut, empty);
-                if (empty || statut == null) {
-                    setGraphic(null);
-                } else {
-                    Label badge = new Label(statut);
-                    badge.getStyleClass().add("badge");
-                    badge.getStyleClass().add(
-                            statut.equals("ACTIF") ? "badge-actif" : "badge-inactif"
-                    );
-                    setGraphic(badge);
-                }
+                if (empty || statut == null) { setGraphic(null); return; }
+                Label badge = new Label(statut);
+                badge.getStyleClass().add("badge");
+                badge.getStyleClass().add(
+                        statut.equals("ACTIF") ? "badge-actif" : "badge-inactif");
+                setGraphic(badge);
+                setText(null);
             }
         });
     }
 
+    // ── Validation ──────────────────────────────────────────
     private boolean formulaireValide() {
         resetStyle(tfType, tfLocalisation);
-
         if (tfType.getText().trim().isEmpty()
                 || tfLocalisation.getText().trim().isEmpty()
                 || cbStatut.getValue() == null) {
-
             marquerErreur(tfType, tfLocalisation);
             afficherErreur("Formulaire invalide", "Tous les champs sont obligatoires");
             return false;
         }
-
         return true;
     }
 
+    // ── Clear ────────────────────────────────────────────────
     private void clearForm() {
         tfType.clear();
         tfLocalisation.clear();
         cbStatut.setValue(null);
-        cbProjet.setValue(null);  // ← NOUVEAU
+        cbProjet.setValue(null);
+        lblGeo.setText("Coordonnées : --");
         tableCapteur.getSelectionModel().clearSelection();
         resetStyle(tfType, tfLocalisation);
     }
 
     private void marquerErreur(TextField... fields) {
-        for (TextField f : fields) {
-            f.setStyle("-fx-border-color:red;");
-        }
+        for (TextField f : fields) f.setStyle("-fx-border-color: red;");
     }
 
     private void resetStyle(TextField... fields) {
-        for (TextField f : fields) {
-            f.setStyle(null);
-        }
+        for (TextField f : fields) f.setStyle(null);
     }
 
     private void afficherErreur(String titre, String message) {
@@ -246,51 +260,33 @@ public class CapteurController {
         alert.setContentText(message);
         alert.show();
     }
+
+    // ── Tester localisation ──────────────────────────────────
     @FXML
     private void testerLocalisation() {
-
         String loc = tfLocalisation.getText().trim();
-
         if (loc.isEmpty()) {
             afficherErreur("Localisation vide",
                     "Veuillez saisir une localisation avant de tester.");
             return;
         }
-
         try {
-
-            ApiGeoService.Coordinates coords =
-                    geoService.geocode(loc);
-
+            ApiGeoService.Coordinates coords = geoService.geocode(loc);
             if (coords == null) {
                 lblGeo.setText("Coordonnées : introuvables");
                 return;
             }
+            lblGeo.setText(String.format("Coordonnées : %.5f , %.5f",
+                    coords.getLat(), coords.getLon()));
 
-            // ✅ Afficher coordonnées
-            lblGeo.setText(String.format(
-                    "Coordonnées : %.5f , %.5f",
-                    coords.getLat(),
-                    coords.getLon()
-            ));
-
-            // ✅ Ouvrir la carte dans le navigateur
-            String url =
-                    "https://www.openstreetmap.org/?mlat="
-                            + coords.getLat()
-                            + "&mlon="
-                            + coords.getLon()
-                            + "#map=15/"
-                            + coords.getLat()
-                            + "/"
-                            + coords.getLon();
-
+            String url = "https://www.openstreetmap.org/?mlat=" + coords.getLat()
+                    + "&mlon=" + coords.getLon()
+                    + "#map=15/" + coords.getLat() + "/" + coords.getLon();
             Desktop.getDesktop().browse(new URI(url));
 
         } catch (Exception e) {
             e.printStackTrace();
-            afficherErreur("Erreur",
-                    "Impossible d'ouvrir la carte.");
+            afficherErreur("Erreur", "Impossible d'ouvrir la carte.");
         }
     }
 }

@@ -1,5 +1,9 @@
 package controlers;
 
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import entities.releve_terrain;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -423,16 +427,60 @@ public class ReleveController {
                     new FileOutputStream("releves.pdf"));
 
             document.open();
-            document.add(new Paragraph("Rapport Relevés IoT\n\n"));
+
+            // ✅ Titre stylé
+            com.itextpdf.text.Font titleFont =
+                    new com.itextpdf.text.Font(
+                            com.itextpdf.text.Font.FontFamily.HELVETICA,
+                            18,
+                            com.itextpdf.text.Font.BOLD,
+                            new com.itextpdf.text.BaseColor(7, 106, 57) // #076A39
+                    );
+
+            Paragraph title =
+                    new Paragraph("RAPPORT RELEVÉS IoT", titleFont);
+
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+
+            document.add(new Paragraph("Date : "
+                    + java.time.LocalDate.now()));
+            document.add(new Paragraph(" "));
+
+            // ✅ Tableau 4 colonnes
+            PdfPTable table = new PdfPTable(4);
+            table.setWidthPercentage(100);
+            table.setSpacingBefore(10);
+
+            float[] columnWidths = {3f, 2f, 2f, 2f};
+            table.setWidths(columnWidths);
+
+            // ✅ En-têtes
+            addHeaderCell(table, "Type");
+            addHeaderCell(table, "Valeur");
+            addHeaderCell(table, "Unité");
+            addHeaderCell(table, "Capteur");
+
+            boolean alternate = false;
 
             for (releve_terrain r : tableReleve.getItems()) {
-                document.add(new Paragraph(
-                        r.getTypeMesure() + " | "
-                                + r.getValeurMesuree() + " | "
-                                + r.getUnite()
-                ));
+
+                com.itextpdf.text.BaseColor bg =
+                        alternate
+                                ? new com.itextpdf.text.BaseColor(245, 245, 240) // #F5F5F0
+                                : com.itextpdf.text.BaseColor.WHITE;
+
+                addBodyCell(table, r.getTypeMesure(), bg);
+                addBodyCell(table,
+                        String.valueOf(r.getValeurMesuree()), bg);
+                addBodyCell(table, r.getUnite(), bg);
+                addBodyCell(table,
+                        String.valueOf(r.getIdCapteur()), bg);
+
+                alternate = !alternate;
             }
 
+            document.add(table);
             document.close();
 
             new Alert(Alert.AlertType.INFORMATION,
@@ -446,24 +494,41 @@ public class ReleveController {
     private void exportCSV() {
 
         try (PrintWriter writer =
-                     new PrintWriter("releves.csv")) {
+                     new PrintWriter("releves.csv", "UTF-8")) {
 
-            writer.println("Type,Valeur,Unite,Capteur");
+            writer.println("=================================================");
+            writer.println("                RAPPORT RELEVÉS IoT              ");
+            writer.println("=================================================");
+            writer.println("Date : " + java.time.LocalDate.now());
+            writer.println("");
+
+            // ✅ En-tête tableau (Excel friendly)
+            writer.println("Type;Valeur;Unité;Capteur");
 
             for (releve_terrain r : tableReleve.getItems()) {
-                writer.println(
-                        r.getTypeMesure() + ","
-                                + r.getValeurMesuree() + ","
-                                + r.getUnite() + ","
-                                + r.getIdCapteur()
-                );
+
+                String type = safe(r.getTypeMesure());
+                String valeur = String.valueOf(r.getValeurMesuree());
+                String unite = safe(r.getUnite());
+                String capteur = String.valueOf(r.getIdCapteur());
+
+                writer.println(type + ";"
+                        + valeur + ";"
+                        + unite + ";"
+                        + capteur);
             }
 
+            writer.println("");
+            writer.println("Total relevés : "
+                    + tableReleve.getItems().size());
+
             new Alert(Alert.AlertType.INFORMATION,
-                    "CSV exporté ✅").show();
+                    "CSV exporté avec succès ✅").show();
 
         } catch (Exception e) {
             e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR,
+                    "Erreur lors de l'export CSV").show();
         }
     }
     @FXML
@@ -521,7 +586,46 @@ public class ReleveController {
             e.printStackTrace();
         }
     }
+    private void addHeaderCell(PdfPTable table, String text) {
+
+        com.itextpdf.text.Font font =
+                new com.itextpdf.text.Font(
+                        com.itextpdf.text.Font.FontFamily.HELVETICA,
+                        12,
+                        com.itextpdf.text.Font.BOLD,
+                        com.itextpdf.text.BaseColor.WHITE
+                );
+
+        PdfPCell cell = new PdfPCell(new Phrase(text, font));
+        cell.setBackgroundColor(
+                new com.itextpdf.text.BaseColor(8, 150, 71) // #089647
+        );
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setPadding(8);
+
+        table.addCell(cell);
+    }
+
+    private void addBodyCell(PdfPTable table,
+                             String text,
+                             com.itextpdf.text.BaseColor bg) {
+
+        com.itextpdf.text.Font font =
+                new com.itextpdf.text.Font(
+                        com.itextpdf.text.Font.FontFamily.HELVETICA,
+                        11
+                );
+
+        PdfPCell cell = new PdfPCell(new Phrase(text, font));
+        cell.setBackgroundColor(bg);
+        cell.setPadding(6);
+
+        table.addCell(cell);
+    }
 
 
+    private String safe(String value) {
+        return value == null ? "" : value.replace(";", ",");
+    }
 
 }

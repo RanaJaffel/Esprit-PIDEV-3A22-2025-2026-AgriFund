@@ -5,7 +5,9 @@ import utils.MyDabase;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ServiceCapteur implements interfaceCrud<capteur> {
 
@@ -59,7 +61,6 @@ public class ServiceCapteur implements interfaceCrud<capteur> {
         String req = "SELECT * FROM capteur ORDER BY id_capteur DESC";
         Statement st = con.createStatement();
         ResultSet rs = st.executeQuery(req);
-
         while (rs.next()) {
             capteur c = new capteur();
             c.setIdCapteur(rs.getInt("id_capteur"));
@@ -70,14 +71,12 @@ public class ServiceCapteur implements interfaceCrud<capteur> {
             c.setIdProjet(rs.wasNull() ? null : idp);
             list.add(c);
         }
-
         return list;
     }
 
-    // ✅ NOUVELLE MÉTHODE — récupère les IDs projets depuis la table projet
+    // ✅ ANCIENNE méthode — gardée pour compatibilité
     public List<Integer> getIdsProjets() throws SQLException {
         List<Integer> ids = new ArrayList<>();
-        // ⚠️ Adapte "projet" et "id_projet" selon ta vraie table
         String req = "SELECT idproject FROM projectagricole ORDER BY idproject";
         Statement st = con.createStatement();
         ResultSet rs = st.executeQuery(req);
@@ -87,6 +86,29 @@ public class ServiceCapteur implements interfaceCrud<capteur> {
         return ids;
     }
 
+    // ✅ NOUVELLE méthode — retourne Map<id, nomProjet>
+    public Map<Integer, String> getProjetsMap() throws SQLException {
+        Map<Integer, String> map = new LinkedHashMap<>();
+        String req = "SELECT idproject, nomproject FROM projectagricole ORDER BY nomproject";
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery(req);
+        while (rs.next()) {
+            map.put(rs.getInt("idproject"), rs.getString("nomproject"));
+        }
+        return map;
+    }
+
+    // ✅ Retourne le nom d'un projet par son ID
+    public String getNomProjetById(int idProjet) throws SQLException {
+        String req = "SELECT nomproject FROM projectagricole WHERE idproject = ?";
+        PreparedStatement ps = con.prepareStatement(req);
+        ps.setInt(1, idProjet);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getString("nomproject");
+        }
+        return "Projet #" + idProjet;
+    }
 
     public String getLocalisationById(int idCapteur) throws SQLException {
         String req = "SELECT localisation FROM capteur WHERE id_capteur = ?";
@@ -126,24 +148,17 @@ public class ServiceCapteur implements interfaceCrud<capteur> {
         }
         return 0;
     }
-    // ===== MÉTIER AVANCÉ =====
-// Met automatiquement INACTIF les capteurs
-// qui n'ont pas envoyé de relevé depuis 24h
 
     public void verifierEtatCapteurs() throws SQLException {
-
         String sql = """
-        UPDATE capteur c
-        LEFT JOIN releve_terrain r
-            ON c.id_capteur = r.id_capteur
-        SET c.statut = 'INACTIF'
-        WHERE r.date_heure IS NULL
-           OR r.date_heure < NOW() - INTERVAL 1 DAY
-    """;
-
+            UPDATE capteur c
+            LEFT JOIN releve_terrain r ON c.id_capteur = r.id_capteur
+            SET c.statut = 'INACTIF'
+            WHERE r.date_heure IS NULL
+               OR r.date_heure < NOW() - INTERVAL 1 DAY
+        """;
         PreparedStatement pst = con.prepareStatement(sql);
         pst.executeUpdate();
-
         System.out.println("🔎 Vérification automatique des capteurs terminée");
     }
 }
