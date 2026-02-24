@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.agrifund.controller.agriculteur.AgriculteurDocumentsController"
+            stylesheets="@../../css/styles.css">
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <VBox styleClass="content-area" spacing="0">
+            <!-- Header -->
+            <HBox alignment="CENTER" style="-fx-padding: 0 0 30 0;">
+                <VBox HBox.hgrow="ALWAYS">
+                    <Label text="Mes Documents" styleClass="page-title"/>
+                    <Label text="Gérer et télécharger vos documents justificatifs" styleClass="page-subtitle"/>
+                </VBox>
+
+                <HBox spacing="15">
+                    <Button text="➕ Ajouter un document" styleClass="btn, btn-primary" onAction="#showAddDocumentDialog"/>
+                </HBox>
+            </HBox>
+
+            <!-- Stats -->
+            <HBox spacing="20" style="-fx-padding: 0 0 30 0;">
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: linear-gradient(to right, #089647, #076A39);">
+                    <Label fx:id="totalCount" text="0" styleClass="stat-value"/>
+                    <Label text="Total documents" styleClass="stat-label"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: linear-gradient(to right, #B2D944, #9A951F);">
+                    <Label fx:id="validatedCount" text="0" styleClass="stat-value" style="-fx-text-fill: #060806;"/>
+                    <Label text="Validés" styleClass="stat-label" style="-fx-text-fill: rgba(0,0,0,0.7);"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: linear-gradient(to right, #E1B323, #c9a11f);">
+                    <Label fx:id="pendingCount" text="0" styleClass="stat-value" style="-fx-text-fill: #060806;"/>
+                    <Label text="En attente" styleClass="stat-label" style="-fx-text-fill: rgba(0,0,0,0.7);"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: linear-gradient(to right, #dc3545, #c82333);">
+                    <Label fx:id="rejectedCount" text="0" styleClass="stat-value"/>
+                    <Label text="Rejetés" styleClass="stat-label"/>
+                </VBox>
+            </HBox>
+
+            <!-- Filter -->
+            <HBox spacing="10" style="-fx-padding: 0 0 20 0;">
+                <Button fx:id="btnAll" text="📄 Tous" styleClass="btn"
+                        style="-fx-background-color: #089647; -fx-text-fill: white;" onAction="#filterAll"/>
+                <Button fx:id="btnValidated" text="✓ Validés" styleClass="btn, btn-secondary" onAction="#filterValidated"/>
+                <Button fx:id="btnPending" text="⏳ En attente" styleClass="btn, btn-secondary" onAction="#filterPending"/>
+                <Button fx:id="btnRejected" text="✗ Rejetés" styleClass="btn, btn-secondary" onAction="#filterRejected"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Button text="🔄 Actualiser" styleClass="btn, btn-secondary" onAction="#refreshList"/>
+            </HBox>
+
+            <!-- Documents List -->
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
+                <VBox fx:id="documentsContainer" spacing="15">
+                    <!-- Rempli dynamiquement -->
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </center>
+
+</BorderPane>

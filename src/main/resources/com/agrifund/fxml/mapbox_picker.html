@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Choisir localisation</title>
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        html,body{height:100%;width:100%;overflow:hidden;font-family:'Segoe UI',Arial,sans-serif;background:#1a2a1a;display:flex;flex-direction:column}
+
+        /* ── Top toolbar ── */
+        #toolbar{background:linear-gradient(135deg,#076A39,#133D03);color:white;padding:0 16px;display:flex;align-items:center;gap:12px;height:46px;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+        #toolbar h3{font-size:14px;flex:1}
+
+        /* ── Coords bar ── */
+        #coords-bar{background:#fff;padding:0 16px;display:flex;gap:20px;align-items:center;border-bottom:2px solid #ddd;height:36px;font-size:13px;flex-shrink:0}
+        .lbl{color:#666}
+        #lat-display,#lng-display{color:#076A39;font-weight:bold;min-width:115px;display:inline-block}
+        #status-msg{color:#E1B323;font-weight:bold;margin-left:auto;font-size:12px}
+
+        /* ── Map area – flex:1 so it fills remaining space ── */
+        #map-wrap{position:relative;flex:1;overflow:hidden;cursor:crosshair;background:#aad3df;user-select:none;-webkit-user-select:none}
+        canvas#map{display:block;position:absolute;top:0;left:0}
+
+        #hint{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.72);color:#fff;padding:8px 18px;border-radius:20px;font-size:13px;pointer-events:none;z-index:20;white-space:nowrap;transition:opacity .5s}
+
+        #zoom-ctrl{position:absolute;top:12px;right:12px;display:flex;flex-direction:column;gap:4px;z-index:30}
+        .zbtn{width:32px;height:32px;background:#fff;border:1px solid #bbb;border-radius:6px;font-size:20px;font-weight:bold;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.2);color:#333;line-height:1}
+        .zbtn:hover{background:#f0f0f0}
+
+        #attrib{position:absolute;bottom:4px;right:8px;font-size:10px;color:#333;background:rgba(255,255,255,.7);padding:2px 5px;border-radius:3px;z-index:20}
+
+        /* ── Bottom action bar – OUTSIDE the map, no event conflicts ── */
+        #bottom-bar{background:#f8f8f8;border-top:2px solid #ddd;padding:10px 20px;display:none;align-items:center;gap:16px;flex-shrink:0;height:58px}
+        #bottom-bar.visible{display:flex}
+        #coord-summary{font-size:13px;color:#333;flex:1}
+        #coord-summary strong{color:#076A39}
+        #confirm-btn{background:#076A39;color:#fff;border:none;padding:11px 30px;font-size:14px;font-weight:bold;border-radius:24px;cursor:pointer;box-shadow:0 3px 12px rgba(7,106,57,.45);white-space:nowrap;transition:background .15s}
+        #confirm-btn:hover{background:#089647}
+        #confirm-btn:active{background:#055a2f;transform:scale(.97)}
+        #clear-btn{background:transparent;color:#888;border:1px solid #ccc;padding:10px 18px;font-size:13px;border-radius:24px;cursor:pointer}
+        #clear-btn:hover{background:#f0f0f0;color:#555}
+    </style>
+</head>
+<body>
+
+<!-- ── TOP TOOLBAR ── -->
+<div id="toolbar">
+    <span style="font-size:20px">📍</span>
+    <h3>Sélectionner la localisation du projet agricole</h3>
+</div>
+
+<!-- ── COORDS BAR ── -->
+<div id="coords-bar">
+    <span class="lbl">Latitude :</span><span id="lat-display">—</span>
+    <span class="lbl">Longitude :</span><span id="lng-display">—</span>
+    <span id="status-msg">Cliquez sur la carte pour placer le marqueur</span>
+</div>
+
+<!-- ── MAP (canvas only, no buttons inside) ── -->
+<div id="map-wrap">
+    <canvas id="map"></canvas>
+    <div id="hint">🖱 Cliquez n'importe où pour marquer la localisation du projet</div>
+    <div id="zoom-ctrl">
+        <button class="zbtn" id="zoomIn"  title="Zoom +">+</button>
+        <button class="zbtn" id="zoomOut" title="Zoom -">−</button>
+    </div>
+    <div id="attrib">© OpenStreetMap / Mapbox</div>
+</div>
+
+<!-- ── BOTTOM ACTION BAR – completely outside map-wrap ── -->
+<div id="bottom-bar">
+    <div id="coord-summary">📍 <strong id="summary-lat">—</strong> , <strong id="summary-lng">—</strong></div>
+    <button id="clear-btn">✖ Effacer</button>
+    <button id="confirm-btn">✔ Confirmer cette localisation</button>
+</div>
+
+<script>
+    // ═══════════════════════════════════════════════════════════════════
+    //  Self-contained slippy map  –  pure vanilla JS, zero dependencies
+    //  JavaFX WebView compatible (no WebGL, no CDN, no fetch)
+    // ═══════════════════════════════════════════════════════════════════
+
+    var MAPBOX_TOKEN = 'pk.eyJ1IjoicmF5ZW5raCIsImEiOiJZU0l6SW5NdGJIYzNiWHBhajBuYWpJSXdkMmMzTjNsc1paQWlmUS52M095TGFzLTVpRU1ocFV0aGpsTlNRIn0.BnajIzZXIwd2c3N3lsZzAifQ.v3OyLs-5iEMhpUtYhj3NSQ';
+    var TILE_SIZE = 256, MIN_ZOOM = 2, MAX_ZOOM = 18;
+
+    var zoom = 6, centerLat = 33.8869, centerLng = 9.5375;
+    var markerLat = null, markerLng = null;
+    var selectedLat = null, selectedLng = null;
+    var dragging = false, dragStartX, dragStartY, dragStartLat, dragStartLng;
+    var tileCache = {};
+    var redrawPending = false;
+
+    var canvas  = document.getElementById('map');
+    var ctx     = canvas.getContext('2d');
+    var mapWrap = document.getElementById('map-wrap');
+
+    // ── Projection ────────────────────────────────────────────────────
+    function latToY(lat, z) {
+        var s = Math.sin(lat * Math.PI / 180);
+        return (0.5 - Math.log((1+s)/(1-s)) / (4*Math.PI)) * Math.pow(2,z) * TILE_SIZE;
+    }
+    function lngToX(lng, z) { return (lng+180)/360 * Math.pow(2,z) * TILE_SIZE; }
+    function yToLat(y, z) {
+        var n = Math.PI - 2*Math.PI*y/(Math.pow(2,z)*TILE_SIZE);
+        return 180/Math.PI * Math.atan(0.5*(Math.exp(n)-Math.exp(-n)));
+    }
+    function xToLng(x, z) { return x/(Math.pow(2,z)*TILE_SIZE)*360-180; }
+
+    function worldToCanvas(wx, wy) {
+        return { x: wx - lngToX(centerLng,zoom) + canvas.width/2,
+            y: wy - latToY(centerLat,zoom) + canvas.height/2 };
+    }
+    function canvasToWorld(cx, cy) {
+        return { x: cx - canvas.width/2  + lngToX(centerLng,zoom),
+            y: cy - canvas.height/2 + latToY(centerLat,zoom) };
+    }
+
+    // ── Tile loading ──────────────────────────────────────────────────
+    function tileUrl(z,x,y) {
+        return 'https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/tiles/' +
+            z+'/'+x+'/'+y+'?access_token='+MAPBOX_TOKEN;
+    }
+    function osmUrl(z,x,y) {
+        return 'https://'+['a','b','c'][(x+y)%3]+'.tile.openstreetmap.org/'+z+'/'+x+'/'+y+'.png';
+    }
+
+    function getTile(z, tx, ty) {
+        var key = z+'/'+tx+'/'+ty;
+        if (tileCache[key]) return tileCache[key];
+        var obj = { img: null, fallback: null, ready: false, fbReady: false };
+        tileCache[key] = obj;
+
+        var img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload  = function(){ obj.ready = true;  requestRedraw(); };
+        img.onerror = function(){
+            // Try OSM fallback
+            var fb = new Image();
+            fb.crossOrigin = 'anonymous';
+            fb.onload  = function(){ obj.fbReady = true; requestRedraw(); };
+            fb.src = osmUrl(z, tx, ty);
+            obj.fallback = fb;
+        };
+        img.src = tileUrl(z, tx, ty);
+        obj.img = img;
+        return obj;
+    }
+
+    // ── Draw ──────────────────────────────────────────────────────────
+    function requestRedraw() {
+        if (!redrawPending) { redrawPending = true; setTimeout(draw, 0); }
+    }
+
+    function draw() {
+        redrawPending = false;
+        var cw = canvas.width, ch = canvas.height;
+        if (cw === 0 || ch === 0) return;
+        ctx.clearRect(0,0,cw,ch);
+
+        var numTiles = Math.pow(2, zoom);
+        var cx = lngToX(centerLng,zoom), cy = latToY(centerLat,zoom);
+        var startTX = Math.floor((cx-cw/2)/TILE_SIZE);
+        var startTY = Math.floor((cy-ch/2)/TILE_SIZE);
+        var endTX   = Math.ceil ((cx+cw/2)/TILE_SIZE);
+        var endTY   = Math.ceil ((cy+ch/2)/TILE_SIZE);
+
+        for (var tx = startTX; tx <= endTX; tx++) {
+            for (var ty = startTY; ty <= endTY; ty++) {
+                if (ty < 0 || ty >= numTiles) continue;
+                var wtx = ((tx % numTiles) + numTiles) % numTiles;
+                var obj  = getTile(zoom, wtx, ty);
+                var dx   = Math.round(tx*TILE_SIZE - cx + cw/2);
+                var dy   = Math.round(ty*TILE_SIZE - cy + ch/2);
+
+                if (obj.ready) {
+                    ctx.drawImage(obj.img, dx, dy, TILE_SIZE, TILE_SIZE);
+                } else if (obj.fbReady) {
+                    ctx.drawImage(obj.fallback, dx, dy, TILE_SIZE, TILE_SIZE);
+                } else {
+                    ctx.fillStyle = '#c8dfc8';
+                    ctx.fillRect(dx, dy, TILE_SIZE, TILE_SIZE);
+                    ctx.strokeStyle = '#9bbf9b';
+                    ctx.strokeRect(dx, dy, TILE_SIZE, TILE_SIZE);
+                }
+            }
+        }
+
+        // Draw pin marker on canvas
+        if (markerLat !== null) {
+            var wp = worldToCanvas(lngToX(markerLng,zoom), latToY(markerLat,zoom));
+            drawPin(wp.x, wp.y);
+        }
+    }
+
+    function drawPin(x, y) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.shadowColor = 'rgba(0,0,0,0.35)';
+        ctx.shadowBlur = 8; ctx.shadowOffsetY = 3;
+
+        // Tear-drop pin body
+        ctx.beginPath();
+        ctx.arc(0, -24, 13, 0, 2*Math.PI);
+        ctx.fillStyle = '#076A39'; ctx.fill();
+        ctx.strokeStyle = 'white'; ctx.lineWidth = 2.5; ctx.stroke();
+
+        ctx.shadowColor = 'transparent';
+        ctx.beginPath();
+        ctx.moveTo(-8, -14); ctx.lineTo(8, -14); ctx.lineTo(0, 2);
+        ctx.closePath(); ctx.fillStyle = '#076A39'; ctx.fill();
+
+        // White dot
+        ctx.beginPath(); ctx.arc(0, -24, 5, 0, 2*Math.PI);
+        ctx.fillStyle = 'white'; ctx.fill();
+        ctx.restore();
+    }
+
+    // ── Resize canvas to fill map-wrap ───────────────────────────────
+    function resizeCanvas() {
+        canvas.width  = mapWrap.clientWidth;
+        canvas.height = mapWrap.clientHeight;
+        requestRedraw();
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // ── Mouse: pan & click-to-place ───────────────────────────────────
+    mapWrap.addEventListener('mousedown', function(e) {
+        // Ignore clicks on zoom buttons
+        if (e.target.classList.contains('zbtn')) return;
+        dragging   = true;
+        dragStartX = e.clientX; dragStartY = e.clientY;
+        var w = canvasToWorld(e.offsetX, e.offsetY);
+        dragStartLat = yToLat(w.y, zoom);
+        dragStartLng = xToLng(w.x, zoom);
+        mapWrap.style.cursor = 'grabbing';
+        e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', function(e) {
+        if (!dragging) return;
+        var r = canvas.getBoundingClientRect();
+        var w = canvasToWorld(e.clientX - r.left, e.clientY - r.top);
+        centerLat -= (yToLat(w.y,zoom) - dragStartLat);
+        centerLng -= (xToLng(w.x,zoom) - dragStartLng);
+        centerLat  = Math.max(-85, Math.min(85, centerLat));
+        requestRedraw();
+    });
+
+    document.addEventListener('mouseup', function(e) {
+        if (!dragging) return;
+        dragging = false;
+        mapWrap.style.cursor = 'crosshair';
+        var dx = Math.abs(e.clientX - dragStartX);
+        var dy = Math.abs(e.clientY - dragStartY);
+        if (dx < 5 && dy < 5) {
+            // It was a click on the map, not a drag
+            var r = canvas.getBoundingClientRect();
+            placeMarker(e.clientX - r.left, e.clientY - r.top);
+        }
+    });
+
+    mapWrap.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        zoomAtPoint(e.offsetX, e.offsetY, e.deltaY < 0 ? 1 : -1);
+    }, { passive: false });
+
+    // ── Zoom buttons (events on the buttons, not on map-wrap) ─────────
+    document.getElementById('zoomIn').addEventListener('click', function(e) {
+        e.stopPropagation();
+        zoomAtPoint(canvas.width/2, canvas.height/2, 1);
+    });
+    document.getElementById('zoomOut').addEventListener('click', function(e) {
+        e.stopPropagation();
+        zoomAtPoint(canvas.width/2, canvas.height/2, -1);
+    });
+
+    function zoomAtPoint(px, py, delta) {
+        var newZ = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, zoom+delta));
+        if (newZ === zoom) return;
+        var w   = canvasToWorld(px, py);
+        var lat = yToLat(w.y, zoom), lng = xToLng(w.x, zoom);
+        zoom = newZ;
+        var w2  = canvasToWorld(px, py);
+        centerLat += lat - yToLat(w2.y, zoom);
+        centerLng += lng - xToLng(w2.x, zoom);
+        centerLat  = Math.max(-85, Math.min(85, centerLat));
+        requestRedraw();
+    }
+
+    // ── Place marker ──────────────────────────────────────────────────
+    function placeMarker(px, py) {
+        var w   = canvasToWorld(px, py);
+        markerLat = yToLat(w.y, zoom);
+        markerLng = xToLng(w.x, zoom);
+        selectedLat = markerLat.toFixed(6);
+        selectedLng = markerLng.toFixed(6);
+
+        document.getElementById('lat-display').textContent  = selectedLat;
+        document.getElementById('lng-display').textContent  = selectedLng;
+        document.getElementById('status-msg').textContent   = '✔ Localisation sélectionnée';
+        document.getElementById('status-msg').style.color   = '#089647';
+        document.getElementById('summary-lat').textContent  = selectedLat;
+        document.getElementById('summary-lng').textContent  = selectedLng;
+        document.getElementById('hint').style.opacity       = '0';
+
+        // Show the bottom bar (outside map-wrap – no event conflicts!)
+        document.getElementById('bottom-bar').className = 'visible';
+
+        requestRedraw();
+    }
+
+    // ── Clear marker ──────────────────────────────────────────────────
+    document.getElementById('clear-btn').addEventListener('click', function() {
+        markerLat = markerLng = selectedLat = selectedLng = null;
+        document.getElementById('lat-display').textContent = '—';
+        document.getElementById('lng-display').textContent = '—';
+        document.getElementById('status-msg').textContent  = 'Cliquez sur la carte pour placer le marqueur';
+        document.getElementById('status-msg').style.color  = '#E1B323';
+        document.getElementById('hint').style.opacity      = '1';
+        document.getElementById('bottom-bar').className    = '';
+        requestRedraw();
+    });
+
+    // ── Confirm – sends coords to Java ────────────────────────────────
+    document.getElementById('confirm-btn').addEventListener('click', function() {
+        if (selectedLat === null || selectedLng === null) return;
+        var lat = String(selectedLat);
+        var lng = String(selectedLng);
+
+        // Always set title first as reliable fallback (pipe separator avoids colon conflicts)
+        document.title = 'COORDS|' + lat + '|' + lng;
+
+        // Also try the Java bridge if it was injected
+        try {
+            if (window.javaBridge && typeof window.javaBridge.setCoordinates === 'function') {
+                window.javaBridge.setCoordinates(lat, lng);
+            }
+        } catch(e) {
+            // Bridge not available or failed – title fallback already set above
+            console.log('Bridge unavailable, using title fallback');
+        }
+    });
+
+    // ── setInitialMarker – called from Java when editing a project ────
+    function setInitialMarker(lat, lng) {
+        centerLat = parseFloat(lat); centerLng = parseFloat(lng); zoom = 12;
+        markerLat = centerLat; markerLng = centerLng;
+        selectedLat = markerLat.toFixed(6); selectedLng = markerLng.toFixed(6);
+
+        document.getElementById('lat-display').textContent  = selectedLat;
+        document.getElementById('lng-display').textContent  = selectedLng;
+        document.getElementById('status-msg').textContent   = '✔ Localisation déjà définie';
+        document.getElementById('status-msg').style.color   = '#089647';
+        document.getElementById('summary-lat').textContent  = selectedLat;
+        document.getElementById('summary-lng').textContent  = selectedLng;
+        document.getElementById('hint').style.opacity       = '0';
+        document.getElementById('bottom-bar').className     = 'visible';
+        requestRedraw();
+    }
+
+    // Initial render
+    requestRedraw();
+</script>
+</body>
+</html>

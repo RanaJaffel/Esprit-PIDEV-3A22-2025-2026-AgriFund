@@ -2,7 +2,7 @@ package com.agrifund.view;
 
 import com.agrifund.controller.OffreFinanciereController;
 import com.agrifund.model.OffreFinanciere;
-import com.agrifund.util.DatabaseConnection;
+import com.agrifund.util.AgrifundDBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -127,7 +127,7 @@ public class OffreFinanciereViewController {
         ResultSet rs = null;
 
         try {
-            conn = DatabaseConnection.getConnection();
+            conn = AgrifundDBConnection.getConnection();
             if (conn == null) {
                 System.err.println("⚠️ Connexion null - impossible de charger les donnees");
                 initializeEmptyState();
@@ -175,7 +175,7 @@ public class OffreFinanciereViewController {
         Connection conn = null;
 
         try {
-            conn = DatabaseConnection.getConnection();
+            conn = AgrifundDBConnection.getConnection();
             if (conn == null) {
                 initializeEmptyState();
                 return;
@@ -490,7 +490,7 @@ public class OffreFinanciereViewController {
                 return;
             }
 
-            conn = DatabaseConnection.getConnection();
+            conn = AgrifundDBConnection.getConnection();
             if (conn == null) {
                 showAlert("Erreur", "Connexion a la base de donnees impossible", Alert.AlertType.ERROR);
                 return;

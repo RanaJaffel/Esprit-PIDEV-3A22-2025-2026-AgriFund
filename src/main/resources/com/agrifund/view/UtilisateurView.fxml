@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/17"
+            fx:controller="com.agrifund.controller.UtilisateurController"
+            style="-fx-background-color: #f5f5f5;">
+
+    <!-- HEADER -->
+    <top>
+        <VBox spacing="0">
+            <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-background-color: linear-gradient(to right, #076A39, #089647); -fx-padding: 20;">
+                <VBox spacing="5">
+                    <Label text="Espace Utilisateur" style="-fx-text-fill: white; -fx-font-size: 22; -fx-font-weight: bold;"/>
+                    <Label text="Vos projets et offres" style="-fx-text-fill: #B2D944; -fx-font-size: 13;"/>
+                </VBox>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <HBox spacing="15" style="-fx-padding: 20;">
+
+            <!-- LEFT SIDE: PROJECTS & OFFERS (70%) -->
+            <VBox spacing="15" HBox.hgrow="ALWAYS">
+
+                <!-- PROJECTS SECTION -->
+                <VBox spacing="10" style="-fx-border-color: #ddd; -fx-border-radius: 10; -fx-padding: 15; -fx-background-color: white;">
+                    <Label text="Mes Projets" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #076A39;"/>
+                    <Separator/>
+
+                    <!-- Projects List -->
+                    <ListView fx:id="lstProjects" prefHeight="200" style="-fx-border-color: #ddd; -fx-border-radius: 5; -fx-control-inner-background: white;"/>
+
+                    <!-- No Projects Message -->
+                    <Label fx:id="lblNoProjects" text="Aucun projet associe pour le moment"
+                           style="-fx-font-size: 13; -fx-text-fill: #999; -fx-font-style: italic;"
+                           alignment="CENTER"/>
+                </VBox>
+
+                <!-- OFFERS SECTION -->
+                <VBox spacing="10" style="-fx-border-color: #ddd; -fx-border-radius: 10; -fx-padding: 15; -fx-background-color: white;">
+                    <Label text="Offres Associees" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #076A39;"/>
+                    <Separator/>
+
+                    <!-- Offers List -->
+                    <ListView fx:id="lstOffers" prefHeight="150" style="-fx-border-color: #ddd; -fx-border-radius: 5; -fx-control-inner-background: white;"/>
+
+                    <!-- No Offers Message -->
+                    <Label fx:id="lblNoOffers" text="Aucune offre disponible pour vos projets"
+                           style="-fx-font-size: 13; -fx-text-fill: #999; -fx-font-style: italic;"
+                           alignment="CENTER"/>
+                </VBox>
+
+            </VBox>
+
+
+        </HBox>
+    </center>
+
+</BorderPane>

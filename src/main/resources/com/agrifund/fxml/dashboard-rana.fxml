@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.agrifund.controller.ReleveController"
+      spacing="15"
+      stylesheets="@../css/style-rana.css">
+
+    <Label text="Relevés Terrain – IoT" styleClass="title"/>
+    <Label fx:id="lblMeteo"
+           text="Température météo : --"
+           styleClass="section-title"/>
+
+
+
+    <HBox spacing="10" alignment="CENTER">
+        <TextField fx:id="txtType" promptText="Type"/>
+        <TextField fx:id="txtValeur" promptText="Valeur"/>
+        <TextField fx:id="txtUnite" promptText="Unité"/>
+        <TextField fx:id="txtCapteur" promptText="ID Capteur"/>
+    </HBox>
+
+    <!-- TABLE -->
+    <TableView fx:id="tableReleve" prefHeight="220">
+        <columns>
+            <TableColumn fx:id="colType" text="Type"/>
+            <TableColumn fx:id="colValeur" text="Valeur"/>
+            <TableColumn fx:id="colUnite" text="Unité"/>
+            <TableColumn fx:id="colCapteur" text="Capteur"/>
+            <TableColumn fx:id="colEtat" text="État"/>
+        </columns>
+    </TableView>
+
+    <!-- GRAPH -->
+    <LineChart fx:id="chart">
+        <xAxis>
+            <CategoryAxis label="Temps"/>
+        </xAxis>
+        <yAxis>
+            <NumberAxis label="Valeur"/>
+        </yAxis>
+    </LineChart>
+
+    <!-- BUTTONS -->
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Ajouter" onAction="#ajouterReleve" styleClass="btn-success"/>
+        <Button text="Modifier" onAction="#modifierReleve"  styleClass="btn"/>
+        <Button text="Supprimer" onAction="#supprimerReleve" styleClass="btn-danger"/>
+        <Button text="Clôturer la journée" onAction="#viderGraphique"/>
+        <Button text="Voir rapports journaliers" onAction="#ouvrirRapports"/>
+
+    </HBox>
+
+</VBox>

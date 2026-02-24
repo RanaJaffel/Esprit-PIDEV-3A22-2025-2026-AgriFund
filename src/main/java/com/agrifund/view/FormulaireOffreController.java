@@ -3,7 +3,7 @@ package com.agrifund.view;
 import com.agrifund.controller.OffreFinanciereController;
 import com.agrifund.model.OffreFinanciere;
 import com.agrifund.model.ProduitFinancier;
-import com.agrifund.util.DatabaseConnection;
+import com.agrifund.util.AgrifundDBConnection;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -74,7 +74,7 @@ public class FormulaireOffreController {
 
     private void chargerProduits() {
         try {
-            Connection conn = DatabaseConnection.getConnection();
+            Connection conn = AgrifundDBConnection.getConnection();
             if (conn == null) return;
 
             String sql = "SELECT * FROM produit_financier ORDER BY nom_produit";

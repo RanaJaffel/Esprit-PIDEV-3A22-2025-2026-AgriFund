@@ -2,7 +2,7 @@ package com.agrifund.controller;
 
 import com.agrifund.model.OffreFinanciere;
 import com.agrifund.model.ProduitFinancier;
-import com.agrifund.util.DatabaseConnection;
+import com.agrifund.util.AgrifundDBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -15,7 +15,7 @@ public class OffreFinanciereController {
         String sql = "INSERT INTO offre_financiere (nom_offre, conditions, statut, id_produit) " +
                 "VALUES (?, ?, ?, ?)";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = AgrifundDBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, offre.getNomOffre());
@@ -37,7 +37,7 @@ public class OffreFinanciereController {
         ObservableList<OffreFinanciere> offres = FXCollections.observableArrayList();
         String sql = "SELECT * FROM offre_financiere";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = AgrifundDBConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
@@ -67,7 +67,7 @@ public class OffreFinanciereController {
                 "FROM offre_financiere o " +
                 "INNER JOIN produit_financier p ON o.id_produit = p.id_produit";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = AgrifundDBConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
@@ -106,7 +106,7 @@ public class OffreFinanciereController {
     public OffreFinanciere getOffreById(int id) {
         String sql = "SELECT * FROM offre_financiere WHERE id_offre = ?";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = AgrifundDBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, id);
@@ -134,7 +134,7 @@ public class OffreFinanciereController {
         String sql = "UPDATE offre_financiere SET nom_offre=?, conditions=?, " +
                 "statut=?, id_produit=? WHERE id_offre=?";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = AgrifundDBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, offre.getNomOffre());
@@ -156,7 +156,7 @@ public class OffreFinanciereController {
     public boolean supprimerOffre(int id) {
         String sql = "DELETE FROM offre_financiere WHERE id_offre = ?";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = AgrifundDBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, id);
@@ -174,7 +174,7 @@ public class OffreFinanciereController {
         ObservableList<OffreFinanciere> offres = FXCollections.observableArrayList();
         String sql = "SELECT * FROM offre_financiere WHERE nom_offre LIKE ? OR statut LIKE ?";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = AgrifundDBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             String searchPattern = "%" + critere + "%";
@@ -206,7 +206,7 @@ public class OffreFinanciereController {
         ObservableList<OffreFinanciere> offres = FXCollections.observableArrayList();
         String sql = "SELECT * FROM offre_financiere WHERE id_produit = ?";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = AgrifundDBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, idProduit);

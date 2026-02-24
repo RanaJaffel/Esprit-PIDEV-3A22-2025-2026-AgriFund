@@ -5,16 +5,20 @@
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 
 <VBox prefHeight="700" prefWidth="1200" spacing="0"
       style="-fx-background-color: linear-gradient(to bottom, #FFFFFF, #E8F5E9, #C8E6C9);"
       xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.agrifund.view.ProduitFinancierViewController">
+      fx:controller="com.agrifund.controller.ProduitFinancierViewController">
 
     <!-- ========== HEADER ========== -->
+
     <VBox alignment="CENTER_LEFT" prefHeight="100"
           style="-fx-background-color: linear-gradient(to right, #089647, #4CAF50, #089647);">
+
         <padding>
             <Insets bottom="20" left="30" right="30" top="20"/>
         </padding>
@@ -28,13 +32,23 @@
 
         <Label style="-fx-text-fill: #E8F5E9; -fx-font-size: 14px; -fx-font-style: italic;"
                text="Creez et gerez vos produits de financement agricole"/>
+
     </VBox>
 
     <!-- ========== BARRE D'OUTILS ========== -->
     <HBox alignment="CENTER_LEFT" spacing="15"
           style="-fx-background-color: linear-gradient(to right, #E8F5E9, #C8E6C9, #E8F5E9); -fx-padding: 12;
                  -fx-border-color: #81C784; -fx-border-width: 0 0 2 0;">
+        <ImageView
+                fitWidth="100"
+                preserveRatio="true"
+                smooth="true"
+                cache="true">
+            <image>
+                <Image url="@/com/agrifund/images/image_2026-01-25_212530957-removebg-preview.png"/>
 
+            </image>
+        </ImageView>
         <Button fx:id="btnNouveau" onAction="#handleNouveau" text="+ Nouveau Produit"
                 style="-fx-background-color: linear-gradient(to bottom, #4CAF50, #388E3C);
                        -fx-text-fill: white; -fx-font-weight: bold;

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.WebView?>
+
+<AnchorPane prefWidth="800" prefHeight="650"
+            xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.agrifund.controller.projectagricolecontroller">
+
+    <children>
+
+        <Label layoutX="30" layoutY="20" text="Ajouter un projet agricole" />
+
+        <TextField fx:id="nomField" layoutX="30" layoutY="60" promptText="Nom du projet"/>
+
+        <ComboBox fx:id="statutBox" layoutX="30" layoutY="100">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="en cours"/>
+                    <String fx:value="accepte"/>
+                    <String fx:value="refuse"/>
+                </FXCollections>
+            </items>
+        </ComboBox>
+
+        <!-- 🗺️ MAP -->
+        <WebView fx:id="mapViewAdd" layoutX="30" layoutY="150"
+                 prefWidth="720" prefHeight="400"/>
+
+        <Button text="Ajouter"
+                layoutX="30" layoutY="570"
+                onAction="#ajouterProjet"/>
+
+    </children>
+</AnchorPane>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/17"
+            fx:controller="com.agrifund.controller.MapController"
+            style="-fx-background-color: #f5f5f5;">
+
+    <!-- HEADER WITH SEARCH -->
+    <top>
+        <VBox spacing="0">
+            <HBox alignment="CENTER_LEFT" spacing="15"
+                  style="-fx-background-color: linear-gradient(to right, #076A39, #089647); -fx-padding: 15 20;">
+                <VBox spacing="3">
+                    <Label text="🗺️ Carte AgriFund" style="-fx-text-fill: white; -fx-font-size: 20; -fx-font-weight: bold;"/>
+                    <Label text="Propulse par Google Maps" style="-fx-text-fill: #B2D944; -fx-font-size: 12;"/>
+                </VBox>
+                <HBox HBox.hgrow="ALWAYS"/>
+                <VBox spacing="0">
+                    <TextField fx:id="txtSearchAddress" promptText="🔍 Rechercher via Google Maps..."
+                               style="-fx-pref-width: 400; -fx-padding: 8; -fx-border-color: #B2D944; -fx-border-radius: 5; -fx-background-radius: 5;"
+                               onAction="#handleSearchAddress"/>
+                    <ListView fx:id="listSuggestions" prefHeight="0" maxHeight="180" visible="false" managed="false"
+                              style="-fx-background-color: white; -fx-border-color: #B2D944; -fx-border-radius: 0 0 5 5; -fx-pref-width: 400; -fx-font-size: 12;"/>
+                </VBox>
+                <Button text="🔍 Rechercher"
+                        style="-fx-background-color: #B2D944; -fx-text-fill: #076A39; -fx-font-weight: bold; -fx-padding: 8 20; -fx-background-radius: 5; -fx-cursor: hand;"
+                        onAction="#handleSearchAddress"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- CENTER: MAP + CUSTOMIZATION SIDEBAR -->
+    <center>
+        <HBox HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+            <!-- MAP container — GoogleMapView is added programmatically -->
+            <StackPane fx:id="mapContainer" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS"
+                       maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308"
+                       style="-fx-background-color: #e8f5e9;"/>
+            <!-- CUSTOMIZATION SIDEBAR -->
+            <ScrollPane fitToWidth="true" prefWidth="260" minWidth="260"
+                        style="-fx-background: #095032; -fx-background-color: #095032; -fx-border-color: transparent;">
+                <VBox spacing="12" style="-fx-background-color: #095032; -fx-padding: 15 12;">
+
+                    <!-- Section: Couche de carte -->
+                    <Label text="🗺️ Google Maps - Couches" style="-fx-text-fill: #B2D944; -fx-font-weight: bold; -fx-font-size: 13;"/>
+                    <fx:define>
+                        <ToggleGroup fx:id="tileGroup"/>
+                    </fx:define>
+                    <VBox spacing="5" style="-fx-background-color: rgba(255,255,255,0.08); -fx-background-radius: 8; -fx-padding: 10;">
+                        <RadioButton fx:id="rbOSM" text="Google Maps (Plan)" toggleGroup="$tileGroup" selected="true"
+                                     style="-fx-text-fill: white; -fx-font-size: 11;" onAction="#handleTileChange"/>
+                        <RadioButton fx:id="rbSatellite" text="Google Satellite" toggleGroup="$tileGroup"
+                                     style="-fx-text-fill: white; -fx-font-size: 11;" onAction="#handleTileChange"/>
+                        <RadioButton fx:id="rbTerrain" text="Google Relief" toggleGroup="$tileGroup"
+                                     style="-fx-text-fill: white; -fx-font-size: 11;" onAction="#handleTileChange"/>
+                        <RadioButton fx:id="rbDark" text="Google Hybride" toggleGroup="$tileGroup"
+                                     style="-fx-text-fill: white; -fx-font-size: 11;" onAction="#handleTileChange"/>
+                    </VBox>
+
+                    <Separator style="-fx-background-color: #B2D944;"/>
+
+                    <!-- Section: Marqueurs -->
+                    <Label text="📍 Marqueurs" style="-fx-text-fill: #B2D944; -fx-font-weight: bold; -fx-font-size: 13;"/>
+                    <VBox spacing="5" style="-fx-background-color: rgba(255,255,255,0.08); -fx-background-radius: 8; -fx-padding: 10;">
+                        <CheckBox fx:id="cbShowFarms" text="🌾 Exploitations" selected="false"
+                                  style="-fx-text-fill: white; -fx-font-size: 11;" onAction="#handleMarkerToggle"/>
+                        <CheckBox fx:id="cbShowOffices" text="🏢 Bureaux AgriFund" selected="false"
+                                  style="-fx-text-fill: white; -fx-font-size: 11;" onAction="#handleMarkerToggle"/>
+                        <CheckBox fx:id="cbShowCustom" text="📌 Mes marqueurs" selected="true"
+                                  style="-fx-text-fill: white; -fx-font-size: 11;" onAction="#handleMarkerToggle"/>
+                    </VBox>
+
+                    <Separator style="-fx-background-color: #B2D944;"/>
+
+                    <!-- Section: Ajouter un marqueur -->
+                    <Label text="➕ Ajouter un marqueur" style="-fx-text-fill: #B2D944; -fx-font-weight: bold; -fx-font-size: 13;"/>
+                    <VBox spacing="6" style="-fx-background-color: rgba(255,255,255,0.08); -fx-background-radius: 8; -fx-padding: 10;">
+                        <TextField fx:id="txtMarkerTitle" promptText="Titre du marqueur"
+                                   style="-fx-font-size: 11; -fx-background-radius: 5;"/>
+                        <TextField fx:id="txtMarkerDesc" promptText="Description"
+                                   style="-fx-font-size: 11; -fx-background-radius: 5;"/>
+                        <HBox spacing="5">
+                            <TextField fx:id="txtMarkerLat" promptText="Latitude" HBox.hgrow="ALWAYS"
+                                       style="-fx-font-size: 11; -fx-background-radius: 5;"/>
+                            <TextField fx:id="txtMarkerLng" promptText="Longitude" HBox.hgrow="ALWAYS"
+                                       style="-fx-font-size: 11; -fx-background-radius: 5;"/>
+                        </HBox>
+                        <ComboBox fx:id="cbMarkerColor" promptText="Couleur" prefWidth="1000" maxWidth="1.7976931348623157E308"
+                                  style="-fx-font-size: 11; -fx-background-radius: 5;"/>
+                        <Button text="📌 Ajouter marqueur" prefWidth="1000" maxWidth="1.7976931348623157E308"
+                                style="-fx-background-color: #B2D944; -fx-text-fill: #076A39; -fx-font-weight: bold; -fx-font-size: 11; -fx-background-radius: 5; -fx-cursor: hand;"
+                                onAction="#handleAddCustomMarker"/>
+                        <Button text="🖱️ Mode clic sur carte" prefWidth="1000" maxWidth="1.7976931348623157E308"
+                                fx:id="btnClickMode"
+                                style="-fx-background-color: rgba(178,217,68,0.3); -fx-text-fill: #B2D944; -fx-font-size: 11; -fx-background-radius: 5; -fx-cursor: hand; -fx-border-color: #B2D944; -fx-border-radius: 5;"
+                                onAction="#handleToggleClickMode"/>
+                    </VBox>
+
+                    <Separator style="-fx-background-color: #B2D944;"/>
+
+                    <!-- Section: Cercle de zone -->
+                    <Label text="⭕ Zone circulaire" style="-fx-text-fill: #B2D944; -fx-font-weight: bold; -fx-font-size: 13;"/>
+                    <VBox spacing="6" style="-fx-background-color: rgba(255,255,255,0.08); -fx-background-radius: 8; -fx-padding: 10;">
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <Label text="Rayon (km):" style="-fx-text-fill: white; -fx-font-size: 11;"/>
+                            <Slider fx:id="sliderRadius" min="1" max="100" value="20" showTickLabels="true"
+                                    HBox.hgrow="ALWAYS" style="-fx-font-size: 10;"/>
+                        </HBox>
+                        <Label fx:id="lblRadiusValue" text="20 km" style="-fx-text-fill: #B2D944; -fx-font-size: 11;"/>
+                        <ComboBox fx:id="cbCircleColor" promptText="Couleur cercle" prefWidth="1000" maxWidth="1.7976931348623157E308"
+                                  style="-fx-font-size: 11; -fx-background-radius: 5;"/>
+                        <Button text="⭕ Tracer autour position" prefWidth="1000" maxWidth="1.7976931348623157E308"
+                                style="-fx-background-color: rgba(178,217,68,0.3); -fx-text-fill: #B2D944; -fx-font-size: 11; -fx-background-radius: 5; -fx-cursor: hand; -fx-border-color: #B2D944; -fx-border-radius: 5;"
+                                onAction="#handleDrawCircle"/>
+                    </VBox>
+
+                    <Separator style="-fx-background-color: #B2D944;"/>
+
+                    <!-- Section: Affichage -->
+                    <Label text="⚙️ Affichage" style="-fx-text-fill: #B2D944; -fx-font-weight: bold; -fx-font-size: 13;"/>
+                    <VBox spacing="6" style="-fx-background-color: rgba(255,255,255,0.08); -fx-background-radius: 8; -fx-padding: 10;">
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <Label text="Zoom:" style="-fx-text-fill: white; -fx-font-size: 11;"/>
+                            <Slider fx:id="sliderZoom" min="3" max="18" value="7" showTickLabels="true"
+                                    HBox.hgrow="ALWAYS"/>
+                        </HBox>
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <Label text="Opacite:" style="-fx-text-fill: white; -fx-font-size: 11;"/>
+                            <Slider fx:id="sliderOpacity" min="0.3" max="1.0" value="1.0"
+                                    HBox.hgrow="ALWAYS"/>
+                        </HBox>
+                    </VBox>
+
+                    <Separator style="-fx-background-color: #B2D944;"/>
+
+                    <!-- Actions -->
+                    <VBox spacing="6">
+                        <Button text="🗑️ Effacer tous les marqueurs" prefWidth="1000" maxWidth="1.7976931348623157E308"
+                                style="-fx-background-color: #c0392b; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 11; -fx-background-radius: 5; -fx-cursor: hand;"
+                                onAction="#handleClearAll"/>
+                        <Button text="🔄 Recentrer Tunisie" prefWidth="1000" maxWidth="1.7976931348623157E308"
+                                style="-fx-background-color: #076A39; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 11; -fx-background-radius: 5; -fx-cursor: hand;"
+                                onAction="#handleRecenter"/>
+                    </VBox>
+
+                </VBox>
+            </ScrollPane>
+        </HBox>
+    </center>
+
+    <!-- BOTTOM STATUS BAR -->
+    <bottom>
+        <HBox alignment="CENTER_LEFT" spacing="15"
+              style="-fx-background-color: white; -fx-padding: 8 20; -fx-border-color: #e0e0e0; -fx-border-width: 1 0 0 0;">
+            <Label fx:id="lblMapStatus" text="Carte prete" style="-fx-text-fill: #076A39; -fx-font-size: 11; -fx-font-weight: bold;"/>
+            <HBox HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lblCoordinates" text="Coords: --" style="-fx-text-fill: #999; -fx-font-size: 10;"/>
+        </HBox>
+    </bottom>
+</BorderPane>

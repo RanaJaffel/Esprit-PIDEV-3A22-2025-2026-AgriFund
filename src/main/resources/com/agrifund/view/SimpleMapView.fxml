@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml/1"
+           xmlns="http://javafx.com/javafx/17"
+           fx:controller="com.agrifund.controller.SimpleMapController"
+           style="-fx-background-color: #e8f5e9;">
+
+    <StackPane fx:id="mapContainer"
+               prefWidth="1920" prefHeight="1080"
+               maxWidth="Infinity" maxHeight="Infinity"
+               StackPane.alignment="CENTER"/>
+
+</StackPane>

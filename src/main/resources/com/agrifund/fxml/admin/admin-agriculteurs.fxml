@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.agrifund.controller.admin.AdminAgricultureController"
+            stylesheets="@../../css/styles.css">
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <VBox styleClass="content-area" spacing="0">
+            <!-- Top Bar -->
+            <HBox alignment="CENTER" style="-fx-padding: 0 0 30 0;">
+                <VBox HBox.hgrow="ALWAYS">
+                    <Label text="Gestion des Agriculteurs" styleClass="page-title"/>
+                    <Label text="Gérer et vérifier les comptes agriculteurs" styleClass="page-subtitle"/>
+                </VBox>
+
+                <HBox spacing="15" alignment="CENTER_RIGHT">
+                    <Label fx:id="statsLabel" text="0 agriculteur(s)" style="-fx-text-fill: #848A86;"/>
+                </HBox>
+            </HBox>
+
+            <!-- Filter Tabs -->
+            <HBox spacing="10" style="-fx-padding: 0 0 20 0;">
+                <Button fx:id="btnAll" text="Tous" styleClass="btn" onAction="#filterAll"
+                        style="-fx-background-color: #089647; -fx-text-fill: white;"/>
+                <Button fx:id="btnPending" text="⏳ En attente" styleClass="btn, btn-secondary" onAction="#filterPending"/>
+                <Button fx:id="btnVerified" text="✓ Vérifiés" styleClass="btn, btn-secondary" onAction="#filterVerified"/>
+                <Button fx:id="btnRejected" text="✗ Refusés" styleClass="btn, btn-secondary" onAction="#filterRejected"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <TextField fx:id="searchField" promptText="🔍 Rechercher..." styleClass="form-control"
+                           prefWidth="250" onKeyReleased="#handleSearch"/>
+                <Button text="🔄" styleClass="btn, btn-secondary" onAction="#refreshList"/>
+            </HBox>
+
+            <!-- Agriculteurs List -->
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
+                <VBox fx:id="agriculteursList" spacing="15">
+                    <!-- Rempli dynamiquement -->
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </center>
+
+</BorderPane>
