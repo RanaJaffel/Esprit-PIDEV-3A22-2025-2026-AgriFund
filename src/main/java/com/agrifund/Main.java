@@ -99,7 +99,7 @@ public class Main extends Application {
             btnShadow0.setRadius(8);
             btnUtilisateur.setEffect(btnShadow0);
             btnUtilisateur.setOnAction(e -> {
-                chargerInterface("UtilisateurView.fxml");
+                chargerInterface("AccueilUtilisateurView.fxml");
                 btnUtilisateur.setStyle(activeStyle);
                 btnProduits.setStyle(inactiveStyle);
                 btnOffres.setStyle(inactiveStyle);
