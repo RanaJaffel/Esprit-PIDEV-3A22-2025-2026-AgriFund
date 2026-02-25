@@ -1406,27 +1406,7 @@ public class projectagricolecontroller implements Initializable {
         }
     }
 
-    /**
-     * Navigate to Agriculteur Project view (called from FXML)
-     */
-    @FXML
-    void goToProjectAgriculteur(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Projectagricole agriculteur.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.getScene().setRoot(root);
-            stage.setTitle("Vue Agriculteur — Projets Agricoles");
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur de Navigation",
-                    "Impossible de charger la vue Agriculteur: " + e.getMessage());
-        }
-    }
 
-    /**
-     * Open Add Project Form (called from FXML toolbar button)
-     */
     @FXML
     void openAddProjectForm(ActionEvent event) {
         openAddDialog();
