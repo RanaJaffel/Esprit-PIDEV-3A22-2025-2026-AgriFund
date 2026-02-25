@@ -1,20 +1,22 @@
 package com.agrifund.controller;
 
-import com.agrifund.model.ProduitFinancier;
-import javafx.collections.FXCollections;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-
 import java.awt.Desktop;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+
+import com.agrifund.model.ProduitFinancier;
+
+import javafx.collections.FXCollections;
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class DemandeFinancementController {
     
@@ -148,18 +150,9 @@ public class DemandeFinancementController {
      */
     @FXML
     private void handleRetour() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/agrifund/view/UtilisateurView.fxml"));
-            Parent root = loader.load();
-            
-            Stage stage = (Stage) btnRediriger.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("AgriFund - Mon Espace");
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-            showError("Erreur", "Impossible de retourner: " + e.getMessage());
-        }
+        // Simply close this popup window — the main dashboard stays intact
+        Stage stage = (Stage) btnRediriger.getScene().getWindow();
+        stage.close();
     }
     
     /**

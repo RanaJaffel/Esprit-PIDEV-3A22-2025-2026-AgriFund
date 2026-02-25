@@ -1,90 +1,277 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.shape.Circle?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" 
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
             xmlns="http://javafx.com/javafx/17"
             fx:controller="com.agrifund.controller.AccueilUtilisateurController"
-            style="-fx-background-color: #f5f5f5;">
+            style="-fx-background-color: white;">
 
-    <!-- HEADER -->
-    <top>
-        <VBox spacing="0">
-            <!-- Hero Section -->
-            <HBox alignment="CENTER" style="-fx-background-color: linear-gradient(to right, #076A39, #089647, #0A9F51); -fx-padding: 40;">
-                <VBox alignment="CENTER" spacing="15">
-                    <Label text="Bienvenue sur AgriFund" style="-fx-text-fill: white; -fx-font-size: 32; -fx-font-weight: bold;"/>
-                    <Label text="Votre partenaire en financement agricole" style="-fx-text-fill: #B2D944; -fx-font-size: 18;"/>
-                    <HBox spacing="15" alignment="CENTER">
-                        <Button fx:id="btnNouveauFinancement" text="Demander un Financement" 
-                                style="-fx-background-color: #B2D944; -fx-text-fill: #076A39; -fx-font-size: 14; -fx-font-weight: bold; -fx-padding: 12 30; -fx-background-radius: 25; -fx-cursor: hand;"
-                                onAction="#handleNouveauFinancement"/>
-                    </HBox>
-                </VBox>
-            </HBox>
-            
-            <!-- Search and Filter Bar -->
-            <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-padding: 20; -fx-border-color: #e0e0e0; -fx-border-width: 0 0 1 0;">
-                <Label text="Rechercher:" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #076A39;"/>
-                <TextField fx:id="txtRecherche" promptText="Nom du produit, type de financement..." 
-                          style="-fx-pref-width: 300; -fx-padding: 8; -fx-border-color: #B2D944; -fx-border-radius: 5; -fx-background-radius: 5;"/>
-                
-                <Label text="Type:" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #076A39;"/>
-                <ComboBox fx:id="cmbTypeFinancement" promptText="Tous les types" 
-                         style="-fx-pref-width: 200;"/>
-                
-                <Button text="🔍 Rechercher" 
-                        style="-fx-background-color: #089647; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20; -fx-background-radius: 5; -fx-cursor: hand;"
-                        onAction="#handleRechercher"/>
-                
-                <Button text="🔄 Rafraîchir" 
-                        style="-fx-background-color: #B2D944; -fx-text-fill: #076A39; -fx-font-weight: bold; -fx-padding: 8 20; -fx-background-radius: 5; -fx-cursor: hand;"
-                        onAction="#handleRafraichir"/>
-            </HBox>
-        </VBox>
-    </top>
-
-    <!-- MAIN CONTENT -->
     <center>
-        <VBox spacing="20" style="-fx-padding: 30;">
-            
-            <!-- Section Produits Disponibles -->
-            <VBox spacing="15">
-                <HBox alignment="CENTER_LEFT" spacing="10">
-                    <Label text="📦 Produits Financiers Disponibles" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #076A39;"/>
-                    <Label fx:id="lblNombreProduits" text="(0 produits)" style="-fx-font-size: 14; -fx-text-fill: #666;"/>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER"
+                style="-fx-background: white; -fx-border-color: transparent; -fx-background-color: white;">
+            <VBox spacing="0" style="-fx-padding: 0;">
+
+                <!-- ══════════ HERO SECTION — Full-width gradient with glassmorphism ══════════ -->
+                <StackPane minHeight="280"
+                           style="-fx-background-color: linear-gradient(to bottom right, #f5f7fa, #e8f5e9, #f5f7fa, #e8f5e9);">
+                    <!-- Decorative circles -->
+                    <Circle radius="120" opacity="0.04" fill="white" translateX="-380" translateY="-60"/>
+                    <Circle radius="200" opacity="0.03" fill="white" translateX="420" translateY="80"/>
+                    <Circle radius="70"  opacity="0.06" fill="#B2D944" translateX="300" translateY="-90"/>
+
+                    <VBox spacing="14" alignment="CENTER" style="-fx-padding: 40 50;">
+                        <Label text="🌱" style="-fx-font-size: 38;"/>
+                           <Label fx:id="lblWelcomeName" text="Bienvenue sur AgriFund"
+                               style="-fx-text-fill: #222; -fx-font-size: 32; -fx-font-weight: bold;"/>
+                           <Label text="Votre plateforme intelligente de financement agricole"
+                               style="-fx-text-fill: #666; -fx-font-size: 14;"/>
+
+                        <!-- ── Glassmorphism KPI strip ── -->
+                        <HBox spacing="16" alignment="CENTER" style="-fx-padding: 20 0 0 0;">
+                            <VBox alignment="CENTER" spacing="2"
+                                  style="-fx-background-color: #f8fafc; -fx-background-radius: 16; -fx-padding: 16 28; -fx-border-color: #e0e0e0; -fx-border-radius: 16; -fx-border-width: 1;">
+                                    <Label fx:id="lblStatProduits" text="0"
+                                        style="-fx-text-fill: #B2D944; -fx-font-size: 28; -fx-font-weight: bold;"/>
+                                <Label text="Produits" style="-fx-text-fill: #888; -fx-font-size: 11;"/>
+                            </VBox>
+                            <VBox alignment="CENTER" spacing="2"
+                                  style="-fx-background-color: #f8fafc; -fx-background-radius: 16; -fx-padding: 16 28; -fx-border-color: #e0e0e0; -fx-border-radius: 16; -fx-border-width: 1;">
+                                    <Label fx:id="lblStatOffres" text="0"
+                                        style="-fx-text-fill: #ffb74d; -fx-font-size: 28; -fx-font-weight: bold;"/>
+                                <Label text="Offres" style="-fx-text-fill: #888; -fx-font-size: 11;"/>
+                            </VBox>
+                            <VBox alignment="CENTER" spacing="2"
+                                  style="-fx-background-color: #f8fafc; -fx-background-radius: 16; -fx-padding: 16 28; -fx-border-color: #e0e0e0; -fx-border-radius: 16; -fx-border-width: 1;">
+                                    <Label fx:id="lblStatTaux" text="0%"
+                                        style="-fx-text-fill: #4fc3f7; -fx-font-size: 28; -fx-font-weight: bold;"/>
+                                <Label text="Taux Moyen" style="-fx-text-fill: #888; -fx-font-size: 11;"/>
+                            </VBox>
+                            <VBox alignment="CENTER" spacing="2"
+                                  style="-fx-background-color: #f8fafc; -fx-background-radius: 16; -fx-padding: 16 28; -fx-border-color: #e0e0e0; -fx-border-radius: 16; -fx-border-width: 1;">
+                                    <Label fx:id="lblStatMontant" text="0"
+                                        style="-fx-text-fill: #222; -fx-font-size: 28; -fx-font-weight: bold;"/>
+                                <Label text="Montant Max" style="-fx-text-fill: #888; -fx-font-size: 11;"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </StackPane>
+
+                <VBox spacing="30" style="-fx-padding: 32 40;">
+
+                    <!-- ══════════ QUICK ACTIONS — Gradient icon cards ══════════ -->
+                    <HBox spacing="16">
+                        <VBox spacing="10" alignment="CENTER" HBox.hgrow="ALWAYS"
+                              style="-fx-background-color: linear-gradient(to bottom right, #0d2818, #143a22); -fx-padding: 26; -fx-background-radius: 18; -fx-border-color: rgba(178,217,68,0.15); -fx-border-radius: 18; -fx-border-width: 1; -fx-cursor: hand;"
+                              onMouseClicked="#handleNouveauFinancement">
+                            <StackPane prefWidth="52" prefHeight="52"
+                                       style="-fx-background-color: rgba(178,217,68,0.15); -fx-background-radius: 50;">
+                                <Label text="📋" style="-fx-font-size: 24;"/>
+                            </StackPane>
+                            <Label text="Demander un Financement"
+                                   style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #B2D944;"/>
+                            <Label text="Nouvelle demande en quelques clics"
+                                   style="-fx-font-size: 11; -fx-text-fill: rgba(255,255,255,0.45);"/>
+                        </VBox>
+                        <VBox spacing="10" alignment="CENTER" HBox.hgrow="ALWAYS"
+                              style="-fx-background-color: linear-gradient(to bottom right, #0a1e2e, #10324a); -fx-padding: 26; -fx-background-radius: 18; -fx-border-color: rgba(79,195,247,0.15); -fx-border-radius: 18; -fx-border-width: 1; -fx-cursor: hand;"
+                              onMouseClicked="#scrollToProduits">
+                            <StackPane prefWidth="52" prefHeight="52"
+                                       style="-fx-background-color: rgba(79,195,247,0.15); -fx-background-radius: 50;">
+                                <Label text="🏦" style="-fx-font-size: 24;"/>
+                            </StackPane>
+                            <Label text="Explorer les Produits"
+                                   style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #4fc3f7;"/>
+                            <Label text="Découvrir les financements"
+                                   style="-fx-font-size: 11; -fx-text-fill: rgba(255,255,255,0.45);"/>
+                        </VBox>
+                        <VBox spacing="10" alignment="CENTER" HBox.hgrow="ALWAYS"
+                              style="-fx-background-color: linear-gradient(to bottom right, #2a1a05, #3d2a0a); -fx-padding: 26; -fx-background-radius: 18; -fx-border-color: rgba(255,183,77,0.15); -fx-border-radius: 18; -fx-border-width: 1; -fx-cursor: hand;"
+                              onMouseClicked="#scrollToOffres">
+                            <StackPane prefWidth="52" prefHeight="52"
+                                       style="-fx-background-color: rgba(255,183,77,0.15); -fx-background-radius: 50;">
+                                <Label text="🎁" style="-fx-font-size: 24;"/>
+                            </StackPane>
+                            <Label text="Offres Exclusives"
+                                   style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #ffb74d;"/>
+                            <Label text="Promotions et taux réduits"
+                                   style="-fx-font-size: 11; -fx-text-fill: rgba(255,255,255,0.45);"/>
+                        </VBox>
+                        <VBox spacing="10" alignment="CENTER" HBox.hgrow="ALWAYS"
+                              style="-fx-background-color: linear-gradient(to bottom right, #2a0a1a, #3d0f26); -fx-padding: 26; -fx-background-radius: 18; -fx-border-color: rgba(240,98,146,0.15); -fx-border-radius: 18; -fx-border-width: 1; -fx-cursor: hand;">
+                            <StackPane prefWidth="52" prefHeight="52"
+                                       style="-fx-background-color: rgba(240,98,146,0.15); -fx-background-radius: 50;">
+                                <Label text="📍" style="-fx-font-size: 24;"/>
+                            </StackPane>
+                            <Label text="Agences Proches"
+                                   style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #f06292;"/>
+                            <Label text="Trouver une agence"
+                                   style="-fx-font-size: 11; -fx-text-fill: rgba(255,255,255,0.45);"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- ══════════ FEATURED PRODUCT SPOTLIGHT ══════════ -->
+                      <VBox fx:id="containerFeatured" spacing="0"
+                          style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 18; -fx-border-color: #e8e8e8; -fx-border-radius: 12; -fx-border-width: 1;"/>
+
+                    <!-- ══════════ ANALYTICS ROW: Chart + Activity Timeline ══════════ -->
+                    <HBox spacing="22">
+                        <VBox spacing="12" HBox.hgrow="ALWAYS" prefWidth="420"
+                              style="-fx-background-color: white; -fx-padding: 18; -fx-background-radius: 12; -fx-border-color: #e8e8e8; -fx-border-width: 1;">
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <StackPane prefWidth="32" prefHeight="32"
+                                           style="-fx-background-color: rgba(178,217,68,0.12); -fx-background-radius: 10;">
+                                    <Label text="📊" style="-fx-font-size: 14;"/>
+                                </StackPane>
+                                <VBox spacing="1">
+                                    <Label text="Répartition des Types" style="-fx-font-size: 15; -fx-font-weight: bold; -fx-text-fill: #222;"/>
+                                    <Label text="Distribution par catégorie de financement" style="-fx-font-size: 10; -fx-text-fill: #666;"/>
+                                </VBox>
+                            </HBox>
+                            <PieChart fx:id="pieChartTypes" prefHeight="260" legendVisible="true"
+                                      style="-fx-legend-side: bottom; -fx-background-color: transparent;"/>
+                        </VBox>
+
+                        <VBox spacing="12" HBox.hgrow="ALWAYS" prefWidth="420"
+                              style="-fx-background-color: white; -fx-padding: 18; -fx-background-radius: 12; -fx-border-color: #e8e8e8; -fx-border-width: 1;">
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <StackPane prefWidth="32" prefHeight="32"
+                                           style="-fx-background-color: rgba(79,195,247,0.12); -fx-background-radius: 10;">
+                                    <Label text="⏱" style="-fx-font-size: 14;"/>
+                                </StackPane>
+                                <VBox spacing="1">
+                                    <Label text="Activités Récentes" style="-fx-font-size: 15; -fx-font-weight: bold; -fx-text-fill: #222;"/>
+                                    <Label text="Votre historique d'interactions" style="-fx-font-size: 10; -fx-text-fill: #666;"/>
+                                </VBox>
+                            </HBox>
+                            <VBox fx:id="containerActivites" spacing="8" style="-fx-padding: 4 0 0 0;"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- ══════════ HOW IT WORKS — Steps ══════════ -->
+                    <VBox spacing="18">
+                        <Label text="Comment ça marche ?"
+                               style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #076A39;"/>
+                        <HBox spacing="18">
+                            <HBox spacing="14" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS"
+                                  style="-fx-background-color: white; -fx-padding: 16; -fx-background-radius: 12; -fx-border-color: #e8e8e8; -fx-border-width: 1;">
+                                <StackPane prefWidth="42" prefHeight="42"
+                                           style="-fx-background-color: #076A39; -fx-background-radius: 50;">
+                                    <Label text="1" style="-fx-text-fill: white; -fx-font-size: 18; -fx-font-weight: bold;"/>
+                                </StackPane>
+                                <VBox spacing="2">
+                                    <Label text="Explorez" style="-fx-text-fill: #076A39; -fx-font-size: 14; -fx-font-weight: bold;"/>
+                                    <Label text="Parcourez nos produits financiers" style="-fx-text-fill: #666; -fx-font-size: 11;"/>
+                                </VBox>
+                            </HBox>
+                            <HBox spacing="14" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS"
+                                  style="-fx-background-color: white; -fx-padding: 16; -fx-background-radius: 12; -fx-border-color: #e8e8e8; -fx-border-width: 1;">
+                                <StackPane prefWidth="42" prefHeight="42"
+                                           style="-fx-background-color: #0277bd; -fx-background-radius: 50;">
+                                    <Label text="2" style="-fx-text-fill: white; -fx-font-size: 18; -fx-font-weight: bold;"/>
+                                </StackPane>
+                                <VBox spacing="2">
+                                    <Label text="Choisissez" style="-fx-text-fill: #0277bd; -fx-font-size: 14; -fx-font-weight: bold;"/>
+                                    <Label text="Sélectionnez l'offre qui vous convient" style="-fx-text-fill: #666; -fx-font-size: 11;"/>
+                                </VBox>
+                            </HBox>
+                            <HBox spacing="14" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS"
+                                  style="-fx-background-color: white; -fx-padding: 16; -fx-background-radius: 12; -fx-border-color: #e8e8e8; -fx-border-width: 1;">
+                                <StackPane prefWidth="42" prefHeight="42"
+                                           style="-fx-background-color: #e65100; -fx-background-radius: 50;">
+                                    <Label text="3" style="-fx-text-fill: white; -fx-font-size: 18; -fx-font-weight: bold;"/>
+                                </StackPane>
+                                <VBox spacing="2">
+                                    <Label text="Demandez" style="-fx-text-fill: #e65100; -fx-font-size: 14; -fx-font-weight: bold;"/>
+                                    <Label text="Soumettez votre demande en ligne" style="-fx-text-fill: #666; -fx-font-size: 11;"/>
+                                </VBox>
+                            </HBox>
+                            <HBox spacing="14" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS"
+                                  style="-fx-background-color: white; -fx-padding: 16; -fx-background-radius: 12; -fx-border-color: #e8e8e8; -fx-border-width: 1;">
+                                <StackPane prefWidth="42" prefHeight="42"
+                                           style="-fx-background-color: #6a1b9a; -fx-background-radius: 50;">
+                                    <Label text="✓" style="-fx-text-fill: white; -fx-font-size: 18; -fx-font-weight: bold;"/>
+                                </StackPane>
+                                <VBox spacing="2">
+                                    <Label text="Financez" style="-fx-text-fill: #6a1b9a; -fx-font-size: 14; -fx-font-weight: bold;"/>
+                                    <Label text="Recevez votre financement rapidement" style="-fx-text-fill: #666; -fx-font-size: 11;"/>
+                                </VBox>
+                            </HBox>
+                        </HBox>
+                    </VBox>
+
+                    <!-- ══════════ FLOATING SEARCH BAR ══════════ -->
+                                        <HBox spacing="12" alignment="CENTER_LEFT"
+                                                    style="-fx-background-color: white; -fx-padding: 14 18; -fx-background-radius: 12; -fx-border-color: #e8e8e8; -fx-border-width: 1;">
+                        <StackPane prefWidth="36" prefHeight="36"
+                                   style="-fx-background-color: rgba(178,217,68,0.12); -fx-background-radius: 10;">
+                            <Label text="🔍" style="-fx-font-size: 15;"/>
+                        </StackPane>
+                                                <TextField fx:id="txtRecherche" promptText="Rechercher un produit, type ou mot-clé..."
+                                                                     style="-fx-pref-height: 38; -fx-background-color: white; -fx-text-fill: #222; -fx-prompt-text-fill: #999; -fx-border-color: #e8e8e8; -fx-border-radius: 10; -fx-background-radius: 10; -fx-font-size: 13; -fx-padding: 8 14;"
+                                                                     HBox.hgrow="ALWAYS"/>
+                                                <ComboBox fx:id="cmbTypeFinancement" promptText="Tous"
+                                                                    style="-fx-pref-width: 170; -fx-font-size: 12; -fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #e8e8e8;"/>
+                        <Button text="Rechercher" onAction="#handleRechercher"
+                                style="-fx-background-color: linear-gradient(to right, #076A39, #0a9f51); -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 24; -fx-background-radius: 10; -fx-cursor: hand; -fx-font-size: 12;"/>
+                        <Button text="↻" onAction="#handleRafraichir"
+                                style="-fx-background-color: rgba(178,217,68,0.12); -fx-text-fill: #B2D944; -fx-font-weight: bold; -fx-padding: 10 16; -fx-background-radius: 10; -fx-cursor: hand; -fx-font-size: 14;"/>
+                    </HBox>
+
+                    <!-- ══════════ PRODUITS DISPONIBLES ══════════ -->
+                    <VBox fx:id="sectionProduits" spacing="16">
+                              <HBox alignment="CENTER_LEFT" spacing="12">
+                            <StackPane prefWidth="36" prefHeight="36"
+                                       style="-fx-background-color: rgba(178,217,68,0.12); -fx-background-radius: 10;">
+                                <Label text="🏦" style="-fx-font-size: 15;"/>
+                            </StackPane>
+                            <Label text="Produits Disponibles"
+                                    style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #222;"/>
+                            <Label fx:id="lblNombreProduits" text="(0)"
+                                   style="-fx-text-fill: #B2D944; -fx-font-size: 14; -fx-font-weight: bold;"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                                <Label text="Tous les financements agricoles"
+                                    style="-fx-text-fill: #666; -fx-font-size: 11;"/>
+                        </HBox>
+                        <FlowPane fx:id="containerProduits" hgap="18" vgap="18"/>
+                    </VBox>
+
+                    <!-- ══════════ OFFRES SPÉCIALES ══════════ -->
+                    <VBox fx:id="sectionOffres" spacing="16">
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <StackPane prefWidth="36" prefHeight="36"
+                                       style="-fx-background-color: rgba(255,183,77,0.12); -fx-background-radius: 10;">
+                                <Label text="🎁" style="-fx-font-size: 15;"/>
+                            </StackPane>
+                            <Label text="Offres Exclusives"
+                                style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #222;"/>
+                            <Label fx:id="lblNombreOffres" text="(0)"
+                                   style="-fx-text-fill: #ffb74d; -fx-font-size: 14; -fx-font-weight: bold;"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="Promotions et taux préférentiels"
+                                style="-fx-text-fill: #666; -fx-font-size: 11;"/>
+                        </HBox>
+                        <FlowPane fx:id="containerOffres" hgap="18" vgap="18"/>
+                    </VBox>
+
+                </VBox>
+
+                <!-- ══════════ FOOTER ══════════ -->
+                <HBox alignment="CENTER" spacing="30"
+                      style="-fx-background-color: linear-gradient(to right, #043d20, #076A39); -fx-padding: 20;">
+                    <Label text="© 2026 AgriFund — Financement Agricole Intelligent"
+                           style="-fx-text-fill: rgba(255,255,255,0.5); -fx-font-size: 11;"/>
+                    <Label text="🌿 Cultivons votre avenir"
+                           style="-fx-text-fill: #B2D944; -fx-font-size: 11; -fx-font-weight: bold;"/>
+                    <Label text="📞 +212 5XX-XXXXXX"
+                           style="-fx-text-fill: rgba(255,255,255,0.4); -fx-font-size: 11;"/>
                 </HBox>
-                
-                <ScrollPane fitToWidth="true" style="-fx-background: transparent; -fx-border-color: transparent;">
-                    <VBox fx:id="containerProduits" spacing="15" style="-fx-padding: 10;"/>
-                </ScrollPane>
+
             </VBox>
-            
-            <!-- Section Offres Spéciales -->
-            <VBox spacing="15">
-                <HBox alignment="CENTER_LEFT" spacing="10">
-                    <Label text="🎁 Offres Spéciales" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #089647;"/>
-                    <Label fx:id="lblNombreOffres" text="(0 offres)" style="-fx-font-size: 14; -fx-text-fill: #666;"/>
-                </HBox>
-                
-                <ScrollPane fitToWidth="true" style="-fx-background: transparent; -fx-border-color: transparent;">
-                    <VBox fx:id="containerOffres" spacing="15" style="-fx-padding: 10;"/>
-                </ScrollPane>
-            </VBox>
-            
-        </VBox>
+        </ScrollPane>
     </center>
-
-    <!-- FOOTER -->
-    <bottom>
-        <HBox alignment="CENTER" spacing="30" style="-fx-background-color: #076A39; -fx-padding: 20;">
-            <Label text="© 2026 AgriFund - Plateforme de Financement Agricole" style="-fx-text-fill: white; -fx-font-size: 12;"/>
-            <Label text="📞 Contact: +212 5XX-XXXXXX" style="-fx-text-fill: #B2D944; -fx-font-size: 12;"/>
-
-        </HBox>
-    </bottom>
 
 </BorderPane>
