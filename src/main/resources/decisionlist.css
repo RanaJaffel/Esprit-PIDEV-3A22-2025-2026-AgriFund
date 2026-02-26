@@ -973,3 +973,26 @@
 .chip-primary:hover {
     -fx-background-color: rgba(8, 150, 71, 0.2);
 }
+.btn-edit {
+    -fx-background-color: #1976D2;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.btn-edit:hover {
+    -fx-background-color: #0D47A1;
+}
+
+.btn-delete {
+    -fx-background-color: #D32F2F;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.btn-delete:hover {
+    -fx-background-color: #B71C1C;
+}

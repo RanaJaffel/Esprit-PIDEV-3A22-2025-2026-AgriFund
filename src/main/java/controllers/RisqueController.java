@@ -186,8 +186,8 @@ public class RisqueController {
                 cbRecommandation.setValue(getRecommandationString(evaluation.getRecommandation()));
                 cbIdProjet.setValue(evaluation.getIdProjet());
 
-                dpDateEvaluation.setValue(evaluation.getDateEvaluation()
-                        .toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+                java.sql.Date sqlDate = new java.sql.Date(evaluation.getDateEvaluation().getTime());
+                dpDateEvaluation.setValue(sqlDate.toLocalDate());
 
                 updateStatus("Modification en cours");
             } else {

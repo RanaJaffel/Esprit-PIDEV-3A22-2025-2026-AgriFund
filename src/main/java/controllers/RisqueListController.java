@@ -64,7 +64,7 @@ public class RisqueListController {
     private ObservableList<EvaluationRisque> filteredData;
 
     // ── Chat - Config API ─────────────────────────────────────────────────────
-    private static final String HF_API_KEY = "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";
+    private static final String HF_API_KEY = "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";
     private static final String HF_API_URL = "https://router.huggingface.co/v1/chat/completions";
 
     // ✅ Format correct : "model-id:provider"

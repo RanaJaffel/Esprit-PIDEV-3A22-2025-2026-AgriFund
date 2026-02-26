@@ -961,3 +961,54 @@
     -fx-background-color: #145A25;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 6, 0, 0, 2);
 }
+/* ===== BOUTON CHAT FLOTTANT PREMIUM ===== */
+
+.fab-chat-btn {
+    -fx-background-color: linear-gradient(to right, #2E7D32, #43A047);
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 50%;
+    -fx-min-width: 65px;
+    -fx-min-height: 65px;
+    -fx-max-width: 65px;
+    -fx-max-height: 65px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 12, 0.5, 0, 4);
+}
+
+.fab-chat-btn:hover {
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+    -fx-background-color: linear-gradient(to right, #1B5E20, #2E7D32);
+}
+
+.fab-chat-btn:pressed {
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+}
+/* ===== BOUTONS ACTION TABLE ===== */
+
+.btn-edit {
+    -fx-background-color: #1976D2;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.btn-edit:hover {
+    -fx-background-color: #0D47A1;
+}
+
+.btn-delete {
+    -fx-background-color: #D32F2F;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.btn-delete:hover {
+    -fx-background-color: #B71C1C;
+}
