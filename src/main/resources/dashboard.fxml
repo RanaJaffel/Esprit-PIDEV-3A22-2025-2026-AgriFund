@@ -13,7 +13,7 @@
     <Label fx:id="lblMeteo"
            text="Température météo : --"
            styleClass="section-title"/>
-    <!-- FILTRE TEMPS RÉEL -->
+
     <TextField fx:id="txtSearch"
                promptText="🔍 Filtrer en temps réel..."
                onKeyReleased="#filtrerLive"/>
@@ -28,7 +28,7 @@
         <TextField fx:id="txtCapteur" promptText="ID Capteur"/>
     </HBox>
 
-    <!-- TABLE -->
+
     <TableView fx:id="tableReleve" prefHeight="220">
         <columns>
             <TableColumn fx:id="colType" text="Type"/>
@@ -39,7 +39,7 @@
         </columns>
     </TableView>
 
-    <!-- GRAPH -->
+
     <LineChart fx:id="chart">
         <xAxis>
             <CategoryAxis label="Temps"/>
@@ -48,13 +48,13 @@
             <NumberAxis label="Valeur"/>
         </yAxis>
     </LineChart>
-    <!-- STATISTIQUES -->
+
     <HBox spacing="20" alignment="CENTER">
         <Label fx:id="lblTotal" text="Total: 0"/>
         <Label fx:id="lblAnomalies" text="Anomalies: 0"/>
     </HBox>
 
-    <!-- BUTTONS -->
+
     <HBox spacing="10" alignment="CENTER">
         <Button text="Ajouter" onAction="#ajouterReleve" styleClass="btn-success"/>
         <Button text="Modifier" onAction="#modifierReleve"  styleClass="btn"/>

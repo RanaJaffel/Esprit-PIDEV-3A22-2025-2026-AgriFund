@@ -33,12 +33,12 @@ public class CapteurController {
     private final ServiceCapteur service    = new ServiceCapteur();
     private final ApiGeoService  geoService = new ApiGeoService();
 
-    // nom → id  (pour sauvegarder l'ID en base)
+
     private final Map<String, Integer> nomToId = new HashMap<>();
-    // id  → nom (pour afficher le nom quand on sélectionne une ligne)
+
     private final Map<Integer, String> idToNom = new HashMap<>();
 
-    // ═══════════════════════════════════════════════
+
     @FXML
     public void initialize() {
         try { service.verifierEtatCapteurs(); }
@@ -50,7 +50,7 @@ public class CapteurController {
         colStatut.setCellValueFactory(new PropertyValueFactory<>("statut"));
         colProjet.setCellValueFactory(new PropertyValueFactory<>("idProjet"));
 
-        // Colonne Projet : affiche le NOM du projet
+
         colProjet.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(Integer idProjet, boolean empty) {
@@ -68,7 +68,7 @@ public class CapteurController {
         gererSelection();
     }
 
-    // ── Charge projets et remplit les deux maps ─────────────
+
     private void chargerProjets() {
         try {
             Map<Integer, String> map = service.getProjetsMap();
@@ -98,7 +98,7 @@ public class CapteurController {
         }
     }
 
-    // ── Ajouter ─────────────────────────────────────────────
+
     @FXML
     private void ajouterCapteur() {
         if (!formulaireValide()) return;
@@ -133,7 +133,7 @@ public class CapteurController {
         }
     }
 
-    // ── Modifier ────────────────────────────────────────────
+
     @FXML
     private void modifierCapteur() {
         capteur selected = tableCapteur.getSelectionModel().getSelectedItem();
@@ -156,7 +156,7 @@ public class CapteurController {
         }
     }
 
-    // ── Supprimer ───────────────────────────────────────────
+
     @FXML
     private void supprimerCapteur() {
         capteur selected = tableCapteur.getSelectionModel().getSelectedItem();
@@ -180,7 +180,7 @@ public class CapteurController {
         }
     }
 
-    // ── Sélection ligne → remplir formulaire ────────────────
+
     private void gererSelection() {
         tableCapteur.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldVal, c) -> {
@@ -198,13 +198,13 @@ public class CapteurController {
         );
     }
 
-    // ── Helper : nom sélectionné → ID ───────────────────────
+
     private Integer getSelectedProjetId() {
         String nom = cbProjet.getValue();
         return (nom == null || nom.isBlank()) ? null : nomToId.get(nom);
     }
 
-    // ── Badge statut ────────────────────────────────────────
+
     private void styliserStatut() {
         colStatut.setCellFactory(column -> new TableCell<>() {
             @Override
@@ -221,7 +221,7 @@ public class CapteurController {
         });
     }
 
-    // ── Validation ──────────────────────────────────────────
+
     private boolean formulaireValide() {
         resetStyle(tfType, tfLocalisation);
         if (tfType.getText().trim().isEmpty()
@@ -234,7 +234,7 @@ public class CapteurController {
         return true;
     }
 
-    // ── Clear ────────────────────────────────────────────────
+
     private void clearForm() {
         tfType.clear();
         tfLocalisation.clear();
@@ -261,7 +261,7 @@ public class CapteurController {
         alert.show();
     }
 
-    // ── Tester localisation ──────────────────────────────────
+
     @FXML
     private void testerLocalisation() {
         String loc = tfLocalisation.getText().trim();

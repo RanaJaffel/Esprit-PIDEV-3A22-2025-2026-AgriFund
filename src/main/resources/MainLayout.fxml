@@ -9,7 +9,7 @@
             fx:controller="controlers.MainController"
             stylesheets="@style.css">
 
-    <!-- MENU -->
+
     <left>
         <VBox spacing="20" styleClass="menu" alignment="TOP_CENTER">
             <Label text="AgriFund Smart" styleClass="menu-title"/>
@@ -29,7 +29,7 @@
 
     </left>
 
-    <!-- CONTENU -->
+
     <center>
         <StackPane fx:id="contentPane" styleClass="content-area"/>
     </center>

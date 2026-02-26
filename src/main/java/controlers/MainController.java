@@ -12,7 +12,7 @@ public class MainController {
 
     @FXML
     public void initialize() {
-        openCapteurs(); // page par défaut
+        openCapteurs();
     }
 
     @FXML
@@ -24,10 +24,7 @@ public class MainController {
     private void openDashboard() {
         loadPage("/dashboard.fxml");
     }
-    @FXML
-    private void openMap() {
-        loadPage("/map.fxml");
-    }
+
     @FXML
     private void openMeteo() {
         loadPage("/meteo.fxml");

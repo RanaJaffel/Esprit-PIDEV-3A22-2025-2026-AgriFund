@@ -13,7 +13,7 @@ import java.net.http.HttpResponse;
 
 public class ApiMeteoService {
 
-    // Mets ici ta clé OpenWeatherMap
+
     private static final String API_KEY = "81e47e8697241e1f54c3215137a8b5bf"; // ex: "b1234abcd..."
     private static final String BASE_URL =
             "https://api.openweathermap.org/data/2.5/weather";
@@ -47,7 +47,7 @@ public class ApiMeteoService {
             }
 
             JSONObject json = new JSONObject(response.body());
-            // { "main": { "temp": 23.5, ... } }
+
             double temp = json.getJSONObject("main").getDouble("temp");
             System.out.println("🌤 Température API pour " + city + " = " + temp);
             return temp;

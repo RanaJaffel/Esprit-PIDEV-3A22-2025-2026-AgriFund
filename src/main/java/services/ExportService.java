@@ -18,7 +18,7 @@ public class ExportService {
 
         document.open();
 
-        // ✅ Titre
+
         Font titleFont = new Font(Font.FontFamily.HELVETICA,
                 18, Font.BOLD,
                 new BaseColor(7, 106, 57)); // #076A39
@@ -34,7 +34,7 @@ public class ExportService {
                 + LocalDate.now()));
         document.add(new Paragraph(" "));
 
-        // ✅ Tableau 4 colonnes
+
         PdfPTable table = new PdfPTable(4);
         table.setWidthPercentage(100);
         table.setSpacingBefore(10);
@@ -42,7 +42,7 @@ public class ExportService {
         float[] columnWidths = {3f, 2f, 2f, 2f};
         table.setWidths(columnWidths);
 
-        // ✅ En-têtes stylés
+
         addHeader(table, "Type");
         addHeader(table, "Valeur");
         addHeader(table, "Unité");

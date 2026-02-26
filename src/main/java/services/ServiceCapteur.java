@@ -74,7 +74,7 @@ public class ServiceCapteur implements interfaceCrud<capteur> {
         return list;
     }
 
-    // ✅ ANCIENNE méthode — gardée pour compatibilité
+
     public List<Integer> getIdsProjets() throws SQLException {
         List<Integer> ids = new ArrayList<>();
         String req = "SELECT idproject FROM projectagricole ORDER BY idproject";
@@ -86,7 +86,7 @@ public class ServiceCapteur implements interfaceCrud<capteur> {
         return ids;
     }
 
-    // ✅ NOUVELLE méthode — retourne Map<id, nomProjet>
+
     public Map<Integer, String> getProjetsMap() throws SQLException {
         Map<Integer, String> map = new LinkedHashMap<>();
         String req = "SELECT idproject, nomproject FROM projectagricole ORDER BY nomproject";
@@ -98,7 +98,7 @@ public class ServiceCapteur implements interfaceCrud<capteur> {
         return map;
     }
 
-    // ✅ Retourne le nom d'un projet par son ID
+
     public String getNomProjetById(int idProjet) throws SQLException {
         String req = "SELECT nomproject FROM projectagricole WHERE idproject = ?";
         PreparedStatement ps = con.prepareStatement(req);

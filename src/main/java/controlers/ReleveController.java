@@ -66,7 +66,7 @@ public class ReleveController {
         colUnite.setCellValueFactory(new PropertyValueFactory<>("unite"));
         colCapteur.setCellValueFactory(new PropertyValueFactory<>("idCapteur"));
 
-        // ===== MÉTIER AVANCÉ : Détection anomalie =====
+
         colEtat.setCellValueFactory(cellData -> {
 
             releve_terrain r = cellData.getValue();
@@ -86,7 +86,7 @@ public class ReleveController {
             }
         });
 
-        // ===== STYLE VISUEL =====
+
         colEtat.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(String etat, boolean empty) {
@@ -172,7 +172,7 @@ public class ReleveController {
             double valeur = Double.parseDouble(txtValeur.getText());
             int idCapteur = Integer.parseInt(txtCapteur.getText());
 
-            // Création de l'objet relevé
+
             releve_terrain r = new releve_terrain(
                     txtType.getText().trim(),
                     valeur,
@@ -180,17 +180,16 @@ public class ReleveController {
                     idCapteur
             );
 
-            // ===== Sauvegarde en base =====
+
             service.ajouter(r);
 
-            // ===== Appel API météo =====
-            // On réutilise le champ "apiMeteoService" déclaré en haut du contrôleur
+
             double tempMeteo = apiMeteoService.getTemperature("Tunis");
 
             if (tempMeteo != -999) {
                 double ecart = Math.abs(valeur - tempMeteo);
 
-                if (ecart > 10) {  // seuil métier
+                if (ecart > 10) {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("Alerte Anomalie");
                     alert.setHeaderText("Écart important détecté !");
@@ -203,7 +202,7 @@ public class ReleveController {
                 }
             }
 
-            // Recharger l'affichage + vider les champs
+
             chargerReleves();
             viderChamps();
 
@@ -218,7 +217,7 @@ public class ReleveController {
     }
 
 
-    /* ===== UTILS ===== */
+
     private void marquerErreur(TextField... fields) {
         for (TextField f : fields) {
             f.setStyle("-fx-border-color:red;");
@@ -372,7 +371,7 @@ public class ReleveController {
 
         chart.getData().clear();
 
-        // ✅ Limite à 500 derniers points max
+
         int maxPoints = 500;
 
         List<releve_terrain> dataToShow;
@@ -428,7 +427,7 @@ public class ReleveController {
 
             document.open();
 
-            // ✅ Titre stylé
+
             com.itextpdf.text.Font titleFont =
                     new com.itextpdf.text.Font(
                             com.itextpdf.text.Font.FontFamily.HELVETICA,
@@ -447,7 +446,7 @@ public class ReleveController {
                     + java.time.LocalDate.now()));
             document.add(new Paragraph(" "));
 
-            // ✅ Tableau 4 colonnes
+
             PdfPTable table = new PdfPTable(4);
             table.setWidthPercentage(100);
             table.setSpacingBefore(10);
@@ -455,7 +454,7 @@ public class ReleveController {
             float[] columnWidths = {3f, 2f, 2f, 2f};
             table.setWidths(columnWidths);
 
-            // ✅ En-têtes
+
             addHeaderCell(table, "Type");
             addHeaderCell(table, "Valeur");
             addHeaderCell(table, "Unité");
@@ -502,7 +501,7 @@ public class ReleveController {
             writer.println("Date : " + java.time.LocalDate.now());
             writer.println("");
 
-            // ✅ En-tête tableau (Excel friendly)
+
             writer.println("Type;Valeur;Unité;Capteur");
 
             for (releve_terrain r : tableReleve.getItems()) {
