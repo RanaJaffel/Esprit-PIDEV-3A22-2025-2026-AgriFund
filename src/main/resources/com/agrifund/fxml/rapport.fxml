@@ -6,7 +6,7 @@
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.agrifund.controller.RapportJournalierController"
       spacing="20"
-      stylesheets="@../css/style-rana.css">
+      stylesheets="@style-rana.css">
 
     <Label text="Rapports Journaliers" styleClass="title"/>
 

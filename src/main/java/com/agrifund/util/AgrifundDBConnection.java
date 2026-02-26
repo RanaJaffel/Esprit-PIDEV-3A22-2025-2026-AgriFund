@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class AgrifundDBConnection {
-    private static final String URL = "jdbc:mysql://localhost:3306/agrifund";
+    private static final String URL = "jdbc:mysql://localhost:3306/pidev2";
     private static final String USER = "root";
     private static final String PASSWORD = "";
 

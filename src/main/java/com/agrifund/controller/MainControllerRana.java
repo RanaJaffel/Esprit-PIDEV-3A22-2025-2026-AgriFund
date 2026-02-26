@@ -25,6 +25,11 @@ public class MainControllerRana {
         loadPage("/dashboard.fxml");
     }
 
+    @FXML
+    private void openMeteo() {
+        loadPage("/meteo.fxml");
+    }
+
     private void loadPage(String fxml) {
         try {
             Pane page = FXMLLoader.load(getClass().getResource(fxml));
@@ -34,3 +39,4 @@ public class MainControllerRana {
         }
     }
 }
+

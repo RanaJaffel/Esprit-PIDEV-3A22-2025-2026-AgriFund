@@ -1,10 +1,19 @@
 package com.agrifund.controller;
 
 import com.agrifund.entities.releve_terrain;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
@@ -13,9 +22,15 @@ import javafx.stage.Stage;
 import com.agrifund.services.ApiMeteoService;
 import com.agrifund.services.ServiceReleveTerrain;
 
+import java.awt.event.ActionEvent;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ReleveController {
 
@@ -33,6 +48,11 @@ public class ReleveController {
     @FXML private TextField txtValeur;
     @FXML private TextField txtUnite;
     @FXML private TextField txtCapteur;
+    @FXML private TextField txtSearch;
+    @FXML private Label lblTotal;
+    @FXML private Label lblAnomalies;
+
+    private ObservableList<releve_terrain> masterData = FXCollections.observableArrayList();
 
 
     private final ServiceReleveTerrain service = new ServiceReleveTerrain();
@@ -50,7 +70,7 @@ public class ReleveController {
         colUnite.setCellValueFactory(new PropertyValueFactory<>("unite"));
         colCapteur.setCellValueFactory(new PropertyValueFactory<>("idCapteur"));
 
-        // ===== MÉTIER AVANCÉ : Détection anomalie =====
+
         colEtat.setCellValueFactory(cellData -> {
 
             releve_terrain r = cellData.getValue();
@@ -70,7 +90,7 @@ public class ReleveController {
             }
         });
 
-        // ===== STYLE VISUEL =====
+
         colEtat.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(String etat, boolean empty) {
@@ -101,45 +121,24 @@ public class ReleveController {
         } else {
             lblMeteo.setText("Erreur récupération météo");
         }
+        chart.setCreateSymbols(false);
     }
 
 
 
     private void chargerReleves() {
         try {
-            ObservableList<releve_terrain> list =
-                    FXCollections.observableArrayList(service.afficher());
-
-            tableReleve.setItems(list);
-            alimenterGraphique(list);
-
+            masterData = FXCollections.observableArrayList(service.afficher());
+            tableReleve.setItems(masterData);
+            alimenterGraphique(masterData);
+            updateStats(masterData);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
 
-    private void alimenterGraphique(List<releve_terrain> list) {
 
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Mesures IoT");
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-
-        for (releve_terrain r : list) {
-            if (r.getDateHeure() != null) {
-                series.getData().add(
-                        new XYChart.Data<>(
-                                r.getDateHeure().format(formatter),
-                                r.getValeurMesuree()
-                        )
-                );
-            }
-        }
-
-        chart.getData().clear();
-        chart.getData().add(series);
-    }
 
 
     private void gererSelection() {
@@ -177,7 +176,7 @@ public class ReleveController {
             double valeur = Double.parseDouble(txtValeur.getText());
             int idCapteur = Integer.parseInt(txtCapteur.getText());
 
-            // Création de l'objet relevé
+
             releve_terrain r = new releve_terrain(
                     txtType.getText().trim(),
                     valeur,
@@ -185,17 +184,16 @@ public class ReleveController {
                     idCapteur
             );
 
-            // ===== Sauvegarde en base =====
+
             service.ajouter(r);
 
-            // ===== Appel API météo =====
-            // On réutilise le champ "apiMeteoService" déclaré en haut du contrôleur
+
             double tempMeteo = apiMeteoService.getTemperature("Tunis");
 
             if (tempMeteo != -999) {
                 double ecart = Math.abs(valeur - tempMeteo);
 
-                if (ecart > 10) {  // seuil métier
+                if (ecart > 10) {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("Alerte Anomalie");
                     alert.setHeaderText("Écart important détecté !");
@@ -208,7 +206,7 @@ public class ReleveController {
                 }
             }
 
-            // Recharger l'affichage + vider les champs
+
             chargerReleves();
             viderChamps();
 
@@ -223,7 +221,7 @@ public class ReleveController {
     }
 
 
-    /* ===== UTILS ===== */
+
     private void marquerErreur(TextField... fields) {
         for (TextField f : fields) {
             f.setStyle("-fx-border-color:red;");
@@ -298,7 +296,7 @@ public class ReleveController {
     private void ouvrirRapports() {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/agrifund/fxml/rapport.fxml")
+                    getClass().getResource("/rapport.fxml")
             );
 
             Scene scene = new Scene(loader.load(), 900, 600);
@@ -314,6 +312,337 @@ public class ReleveController {
             e.printStackTrace();
         }
     }
+    @FXML
+    private void filtrerLive() {
+
+        if (txtSearch == null) return;
+
+        String filter = txtSearch.getText().toLowerCase();
+
+        ObservableList<releve_terrain> filtered =
+                masterData.filtered(r ->
+                        r.getTypeMesure().toLowerCase().contains(filter) ||
+                                String.valueOf(r.getIdCapteur()).contains(filter)
+                );
+
+        tableReleve.setItems(filtered);
+        alimenterGraphique(filtered);
+        updateStats(filtered);
+    }
+    @FXML
+    private void afficherAnomalies() {
+
+        ObservableList<releve_terrain> anomalies =
+                masterData.filtered(r ->
+                        {
+                            try {
+                                return service.detecterAnomalieStatistique(
+                                        r.getIdCapteur(),
+                                        r.getValeurMesuree()
+                                );
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                );
+
+        tableReleve.setItems(anomalies);
+        alimenterGraphique(anomalies);
+        updateStats(anomalies);
+    }
+    private void updateStats(List<releve_terrain> list) {
+
+        if (lblTotal == null || lblAnomalies == null) return;
+
+        long anomalies = list.stream()
+                .filter(r ->
+                        {
+                            try {
+                                return service.detecterAnomalieStatistique(
+                                        r.getIdCapteur(),
+                                        r.getValeurMesuree()
+                                );
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                ).count();
+
+        lblTotal.setText("Total: " + list.size());
+        lblAnomalies.setText("Anomalies: " + anomalies);
+    }
+    private void alimenterGraphique(List<releve_terrain> list) {
+
+        chart.getData().clear();
+
+
+        int maxPoints = 500;
+
+        List<releve_terrain> dataToShow;
+
+        if (list.size() > maxPoints) {
+            dataToShow = list.subList(
+                    list.size() - maxPoints,
+                    list.size()
+            );
+        } else {
+            dataToShow = list;
+        }
+
+        Map<Integer, List<releve_terrain>> grouped =
+                dataToShow.stream()
+                        .collect(Collectors.groupingBy(
+                                releve_terrain::getIdCapteur
+                        ));
+
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("HH:mm:ss");
+
+        for (Integer capteur : grouped.keySet()) {
+
+            XYChart.Series<String, Number> series =
+                    new XYChart.Series<>();
+
+            series.setName("Capteur " + capteur);
+
+            for (releve_terrain r : grouped.get(capteur)) {
+
+                if (r.getDateHeure() != null) {
+                    series.getData().add(
+                            new XYChart.Data<>(
+                                    r.getDateHeure().format(formatter),
+                                    r.getValeurMesuree()
+                            )
+                    );
+                }
+            }
+
+            chart.getData().add(series);
+        }
+    }
+    @FXML
+    private void exportPDF() {
+
+        try {
+
+            Document document = new Document();
+            PdfWriter.getInstance(document,
+                    new FileOutputStream("releves.pdf"));
+
+            document.open();
+
+
+            com.itextpdf.text.Font titleFont =
+                    new com.itextpdf.text.Font(
+                            com.itextpdf.text.Font.FontFamily.HELVETICA,
+                            18,
+                            com.itextpdf.text.Font.BOLD,
+                            new com.itextpdf.text.BaseColor(7, 106, 57) // #076A39
+                    );
+
+            Paragraph title =
+                    new Paragraph("RAPPORT RELEVÉS IoT", titleFont);
+
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+
+            document.add(new Paragraph("Date : "
+                    + java.time.LocalDate.now()));
+            document.add(new Paragraph(" "));
+
+
+            PdfPTable table = new PdfPTable(4);
+            table.setWidthPercentage(100);
+            table.setSpacingBefore(10);
+
+            float[] columnWidths = {3f, 2f, 2f, 2f};
+            table.setWidths(columnWidths);
+
+
+            addHeaderCell(table, "Type");
+            addHeaderCell(table, "Valeur");
+            addHeaderCell(table, "Unité");
+            addHeaderCell(table, "Capteur");
+
+            boolean alternate = false;
+
+            for (releve_terrain r : tableReleve.getItems()) {
+
+                com.itextpdf.text.BaseColor bg =
+                        alternate
+                                ? new com.itextpdf.text.BaseColor(245, 245, 240) // #F5F5F0
+                                : com.itextpdf.text.BaseColor.WHITE;
+
+                addBodyCell(table, r.getTypeMesure(), bg);
+                addBodyCell(table,
+                        String.valueOf(r.getValeurMesuree()), bg);
+                addBodyCell(table, r.getUnite(), bg);
+                addBodyCell(table,
+                        String.valueOf(r.getIdCapteur()), bg);
+
+                alternate = !alternate;
+            }
+
+            document.add(table);
+            document.close();
+
+            new Alert(Alert.AlertType.INFORMATION,
+                    "PDF généré ✅").show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    private void exportCSV() {
+
+        try (PrintWriter writer =
+                     new PrintWriter("releves.csv", "UTF-8")) {
+
+            writer.println("=================================================");
+            writer.println("                RAPPORT RELEVÉS IoT              ");
+            writer.println("=================================================");
+            writer.println("Date : " + java.time.LocalDate.now());
+            writer.println("");
+
+
+            writer.println("Type;Valeur;Unité;Capteur");
+
+            for (releve_terrain r : tableReleve.getItems()) {
+
+                String type = safe(r.getTypeMesure());
+                String valeur = String.valueOf(r.getValeurMesuree());
+                String unite = safe(r.getUnite());
+                String capteur = String.valueOf(r.getIdCapteur());
+
+                writer.println(type + ";"
+                        + valeur + ";"
+                        + unite + ";"
+                        + capteur);
+            }
+
+            writer.println("");
+            writer.println("Total relevés : "
+                    + tableReleve.getItems().size());
+
+            new Alert(Alert.AlertType.INFORMATION,
+                    "CSV exporté avec succès ✅").show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR,
+                    "Erreur lors de l'export CSV").show();
+        }
+    }
+    @FXML
+    private void analyseIA() {
+
+        releve_terrain selected =
+                tableReleve.getSelectionModel().getSelectedItem();
+
+        if (selected == null) {
+            new Alert(Alert.AlertType.WARNING,
+                    "Sélectionnez un relevé").show();
+            return;
+        }
+
+        try {
+
+            String analyse =
+                    service.analyseIntelligente(
+                            selected.getIdCapteur(),
+                            selected.getValeurMesuree()
+                    );
+
+            Alert alert =
+                    new Alert(Alert.AlertType.INFORMATION);
+
+            alert.setHeaderText("Analyse intelligente locale");
+            alert.setContentText(analyse);
+            alert.getDialogPane().setPrefWidth(450);
+            alert.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    public void allerMeteo(javafx.event.ActionEvent actionEvent) {
+
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/agrifund/view/Meteo.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    private void predictionLocale() {
+
+        releve_terrain selected =
+                tableReleve.getSelectionModel().getSelectedItem();
+
+        if (selected == null) return;
+
+        try {
+
+            double prediction =
+                    service.predictionSimple(
+                            selected.getIdCapteur()
+                    );
+
+            new Alert(Alert.AlertType.INFORMATION,
+                    "Prochaine valeur estimée : "
+                            + prediction).show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private void addHeaderCell(PdfPTable table, String text) {
+
+        com.itextpdf.text.Font font =
+                new com.itextpdf.text.Font(
+                        com.itextpdf.text.Font.FontFamily.HELVETICA,
+                        12,
+                        com.itextpdf.text.Font.BOLD,
+                        com.itextpdf.text.BaseColor.WHITE
+                );
+
+        PdfPCell cell = new PdfPCell(new Phrase(text, font));
+        cell.setBackgroundColor(
+                new com.itextpdf.text.BaseColor(8, 150, 71) // #089647
+        );
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setPadding(8);
+
+        table.addCell(cell);
+    }
+
+    private void addBodyCell(PdfPTable table,
+                             String text,
+                             com.itextpdf.text.BaseColor bg) {
+
+        com.itextpdf.text.Font font =
+                new com.itextpdf.text.Font(
+                        com.itextpdf.text.Font.FontFamily.HELVETICA,
+                        11
+                );
+
+        PdfPCell cell = new PdfPCell(new Phrase(text, font));
+        cell.setBackgroundColor(bg);
+        cell.setPadding(6);
+
+        table.addCell(cell);
+    }
+
+
+    private String safe(String value) {
+        return value == null ? "" : value.replace(";", ",");
+    }
+
 
 
 }

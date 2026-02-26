@@ -4,7 +4,7 @@ import java.net.URI;
 import java.net.URL;
 import java.sql.*;
 public class MyDabase {
-    final String URL ="jdbc:mysql://localhost:3306/agrifund";
+    final String URL ="jdbc:mysql://localhost:3306/pidev2";
     final String USER ="root";
     final String PASS ="";
 
