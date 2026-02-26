@@ -619,9 +619,6 @@ public class RisqueListController {
         }
     }
 
-    // ═════════════════════════════════════════════════════════════════════════
-    //  UTILITAIRES
-    // ═════════════════════════════════════════════════════════════════════════
 
     private String getRecommandationString(int r) {
         switch (r) {
