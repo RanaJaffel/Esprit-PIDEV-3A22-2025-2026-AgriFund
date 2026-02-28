@@ -73,15 +73,6 @@
             <Button fx:id="btnSatellite" text="🛰  Satellite" styleClass="sidebar-menu-item"
                     onAction="#goToSatellite" maxWidth="Infinity"/>
 
-            <!-- IoT & RAPPORTS -->
-            <Label text="IoT &amp; RAPPORTS" styleClass="sidebar-section-title"/>
-            <Button fx:id="btnCapteurs" text="📡  Capteurs" styleClass="sidebar-menu-item"
-                    onAction="#goToCapteurs" maxWidth="Infinity"/>
-            <Button fx:id="btnDashboardIoT" text="📈  Dashboard IoT" styleClass="sidebar-menu-item"
-                    onAction="#goToDashboardIoT" maxWidth="Infinity"/>
-            <Button fx:id="btnRapports" text="📝  Rapports" styleClass="sidebar-menu-item"
-                    onAction="#goToRapports" maxWidth="Infinity"/>
-
             <!-- COMMUNICATION -->
             <Label text="COMMUNICATION" styleClass="sidebar-section-title"/>
             <Button fx:id="btnMessagerie" text="💬  Messagerie" styleClass="sidebar-menu-item"

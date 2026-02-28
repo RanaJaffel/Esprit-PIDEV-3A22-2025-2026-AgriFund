@@ -169,7 +169,7 @@ public class projectagriculteurcontroller implements Initializable {
     // ============================================================================
     // 🌿 ASSISTANT PLANTE MALADE — GROQ AI VISION
     // ============================================================================
-    private static String GROQ_API_KEY = "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";
+    private static String GROQ_API_KEY = "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";
 
     private static final String[] GROQ_VISION_MODELS = {
             "meta-llama/llama-4-scout-17b-16e-instruct",

@@ -62,12 +62,6 @@
             <Button fx:id="btnRessources" text="🌿  Ressources" styleClass="sidebar-menu-item"
                     onAction="#goToRessources" maxWidth="Infinity"/>
 
-            <!-- DÉCISIONS & RISQUES -->
-            <Label text="DÉCISIONS &amp; RISQUES" styleClass="sidebar-section-title"/>
-            <Button fx:id="btnDecisions" text="⚖  Décisions" styleClass="sidebar-menu-item"
-                    onAction="#goToDecisions" maxWidth="Infinity"/>
-            <Button fx:id="btnRisques" text="📊  Risques" styleClass="sidebar-menu-item"
-                    onAction="#goToRisques" maxWidth="Infinity"/>
 
             <!-- IoT & RAPPORTS -->
             <Label text="IoT &amp; RAPPORTS" styleClass="sidebar-section-title"/>
