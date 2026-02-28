@@ -5,9 +5,11 @@ import com.agrifund.util.MyDabase;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-public class ServiceCapteur implements InterfaceCRUD<capteur> {
+public class ServiceCapteur implements com.agrifund.services.intCrud<capteur> {
 
     private final Connection con = MyDabase.getInstance().getCon();
 
@@ -59,7 +61,6 @@ public class ServiceCapteur implements InterfaceCRUD<capteur> {
         String req = "SELECT * FROM capteur ORDER BY id_capteur DESC";
         Statement st = con.createStatement();
         ResultSet rs = st.executeQuery(req);
-
         while (rs.next()) {
             capteur c = new capteur();
             c.setIdCapteur(rs.getInt("id_capteur"));
@@ -70,14 +71,81 @@ public class ServiceCapteur implements InterfaceCRUD<capteur> {
             c.setIdProjet(rs.wasNull() ? null : idp);
             list.add(c);
         }
-
         return list;
     }
 
-    // ✅ NOUVELLE MÉTHODE — récupère les IDs projets depuis la table projet
+    // =====================================================
+    // NOUVELLE MÉTHODE : Capteurs par Agriculteur
+    // =====================================================
+    public List<capteur> afficherParAgriculteur(int agriculteurId) throws SQLException {
+        List<capteur> list = new ArrayList<>();
+        String req = """
+            SELECT c.* FROM capteur c
+            INNER JOIN projectagricole p ON c.idproject = p.idproject
+            WHERE p.agriculteur_id = ?
+            ORDER BY c.id_capteur DESC
+        """;
+        PreparedStatement ps = con.prepareStatement(req);
+        ps.setInt(1, agriculteurId);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            capteur c = new capteur();
+            c.setIdCapteur(rs.getInt("id_capteur"));
+            c.setTypeCapteur(rs.getString("typeCapteur"));
+            c.setLocalisation(rs.getString("localisation"));
+            c.setStatut(rs.getString("statut"));
+            int idp = rs.getInt("idproject");
+            c.setIdProjet(rs.wasNull() ? null : idp);
+            list.add(c);
+        }
+        return list;
+    }
+
+    // =====================================================
+    // NOUVELLE MÉTHODE : Projets par Agriculteur
+    // =====================================================
+    public Map<Integer, String> getProjetsMapByAgriculteur(int agriculteurId) throws SQLException {
+        Map<Integer, String> map = new LinkedHashMap<>();
+        String req = "SELECT idproject, nomproject FROM projectagricole WHERE agriculteur_id = ? ORDER BY nomproject";
+        PreparedStatement ps = con.prepareStatement(req);
+        ps.setInt(1, agriculteurId);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            map.put(rs.getInt("idproject"), rs.getString("nomproject"));
+        }
+        return map;
+    }
+
+    // =====================================================
+    // NOUVELLE MÉTHODE : Tous les capteurs avec infos agriculteur (pour Admin)
+    // =====================================================
+    public List<Map<String, Object>> afficherTousAvecAgriculteur() throws SQLException {
+        List<Map<String, Object>> list = new ArrayList<>();
+        String req = """
+            SELECT c.*, p.nomproject, u.nom as agriculteur_nom, u.prenom as agriculteur_prenom
+            FROM capteur c
+            LEFT JOIN projectagricole p ON c.idproject = p.idproject
+            LEFT JOIN agriculteur a ON p.agriculteur_id = a.id
+            LEFT JOIN utilisateur u ON a.utilisateur_id = u.id
+            ORDER BY c.id_capteur DESC
+        """;
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery(req);
+        while (rs.next()) {
+            Map<String, Object> row = new LinkedHashMap<>();
+            row.put("idCapteur", rs.getInt("id_capteur"));
+            row.put("typeCapteur", rs.getString("typeCapteur"));
+            row.put("localisation", rs.getString("localisation"));
+            row.put("statut", rs.getString("statut"));
+            row.put("nomProjet", rs.getString("nomproject"));
+            row.put("agriculteur", rs.getString("agriculteur_prenom") + " " + rs.getString("agriculteur_nom"));
+            list.add(row);
+        }
+        return list;
+    }
+
     public List<Integer> getIdsProjets() throws SQLException {
         List<Integer> ids = new ArrayList<>();
-        // ⚠️ Adapte "projet" et "id_projet" selon ta vraie table
         String req = "SELECT idproject FROM projectagricole ORDER BY idproject";
         Statement st = con.createStatement();
         ResultSet rs = st.executeQuery(req);
@@ -87,6 +155,27 @@ public class ServiceCapteur implements InterfaceCRUD<capteur> {
         return ids;
     }
 
+    public Map<Integer, String> getProjetsMap() throws SQLException {
+        Map<Integer, String> map = new LinkedHashMap<>();
+        String req = "SELECT idproject, nomproject FROM projectagricole ORDER BY nomproject";
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery(req);
+        while (rs.next()) {
+            map.put(rs.getInt("idproject"), rs.getString("nomproject"));
+        }
+        return map;
+    }
+
+    public String getNomProjetById(int idProjet) throws SQLException {
+        String req = "SELECT nomproject FROM projectagricole WHERE idproject = ?";
+        PreparedStatement ps = con.prepareStatement(req);
+        ps.setInt(1, idProjet);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getString("nomproject");
+        }
+        return "Projet #" + idProjet;
+    }
 
     public String getLocalisationById(int idCapteur) throws SQLException {
         String req = "SELECT localisation FROM capteur WHERE id_capteur = ?";
@@ -126,24 +215,32 @@ public class ServiceCapteur implements InterfaceCRUD<capteur> {
         }
         return 0;
     }
-    // ===== MÉTIER AVANCÉ =====
-// Met automatiquement INACTIF les capteurs
-// qui n'ont pas envoyé de relevé depuis 24h
+
+    public int countCapteursActifsByAgriculteur(int agriculteurId) throws SQLException {
+        String req = """
+            SELECT COUNT(*) as total FROM capteur c
+            INNER JOIN projectagricole p ON c.idproject = p.idproject
+            WHERE p.agriculteur_id = ? AND c.statut = 'ACTIF'
+        """;
+        PreparedStatement ps = con.prepareStatement(req);
+        ps.setInt(1, agriculteurId);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt("total");
+        }
+        return 0;
+    }
 
     public void verifierEtatCapteurs() throws SQLException {
-
         String sql = """
-        UPDATE capteur c
-        LEFT JOIN releve_terrain r
-            ON c.id_capteur = r.id_capteur
-        SET c.statut = 'INACTIF'
-        WHERE r.date_heure IS NULL
-           OR r.date_heure < NOW() - INTERVAL 1 DAY
-    """;
-
+            UPDATE capteur c
+            LEFT JOIN releve_terrain r ON c.id_capteur = r.id_capteur
+            SET c.statut = 'INACTIF'
+            WHERE r.date_heure IS NULL
+               OR r.date_heure < NOW() - INTERVAL 1 DAY
+        """;
         PreparedStatement pst = con.prepareStatement(sql);
         pst.executeUpdate();
-
         System.out.println("🔎 Vérification automatique des capteurs terminée");
     }
 }

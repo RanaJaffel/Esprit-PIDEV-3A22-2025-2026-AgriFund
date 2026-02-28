@@ -11,6 +11,8 @@ import com.agrifund.services.AIService;
 import com.agrifund.services.ServiceEvaluationRisque;
 import com.agrifund.services.ServiceProjectAgricoleChedy;
 
+import com.agrifund.services.ServiceProjectAgricoleChedy;
+
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -25,7 +27,7 @@ public class RisqueController {
     @FXML private TextField tfScoreGlobal;
     @FXML private ComboBox<String> cbNiveauRisque;
     @FXML private ComboBox<String> cbFiabiliteDonnees;
-    @FXML private TextField tfFacteurPrincipal;
+    @FXML private TextArea tfFacteurPrincipal;  // Changé de TextField à TextArea
     @FXML private ComboBox<String> cbRecommandation;
     @FXML private DatePicker dpDateEvaluation;
     @FXML private Label lblStatus;
@@ -84,13 +86,8 @@ public class RisqueController {
     }
 
     private void loadProjetIds() {
-        try {
-            List<Integer> projetIds = new ServiceProjectAgricoleChedy().getAllProjectIds();
-            cbIdProjet.getItems().setAll(projetIds);
-        } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger les projets: " + e.getMessage());
-            e.printStackTrace();
-        }
+        List<Integer> projetIds = new ServiceProjectAgricoleChedy().getAllProjectIds();
+        cbIdProjet.getItems().setAll(projetIds);
     }
 
     @FXML
@@ -140,7 +137,7 @@ public class RisqueController {
         if (tfScoreGlobal.getText().isEmpty()) errors.append("- Le score global est obligatoire\n");
         if (cbNiveauRisque.getValue() == null) errors.append("- Le niveau de risque est obligatoire\n");
         if (cbFiabiliteDonnees.getValue() == null) errors.append("- La fiabilité des données est obligatoire\n");
-        if (tfFacteurPrincipal.getText().isEmpty()) errors.append("- Le facteur principal est obligatoire\n");
+        if (tfFacteurPrincipal.getText().isEmpty()) errors.append("- Les facteurs principaux sont obligatoires\n");
         if (cbRecommandation.getValue() == null) errors.append("- La recommandation est obligatoire\n");
         if (dpDateEvaluation.getValue() == null) errors.append("- La date d'évaluation est obligatoire\n");
         if (cbIdProjet.getValue() == null) errors.append("- Le projet est obligatoire\n");
@@ -186,8 +183,8 @@ public class RisqueController {
                 cbRecommandation.setValue(getRecommandationString(evaluation.getRecommandation()));
                 cbIdProjet.setValue(evaluation.getIdProjet());
 
-                dpDateEvaluation.setValue(evaluation.getDateEvaluation()
-                        .toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+                java.sql.Date sqlDate = new java.sql.Date(evaluation.getDateEvaluation().getTime());
+                dpDateEvaluation.setValue(sqlDate.toLocalDate());
 
                 updateStatus("Modification en cours");
             } else {

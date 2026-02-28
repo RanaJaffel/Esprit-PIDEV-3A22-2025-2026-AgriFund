@@ -7,6 +7,11 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.agrifund.controller.admin.AdminProfileController"
             stylesheets="@../../css/styles.css">
+    <!-- SIDEBAR -->
+    <left>
+        <fx:include source="admin-sidebar.fxml"/>
+    </left>
+
 
     <!-- MAIN CONTENT -->
     <center>

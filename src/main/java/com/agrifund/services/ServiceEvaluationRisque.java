@@ -17,7 +17,9 @@ public class ServiceEvaluationRisque implements InterfaceCRUD<EvaluationRisque> 
 
     @Override
     public void ajouter(EvaluationRisque evaluation) throws SQLException {
-        String req = "INSERT INTO evaluationrisque (scoreGlobal, niveauRisque, fiabiliteDonnees, facteurPrincipal, recommandation, dateEvaluation, idProjet) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String req = "INSERT INTO evaluationrisque (scoreGlobal, niveauRisque, fiabiliteDonnees, " +
+                "facteurPrincipal, recommandation, dateEvaluation, idProjet, banqueId) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pst = connection.prepareStatement(req)) {
             pst.setInt(1, evaluation.getScoreGlobal());
@@ -27,20 +29,18 @@ public class ServiceEvaluationRisque implements InterfaceCRUD<EvaluationRisque> 
             pst.setInt(5, evaluation.getRecommandation());
             pst.setDate(6, new java.sql.Date(evaluation.getDateEvaluation().getTime()));
             pst.setInt(7, evaluation.getIdProjet());
+            pst.setInt(8, evaluation.getBanqueId());
 
-            int rowsAffected = pst.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Évaluation ajoutée avec succès!");
-            }
-        } catch (SQLException e) {
-            System.err.println("Erreur lors de l'ajout de l'évaluation");
-            throw e;
+            pst.executeUpdate();
+            System.out.println("✅ Évaluation ajoutée avec succès!");
         }
     }
 
     @Override
     public void modifier(EvaluationRisque evaluation) throws SQLException {
-        String req = "UPDATE evaluationrisque SET scoreGlobal = ?, niveauRisque = ?, fiabiliteDonnees = ?, facteurPrincipal = ?, recommandation = ?, dateEvaluation = ?, idProjet = ? WHERE idEvaluation = ?";
+        String req = "UPDATE evaluationrisque SET scoreGlobal=?, niveauRisque=?, fiabiliteDonnees=?, " +
+                "facteurPrincipal=?, recommandation=?, dateEvaluation=?, idProjet=? " +
+                "WHERE idEvaluation=? AND banqueId=?";
 
         try (PreparedStatement pst = connection.prepareStatement(req)) {
             pst.setInt(1, evaluation.getScoreGlobal());
@@ -51,35 +51,30 @@ public class ServiceEvaluationRisque implements InterfaceCRUD<EvaluationRisque> 
             pst.setDate(6, new java.sql.Date(evaluation.getDateEvaluation().getTime()));
             pst.setInt(7, evaluation.getIdProjet());
             pst.setInt(8, evaluation.getIdEvaluation());
+            pst.setInt(9, evaluation.getBanqueId());
 
-            int rowsAffected = pst.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Évaluation modifiée avec succès! ID: " + evaluation.getIdEvaluation());
-            } else {
-                System.out.println("Aucune évaluation trouvée avec cet ID: " + evaluation.getIdEvaluation());
-            }
-        } catch (SQLException e) {
-            System.err.println("Erreur lors de la modification de l'évaluation: " + e.getMessage());
-            throw e;
+            pst.executeUpdate();
         }
     }
 
     @Override
     public void supprimer(int id) throws SQLException {
-        String req = "DELETE FROM evaluationrisque WHERE idEvaluation = ?";
-
+        String req = "DELETE FROM evaluationrisque WHERE idEvaluation=?";
         try (PreparedStatement pst = connection.prepareStatement(req)) {
             pst.setInt(1, id);
+            pst.executeUpdate();
+        }
+    }
 
-            int rowsAffected = pst.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Évaluation supprimée avec succès!");
-            } else {
-                System.out.println("Aucune évaluation trouvée avec cet ID");
-            }
-        } catch (SQLException e) {
-            System.err.println("Erreur lors de la suppression de l'évaluation");
-            throw e;
+    /**
+     * ✅ Supprimer avec vérification de la banque
+     */
+    public void supprimerParBanque(int idEvaluation, int banqueId) throws SQLException {
+        String req = "DELETE FROM evaluationrisque WHERE idEvaluation=? AND banqueId=?";
+        try (PreparedStatement pst = connection.prepareStatement(req)) {
+            pst.setInt(1, idEvaluation);
+            pst.setInt(2, banqueId);
+            pst.executeUpdate();
         }
     }
 
@@ -90,25 +85,28 @@ public class ServiceEvaluationRisque implements InterfaceCRUD<EvaluationRisque> 
 
         try (Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(req)) {
-
             while (rs.next()) {
-                EvaluationRisque evaluation = new EvaluationRisque(
-                        rs.getInt("idEvaluation"),
-                        rs.getInt("scoreGlobal"),
-                        rs.getString("niveauRisque"),
-                        rs.getString("fiabiliteDonnees"),
-                        rs.getString("facteurPrincipal"),
-                        rs.getInt("recommandation"),
-                        rs.getDate("dateEvaluation"),
-                        rs.getInt("idProjet")
-                );
-                evaluations.add(evaluation);
+                evaluations.add(mapResultSet(rs));
             }
-        } catch (SQLException e) {
-            System.err.println("Erreur lors de l'affichage des évaluations");
-            throw e;
         }
+        return evaluations;
+    }
 
+    /**
+     * ✅ NOUVEAU - Afficher uniquement les évaluations d'une banque spécifique
+     */
+    public List<EvaluationRisque> afficherParBanque(int banqueId) throws SQLException {
+        List<EvaluationRisque> evaluations = new ArrayList<>();
+        String req = "SELECT * FROM evaluationrisque WHERE banqueId = ?";
+
+        try (PreparedStatement pst = connection.prepareStatement(req)) {
+            pst.setInt(1, banqueId);
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    evaluations.add(mapResultSet(rs));
+                }
+            }
+        }
         return evaluations;
     }
 
@@ -117,27 +115,31 @@ public class ServiceEvaluationRisque implements InterfaceCRUD<EvaluationRisque> 
 
         try (PreparedStatement pst = connection.prepareStatement(req)) {
             pst.setInt(1, idEvaluation);
-
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
-                    return new EvaluationRisque(
-                            rs.getInt("idEvaluation"),
-                            rs.getInt("scoreGlobal"),
-                            rs.getString("niveauRisque"),
-                            rs.getString("fiabiliteDonnees"),
-                            rs.getString("facteurPrincipal"),
-                            rs.getInt("recommandation"),
-                            rs.getDate("dateEvaluation"),
-                            rs.getInt("idProjet")
-                    );
+                    return mapResultSet(rs);
                 }
             }
-        } catch (SQLException e) {
-            System.err.println("Erreur lors de la récupération de l'évaluation: " + e.getMessage());
-            throw e;
         }
-
         return null;
+    }
+
+    /**
+     * ✅ NOUVEAU - Récupérer les IDs d'évaluation d'une banque spécifique
+     */
+    public List<Integer> getEvaluationIdsByBanque(int banqueId) throws SQLException {
+        List<Integer> ids = new ArrayList<>();
+        String req = "SELECT idEvaluation FROM evaluationrisque WHERE banqueId = ?";
+
+        try (PreparedStatement pst = connection.prepareStatement(req)) {
+            pst.setInt(1, banqueId);
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    ids.add(rs.getInt("idEvaluation"));
+                }
+            }
+        }
+        return ids;
     }
 
     public List<Integer> getAllEvaluationIds() throws SQLException {
@@ -150,5 +152,19 @@ public class ServiceEvaluationRisque implements InterfaceCRUD<EvaluationRisque> 
             }
         }
         return evaluationIds;
+    }
+
+    private EvaluationRisque mapResultSet(ResultSet rs) throws SQLException {
+        return new EvaluationRisque(
+                rs.getInt("idEvaluation"),
+                rs.getInt("scoreGlobal"),
+                rs.getString("niveauRisque"),
+                rs.getString("fiabiliteDonnees"),
+                rs.getString("facteurPrincipal"),
+                rs.getInt("recommandation"),
+                rs.getDate("dateEvaluation"),
+                rs.getInt("idProjet"),
+                rs.getInt("banqueId")
+        );
     }
 }

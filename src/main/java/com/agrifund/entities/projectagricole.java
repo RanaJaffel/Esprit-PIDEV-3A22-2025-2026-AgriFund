@@ -5,6 +5,7 @@ import java.sql.Date;
 
 public class projectagricole {
     private int idproject;
+    private int agriculteurId;
     private String nomproject;
     private float surface;
     private BigDecimal budgetdemande;
@@ -13,9 +14,13 @@ public class projectagricole {
     private Double latitude;
     private Double longitude;
 
+    // Constructeur vide
     public projectagricole() {}
 
-    public projectagricole(String nomproject, float surface, BigDecimal budgetdemande, String statut, Date datesoumission) {
+    // ✅ Constructeur SANS idproject (pour ajout)
+    public projectagricole(int agriculteurId, String nomproject, float surface,
+                           BigDecimal budgetdemande, String statut, Date datesoumission) {
+        this.agriculteurId = agriculteurId;
         this.nomproject = nomproject;
         this.surface = surface;
         this.budgetdemande = budgetdemande;
@@ -23,8 +28,11 @@ public class projectagricole {
         this.datesoumission = datesoumission;
     }
 
-    public projectagricole(int idproject, String nomproject, float surface, BigDecimal budgetdemande, String statut, Date datesoumission) {
+    // ✅ Constructeur AVEC idproject (pour modification/lecture)
+    public projectagricole(int idproject, int agriculteurId, String nomproject, float surface,
+                           BigDecimal budgetdemande, String statut, Date datesoumission) {
         this.idproject = idproject;
+        this.agriculteurId = agriculteurId;
         this.nomproject = nomproject;
         this.surface = surface;
         this.budgetdemande = budgetdemande;
@@ -32,8 +40,12 @@ public class projectagricole {
         this.datesoumission = datesoumission;
     }
 
-    public projectagricole(int idproject, String nomproject, float surface, BigDecimal budgetdemande, String statut, Date datesoumission, Double latitude, Double longitude) {
+    // ✅ Constructeur COMPLET avec latitude/longitude
+    public projectagricole(int idproject, int agriculteurId, String nomproject, float surface,
+                           BigDecimal budgetdemande, String statut, Date datesoumission,
+                           Double latitude, Double longitude) {
         this.idproject = idproject;
+        this.agriculteurId = agriculteurId;
         this.nomproject = nomproject;
         this.surface = surface;
         this.budgetdemande = budgetdemande;
@@ -43,8 +55,12 @@ public class projectagricole {
         this.longitude = longitude;
     }
 
+    // Getters et Setters
     public int getIdproject() { return idproject; }
     public void setIdproject(int idproject) { this.idproject = idproject; }
+
+    public int getAgriculteurId() { return agriculteurId; }
+    public void setAgriculteurId(int agriculteurId) { this.agriculteurId = agriculteurId; }
 
     public String getNomproject() { return nomproject; }
     public void setNomproject(String nomproject) { this.nomproject = nomproject; }
@@ -75,6 +91,7 @@ public class projectagricole {
     public String toString() {
         return "projectagricole{" +
                 "idproject=" + idproject +
+                ", agriculteurId=" + agriculteurId +
                 ", nomproject='" + nomproject + '\'' +
                 ", surface=" + surface +
                 ", budgetdemande=" + budgetdemande +

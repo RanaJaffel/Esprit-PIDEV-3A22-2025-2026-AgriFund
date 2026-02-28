@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.SVGPath?>
 
-<VBox prefHeight="700.0" prefWidth="500.0" spacing="0" stylesheets="@../css/style-rayen.css"
+<VBox prefHeight="700.0" prefWidth="500.0" spacing="0" stylesheets="@stylerayen.css"
       xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.agrifund.controller.projectagricolecontroller">
 

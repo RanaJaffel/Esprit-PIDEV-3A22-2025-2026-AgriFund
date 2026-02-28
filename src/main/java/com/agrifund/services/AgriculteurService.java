@@ -1,8 +1,8 @@
 package com.agrifund.services;
+
 import com.agrifund.entities.Agriculteur;
-import com.agrifund.entities.Utilisateur;
 import com.agrifund.util.DatabaseConnection;
-import java.math.BigDecimal;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +29,11 @@ public class AgriculteurService {
         int agriculteurId = -1;
 
         try {
-            // Désactiver l'auto-commit pour gérer la transaction
             connection.setAutoCommit(false);
 
-            // 1. Insérer dans la table Utilisateur
             int utilisateurId = utilisateurService.ajouter(agriculteur);
 
             if (utilisateurId > 0) {
-                // 2. Insérer dans la table Agriculteur
                 String sqlAgri = "INSERT INTO Agriculteur (utilisateur_id, adresseferme, " +
                         "superficieferme, typeCulture, statuscompte, compteverifie) " +
                         "VALUES (?, ?, ?, ?, ?, ?)";
@@ -61,18 +58,15 @@ public class AgriculteurService {
                     rs.close();
                 }
 
-                // Valider la transaction
                 connection.commit();
                 System.out.println("✓ Agriculteur inscrit avec succès! ID: " + agriculteurId);
             }
 
         } catch (SQLException e) {
-            // Annuler la transaction en cas d'erreur
             connection.rollback();
             System.err.println("✗ Erreur lors de l'inscription: " + e.getMessage());
             throw e;
         } finally {
-            // Réactiver l'auto-commit
             connection.setAutoCommit(true);
             if (pstAgri != null) pstAgri.close();
         }
@@ -90,10 +84,8 @@ public class AgriculteurService {
         PreparedStatement pst = null;
 
         try {
-            // Mettre à jour la table Utilisateur
             utilisateurService.modifier(agriculteur);
 
-            // Mettre à jour la table Agriculteur
             pst = connection.prepareStatement(sql);
             pst.setString(1, agriculteur.getAdresseFerme());
             pst.setBigDecimal(2, agriculteur.getSuperficieFerme());
@@ -147,31 +139,7 @@ public class AgriculteurService {
             rs = st.executeQuery(sql);
 
             while (rs.next()) {
-                Agriculteur agri = new Agriculteur();
-
-                // Données Agriculteur
-                agri.setAgriculteurId(rs.getInt("a.id"));
-                agri.setUtilisateurId(rs.getInt("utilisateur_id"));
-                agri.setAdresseFerme(rs.getString("adresseferme"));
-                agri.setSuperficieFerme(rs.getBigDecimal("superficieferme"));
-                agri.setTypeCulture(rs.getString("typeCulture"));
-                agri.setStatusCompte(rs.getString("statuscompte"));
-                agri.setCompteVerifie(rs.getBoolean("compteverifie"));
-
-                // Données Utilisateur
-                agri.setId(rs.getInt("utilisateur_id"));
-                agri.setNom(rs.getString("nom"));
-                agri.setPrenom(rs.getString("prenom"));
-                agri.setEmail(rs.getString("email"));
-                agri.setTel(rs.getString("tel"));
-
-                Timestamp timestamp = rs.getTimestamp("date_inscrit");
-                if (timestamp != null) {
-                    agri.setDateInscrit(timestamp.toLocalDateTime());
-                }
-
-                agri.setPhoto(rs.getString("photo"));
-
+                Agriculteur agri = mapResultSetToAgriculteur(rs);
                 agriculteurs.add(agri);
             }
 
@@ -183,6 +151,36 @@ public class AgriculteurService {
         }
 
         return agriculteurs;
+    }
+
+    /**
+     * ✅ RECHERCHER un agriculteur par son ID agriculteur
+     */
+    public Agriculteur rechercherParId(int agriculteurId) throws SQLException {
+        String sql = "SELECT a.*, u.nom, u.prenom, u.email, u.tel, u.date_inscrit, u.photo " +
+                "FROM Agriculteur a " +
+                "INNER JOIN Utilisateur u ON a.utilisateur_id = u.id " +
+                "WHERE a.id = ?";
+
+        Agriculteur agri = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+
+        try {
+            pst = connection.prepareStatement(sql);
+            pst.setInt(1, agriculteurId);
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
+                agri = mapResultSetToAgriculteur(rs);
+            }
+
+        } finally {
+            if (rs != null) rs.close();
+            if (pst != null) pst.close();
+        }
+
+        return agri;
     }
 
     /**
@@ -204,28 +202,7 @@ public class AgriculteurService {
             rs = pst.executeQuery();
 
             if (rs.next()) {
-                agri = new Agriculteur();
-
-                agri.setAgriculteurId(rs.getInt("id"));
-                agri.setUtilisateurId(rs.getInt("utilisateur_id"));
-                agri.setAdresseFerme(rs.getString("adresseferme"));
-                agri.setSuperficieFerme(rs.getBigDecimal("superficieferme"));
-                agri.setTypeCulture(rs.getString("typeCulture"));
-                agri.setStatusCompte(rs.getString("statuscompte"));
-                agri.setCompteVerifie(rs.getBoolean("compteverifie"));
-
-                agri.setId(utilisateurId);
-                agri.setNom(rs.getString("nom"));
-                agri.setPrenom(rs.getString("prenom"));
-                agri.setEmail(rs.getString("email"));
-                agri.setTel(rs.getString("tel"));
-
-                Timestamp timestamp = rs.getTimestamp("date_inscrit");
-                if (timestamp != null) {
-                    agri.setDateInscrit(timestamp.toLocalDateTime());
-                }
-
-                agri.setPhoto(rs.getString("photo"));
+                agri = mapResultSetToAgriculteur(rs);
             }
 
         } finally {
@@ -240,8 +217,38 @@ public class AgriculteurService {
      * SUPPRIMER un agriculteur
      */
     public void supprimer(int utilisateurId) throws SQLException {
-        // Grâce à ON DELETE CASCADE, la suppression de l'utilisateur
-        // supprimera automatiquement l'agriculteur
         utilisateurService.supprimer(utilisateurId);
+    }
+
+    /**
+     * ✅ Méthode utilitaire pour mapper un ResultSet vers un Agriculteur
+     */
+    private Agriculteur mapResultSetToAgriculteur(ResultSet rs) throws SQLException {
+        Agriculteur agri = new Agriculteur();
+
+        // Données Agriculteur
+        agri.setAgriculteurId(rs.getInt("id"));
+        agri.setUtilisateurId(rs.getInt("utilisateur_id"));
+        agri.setAdresseFerme(rs.getString("adresseferme"));
+        agri.setSuperficieFerme(rs.getBigDecimal("superficieferme"));
+        agri.setTypeCulture(rs.getString("typeCulture"));
+        agri.setStatusCompte(rs.getString("statuscompte"));
+        agri.setCompteVerifie(rs.getBoolean("compteverifie"));
+
+        // Données Utilisateur
+        agri.setId(rs.getInt("utilisateur_id"));
+        agri.setNom(rs.getString("nom"));
+        agri.setPrenom(rs.getString("prenom"));
+        agri.setEmail(rs.getString("email"));
+        agri.setTel(rs.getString("tel"));
+
+        Timestamp timestamp = rs.getTimestamp("date_inscrit");
+        if (timestamp != null) {
+            agri.setDateInscrit(timestamp.toLocalDateTime());
+        }
+
+        agri.setPhoto(rs.getString("photo"));
+
+        return agri;
     }
 }

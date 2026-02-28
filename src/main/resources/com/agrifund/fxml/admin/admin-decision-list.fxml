@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.agrifund.controller.admin.AdminDecisionListController"
+            prefWidth="1500" prefHeight="850"
+            styleClass="root"
+            stylesheets="@admin-styles.css">
+
+    <!-- Sidebar Admin -->
+    <left>
+        <fx:include source="/com/agrifund/fxml/admin/admin-sidebar.fxml"/>
+    </left>
+
+    <!-- Header -->
+    <top>
+        <HBox styleClass="header" alignment="CENTER_LEFT" spacing="20">
+            <padding><Insets top="15" right="25" bottom="15" left="25"/></padding>
+            <Label styleClass="title" text="👁️ Consultation - Toutes les Décisions Financières"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="📖 Mode lecture seule" style="-fx-text-fill: #E1B323; -fx-font-weight: bold; -fx-font-size: 14px;"/>
+            <Button text="📊 Voir Évaluations" styleClass="button-accent" onAction="#handleViewEvaluations"/>
+            <Button text="📈 Statistiques" styleClass="button-primary" onAction="#handleExportStats"/>
+        </HBox>
+    </top>
+
+    <!-- Contenu principal -->
+    <center>
+        <VBox spacing="20" styleClass="main-content">
+            <padding><Insets top="25" right="30" bottom="25" left="30"/></padding>
+
+            <!-- Info Box -->
+            <HBox styleClass="info-box" alignment="CENTER_LEFT" spacing="10">
+                <padding><Insets top="12" right="20" bottom="12" left="20"/></padding>
+                <Label text="ℹ️" style="-fx-font-size: 22px;"/>
+                <VBox spacing="3">
+                    <Label text="Mode Administrateur - Consultation uniquement" style="-fx-font-weight: bold; -fx-text-fill: #133D03;"/>
+                    <Label text="Vous pouvez visualiser toutes les décisions prises par l'ensemble des banques. Les modifications ne sont pas autorisées depuis cette interface."
+                           style="-fx-text-fill: #666; -fx-font-size: 12px;" wrapText="true"/>
+                </VBox>
+            </HBox>
+
+            <!-- Toolbar -->
+            <HBox spacing="15" alignment="CENTER_LEFT" styleClass="toolbar">
+                <padding><Insets top="12" right="20" bottom="12" left="20"/></padding>
+                <Label text="🔍 Rechercher:" styleClass="form-label"/>
+                <TextField fx:id="tfSearch" promptText="Projet, banque, statut, justification..."
+                           onKeyReleased="#handleSearch" prefWidth="400" styleClass="text-field"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="🔄 Rafraîchir" styleClass="button-accent" onAction="#handleRefresh"/>
+            </HBox>
+
+            <!-- Table (sans colonne Actions) -->
+            <TableView fx:id="tableDecisions" VBox.vgrow="ALWAYS" styleClass="table-view">
+                <columns>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+                    <TableColumn fx:id="colProjet" text="Projet" prefWidth="180"/>
+                    <TableColumn fx:id="colBanque" text="Banque" prefWidth="150"/>
+                    <TableColumn fx:id="colStatut" text="Statut" prefWidth="120"/>
+                    <TableColumn fx:id="colJustification" text="Justification" prefWidth="300"/>
+                    <TableColumn fx:id="colDateDecision" text="Date Décision" prefWidth="140"/>
+                    <TableColumn fx:id="colIdEvaluation" text="ID Éval." prefWidth="80"/>
+                </columns>
+            </TableView>
+
+            <!-- Statistiques -->
+            <HBox spacing="30" alignment="CENTER" styleClass="stats-container">
+                <padding><Insets top="15" right="20" bottom="15" left="20"/></padding>
+
+                <VBox spacing="5" alignment="CENTER" styleClass="stat-box">
+                    <Label text="📊 Total" styleClass="stats-label"/>
+                    <Label fx:id="lblTotal" text="0" styleClass="stats-value"/>
+                </VBox>
+
+                <Separator orientation="VERTICAL" styleClass="vertical-separator"/>
+
+                <VBox spacing="5" alignment="CENTER" styleClass="stat-box">
+                    <Label text="✅ Approuvées" styleClass="stats-label"/>
+                    <Label fx:id="lblApprouves" text="0" style="-fx-text-fill: #28a745; -fx-font-size: 24px; -fx-font-weight: bold;"/>
+                </VBox>
+
+                <Separator orientation="VERTICAL" styleClass="vertical-separator"/>
+
+                <VBox spacing="5" alignment="CENTER" styleClass="stat-box">
+                    <Label text="⏳ En attente" styleClass="stats-label"/>
+                    <Label fx:id="lblEnAttente" text="0" style="-fx-text-fill: #ffc107; -fx-font-size: 24px; -fx-font-weight: bold;"/>
+                </VBox>
+
+                <Separator orientation="VERTICAL" styleClass="vertical-separator"/>
+
+                <VBox spacing="5" alignment="CENTER" styleClass="stat-box">
+                    <Label text="❌ Rejetées" styleClass="stats-label"/>
+                    <Label fx:id="lblRejetes" text="0" style="-fx-text-fill: #dc3545; -fx-font-size: 24px; -fx-font-weight: bold;"/>
+                </VBox>
+            </HBox>
+
+            <!-- Status Bar -->
+            <HBox alignment="CENTER_LEFT" styleClass="status-bar">
+                <padding><Insets top="8" right="15" bottom="8" left="15"/></padding>
+                <Label fx:id="lblStatus" styleClass="status-label" text="Mode consultation"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

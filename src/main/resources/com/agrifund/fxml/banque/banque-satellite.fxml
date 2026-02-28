@@ -7,7 +7,9 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.agrifund.controller.banque.BanqueSatelliteController"
             stylesheets="@../../css/styles.css">
-
+    <left>
+        <fx:include source="banque-sidebar.fxml"/>
+    </left>
     <center>
         <VBox styleClass="content-area" spacing="0">
 

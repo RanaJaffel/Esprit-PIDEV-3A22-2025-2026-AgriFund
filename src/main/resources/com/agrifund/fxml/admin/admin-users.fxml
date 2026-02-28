@@ -10,6 +10,9 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.agrifund.controller.admin.AdminUsersController"
             stylesheets="@../../css/styles.css">
+    <left>
+        <fx:include source="admin-sidebar.fxml"/>
+    </left>
 
     <!-- MAIN CONTENT -->
     <center>

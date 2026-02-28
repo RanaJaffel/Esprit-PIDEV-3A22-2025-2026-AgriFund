@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.agrifund.controller.banque.BanqueRisqueController"
+            prefWidth="900" prefHeight="850"
+            styleClass="root"
+            stylesheets="@banque-styles.css">
+
+    <!-- En-tête -->
+    <top>
+        <VBox styleClass="header" spacing="5">
+            <padding><Insets top="20" right="25" bottom="20" left="25"/></padding>
+            <Label styleClass="title" text="📊 Évaluation de Risque"/>
+            <Label fx:id="lblBanqueInfo" styleClass="subtitle" text="🏦 Banque"/>
+        </VBox>
+    </top>
+
+    <!-- Contenu principal -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+            <VBox spacing="25" styleClass="main-content">
+                <padding><Insets top="30" right="40" bottom="30" left="40"/></padding>
+
+                <!-- Section Formulaire -->
+                <VBox spacing="20" styleClass="form-section">
+                    <Label text="INFORMATIONS DE L'ÉVALUATION" styleClass="section-title"/>
+
+                    <GridPane hgap="20" vgap="20" styleClass="form-grid">
+                        <padding><Insets top="20" right="25" bottom="20" left="25"/></padding>
+
+                        <!-- ID (masqué) -->
+                        <TextField fx:id="tfIdEvaluation" visible="false" managed="false"/>
+
+                        <!-- Projet (ComboBox avec NOM) -->
+                        <Label text="🌾 Projet agricole :" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
+                        <ComboBox fx:id="cbNomProjet"
+                                  GridPane.rowIndex="0" GridPane.columnIndex="1"
+                                  prefWidth="400" promptText="Sélectionnez un projet" styleClass="combo-box"/>
+
+                        <!-- Score Global -->
+                        <Label text="📈 Score Global :" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+                        <TextField fx:id="tfScoreGlobal"
+                                   GridPane.rowIndex="1" GridPane.columnIndex="1"
+                                   prefWidth="400" promptText="Score calculé automatiquement" styleClass="text-field"/>
+
+                        <!-- Niveau de Risque -->
+                        <Label text="⚠️ Niveau de Risque :" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
+                        <ComboBox fx:id="cbNiveauRisque"
+                                  GridPane.rowIndex="2" GridPane.columnIndex="1"
+                                  prefWidth="400" promptText="Sélectionner le niveau" styleClass="combo-box"/>
+
+                        <!-- Fiabilité des Données -->
+                        <Label text="🔒 Fiabilité des Données :" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label"/>
+                        <ComboBox fx:id="cbFiabiliteDonnees"
+                                  GridPane.rowIndex="3" GridPane.columnIndex="1"
+                                  prefWidth="400" promptText="Sélectionner la fiabilité" styleClass="combo-box"/>
+
+                        <!-- Facteurs et Conseils -->
+                        <Label text="📝 Facteurs et Conseils :" GridPane.rowIndex="4" GridPane.columnIndex="0"
+                               GridPane.valignment="TOP" styleClass="form-label"/>
+                        <TextArea fx:id="tfFacteurPrincipal"
+                                  GridPane.rowIndex="4" GridPane.columnIndex="1"
+                                  prefWidth="400" prefHeight="200"
+                                  wrapText="true"
+                                  promptText="Facteurs de risque identifiés et conseils..." styleClass="text-area"/>
+
+                        <!-- Recommandation -->
+                        <Label text="💡 Recommandation :" GridPane.rowIndex="5" GridPane.columnIndex="0" styleClass="form-label"/>
+                        <ComboBox fx:id="cbRecommandation"
+                                  GridPane.rowIndex="5" GridPane.columnIndex="1"
+                                  prefWidth="400" promptText="Votre recommandation" styleClass="combo-box"/>
+
+                        <!-- Date d'Évaluation -->
+                        <Label text="📅 Date d'Évaluation :" GridPane.rowIndex="6" GridPane.columnIndex="0" styleClass="form-label"/>
+                        <DatePicker fx:id="dpDateEvaluation"
+                                    GridPane.rowIndex="6" GridPane.columnIndex="1"
+                                    prefWidth="400" promptText="Sélectionner une date" styleClass="date-picker"/>
+
+                        <!-- Boutons -->
+                        <HBox spacing="15" GridPane.rowIndex="7" GridPane.columnSpan="2" alignment="CENTER">
+                            <padding><Insets top="25"/></padding>
+                            <Button text="❌ Annuler" styleClass="button-secondary" onAction="#handleCancel" prefWidth="140" prefHeight="40"/>
+                            <Button text="🗑️ Effacer" styleClass="button-accent" onAction="#handleClear" prefWidth="140" prefHeight="40"/>
+                            <Button text="✅ Enregistrer" styleClass="button-primary" onAction="#handleSave" prefWidth="160" prefHeight="40"/>
+                        </HBox>
+                    </GridPane>
+                </VBox>
+
+                <!-- Note AI -->
+                <HBox styleClass="info-note" alignment="CENTER_LEFT" spacing="10">
+                    <padding><Insets top="15" right="20" bottom="15" left="20"/></padding>
+                    <Label text="🤖" style="-fx-font-size: 20px;"/>
+                    <Label text="Sélectionnez un projet pour obtenir une évaluation automatique basée sur l'IA. Les valeurs peuvent être modifiées manuellement."
+                           style="-fx-text-fill: #133D03; -fx-font-size: 12px;" wrapText="true"/>
+                </HBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <!-- Pied de page -->
+    <bottom>
+        <HBox styleClass="footer" alignment="CENTER_LEFT" spacing="20">
+            <padding><Insets top="12" right="25" bottom="12" left="25"/></padding>
+            <Label styleClass="signature" text="💚"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lblStatus" styleClass="status-label" text="Prêt"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label styleClass="signature" text="AgriFund"/>
+        </HBox>
+    </bottom>
+</BorderPane>

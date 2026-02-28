@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane stylesheets="@../stylerayen.css" style="-fx-background-color: #F8F9FA;"
+            prefWidth="1200" prefHeight="800"
+            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.agrifund.controller.agriculteur.projectagriculteurcontroller">
+
+    <!-- SIDEBAR -->
+    <left>
+        <fx:include source="agriculteur-sidebar.fxml"/>
+    </left>
+
+    <top>
+        <VBox spacing="0">
+            <!-- Header -->
+            <HBox alignment="CENTER" spacing="20" styleClass="page-header">
+                <padding>
+                    <Insets top="20" right="30" bottom="20" left="30"/>
+                </padding>
+
+                <HBox alignment="CENTER_LEFT" spacing="15" HBox.hgrow="ALWAYS">
+                    <StackPane styleClass="icon-container" style="-fx-min-width: 55; -fx-min-height: 55; -fx-background-color: rgba(255,255,255,0.2);">
+                        <Label text="🌿" style="-fx-font-size: 32px;"/>
+                    </StackPane>
+                    <VBox spacing="0">
+                        <Label text="Mes Projets Agricoles" styleClass="header-title" style="-fx-font-size: 26px;"/>
+                        <Label fx:id="lblUserName" text="Bienvenue"
+                               style="-fx-text-fill: rgba(255,255,255,0.85); -fx-font-size: 13px;"/>
+                    </VBox>
+                </HBox>
+
+                <HBox spacing="10">
+                    <Button text="📄 Exporter PDF" styleClass="btn-info"
+                            style="-fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: 600;"
+                            onAction="#exportToPDF" prefHeight="40" prefWidth="150"/>
+                </HBox>
+            </HBox>
+
+            <!-- Toolbar -->
+            <HBox alignment="CENTER_LEFT" spacing="15" styleClass="toolbar">
+                <padding>
+                    <Insets top="15" right="30" bottom="15" left="30"/>
+                </padding>
+
+                <VBox spacing="3">
+                    <Label text="🌾 Mes Projets" styleClass="subtitle-label" style="-fx-font-size: 18px;"/>
+                    <Label text="Gérez vos projets agricoles" style="-fx-text-fill: #6C757D; -fx-font-size: 12px;"/>
+                </VBox>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <HBox alignment="CENTER_LEFT" spacing="8" style="-fx-background-color: #F8F9FA; -fx-background-radius: 20; -fx-padding: 8 16;">
+                    <Label text="🔍" style="-fx-font-size: 16px;"/>
+                    <TextField fx:id="tfSearchProject" promptText="Rechercher..."
+                               prefWidth="200" style="-fx-background-color: transparent; -fx-border-width: 0;"/>
+                </HBox>
+
+                <ComboBox fx:id="cbFilterStatutList" promptText="Filtrer par statut" prefWidth="160"/>
+
+                <Button text="+ Nouveau Projet" styleClass="btn-primary"
+                        onAction="#openAddProjectForm" prefHeight="40" prefWidth="180"
+                        style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+
+                <Button text="🗺 Carte" styleClass="btn-info"
+                        onAction="#handleShowAllProjectsMap" prefHeight="40" prefWidth="110"
+                        style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: white; -fx-background-color: #1565C0; -fx-background-radius: 8;"/>
+                <Button text="📰 Actualités"  styleClass="btn-info"
+                        onAction="#openNewsDialog" prefHeight="40" prefWidth="110"
+                        style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: white; -fx-background-color: #1565C0; -fx-background-radius: 8;"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="0" VBox.vgrow="ALWAYS">
+            <padding>
+                <Insets top="25" right="30" bottom="25" left="30"/>
+            </padding>
+
+            <!-- Statistics -->
+            <VBox spacing="15">
+                <padding>
+                    <Insets bottom="15"/>
+                </padding>
+
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="📊" style="-fx-font-size: 20px;"/>
+                    <Label text="Mes Statistiques" styleClass="section-header" style="-fx-font-size: 17px;"/>
+                </HBox>
+
+                <GridPane hgap="20" vgap="20">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="25"/>
+                        <ColumnConstraints percentWidth="25"/>
+                        <ColumnConstraints percentWidth="25"/>
+                        <ColumnConstraints percentWidth="25"/>
+                    </columnConstraints>
+
+                    <HBox spacing="15" alignment="CENTER_LEFT" styleClass="stat-card" GridPane.columnIndex="0">
+                        <StackPane styleClass="icon-container" style="-fx-min-width: 55; -fx-min-height: 55; -fx-background-color: #D8F3DC;">
+                            <Label text="📁" style="-fx-font-size: 28px;"/>
+                        </StackPane>
+                        <VBox spacing="4">
+                            <Label text="Total Projets" styleClass="stat-label"/>
+                            <Label fx:id="lblTotalProjects" text="--" styleClass="stat-value" style="-fx-font-size: 28px;"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox spacing="15" alignment="CENTER_LEFT" styleClass="stat-card" GridPane.columnIndex="1">
+                        <StackPane styleClass="icon-container" style="-fx-min-width: 55; -fx-min-height: 55; -fx-background-color: #D5F4E6;">
+                            <Label text="✓" style="-fx-font-size: 32px; -fx-text-fill: #40916C; -fx-font-weight: bold;"/>
+                        </StackPane>
+                        <VBox spacing="4">
+                            <Label text="Acceptés" styleClass="stat-label"/>
+                            <Label fx:id="lblAcceptedProjects" text="--" styleClass="stat-value" style="-fx-font-size: 28px; -fx-text-fill: #40916C;"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox spacing="15" alignment="CENTER_LEFT" styleClass="stat-card" GridPane.columnIndex="2">
+                        <StackPane styleClass="icon-container" style="-fx-min-width: 55; -fx-min-height: 55; -fx-background-color: #FFE5CC;">
+                            <Label text="⏳" style="-fx-font-size: 28px;"/>
+                        </StackPane>
+                        <VBox spacing="4">
+                            <Label text="En Cours" styleClass="stat-label"/>
+                            <Label fx:id="lblInProgressProjects" text="--" styleClass="stat-value" style="-fx-font-size: 28px; -fx-text-fill: #F4A261;"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox spacing="15" alignment="CENTER_LEFT" styleClass="stat-card" GridPane.columnIndex="3">
+                        <StackPane styleClass="icon-container" style="-fx-min-width: 55; -fx-min-height: 55; -fx-background-color: #FFE5E5;">
+                            <Label text="✗" style="-fx-font-size: 32px; -fx-text-fill: #E76F51; -fx-font-weight: bold;"/>
+                        </StackPane>
+                        <VBox spacing="4">
+                            <Label text="Refusés" styleClass="stat-label"/>
+                            <Label fx:id="lblRefusedProjects" text="--" styleClass="stat-value" style="-fx-font-size: 28px; -fx-text-fill: #E76F51;"/>
+                        </VBox>
+                    </HBox>
+                </GridPane>
+            </VBox>
+
+            <Separator style="-fx-padding: 10 0;"/>
+
+            <!-- Projects List -->
+            <VBox spacing="15" VBox.vgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="📋" style="-fx-font-size: 18px;"/>
+                    <Label text="Mes Projets" styleClass="section-header" style="-fx-font-size: 16px;"/>
+                </HBox>
+
+                <ScrollPane fitToWidth="true" styleClass="scroll-pane" VBox.vgrow="ALWAYS"
+                            style="-fx-background-color: transparent; -fx-border-width: 0;">
+                    <FlowPane fx:id="projectsContainer" hgap="20" vgap="20"
+                              style="-fx-padding: 5; -fx-background-color: transparent;"/>
+                </ScrollPane>
+            </VBox>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER" spacing="30" style="-fx-background-color: white; -fx-padding: 12 30; -fx-border-color: #E9ECEF; -fx-border-width: 1 0 0 0;">
+            <HBox spacing="8" alignment="CENTER">
+                <Label text="💰" style="-fx-font-size: 16px;"/>
+                <VBox spacing="0">
+                    <Label text="Budget Total" style="-fx-font-size: 11px; -fx-text-fill: #6C757D;"/>
+                    <Label fx:id="lblTotalBudget" text="-- DT" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2D6A4F;"/>
+                </VBox>
+            </HBox>
+
+            <Separator orientation="VERTICAL"/>
+
+            <HBox spacing="8" alignment="CENTER">
+                <Label text="🌍" style="-fx-font-size: 16px;"/>
+                <VBox spacing="0">
+                    <Label text="Surface Totale" style="-fx-font-size: 11px; -fx-text-fill: #6C757D;"/>
+                    <Label fx:id="lblTotalSurface" text="-- Ha" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2D6A4F;"/>
+                </VBox>
+            </HBox>
+
+            <Separator orientation="VERTICAL"/>
+
+            <HBox spacing="8" alignment="CENTER">
+                <Label text="📅" style="-fx-font-size: 16px;"/>
+                <VBox spacing="0">
+                    <Label text="Dernière Mise à Jour" style="-fx-font-size: 11px; -fx-text-fill: #6C757D;"/>
+                    <Label fx:id="lblLastUpdate" text="Aujourd'hui" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2D6A4F;"/>
+                </VBox>
+            </HBox>
+
+            <Region HBox.hgrow="ALWAYS"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

@@ -1,37 +1,233 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.web.WebView?>
 
-<AnchorPane prefWidth="800" prefHeight="650"
-            xmlns="http://javafx.com/javafx/8"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.agrifund.controller.projectagricolecontroller">
+<VBox prefHeight="650.0" prefWidth="520.0" spacing="0" stylesheets="@stylerayen.css"
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.agrifund.controller.ressourceprojectcontroller">
 
-    <children>
 
-        <Label layoutX="30" layoutY="20" text="Ajouter un projet agricole" />
+    <HBox alignment="CENTER_LEFT" spacing="15" styleClass="page-header">
+        <padding>
+            <Insets top="20" right="25" bottom="20" left="25"/>
+        </padding>
 
-        <TextField fx:id="nomField" layoutX="30" layoutY="60" promptText="Nom du projet"/>
 
-        <ComboBox fx:id="statutBox" layoutX="30" layoutY="100">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="en cours"/>
-                    <String fx:value="accepte"/>
-                    <String fx:value="refuse"/>
-                </FXCollections>
-            </items>
-        </ComboBox>
+        <StackPane styleClass="icon-container" style="-fx-min-width: 50; -fx-min-height: 50;">
+            <Label text="📦" style="-fx-font-size: 28px;"/>
+        </StackPane>
 
-        <!-- 🗺️ MAP -->
-        <WebView fx:id="mapViewAdd" layoutX="30" layoutY="150"
-                 prefWidth="720" prefHeight="400"/>
+        <VBox spacing="2">
+            <Label text="Nouvelle Ressource" styleClass="header-title"/>
+            <Label text="Ajouter une ressource au projet agricole" style="-fx-text-fill: rgba(255,255,255,0.9); -fx-font-size: 13px;"/>
+        </VBox>
+    </HBox>
 
-        <Button text="Ajouter"
-                layoutX="30" layoutY="570"
-                onAction="#ajouterProjet"/>
 
-    </children>
-</AnchorPane>
+    <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="scroll-pane" VBox.vgrow="ALWAYS">
+        <VBox spacing="25" styleClass="form-container">
+            <padding>
+                <Insets top="30" right="30" bottom="30" left="30"/>
+            </padding>
+
+
+            <VBox spacing="15">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="🔗" style="-fx-font-size: 20px;"/>
+                    <Label text="Liaison au Projet" styleClass="section-header"/>
+                </HBox>
+                <Separator/>
+
+                <GridPane hgap="15" vgap="18">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="35"/>
+                        <ColumnConstraints percentWidth="65"/>
+                    </columnConstraints>
+
+
+                    <VBox spacing="5" GridPane.rowIndex="0" GridPane.columnIndex="0">
+                        <Label text="Projet Associé *" styleClass="label"/>
+                        <Label text="Sélectionner le projet" styleClass="label-small"/>
+                    </VBox>
+                    <ComboBox fx:id="cbIdProjectDialog" maxWidth="Infinity" promptText="Choisir un projet..."
+                              GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <tooltip>
+                            <Tooltip text="Sélectionnez le projet auquel cette ressource sera liée"/>
+                        </tooltip>
+                    </ComboBox>
+
+                    <rowConstraints>
+                        <RowConstraints/>
+                    </rowConstraints>
+                </GridPane>
+            </VBox>
+
+
+            <VBox spacing="15">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="📋" style="-fx-font-size: 20px;"/>
+                    <Label text="Informations de la Ressource" styleClass="section-header"/>
+                </HBox>
+                <Separator/>
+
+                <GridPane hgap="15" vgap="18">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="35"/>
+                        <ColumnConstraints percentWidth="65"/>
+                    </columnConstraints>
+
+
+                    <VBox spacing="5" GridPane.rowIndex="0" GridPane.columnIndex="0">
+                        <Label text="Nom de la Ressource *" styleClass="label"/>
+                        <Label text="Désignation exacte" styleClass="label-small"/>
+                    </VBox>
+                    <TextField fx:id="tfNomRessourceDialog" promptText="Ex: Tracteur John Deere 5075E"
+                               GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <tooltip>
+                            <Tooltip text="Nom complet et descriptif de la ressource"/>
+                        </tooltip>
+                    </TextField>
+
+
+                    <VBox spacing="5" GridPane.rowIndex="1" GridPane.columnIndex="0">
+                        <Label text="Type de Ressource *" styleClass="label"/>
+                        <Label text="Catégorie" styleClass="label-small"/>
+                    </VBox>
+                    <ComboBox fx:id="cbTypeRessourceDialog" maxWidth="Infinity" promptText="Sélectionner le type..."
+                              GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <tooltip>
+                            <Tooltip text="Type: équipement, matériaux ou service"/>
+                        </tooltip>
+                    </ComboBox>
+
+
+                    <VBox spacing="5" GridPane.rowIndex="2" GridPane.columnIndex="0">
+                        <Label text="Quantité *" styleClass="label"/>
+                        <Label text="Nombre d'unités" styleClass="label-small"/>
+                    </VBox>
+                    <HBox spacing="10" alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <TextField fx:id="tfQuantiteDialog" promptText="Ex: 2" HBox.hgrow="ALWAYS">
+                            <tooltip>
+                                <Tooltip text="Quantité requise"/>
+                            </tooltip>
+                        </TextField>
+                        <Label text="unités" style="-fx-font-weight: bold; -fx-text-fill: #2D6A4F;"/>
+                    </HBox>
+
+                    <rowConstraints>
+                        <RowConstraints/>
+                        <RowConstraints/>
+                        <RowConstraints/>
+                    </rowConstraints>
+                </GridPane>
+            </VBox>
+
+
+            <VBox spacing="15">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="💰" style="-fx-font-size: 20px;"/>
+                    <Label text="Informations Financières et Fournisseur" styleClass="section-header"/>
+                </HBox>
+                <Separator/>
+
+                <GridPane hgap="15" vgap="18">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="35"/>
+                        <ColumnConstraints percentWidth="65"/>
+                    </columnConstraints>
+
+
+                    <VBox spacing="5" GridPane.rowIndex="0" GridPane.columnIndex="0">
+                        <Label text="Coût Total *" styleClass="label"/>
+                        <Label text="Prix global" styleClass="label-small"/>
+                    </VBox>
+                    <HBox spacing="10" alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <TextField fx:id="tfCoutDialog" promptText="Ex: 85000.00" HBox.hgrow="ALWAYS">
+                            <tooltip>
+                                <Tooltip text="Coût total en dinars tunisiens"/>
+                            </tooltip>
+                        </TextField>
+                        <Label text="DT" style="-fx-font-weight: bold; -fx-text-fill: #2D6A4F;"/>
+                    </HBox>
+
+
+                    <VBox spacing="5" GridPane.rowIndex="1" GridPane.columnIndex="0">
+                        <Label text="Fournisseur *" styleClass="label"/>
+                        <Label text="Nom du fournisseur" styleClass="label-small"/>
+                    </VBox>
+                    <TextField fx:id="tfFournisseurDialog" promptText="Ex: Agro-Équipement Tunis"
+                               GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <tooltip>
+                            <Tooltip text="Nom complet du fournisseur"/>
+                        </tooltip>
+                    </TextField>
+
+                    <rowConstraints>
+                        <RowConstraints/>
+                        <RowConstraints/>
+                    </rowConstraints>
+                </GridPane>
+            </VBox>
+
+
+            <VBox spacing="15">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="📊" style="-fx-font-size: 20px;"/>
+                    <Label text="Statut et Calendrier" styleClass="section-header"/>
+                </HBox>
+                <Separator/>
+
+                <GridPane hgap="15" vgap="18">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="35"/>
+                        <ColumnConstraints percentWidth="65"/>
+                    </columnConstraints>
+
+
+                    <VBox spacing="5" GridPane.rowIndex="0" GridPane.columnIndex="0">
+                        <Label text="Statut de la Ressource *" styleClass="label"/>
+                        <Label text="État d'acquisition" styleClass="label-small"/>
+                    </VBox>
+                    <ComboBox fx:id="cbStatutRessourceDialog" maxWidth="Infinity" promptText="Sélectionner le statut..."
+                              GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <tooltip>
+                            <Tooltip text="Statut: prévu ou acheté"/>
+                        </tooltip>
+                    </ComboBox>
+
+
+                    <VBox spacing="5" GridPane.rowIndex="1" GridPane.columnIndex="0">
+                        <Label text="Date d'Ajout *" styleClass="label"/>
+                        <Label text="Date d'enregistrement" styleClass="label-small"/>
+                    </VBox>
+                    <DatePicker fx:id="dpDateAjoutDialog" maxWidth="Infinity"
+                                promptText="Sélectionner la date..."
+                                GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <tooltip>
+                            <Tooltip text="Date d'ajout de la ressource"/>
+                        </tooltip>
+                    </DatePicker>
+
+                    <rowConstraints>
+                        <RowConstraints/>
+                        <RowConstraints/>
+                    </rowConstraints>
+                </GridPane>
+            </VBox>
+
+
+
+            <HBox spacing="15" alignment="CENTER_RIGHT">
+                <padding>
+                    <Insets top="10"/>
+                </padding>
+                <Button text="✖ Annuler" onAction="#handleCancel" prefWidth="130"
+                        prefHeight="40" styleClass="btn-danger"/>
+                <Button fx:id="btnSave" text="✓ Enregistrer" onAction="#handleSave"
+                        prefWidth="150" prefHeight="40" styleClass="btn-primary"/>
+            </HBox>
+        </VBox>
+    </ScrollPane>
+</VBox>

@@ -5,8 +5,6 @@ import com.agrifund.util.SessionManager;
 import com.agrifund.entities.Utilisateur;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -14,22 +12,56 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Circle;
-import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.IOException;
 
 public class AdminSidebarController {
 
     @FXML private ImageView userAvatar;
     @FXML private Label userName;
 
+    // ══════════════════════════════════════════════════════════
+    // PRINCIPAL
+    // ══════════════════════════════════════════════════════════
     @FXML private Button btnDashboard;
     @FXML private Button btnUsers;
     @FXML private Button btnAgriculteurs;
     @FXML private Button btnBanques;
+
+    // ══════════════════════════════════════════════════════════
+    // GESTION
+    // ══════════════════════════════════════════════════════════
     @FXML private Button btnDocuments;
     @FXML private Button btnMessagerie;
+
+    // ══════════════════════════════════════════════════════════
+    // FINANCE
+    // ══════════════════════════════════════════════════════════
+    @FXML private Button btnProduitsFinanciers;
+    @FXML private Button btnOffresFinancieres;
+
+    // ══════════════════════════════════════════════════════════
+    // AGRICULTURE
+    // ══════════════════════════════════════════════════════════
+    @FXML private Button btnProjetsAgricoles;
+    @FXML private Button btnRessources;
+
+    // ══════════════════════════════════════════════════════════
+    // DÉCISIONS & RISQUES
+    // ══════════════════════════════════════════════════════════
+    @FXML private Button btnDecisions;
+    @FXML private Button btnRisques;
+
+    // ══════════════════════════════════════════════════════════
+    // IoT & RAPPORTS
+    // ══════════════════════════════════════════════════════════
+    @FXML private Button btnCapteurs;
+    @FXML private Button btnDashboardIoT;
+    @FXML private Button btnRapports;
+    @FXML private Button btnMeteo;
+    // ══════════════════════════════════════════════════════════
+    // COMPTE
+    // ══════════════════════════════════════════════════════════
     @FXML private Button btnProfile;
     @FXML private Button btnSecurity;
 
@@ -38,6 +70,7 @@ public class AdminSidebarController {
     @FXML
     public void initialize() {
         loadUserInfo();
+        updateActiveButton();
     }
 
     public void setCurrentPage(String page) {
@@ -46,42 +79,84 @@ public class AdminSidebarController {
     }
 
     private void updateActiveButton() {
+        // Liste de tous les boutons
+        Button[] allButtons = {
+                btnDashboard, btnUsers, btnAgriculteurs, btnBanques,
+                btnDocuments, btnMessagerie,
+                btnProduitsFinanciers, btnOffresFinancieres,
+                btnProjetsAgricoles, btnRessources,
+                btnDecisions, btnRisques,
+                btnCapteurs, btnDashboardIoT, btnRapports,
+                btnProfile, btnSecurity
+        };
+
         // Retirer la classe active de tous les boutons
-        btnDashboard.getStyleClass().remove("sidebar-menu-item-active");
-        btnUsers.getStyleClass().remove("sidebar-menu-item-active");
-        btnAgriculteurs.getStyleClass().remove("sidebar-menu-item-active");
-        btnBanques.getStyleClass().remove("sidebar-menu-item-active");
-        btnDocuments.getStyleClass().remove("sidebar-menu-item-active");
-        btnMessagerie.getStyleClass().remove("sidebar-menu-item-active");
-        btnProfile.getStyleClass().remove("sidebar-menu-item-active");
-        btnSecurity.getStyleClass().remove("sidebar-menu-item-active");
+        for (Button btn : allButtons) {
+            if (btn != null) {
+                btn.getStyleClass().remove("sidebar-menu-item-active");
+            }
+        }
 
         // Ajouter la classe active au bouton actuel
+        Button activeBtn = null;
         switch (currentPage) {
             case "dashboard":
-                btnDashboard.getStyleClass().add("sidebar-menu-item-active");
+                activeBtn = btnDashboard;
                 break;
             case "users":
-                btnUsers.getStyleClass().add("sidebar-menu-item-active");
+                activeBtn = btnUsers;
                 break;
             case "agriculteurs":
-                btnAgriculteurs.getStyleClass().add("sidebar-menu-item-active");
+                activeBtn = btnAgriculteurs;
                 break;
             case "banques":
-                btnBanques.getStyleClass().add("sidebar-menu-item-active");
+                activeBtn = btnBanques;
                 break;
             case "documents":
-                btnDocuments.getStyleClass().add("sidebar-menu-item-active");
+                activeBtn = btnDocuments;
                 break;
             case "messagerie":
-                btnMessagerie.getStyleClass().add("sidebar-menu-item-active");
+                activeBtn = btnMessagerie;
                 break;
+            case "produits-financiers":
+                activeBtn = btnProduitsFinanciers;
+                break;
+            case "offres-financieres":
+                activeBtn = btnOffresFinancieres;
+                break;
+            case "projets-agricoles":
+                activeBtn = btnProjetsAgricoles;
+                break;
+            case "ressources":
+                activeBtn = btnRessources;
+                break;
+            case "decisions":
+                activeBtn = btnDecisions;
+                break;
+            case "risques":
+                activeBtn = btnRisques;
+                break;
+            case "capteurs":
+                activeBtn = btnCapteurs;
+                break;
+            case "dashboard-iot":
+                activeBtn = btnDashboardIoT;
+                break;
+            case "rapports":
+                activeBtn = btnRapports;
+                break;
+            case "meteo":
+                activeBtn = btnMeteo;
             case "profile":
-                btnProfile.getStyleClass().add("sidebar-menu-item-active");
+                activeBtn = btnProfile;
                 break;
             case "security":
-                btnSecurity.getStyleClass().add("sidebar-menu-item-active");
+                activeBtn = btnSecurity;
                 break;
+        }
+
+        if (activeBtn != null) {
+            activeBtn.getStyleClass().add("sidebar-menu-item-active");
         }
     }
 
@@ -120,45 +195,162 @@ public class AdminSidebarController {
         }
     }
 
+    // ══════════════════════════════════════════════════════════
+    // NAVIGATION - PRINCIPAL
+    // ══════════════════════════════════════════════════════════
+
     @FXML
     public void goToDashboard() {
-        loadPage("admin/admin-dashboard");
+        currentPage = "dashboard";
+        updateActiveButton();
+        Main.navigateTo("/com/agrifund/fxml/admin/admin-dashboard.fxml");
     }
 
     @FXML
     public void goToUsers() {
-        loadPage("admin/admin-users");
+        currentPage = "users";
+        updateActiveButton();
+        Main.navigateTo("/com/agrifund/fxml/admin/admin-users.fxml");
     }
 
     @FXML
     public void goToAgriculteurs() {
-        loadPage("admin/admin-agriculteurs");
+        currentPage = "agriculteurs";
+        updateActiveButton();
+        Main.navigateTo("/com/agrifund/fxml/admin/admin-agriculteurs.fxml");
     }
 
     @FXML
     public void goToBanques() {
-        loadPage("admin/admin-banques");
+        currentPage = "banques";
+        updateActiveButton();
+        Main.navigateTo("/com/agrifund/fxml/admin/admin-banques.fxml");
     }
+
+    // ══════════════════════════════════════════════════════════
+    // NAVIGATION - GESTION
+    // ══════════════════════════════════════════════════════════
 
     @FXML
     public void goToDocuments() {
-        loadPage("admin/admin-documents");
+        currentPage = "documents";
+        updateActiveButton();
+        Main.navigateTo("/com/agrifund/fxml/admin/admin-documents.fxml");
     }
 
     @FXML
     public void goToMessagerie() {
-        loadPage("admin/admin-messagerie");
+        currentPage = "messagerie";
+        updateActiveButton();
+        Main.navigateTo("/com/agrifund/fxml/admin/admin-messagerie.fxml");
+    }
+
+    // ══════════════════════════════════════════════════════════
+    // NAVIGATION - FINANCE
+    // ══════════════════════════════════════════════════════════
+
+    @FXML
+    public void goToProduitsFinanciers() {
+        currentPage = "produits-financiers";
+        updateActiveButton();
+        Main.navigateTo("/com/agrifund/view/ProduitFinancierView.fxml");
     }
 
     @FXML
+    public void goToOffresFinancieres() {
+        currentPage = "offres-financieres";
+        updateActiveButton();
+        Main.navigateTo("/com/agrifund/view/OffreFinanciereView.fxml");
+    }
+
+    // ══════════════════════════════════════════════════════════
+    // NAVIGATION - AGRICULTURE
+    // ══════════════════════════════════════════════════════════
+
+    @FXML
+    public void goToProjetsAgricoles() {
+        currentPage = "projets-agricoles";
+        updateActiveButton();
+        Main.navigateTo("/com/agrifund/fxml/admin/admin-projects.fxml");
+    }
+
+    @FXML
+    public void goToRessources() {
+        currentPage = "ressources";
+        updateActiveButton();
+        Main.navigateTo("/com/agrifund/fxml/admin/ressourcesAdmin.fxml");
+    }
+
+    // ══════════════════════════════════════════════════════════
+    // NAVIGATION - DÉCISIONS & RISQUES
+    // ══════════════════════════════════════════════════════════
+
+    @FXML
+    public void goToDecisions() {
+        currentPage = "decisions";
+        updateActiveButton();
+        Main.navigateTo("/com/agrifund/fxml/admin/admin-decision-list.fxml");
+    }
+
+    @FXML
+    public void goToRisques() {
+        currentPage = "risques";
+        updateActiveButton();
+        Main.navigateTo("/com/agrifund/fxml/admin/admin-risque-list.fxml");
+    }
+
+    // ══════════════════════════════════════════════════════════
+    // NAVIGATION - IoT & RAPPORTS
+    // ══════════════════════════════════════════════════════════
+
+    @FXML
+    public void goToCapteurs() {
+        currentPage = "capteurs";
+        updateActiveButton();
+        Main.navigateTo("/com/agrifund/fxml/admin/admin-capteur.fxml");
+    }
+
+    @FXML
+    public void goToDashboardIoT() {
+        currentPage = "dashboard-iot";
+        updateActiveButton();
+        Main.navigateTo("/com/agrifund/fxml/dashboard-rana.fxml");
+    }
+
+    @FXML
+    public void goToRapports() {
+        currentPage = "rapports";
+        updateActiveButton();
+        Main.navigateTo("/com/agrifund/fxml/rapport.fxml");
+    }
+
+    @FXML
+    public void goToMeteo(){
+        currentPage="meteo";
+        updateActiveButton();
+        Main.navigateTo("/com/agrifund/fxml/meteo.fxml");
+    }
+    // ══════════════════════════════════════════════════════════
+    // NAVIGATION - COMPTE
+    // ══════════════════════════════════════════════════════════
+
+    @FXML
     public void goToProfile() {
-        loadPage("admin/admin-profile");
+        currentPage = "profile";
+        updateActiveButton();
+        Main.navigateTo("/com/agrifund/fxml/admin/admin-profile.fxml");
     }
 
     @FXML
     public void goToSecurity() {
-        loadPage("admin/admin-security");
+        currentPage = "security";
+        updateActiveButton();
+        Main.navigateTo("/com/agrifund/fxml/admin/admin-security.fxml");
     }
+
+    // ══════════════════════════════════════════════════════════
+    // DÉCONNEXION
+    // ══════════════════════════════════════════════════════════
 
     @FXML
     public void handleLogout() {
@@ -166,12 +358,8 @@ public class AdminSidebarController {
         alert.setTitle("Déconnexion");
         alert.setHeaderText("Voulez-vous vraiment vous déconnecter ?");
 
-        if (alert.showAndWait().get() == ButtonType.OK) {
+        if (alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
             Main.handleLogout();
         }
-    }
-
-    private void loadPage(String fxmlFile) {
-        Main.navigateTo("/com/agrifund/fxml/" + fxmlFile + ".fxml");
     }
 }

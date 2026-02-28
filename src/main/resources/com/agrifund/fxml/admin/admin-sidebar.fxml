@@ -33,9 +33,9 @@
 
     <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
         <VBox spacing="5" style="-fx-padding: 10 0;">
-            <!-- Menu Principal -->
-            <Label text="PRINCIPAL" styleClass="sidebar-section-title"/>
 
+            <!-- PRINCIPAL -->
+            <Label text="PRINCIPAL" styleClass="sidebar-section-title"/>
             <Button fx:id="btnDashboard" text="📊  Tableau de bord" styleClass="sidebar-menu-item"
                     onAction="#goToDashboard" maxWidth="Infinity"/>
             <Button fx:id="btnUsers" text="👥  Utilisateurs" styleClass="sidebar-menu-item"
@@ -45,17 +45,46 @@
             <Button fx:id="btnBanques" text="🏦  Banques" styleClass="sidebar-menu-item"
                     onAction="#goToBanques" maxWidth="Infinity"/>
 
-            <!-- Menu Gestion -->
+            <!-- GESTION -->
             <Label text="GESTION" styleClass="sidebar-section-title"/>
-
             <Button fx:id="btnDocuments" text="📄  Documents" styleClass="sidebar-menu-item"
                     onAction="#goToDocuments" maxWidth="Infinity"/>
             <Button fx:id="btnMessagerie" text="💬  Messagerie" styleClass="sidebar-menu-item"
                     onAction="#goToMessagerie" maxWidth="Infinity"/>
 
-            <!-- Menu Compte -->
-            <Label text="COMPTE" styleClass="sidebar-section-title"/>
+            <!-- FINANCE -->
+            <Label text="FINANCE" styleClass="sidebar-section-title"/>
+            <Button fx:id="btnProduitsFinanciers" text="💰  Produits Financiers" styleClass="sidebar-menu-item"
+                    onAction="#goToProduitsFinanciers" maxWidth="Infinity"/>
+            <Button fx:id="btnOffresFinancieres" text="📋  Offres Financières" styleClass="sidebar-menu-item"
+                    onAction="#goToOffresFinancieres" maxWidth="Infinity"/>
 
+            <!-- AGRICULTURE -->
+            <Label text="AGRICULTURE" styleClass="sidebar-section-title"/>
+            <Button fx:id="btnProjetsAgricoles" text="🌾  Projets Agricoles" styleClass="sidebar-menu-item"
+                    onAction="#goToProjetsAgricoles" maxWidth="Infinity"/>
+            <Button fx:id="btnRessources" text="🌿  Ressources" styleClass="sidebar-menu-item"
+                    onAction="#goToRessources" maxWidth="Infinity"/>
+
+            <!-- DÉCISIONS & RISQUES -->
+            <Label text="DÉCISIONS &amp; RISQUES" styleClass="sidebar-section-title"/>
+            <Button fx:id="btnDecisions" text="⚖  Décisions" styleClass="sidebar-menu-item"
+                    onAction="#goToDecisions" maxWidth="Infinity"/>
+            <Button fx:id="btnRisques" text="📊  Risques" styleClass="sidebar-menu-item"
+                    onAction="#goToRisques" maxWidth="Infinity"/>
+
+            <!-- IoT & RAPPORTS -->
+            <Label text="IoT &amp; RAPPORTS" styleClass="sidebar-section-title"/>
+            <Button fx:id="btnCapteurs" text="📡  Capteurs" styleClass="sidebar-menu-item"
+                    onAction="#goToCapteurs" maxWidth="Infinity"/>
+            <Button fx:id="btnDashboardIoT" text="📈  Dashboard IoT" styleClass="sidebar-menu-item"
+                    onAction="#goToDashboardIoT" maxWidth="Infinity"/>
+            <Button fx:id="btnRapports" text="📝  Rapports" styleClass="sidebar-menu-item"
+                    onAction="#goToRapports" maxWidth="Infinity"/>
+            <Button fx:id="btnMeteo" text="📈  Météo" styleClass="sidebar-menu-item"
+                    onAction="#goToMeteo" maxWidth="Infinity"/>
+            <!-- COMPTE -->
+            <Label text="COMPTE" styleClass="sidebar-section-title"/>
             <Button fx:id="btnProfile" text="👤  Mon profil" styleClass="sidebar-menu-item"
                     onAction="#goToProfile" maxWidth="Infinity"/>
             <Button fx:id="btnSecurity" text="🔐  Sécurité" styleClass="sidebar-menu-item"

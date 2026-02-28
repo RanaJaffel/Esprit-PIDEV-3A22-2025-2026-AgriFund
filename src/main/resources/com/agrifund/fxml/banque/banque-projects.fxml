@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane stylesheets="@../stylerayen.css" style="-fx-background-color: #FAFAFA;"
+            prefWidth="1400" prefHeight="850"
+            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.agrifund.controller.banque.BanqueProjectController">
+
+    <!-- SIDEBAR -->
+    <left>
+        <fx:include source="banque-sidebar.fxml"/>
+    </left>
+
+    <top>
+        <VBox spacing="0">
+            <!-- Header -->
+            <HBox alignment="CENTER" spacing="20" style="-fx-background-color: linear-gradient(to right, #0D47A1, #1565C0); -fx-padding: 20 30;">
+                <HBox alignment="CENTER_LEFT" spacing="15" HBox.hgrow="ALWAYS">
+                    <Label text="🏦" style="-fx-font-size: 40px;"/>
+                    <VBox spacing="2">
+                        <Label text="Demandes de Financement" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                        <Label text="Évaluation et gestion des demandes de crédit agricole"
+                               style="-fx-text-fill: rgba(255,255,255,0.85); -fx-font-size: 13px;"/>
+                    </VBox>
+                </HBox>
+
+                <HBox spacing="10">
+                    <Button text="🔄 Actualiser" onAction="#handleRefresh"
+                            style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 8;"/>
+                    <Button text="📊 Rapport PDF" onAction="#exportToPDF"
+                            style="-fx-background-color: white; -fx-text-fill: #0D47A1; -fx-padding: 10 20; -fx-background-radius: 8; -fx-font-weight: bold;"/>
+                </HBox>
+            </HBox>
+
+            <!-- Toolbar avec stats -->
+            <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: white; -fx-padding: 18 30; -fx-border-color: #E0E0E0; -fx-border-width: 0 0 1 0;">
+
+                <!-- Search et filtres -->
+                <HBox alignment="CENTER_LEFT" spacing="8" style="-fx-background-color: #ECEFF1; -fx-background-radius: 25; -fx-padding: 10 18;">
+                    <Label text="🔍" style="-fx-font-size: 16px;"/>
+                    <TextField fx:id="tfSearchProject" promptText="Rechercher par projet ou demandeur..."
+                               prefWidth="300" style="-fx-background-color: transparent; -fx-border-width: 0;"/>
+                </HBox>
+
+                <ComboBox fx:id="cbFilterStatut" promptText="Filtrer par statut" prefWidth="180"
+                          style="-fx-font-size: 13px;"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <!-- Stats Dashboard -->
+                <HBox spacing="25">
+                    <VBox alignment="CENTER" style="-fx-background-color: #E3F2FD; -fx-padding: 12 20; -fx-background-radius: 10;">
+                        <Label text="📋 Total Demandes" style="-fx-font-size: 11px; -fx-text-fill: #1565C0;"/>
+                        <Label fx:id="lblTotalProjects" text="--" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #0D47A1;"/>
+                    </VBox>
+
+                    <VBox alignment="CENTER" style="-fx-background-color: #FFF8E1; -fx-padding: 12 20; -fx-background-radius: 10;">
+                        <Label text="⏳ En Attente" style="-fx-font-size: 11px; -fx-text-fill: #F57F17;"/>
+                        <Label fx:id="lblPendingProjects" text="--" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #E65100;"/>
+                    </VBox>
+
+                    <VBox alignment="CENTER" style="-fx-background-color: #E8F5E9; -fx-padding: 12 20; -fx-background-radius: 10;">
+                        <Label text="💰 Budget Total" style="-fx-font-size: 11px; -fx-text-fill: #2E7D32;"/>
+                        <Label fx:id="lblTotalBudget" text="-- DT" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1B5E20;"/>
+                    </VBox>
+
+                    <VBox alignment="CENTER" style="-fx-background-color: #FFEBEE; -fx-padding: 12 20; -fx-background-radius: 10;">
+                        <Label text="⚠️ Montant en Attente" style="-fx-font-size: 11px; -fx-text-fill: #C62828;"/>
+                        <Label fx:id="lblPendingBudget" text="-- DT" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #B71C1C;"/>
+                    </VBox>
+                </HBox>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-border-width: 0;" VBox.vgrow="ALWAYS">
+            <FlowPane fx:id="projectsContainer" hgap="20" vgap="20" style="-fx-padding: 25;"/>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

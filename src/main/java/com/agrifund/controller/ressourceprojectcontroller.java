@@ -1,6 +1,5 @@
 package com.agrifund.controller;
 
-import com.agrifund.Main;
 import com.agrifund.entities.projectagricole;
 import com.agrifund.entities.ressourceproject;
 import com.agrifund.services.projectagricoleCRUD;
@@ -748,7 +747,19 @@ public class ressourceprojectcontroller implements Initializable {
 
     @FXML
     void goToProjects(ActionEvent event) {
-        Main.navigateTo("/com/agrifund/fxml/projectagricole.fxml");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/agrifund/fxml/projectagricole.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.getScene().setRoot(root);
+            stage.setTitle("Gestion des Projets Agricoles");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur de Navigation",
+                    "Impossible de charger la page Projets: " + e.getMessage());
+        }
     }
 
     @FXML

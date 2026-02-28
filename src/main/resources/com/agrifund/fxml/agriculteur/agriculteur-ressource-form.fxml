@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="620.0" prefWidth="500.0" spacing="0" stylesheets="@../stylerayen.css"
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.agrifund.controller.agriculteur.AgriculteurRessourceFormController">
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="15" styleClass="page-header">
+        <padding><Insets top="20" right="25" bottom="20" left="25"/></padding>
+        <Label text="📦" style="-fx-font-size: 28px;"/>
+        <VBox spacing="2">
+            <Label fx:id="lblTitle" text="Nouvelle Ressource" styleClass="header-title"/>
+            <Label fx:id="lblSubtitle" text="Ajouter une ressource à votre projet"
+                   style="-fx-text-fill: rgba(255,255,255,0.9); -fx-font-size: 13px;"/>
+        </VBox>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS"
+                style="-fx-background-color: transparent;">
+        <VBox spacing="20" style="-fx-background-color: white; -fx-padding: 25;">
+
+            <!-- Project Selection -->
+            <VBox spacing="8">
+                <Label text="📁 Projet associé *" style="-fx-font-weight: bold; -fx-text-fill: #2D6A4F;"/>
+                <ComboBox fx:id="cbIdProjectDialog" maxWidth="Infinity" promptText="Sélectionner un projet..."
+                          style="-fx-font-size: 14px;">
+                    <tooltip><Tooltip text="Sélectionnez le projet auquel cette ressource sera associée"/></tooltip>
+                </ComboBox>
+            </VBox>
+
+            <Separator/>
+
+            <!-- Resource Name -->
+            <VBox spacing="8">
+                <Label text="📝 Nom de la ressource *" style="-fx-font-weight: bold; -fx-text-fill: #2D6A4F;"/>
+                <TextField fx:id="tfNomRessourceDialog" promptText="Ex: Tracteur John Deere, Semences bio..."
+                           style="-fx-font-size: 14px;">
+                    <tooltip><Tooltip text="Nom descriptif de la ressource"/></tooltip>
+                </TextField>
+            </VBox>
+
+            <!-- Type -->
+            <VBox spacing="8">
+                <Label text="📦 Type de ressource *" style="-fx-font-weight: bold; -fx-text-fill: #2D6A4F;"/>
+                <ComboBox fx:id="cbTypeRessourceDialog" maxWidth="Infinity" promptText="Sélectionner le type..."
+                          style="-fx-font-size: 14px;">
+                    <tooltip><Tooltip text="Catégorie: équipement, matériaux ou service"/></tooltip>
+                </ComboBox>
+            </VBox>
+
+            <!-- Quantity & Cost Row -->
+            <HBox spacing="20">
+                <VBox spacing="8" HBox.hgrow="ALWAYS">
+                    <Label text="🔢 Quantité *" style="-fx-font-weight: bold; -fx-text-fill: #2D6A4F;"/>
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <TextField fx:id="tfQuantiteDialog" promptText="Ex: 10" HBox.hgrow="ALWAYS"
+                                   style="-fx-font-size: 14px;">
+                            <tooltip><Tooltip text="Nombre d'unités"/></tooltip>
+                        </TextField>
+                        <Label text="unités" style="-fx-text-fill: #666;"/>
+                    </HBox>
+                </VBox>
+
+                <VBox spacing="8" HBox.hgrow="ALWAYS">
+                    <Label text="💰 Coût unitaire *" style="-fx-font-weight: bold; -fx-text-fill: #2D6A4F;"/>
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <TextField fx:id="tfCoutDialog" promptText="Ex: 5000.00" HBox.hgrow="ALWAYS"
+                                   style="-fx-font-size: 14px;">
+                            <tooltip><Tooltip text="Prix unitaire en dinars"/></tooltip>
+                        </TextField>
+                        <Label text="DT" style="-fx-font-weight: bold; -fx-text-fill: #2D6A4F;"/>
+                    </HBox>
+                </VBox>
+            </HBox>
+
+            <!-- Supplier -->
+            <VBox spacing="8">
+                <Label text="🏭 Fournisseur *" style="-fx-font-weight: bold; -fx-text-fill: #2D6A4F;"/>
+                <TextField fx:id="tfFournisseurDialog" promptText="Nom du fournisseur ou entreprise"
+                           style="-fx-font-size: 14px;">
+                    <tooltip><Tooltip text="Nom complet du fournisseur"/></tooltip>
+                </TextField>
+            </VBox>
+
+            <!-- Status & Date Row -->
+            <HBox spacing="20">
+                <VBox spacing="8" HBox.hgrow="ALWAYS">
+                    <Label text="📊 Statut *" style="-fx-font-weight: bold; -fx-text-fill: #2D6A4F;"/>
+                    <ComboBox fx:id="cbStatutRessourceDialog" maxWidth="Infinity" promptText="Statut..."
+                              style="-fx-font-size: 14px;">
+                        <tooltip><Tooltip text="Prévu = à acheter, Acheté = déjà acquis"/></tooltip>
+                    </ComboBox>
+                </VBox>
+
+                <VBox spacing="8" HBox.hgrow="ALWAYS">
+                    <Label text="📅 Date d'ajout *" style="-fx-font-weight: bold; -fx-text-fill: #2D6A4F;"/>
+                    <DatePicker fx:id="dpDateAjoutDialog" maxWidth="Infinity" promptText="Sélectionner..."
+                                style="-fx-font-size: 14px;">
+                        <tooltip><Tooltip text="Date d'enregistrement de la ressource"/></tooltip>
+                    </DatePicker>
+                </VBox>
+            </HBox>
+
+            <!-- Spacer -->
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <!-- Buttons -->
+            <HBox spacing="15" alignment="CENTER_RIGHT">
+                <padding><Insets top="20"/></padding>
+                <Button text="✖ Annuler" onAction="#handleCancel" prefWidth="130" prefHeight="42"
+                        styleClass="btn-danger" style="-fx-font-size: 14px;"/>
+                <Button fx:id="btnSave" text="✓ Enregistrer" onAction="#handleSave" prefWidth="150" prefHeight="42"
+                        styleClass="btn-primary" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+            </HBox>
+        </VBox>
+    </ScrollPane>
+</VBox>

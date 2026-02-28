@@ -7,9 +7,9 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.agrifund.controller.MainControllerRana"
-            stylesheets="@../css/style-rana.css">
+            stylesheets="@stylerane.css">
 
-    <!-- MENU -->
+
     <left>
         <VBox spacing="20" styleClass="menu" alignment="TOP_CENTER">
             <Label text="AgriFund Smart" styleClass="menu-title"/>
@@ -21,13 +21,17 @@
             <Button text="📊 Relevés IoT"
                     onAction="#openDashboard"
                     styleClass="menu-button"/>
+
+            <Button text="🌤 Météo"
+                    onAction="#openMeteo"
+                    styleClass="menu-button"/>
         </VBox>
+
     </left>
 
-    <!-- CONTENU -->
+
     <center>
         <StackPane fx:id="contentPane" styleClass="content-area"/>
     </center>
 
 </BorderPane>
-

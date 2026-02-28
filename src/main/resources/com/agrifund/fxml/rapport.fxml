@@ -3,22 +3,35 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.agrifund.controller.RapportJournalierController"
-      spacing="20"
-      stylesheets="@../css/style-rana.css">
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.agrifund.controller.RapportJournalierController"
+            prefWidth="1450"
+            prefHeight="800"
+            stylesheets="@stylerane.css">
 
-    <Label text="Rapports Journaliers" styleClass="title"/>
+    <!-- ========== SIDEBAR GAUCHE ========== -->
+    <left>
+        <fx:include source="/com/agrifund/fxml/admin/admin-sidebar.fxml"/>
+    </left>
 
-    <TableView fx:id="tableRapport" prefHeight="400">
-        <columns>
-            <TableColumn fx:id="colDate" text="Date"/>
-            <TableColumn fx:id="colType" text="Type"/>
-            <TableColumn fx:id="colMoy" text="Moyenne"/>
-            <TableColumn fx:id="colMin" text="Min"/>
-            <TableColumn fx:id="colMax" text="Max"/>
-            <TableColumn fx:id="colCapteur" text="Capteur"/>
-        </columns>
-    </TableView>
+    <!-- ========== CONTENU PRINCIPAL ========== -->
+    <center>
+        <VBox spacing="20">
 
-</VBox>
+            <Label text="Rapports Journaliers" styleClass="title"/>
+
+            <TableView fx:id="tableRapport" prefHeight="400" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="colDate" text="Date"/>
+                    <TableColumn fx:id="colType" text="Type"/>
+                    <TableColumn fx:id="colMoy" text="Moyenne"/>
+                    <TableColumn fx:id="colMin" text="Min"/>
+                    <TableColumn fx:id="colMax" text="Max"/>
+                    <TableColumn fx:id="colCapteur" text="Capteur"/>
+                </columns>
+            </TableView>
+
+        </VBox>
+    </center>
+
+</BorderPane>

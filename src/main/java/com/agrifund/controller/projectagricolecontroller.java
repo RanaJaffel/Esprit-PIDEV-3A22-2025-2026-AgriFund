@@ -1,9 +1,10 @@
 package com.agrifund.controller;
 
-import com.agrifund.Main;
+import com.agrifund.entities.Agriculteur;
+import com.agrifund.entities.Utilisateur;
 import com.agrifund.entities.projectagricole;
+import com.agrifund.services.AgriculteurService;
 import com.agrifund.services.projectagricoleCRUD;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -123,7 +124,12 @@ public class projectagricolecontroller implements Initializable {
     private final projectagricoleCRUD service = new projectagricoleCRUD();
     private Timeline autoRefreshTimeline;
     private static final int REFRESH_INTERVAL_SECONDS = 3; // Faster polling for near-real-time updates
-
+    // ============================================================================
+// SESSION - AGRICULTEUR CONNECTÉ
+// ============================================================================
+    private Utilisateur currentUser;
+    private Agriculteur currentAgriculteur;
+    private AgriculteurService agriculteurService;
     // Tracks the last known status of each project (idproject -> statut)
     // Used to detect status changes triggered by decisionfinanciere inserts
     private Map<Integer, String> previousStatuses = new HashMap<>();
@@ -336,7 +342,9 @@ public class projectagricolecontroller implements Initializable {
                                 getStatusDisplayName(currentProject.getStatut()) + ")");
             } else {
                 // ADD MODE
+                // ✅ NOUVEAU CODE - avec agriculteurId
                 projectagricole p = new projectagricole(
+                        currentAgriculteur.getAgriculteurId(),  // ID de l'agriculteur connecté
                         getDialogFieldValue(tfNomProjectDialog),
                         Float.parseFloat(getDialogFieldValue(tfSurfaceDialog)),
                         new BigDecimal(getDialogFieldValue(tfBudgetDialog)),
@@ -390,7 +398,7 @@ public class projectagricolecontroller implements Initializable {
         WebEngine engine = webView.getEngine();
         engine.setJavaScriptEnabled(true);
 
-        java.net.URL mapUrl = getClass().getResource("/com/agrifund/fxml/mapbox_picker.html");
+        java.net.URL mapUrl = getClass().getResource("/mapbox_picker.html");
         if (mapUrl == null) {
             showAlert(Alert.AlertType.ERROR, "Fichier manquant",
                     "Le fichier mapbox_picker.html est introuvable.\n" +
@@ -1043,7 +1051,7 @@ public class projectagricolecontroller implements Initializable {
 
     private void openAddDialog() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/agrifund/fxml/projectagricoleadd.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/projectagricoleadd.fxml"));
             Parent root = loader.load();
 
             projectagricolecontroller controller = loader.getController();
@@ -1065,7 +1073,7 @@ public class projectagricolecontroller implements Initializable {
 
     private void openModifyDialog(projectagricole project) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/agrifund/fxml/projectagricolemodify.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/projectagricolemodify.fxml"));
             Parent root = loader.load();
 
             projectagricolecontroller controller = loader.getController();
@@ -1204,7 +1212,7 @@ public class projectagricolecontroller implements Initializable {
             final javafx.scene.web.WebEngine engine = mapView.getEngine();
             engine.setJavaScriptEnabled(true);
 
-            java.net.URL mapUrl = getClass().getResource("/com/agrifund/fxml/mapbox_picker.html");
+            java.net.URL mapUrl = getClass().getResource("/mapbox_picker.html");
             if (mapUrl != null) {
                 final double lat = project.getLatitude();
                 final double lng = project.getLongitude();
@@ -1391,12 +1399,24 @@ public class projectagricolecontroller implements Initializable {
      */
     @FXML
     void goToRessources(ActionEvent event) {
-        Main.navigateTo("/com/agrifund/fxml/ressourceproject.fxml");
+        try {
+            // Load the ressources FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ressourceproject.fxml"));
+            Parent root = loader.load();
+
+            // Get current stage
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            stage.getScene().setRoot(root);
+            stage.setTitle("Gestion des Ressources");
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur de Navigation",
+                    "Impossible de charger la page Ressources: " + e.getMessage());
+        }
     }
 
-    /**
-     * Open Add Project Form (called from FXML toolbar button)
-     */
+
     @FXML
     void openAddProjectForm(ActionEvent event) {
         openAddDialog();
@@ -1423,7 +1443,7 @@ public class projectagricolecontroller implements Initializable {
             return;
         }
 
-        java.net.URL mapUrl = getClass().getResource("/com/agrifund/fxml/Projects_map.html");
+        java.net.URL mapUrl = getClass().getResource("/projects_map.html");
         if (mapUrl == null) {
             showAlert(Alert.AlertType.ERROR, "Fichier manquant",
                     "projects_map.html introuvable dans src/main/resources/");
@@ -1999,18 +2019,11 @@ public class projectagricolecontroller implements Initializable {
     // ============================================================================
 
     private void showAlert(Alert.AlertType type, String title, String content) {
-        Runnable alertAction = () -> {
-            Alert alert = new Alert(type);
-            alert.setTitle(title);
-            alert.setHeaderText(null);
-            alert.setContentText(content);
-            alert.show();
-        };
-        if (Platform.isFxApplicationThread()) {
-            Platform.runLater(alertAction);
-        } else {
-            Platform.runLater(alertAction);
-        }
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
     public void cleanup() {

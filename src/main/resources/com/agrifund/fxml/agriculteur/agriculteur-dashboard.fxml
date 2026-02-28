@@ -8,7 +8,9 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.agrifund.controller.agriculteur.AgriculteurDashboardController"
             stylesheets="@../../css/styles.css">
-
+    <left>
+        <fx:include source="agriculteur-sidebar.fxml"/>
+    </left>
     <!-- MAIN CONTENT -->
     <center>
         <VBox styleClass="content-area" spacing="0">

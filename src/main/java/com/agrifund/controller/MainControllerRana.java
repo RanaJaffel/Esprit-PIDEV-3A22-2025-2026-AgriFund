@@ -12,7 +12,7 @@ public class MainControllerRana {
 
     @FXML
     public void initialize() {
-        openCapteurs(); // page par défaut
+        openCapteurs();
     }
 
     @FXML
@@ -23,6 +23,11 @@ public class MainControllerRana {
     @FXML
     private void openDashboard() {
         loadPage("/dashboard.fxml");
+    }
+
+    @FXML
+    private void openMeteo() {
+        loadPage("/meteo.fxml");
     }
 
     private void loadPage(String fxml) {

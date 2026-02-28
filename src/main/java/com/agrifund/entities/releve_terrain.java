@@ -11,7 +11,7 @@ public class releve_terrain {
     private LocalDateTime dateHeure;
     private int idCapteur;
 
-    // Constructeurs
+
     public releve_terrain() {
     }
 
@@ -33,7 +33,7 @@ public class releve_terrain {
         this.dateHeure = LocalDateTime.now();
     }
 
-    // Getters et Setters
+
     public int getIdReleve() {
         return idReleve;
     }

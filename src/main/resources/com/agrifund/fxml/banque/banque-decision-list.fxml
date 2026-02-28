@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.agrifund.controller.banque.BanqueDecisionListController"
+            prefWidth="1400" prefHeight="850"
+            styleClass="root"
+            stylesheets="@banque-styles.css">
+
+    <!-- Sidebar Banque -->
+    <left>
+        <fx:include source="/com/agrifund/fxml/banque/banque-sidebar.fxml"/>
+    </left>
+
+    <!-- Header -->
+    <top>
+        <HBox styleClass="header" alignment="CENTER_LEFT" spacing="20">
+            <padding><Insets top="15" right="25" bottom="15" left="25"/></padding>
+            <Label fx:id="lblBanqueInfo" styleClass="title" text="🏦 Mes Décisions Financières"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="➕ Nouvelle Décision" styleClass="button-primary" onAction="#handleNewDecision"/>
+            <Button text="📊 Mes Évaluations" styleClass="button-accent" onAction="#handleViewEvaluations"/>
+        </HBox>
+    </top>
+
+    <!-- Contenu principal -->
+    <center>
+        <VBox spacing="20" styleClass="main-content">
+            <padding><Insets top="25" right="30" bottom="25" left="30"/></padding>
+
+            <!-- Toolbar -->
+            <HBox spacing="15" alignment="CENTER_LEFT" styleClass="toolbar">
+                <padding><Insets top="12" right="20" bottom="12" left="20"/></padding>
+                <Label text="🔍 Rechercher:" styleClass="form-label"/>
+                <TextField fx:id="tfSearch" promptText="Projet, statut, justification..."
+                           onKeyReleased="#handleSearch" prefWidth="350" styleClass="text-field"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="🔄 Rafraîchir" styleClass="button-accent" onAction="#handleRefresh"/>
+            </HBox>
+
+            <!-- Table -->
+            <TableView fx:id="tableDecisions" VBox.vgrow="ALWAYS" styleClass="table-view">
+                <columns>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+                    <TableColumn fx:id="colProjet" text="Projet" prefWidth="200"/>
+                    <TableColumn fx:id="colStatut" text="Statut" prefWidth="120"/>
+                    <TableColumn fx:id="colJustification" text="Justification" prefWidth="280"/>
+                    <TableColumn fx:id="colDateDecision" text="Date" prefWidth="120"/>
+                    <TableColumn fx:id="colIdEvaluation" text="ID Éval." prefWidth="80"/>
+                    <TableColumn fx:id="colActions" text="Actions" prefWidth="130"/>
+                </columns>
+            </TableView>
+
+            <!-- Statistiques -->
+            <HBox spacing="30" alignment="CENTER" styleClass="stats-container">
+                <padding><Insets top="15" right="20" bottom="15" left="20"/></padding>
+
+                <VBox spacing="5" alignment="CENTER" styleClass="stat-box">
+                    <Label text="📊 Total" styleClass="stats-label"/>
+                    <Label fx:id="lblTotal" text="0" styleClass="stats-value"/>
+                </VBox>
+
+                <Separator orientation="VERTICAL" styleClass="vertical-separator"/>
+
+                <VBox spacing="5" alignment="CENTER" styleClass="stat-box">
+                    <Label text="✅ Approuvées" styleClass="stats-label"/>
+                    <Label fx:id="lblApprouves" text="0" style="-fx-text-fill: #28a745; -fx-font-size: 22px; -fx-font-weight: bold;"/>
+                </VBox>
+
+                <Separator orientation="VERTICAL" styleClass="vertical-separator"/>
+
+                <VBox spacing="5" alignment="CENTER" styleClass="stat-box">
+                    <Label text="⏳ En attente" styleClass="stats-label"/>
+                    <Label fx:id="lblEnAttente" text="0" style="-fx-text-fill: #ffc107; -fx-font-size: 22px; -fx-font-weight: bold;"/>
+                </VBox>
+
+                <Separator orientation="VERTICAL" styleClass="vertical-separator"/>
+
+                <VBox spacing="5" alignment="CENTER" styleClass="stat-box">
+                    <Label text="❌ Rejetées" styleClass="stats-label"/>
+                    <Label fx:id="lblRejetes" text="0" style="-fx-text-fill: #dc3545; -fx-font-size: 22px; -fx-font-weight: bold;"/>
+                </VBox>
+            </HBox>
+
+            <!-- Status Bar -->
+            <HBox alignment="CENTER_LEFT" styleClass="status-bar">
+                <padding><Insets top="8" right="15" bottom="8" left="15"/></padding>
+                <Label fx:id="lblStatus" styleClass="status-label" text="Prêt"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

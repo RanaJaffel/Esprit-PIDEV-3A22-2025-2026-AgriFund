@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.agrifund.controller.admin.AdminRisqueListController"
+            prefWidth="1500" prefHeight="850"
+            styleClass="root"
+            stylesheets="@admin-styles.css">
+
+    <!-- Sidebar Admin -->
+    <left>
+        <fx:include source="/com/agrifund/fxml/admin/admin-sidebar.fxml"/>
+    </left>
+
+    <!-- Header -->
+    <top>
+        <HBox styleClass="header" alignment="CENTER_LEFT" spacing="20">
+            <Label styleClass="title" text="👁️ Consultation - Toutes les Évaluations de Risque"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="📖 Mode lecture seule" style="-fx-text-fill: #E1B323; -fx-font-weight: bold;"/>
+            <Button text="📋 Voir Décisions" styleClass="button-accent" onAction="#handleViewDecisions"/>
+        </HBox>
+    </top>
+
+    <!-- Contenu -->
+    <center>
+        <VBox spacing="20" styleClass="main-content">
+            <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>
+
+            <!-- Info Box -->
+            <HBox styleClass="info-box" alignment="CENTER_LEFT" spacing="10">
+                <padding><Insets top="10" right="15" bottom="10" left="15"/></padding>
+                <Label text="ℹ️" style="-fx-font-size: 20px;"/>
+                <Label text="En tant qu'administrateur, vous pouvez consulter toutes les évaluations de toutes les banques. Les modifications ne sont pas autorisées."
+                       style="-fx-text-fill: #666;" wrapText="true"/>
+            </HBox>
+
+            <!-- Toolbar -->
+            <HBox spacing="15" alignment="CENTER_LEFT" styleClass="toolbar">
+                <padding><Insets top="10" right="15" bottom="10" left="15"/></padding>
+                <Label text="🔍 Rechercher:" styleClass="form-label"/>
+                <TextField fx:id="tfSearch" promptText="Projet, banque, niveau..." onKeyReleased="#handleSearch" prefWidth="350"/>
+                <Button text="🔄 Rafraîchir" styleClass="button-accent" onAction="#handleRefresh"/>
+            </HBox>
+
+            <!-- Table (sans colonne Actions) -->
+            <TableView fx:id="tableEvaluations" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
+                    <TableColumn fx:id="colNomProjet" text="Projet" prefWidth="180"/>
+                    <TableColumn fx:id="colBanque" text="Banque" prefWidth="150"/>
+                    <TableColumn fx:id="colScoreGlobal" text="Score" prefWidth="80"/>
+                    <TableColumn fx:id="colNiveauRisque" text="Niveau Risque" prefWidth="120"/>
+                    <TableColumn fx:id="colFiabiliteDonnees" text="Fiabilité" prefWidth="100"/>
+                    <TableColumn fx:id="colFacteurPrincipal" text="Facteurs" prefWidth="250"/>
+                    <TableColumn fx:id="colRecommandation" text="Recommandation" prefWidth="130"/>
+                    <TableColumn fx:id="colDateEvaluation" text="Date" prefWidth="130"/>
+                </columns>
+            </TableView>
+
+            <!-- Stats -->
+            <HBox spacing="20" alignment="CENTER_LEFT">
+                <VBox spacing="5" alignment="CENTER">
+                    <Label text="Total" styleClass="stats-label"/>
+                    <Label fx:id="lblTotal" text="0" styleClass="stats-value"/>
+                </VBox>
+                <Separator orientation="VERTICAL"/>
+                <VBox spacing="5" alignment="CENTER">
+                    <Label text="Faible" styleClass="stats-label"/>
+                    <Label fx:id="lblFaible" text="0" style="-fx-text-fill: #28a745; -fx-font-weight: bold;"/>
+                </VBox>
+                <Separator orientation="VERTICAL"/>
+                <VBox spacing="5" alignment="CENTER">
+                    <Label text="Moyen" styleClass="stats-label"/>
+                    <Label fx:id="lblMoyen" text="0" style="-fx-text-fill: #E1B323; -fx-font-weight: bold;"/>
+                </VBox>
+                <Separator orientation="VERTICAL"/>
+                <VBox spacing="5" alignment="CENTER">
+                    <Label text="Élevé" styleClass="stats-label"/>
+                    <Label fx:id="lblEleve" text="0" style="-fx-text-fill: #E17D23; -fx-font-weight: bold;"/>
+                </VBox>
+                <Separator orientation="VERTICAL"/>
+                <VBox spacing="5" alignment="CENTER">
+                    <Label text="Critique" styleClass="stats-label"/>
+                    <Label fx:id="lblCritique" text="0" style="-fx-text-fill: #dc3545; -fx-font-weight: bold;"/>
+                </VBox>
+            </HBox>
+
+            <Label fx:id="lblStatus" styleClass="status-label" text="Mode consultation"/>
+        </VBox>
+    </center>
+</BorderPane>
