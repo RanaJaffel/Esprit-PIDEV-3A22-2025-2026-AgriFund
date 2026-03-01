@@ -1,107 +1,166 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.effect.*?>
 
-<BorderPane stylesheets="@../stylerayen.css" style="-fx-background-color: #F8F9FA;"
-            prefWidth="1400" prefHeight="850"
-            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.agrifund.controller.admin.AdminRessourceController">
+<HBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.agrifund.controller.admin.AdminRessourceController"
+      stylesheets="@../../css/styles.css"
+      style="-fx-background-color: #f8faf8;">
 
-    <left>
-        <fx:include source="admin-sidebar.fxml"/>
-    </left>
+    <!-- SIDEBAR - Prend toute la hauteur -->
+    <fx:include source="admin-sidebar.fxml"/>
 
-    <top>
-        <VBox spacing="0">
-            <HBox alignment="CENTER_LEFT" spacing="20" styleClass="page-header">
-                <padding><Insets top="18" right="30" bottom="18" left="30"/></padding>
+    <!-- MAIN CONTENT -->
+    <VBox HBox.hgrow="ALWAYS" spacing="0" style="-fx-background-color: #f8faf8;">
 
-                <HBox alignment="CENTER" spacing="12">
-                    <Label text="📦" style="-fx-font-size: 32px;"/>
-                    <VBox spacing="0">
-                        <Label text="Gestion des Ressources" styleClass="header-title" style="-fx-font-size: 26px;"/>
-                        <Label text="Vue administrative - Toutes les ressources"
-                               style="-fx-text-fill: rgba(255,255,255,0.85); -fx-font-size: 13px;"/>
-                    </VBox>
-                </HBox>
+        <!-- ========== HEADER ========== -->
+        <HBox alignment="CENTER_LEFT" spacing="20"
+              style="-fx-background-color: linear-gradient(to right, #089647, #076A39, #095032); -fx-padding: 22 30;">
+            <effect>
+                <DropShadow color="rgba(8, 150, 71, 0.3)" offsetY="3" radius="10"/>
+            </effect>
 
-                <Region HBox.hgrow="ALWAYS"/>
-
-                <Button text="🔄 Actualiser" styleClass="btn-info" onAction="#handleRefresh"
-                        prefHeight="38" prefWidth="130"/>
+            <HBox alignment="CENTER" spacing="12">
+                <Label text="📦" style="-fx-font-size: 36px;"/>
+                <VBox spacing="3">
+                    <Label text="Gestion des Ressources"
+                           style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: white;">
+                        <effect>
+                            <DropShadow color="rgba(0,0,0,0.2)" offsetY="1" radius="3"/>
+                        </effect>
+                    </Label>
+                    <Label text="Vue administrative — Toutes les ressources des projets"
+                           style="-fx-text-fill: #B2D944; -fx-font-size: 13px;"/>
+                </VBox>
             </HBox>
 
-            <HBox alignment="CENTER_LEFT" spacing="15" styleClass="toolbar">
-                <padding><Insets top="15" right="30" bottom="15" left="30"/></padding>
+            <Region HBox.hgrow="ALWAYS"/>
 
-                <HBox alignment="CENTER_LEFT" spacing="8"
-                      style="-fx-background-color: #F8F9FA; -fx-background-radius: 20; -fx-padding: 8 16;">
-                    <Label text="🔍" style="-fx-font-size: 16px;"/>
-                    <TextField fx:id="tfSearch" promptText="Rechercher ressource, projet, agriculteur..."
-                               prefWidth="300" style="-fx-background-color: transparent; -fx-border-width: 0;"/>
-                </HBox>
+            <Button text="🔄 Actualiser" onAction="#handleRefresh"
+                    style="-fx-background-color: #E1B323; -fx-text-fill: #133D03;
+                           -fx-padding: 12 28; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand;">
+                <effect>
+                    <DropShadow color="rgba(225, 179, 35, 0.4)" offsetY="2" radius="6"/>
+                </effect>
+            </Button>
+        </HBox>
 
-                <ComboBox fx:id="cbFilterType" promptText="Type" prefWidth="150"/>
-                <ComboBox fx:id="cbFilterStatutProjet" promptText="Statut projet" prefWidth="150"/>
-                <ComboBox fx:id="cbFilterStatutRessource" promptText="Statut ressource" prefWidth="140"/>
+        <!-- ========== TOOLBAR ========== -->
+        <HBox alignment="CENTER_LEFT" spacing="15"
+              style="-fx-background-color: white; -fx-padding: 18 30;
+                     -fx-border-color: #e0e5e0; -fx-border-width: 0 0 1 0;">
+
+            <HBox alignment="CENTER_LEFT" spacing="8"
+                  style="-fx-background-color: #f5f7f5; -fx-background-radius: 25; -fx-padding: 10 18;
+                         -fx-border-color: #089647; -fx-border-radius: 25; -fx-border-width: 2;">
+                <Label text="🔍" style="-fx-font-size: 16px;"/>
+                <TextField fx:id="tfSearch" promptText="Rechercher ressource, projet, agriculteur..."
+                           prefWidth="320" style="-fx-background-color: transparent; -fx-border-width: 0; -fx-font-size: 13px;"/>
             </HBox>
-        </VBox>
-    </top>
 
-    <center>
-        <VBox spacing="0" VBox.vgrow="ALWAYS">
+            <ComboBox fx:id="cbFilterType" promptText="Type" prefWidth="150"
+                      style="-fx-background-color: #f5f7f5; -fx-background-radius: 10;"/>
+            <ComboBox fx:id="cbFilterStatutProjet" promptText="Statut projet" prefWidth="160"
+                      style="-fx-background-color: #f5f7f5; -fx-background-radius: 10;"/>
+            <ComboBox fx:id="cbFilterStatutRessource" promptText="Statut ressource" prefWidth="160"
+                      style="-fx-background-color: #f5f7f5; -fx-background-radius: 10;"/>
+        </HBox>
+
+        <!-- ========== STATISTICS + CONTENT ========== -->
+        <VBox VBox.vgrow="ALWAYS" spacing="0">
             <padding><Insets top="25" right="30" bottom="25" left="30"/></padding>
 
+            <!-- Statistics Cards -->
             <HBox spacing="20" alignment="CENTER_LEFT">
-                <padding><Insets bottom="20"/></padding>
+                <padding><Insets bottom="25"/></padding>
 
-                <HBox spacing="15" alignment="CENTER_LEFT" styleClass="stat-card" HBox.hgrow="ALWAYS">
-                    <StackPane style="-fx-min-width: 50; -fx-min-height: 50; -fx-background-color: #D8F3DC; -fx-background-radius: 10;">
-                        <Label text="📦" style="-fx-font-size: 24px;"/>
+                <!-- Total Ressources -->
+                <HBox spacing="15" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 16;
+                             -fx-border-color: #e0e5e0; -fx-border-radius: 16; -fx-border-width: 1;">
+                    <effect>
+                        <DropShadow color="rgba(0,0,0,0.08)" offsetY="3" radius="10"/>
+                    </effect>
+                    <StackPane style="-fx-min-width: 55; -fx-min-height: 55;
+                                      -fx-background-color: linear-gradient(to bottom right, #089647, #076A39);
+                                      -fx-background-radius: 12;">
+                        <Label text="📦" style="-fx-font-size: 26px;"/>
                     </StackPane>
                     <VBox spacing="4">
-                        <Label text="Total Ressources" style="-fx-text-fill: #666; -fx-font-size: 12px;"/>
-                        <Label fx:id="lblTotalRessources" text="--" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2D6A4F;"/>
+                        <Label text="Total Ressources" style="-fx-text-fill: #848A86; -fx-font-size: 12px;"/>
+                        <Label fx:id="lblTotalRessources" text="--"
+                               style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #089647;"/>
                     </VBox>
                 </HBox>
 
-                <HBox spacing="15" alignment="CENTER_LEFT" styleClass="stat-card" HBox.hgrow="ALWAYS">
-                    <StackPane style="-fx-min-width: 50; -fx-min-height: 50; -fx-background-color: #E8F5E9; -fx-background-radius: 10;">
-                        <Label text="👨‍🌾" style="-fx-font-size: 24px;"/>
+                <!-- Agriculteurs -->
+                <HBox spacing="15" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 16;
+                             -fx-border-color: #e0e5e0; -fx-border-radius: 16; -fx-border-width: 1;">
+                    <effect>
+                        <DropShadow color="rgba(0,0,0,0.08)" offsetY="3" radius="10"/>
+                    </effect>
+                    <StackPane style="-fx-min-width: 55; -fx-min-height: 55;
+                                      -fx-background-color: linear-gradient(to bottom right, #B2D944, #9A951F);
+                                      -fx-background-radius: 12;">
+                        <Label text="👨‍🌾" style="-fx-font-size: 26px;"/>
                     </StackPane>
                     <VBox spacing="4">
-                        <Label text="Agriculteurs" style="-fx-text-fill: #666; -fx-font-size: 12px;"/>
-                        <Label fx:id="lblTotalAgriculteurs" text="--" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #388E3C;"/>
+                        <Label text="Agriculteurs" style="-fx-text-fill: #848A86; -fx-font-size: 12px;"/>
+                        <Label fx:id="lblTotalAgriculteurs" text="--"
+                               style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #476C1A;"/>
                     </VBox>
                 </HBox>
 
-                <HBox spacing="15" alignment="CENTER_LEFT" styleClass="stat-card" HBox.hgrow="ALWAYS">
-                    <StackPane style="-fx-min-width: 50; -fx-min-height: 50; -fx-background-color: #E3F2FD; -fx-background-radius: 10;">
-                        <Label text="📁" style="-fx-font-size: 24px;"/>
+                <!-- Projets -->
+                <HBox spacing="15" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 16;
+                             -fx-border-color: #e0e5e0; -fx-border-radius: 16; -fx-border-width: 1;">
+                    <effect>
+                        <DropShadow color="rgba(0,0,0,0.08)" offsetY="3" radius="10"/>
+                    </effect>
+                    <StackPane style="-fx-min-width: 55; -fx-min-height: 55;
+                                      -fx-background-color: linear-gradient(to bottom right, #476C1A, #133D03);
+                                      -fx-background-radius: 12;">
+                        <Label text="📁" style="-fx-font-size: 26px;"/>
                     </StackPane>
                     <VBox spacing="4">
-                        <Label text="Projets" style="-fx-text-fill: #666; -fx-font-size: 12px;"/>
-                        <Label fx:id="lblTotalProjets" text="--" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1565C0;"/>
+                        <Label text="Projets" style="-fx-text-fill: #848A86; -fx-font-size: 12px;"/>
+                        <Label fx:id="lblTotalProjets" text="--"
+                               style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #133D03;"/>
                     </VBox>
                 </HBox>
 
-                <HBox spacing="15" alignment="CENTER_LEFT" styleClass="stat-card" HBox.hgrow="ALWAYS">
-                    <StackPane style="-fx-min-width: 50; -fx-min-height: 50; -fx-background-color: #FFF3E0; -fx-background-radius: 10;">
-                        <Label text="💰" style="-fx-font-size: 24px;"/>
+                <!-- Coût Total -->
+                <HBox spacing="15" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 16;
+                             -fx-border-color: #e0e5e0; -fx-border-radius: 16; -fx-border-width: 1;">
+                    <effect>
+                        <DropShadow color="rgba(0,0,0,0.08)" offsetY="3" radius="10"/>
+                    </effect>
+                    <StackPane style="-fx-min-width: 55; -fx-min-height: 55;
+                                      -fx-background-color: linear-gradient(to bottom right, #E1B323, #9A951F);
+                                      -fx-background-radius: 12;">
+                        <Label text="💰" style="-fx-font-size: 26px;"/>
                     </StackPane>
                     <VBox spacing="4">
-                        <Label text="Coût Total" style="-fx-text-fill: #666; -fx-font-size: 12px;"/>
-                        <Label fx:id="lblCoutTotal" text="-- DT" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #E65100;"/>
+                        <Label text="Coût Total" style="-fx-text-fill: #848A86; -fx-font-size: 12px;"/>
+                        <Label fx:id="lblCoutTotal" text="-- DT"
+                               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #9A951F;"/>
                     </VBox>
                 </HBox>
             </HBox>
 
+            <!-- Resources Grid -->
             <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
                         style="-fx-background-color: transparent; -fx-border-width: 0;">
                 <FlowPane fx:id="ressourcesContainer" hgap="20" vgap="20"
                           style="-fx-padding: 5; -fx-background-color: transparent;"/>
             </ScrollPane>
         </VBox>
-    </center>
-</BorderPane>
+    </VBox>
+</HBox>

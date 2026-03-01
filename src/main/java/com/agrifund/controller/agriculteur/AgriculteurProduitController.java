@@ -47,14 +47,25 @@ public class AgriculteurProduitController {
     private ProduitFinancierService produitService;
     private ObservableList<ProduitFinancier> tousLesProduits;
 
-    // Palette de couleurs pour les cartes
+    // Palette de couleurs AgriFund
+    private static final String VERT_VIF = "#089647";
+    private static final String VERT_FONCE = "#076A39";
+    private static final String VERT_FORET = "#095032";
+    private static final String GRIS = "#848A86";
+    private static final String VERT_TRES_FONCE = "#133D03";
+    private static final String JAUNE_MOUTARDE = "#E1B323";
+    private static final String VERT_CITRON = "#B2D944";
+    private static final String OLIVE = "#9A951F";
+    private static final String VERT_OLIVE_FONCE = "#476C1A";
+
+    // Palette de couleurs pour les cartes - utilisant la nouvelle palette
     private static final String[][] CARD_THEMES = {
-            {"#B2D944", "#1a2e10", "#243d15"},  // Lime green
-            {"#4fc3f7", "#0a1e2e", "#10324a"},  // Sky blue
-            {"#ffb74d", "#2a1a05", "#3d2a0a"},  // Amber
-            {"#ef5350", "#2a0a0a", "#3d1010"},  // Red
-            {"#ce93d8", "#1e0a2a", "#2d1040"},  // Purple
-            {"#26c6da", "#0a2a2e", "#103d42"},  // Teal
+            {VERT_CITRON, "#1a2e10", "#243d15"},      // Vert citron
+            {VERT_VIF, "#0a2e1a", "#10422a"},         // Vert vif
+            {JAUNE_MOUTARDE, "#2a2205", "#3d330a"},   // Jaune moutarde
+            {VERT_FONCE, "#0a1e15", "#103220"},       // Vert foncé
+            {OLIVE, "#1e1f0a", "#2d2e10"},            // Olive
+            {VERT_OLIVE_FONCE, "#1a2a10", "#253d18"}, // Vert olive foncé
     };
 
     @FXML
@@ -120,7 +131,7 @@ public class AgriculteurProduitController {
 
         if (produits.isEmpty()) {
             Label lblVide = new Label("🔍 Aucun produit trouvé pour votre recherche");
-            lblVide.setStyle("-fx-text-fill: #666; -fx-font-size: 16; -fx-padding: 40;");
+            lblVide.setStyle("-fx-text-fill: " + GRIS + "; -fx-font-size: 16; -fx-padding: 40;");
             containerProduits.getChildren().add(lblVide);
             lblNombreProduits.setText("(0)");
             return;
@@ -150,12 +161,12 @@ public class AgriculteurProduitController {
         card.setStyle(
                 "-fx-background-color: linear-gradient(to bottom, " + bgStart + ", " + bgEnd + ");" +
                         "-fx-background-radius: 20;" +
-                        "-fx-border-color: " + accent + "15;" +
+                        "-fx-border-color: " + accent + "25;" +
                         "-fx-border-radius: 20;" +
                         "-fx-border-width: 1;" +
                         "-fx-cursor: hand;"
         );
-        card.setEffect(new DropShadow(16, Color.rgb(0, 0, 0, 0.4)));
+        card.setEffect(new DropShadow(16, Color.web(VERT_FONCE + "60")));
 
         // Header
         HBox header = new HBox(10);
@@ -164,7 +175,7 @@ public class AgriculteurProduitController {
 
         StackPane iconBubble = new StackPane();
         iconBubble.setPrefSize(44, 44);
-        iconBubble.setStyle("-fx-background-color: " + accent + "20; -fx-background-radius: 12;");
+        iconBubble.setStyle("-fx-background-color: " + accent + "30; -fx-background-radius: 12;");
         Label iconTxt = new Label(getTypeIcon(produit.getTypeFinancement()));
         iconTxt.setStyle("-fx-font-size: 20;");
         iconBubble.getChildren().add(iconTxt);
@@ -183,7 +194,7 @@ public class AgriculteurProduitController {
         StackPane rateBubble = new StackPane();
         rateBubble.setStyle("-fx-background-color: " + accent + "; -fx-background-radius: 10;");
         Label lblRate = new Label(String.format("%.1f%%", produit.getTauxInteret()));
-        lblRate.setStyle("-fx-text-fill: #0c1b13; -fx-font-size: 14; -fx-font-weight: bold; -fx-padding: 4 12;");
+        lblRate.setStyle("-fx-text-fill: " + VERT_TRES_FONCE + "; -fx-font-size: 14; -fx-font-weight: bold; -fx-padding: 4 12;");
         rateBubble.getChildren().add(lblRate);
 
         header.getChildren().addAll(iconBubble, nameBox, rateBubble);
@@ -207,7 +218,7 @@ public class AgriculteurProduitController {
         StackPane barBg = new StackPane();
         barBg.setPrefHeight(5);
         barBg.setMaxWidth(Double.MAX_VALUE);
-        barBg.setStyle("-fx-background-color: rgba(255,255,255,0.06); -fx-background-radius: 3;");
+        barBg.setStyle("-fx-background-color: rgba(255,255,255,0.08); -fx-background-radius: 3;");
 
         Region barFill = new Region();
         barFill.setPrefHeight(5);
@@ -242,12 +253,42 @@ public class AgriculteurProduitController {
         );
         btnDetails.setOnAction(e -> afficherDetailsProduit(produit));
 
+        // Hover effect pour bouton détails
+        btnDetails.setOnMouseEntered(ev ->
+                btnDetails.setStyle(
+                        "-fx-background-color: rgba(255,255,255,0.15); -fx-text-fill: white;" +
+                                "-fx-padding: 8 18; -fx-background-radius: 10; -fx-cursor: hand; -fx-font-size: 11;"
+                )
+        );
+        btnDetails.setOnMouseExited(ev ->
+                btnDetails.setStyle(
+                        "-fx-background-color: rgba(255,255,255,0.08); -fx-text-fill: rgba(255,255,255,0.7);" +
+                                "-fx-padding: 8 18; -fx-background-radius: 10; -fx-cursor: hand; -fx-font-size: 11;"
+                )
+        );
+
         Button btnDemander = new Button("Demander →");
         btnDemander.setStyle(
-                "-fx-background-color: " + accent + "; -fx-text-fill: #0c1b13; -fx-font-weight: bold;" +
+                "-fx-background-color: " + accent + "; -fx-text-fill: " + VERT_TRES_FONCE + "; -fx-font-weight: bold;" +
                         "-fx-padding: 8 18; -fx-background-radius: 10; -fx-cursor: hand; -fx-font-size: 11;"
         );
         btnDemander.setOnAction(e -> ouvrirFormulaireDemande(produit));
+
+        // Hover effect pour bouton demander
+        final String accentFinal = accent;
+        btnDemander.setOnMouseEntered(ev ->
+                btnDemander.setStyle(
+                        "-fx-background-color: linear-gradient(to right, " + accentFinal + ", " + VERT_VIF + "); " +
+                                "-fx-text-fill: white; -fx-font-weight: bold;" +
+                                "-fx-padding: 8 18; -fx-background-radius: 10; -fx-cursor: hand; -fx-font-size: 11;"
+                )
+        );
+        btnDemander.setOnMouseExited(ev ->
+                btnDemander.setStyle(
+                        "-fx-background-color: " + accentFinal + "; -fx-text-fill: " + VERT_TRES_FONCE + "; -fx-font-weight: bold;" +
+                                "-fx-padding: 8 18; -fx-background-radius: 10; -fx-cursor: hand; -fx-font-size: 11;"
+                )
+        );
 
         actions.getChildren().addAll(btnDetails, btnDemander);
 
@@ -255,20 +296,20 @@ public class AgriculteurProduitController {
 
         card.getChildren().addAll(header, body);
 
-        // Hover effects
+        // Hover effects pour la carte
         card.setOnMouseEntered(e -> {
             ScaleTransition st = new ScaleTransition(Duration.millis(180), card);
             st.setToX(1.03);
             st.setToY(1.03);
             st.play();
-            card.setEffect(new DropShadow(28, Color.web(accent + "44")));
+            card.setEffect(new DropShadow(28, Color.web(accent + "60")));
         });
         card.setOnMouseExited(e -> {
             ScaleTransition st = new ScaleTransition(Duration.millis(180), card);
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
-            card.setEffect(new DropShadow(16, Color.rgb(0, 0, 0, 0.4)));
+            card.setEffect(new DropShadow(16, Color.web(VERT_FONCE + "60")));
         });
 
         return card;

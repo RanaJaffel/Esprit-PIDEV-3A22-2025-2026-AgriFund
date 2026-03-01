@@ -224,37 +224,6 @@
             ══════════════════════════════════════════════════════════ -->
             <Region styleClass="menu-divider"/>
             <Label text="IoT &amp; MONITORING" styleClass="section-title"/>
-
-            <Button fx:id="btnCapteurs" styleClass="sidebar-menu-item"
-                    onAction="#goToCapteurs" maxWidth="Infinity">
-                <graphic>
-                    <HBox spacing="12" alignment="CENTER_LEFT">
-                        <Label text="📡" styleClass="menu-icon"/>
-                        <Label text="Capteurs Terrain" styleClass="menu-text"/>
-                    </HBox>
-                </graphic>
-            </Button>
-
-            <Button fx:id="btnDashboardIoT" styleClass="sidebar-menu-item"
-                    onAction="#goToDashboardIoT" maxWidth="Infinity">
-                <graphic>
-                    <HBox spacing="12" alignment="CENTER_LEFT">
-                        <Label text="📉" styleClass="menu-icon"/>
-                        <Label text="Dashboard IoT" styleClass="menu-text"/>
-                    </HBox>
-                </graphic>
-            </Button>
-
-            <Button fx:id="btnRapports" styleClass="sidebar-menu-item"
-                    onAction="#goToRapports" maxWidth="Infinity">
-                <graphic>
-                    <HBox spacing="12" alignment="CENTER_LEFT">
-                        <Label text="📝" styleClass="menu-icon"/>
-                        <Label text="Rapports" styleClass="menu-text"/>
-                    </HBox>
-                </graphic>
-            </Button>
-
             <!-- ══════════════════════════════════════════════════════════
                  SECTION: COMMUNICATION
             ══════════════════════════════════════════════════════════ -->

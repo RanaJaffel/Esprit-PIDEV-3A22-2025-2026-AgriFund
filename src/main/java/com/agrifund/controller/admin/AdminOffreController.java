@@ -59,7 +59,7 @@ public class AdminOffreController {
             colStatut.setCellValueFactory(new PropertyValueFactory<>("statut"));
             colBanque.setCellValueFactory(new PropertyValueFactory<>("nomBanque"));
 
-            // Style pour la colonne statut
+            // Style pour la colonne statut avec couleurs AgriFund
             colStatut.setCellFactory(column -> new TableCell<OffreFinanciere, String>() {
                 @Override
                 protected void updateItem(String statut, boolean empty) {
@@ -71,13 +71,16 @@ public class AdminOffreController {
                         setText(statut);
                         switch (statut) {
                             case "Active":
-                                setStyle("-fx-text-fill: #2E7D32; -fx-font-weight: bold;");
+                                setStyle("-fx-text-fill: #089647; -fx-font-weight: bold; " +
+                                        "-fx-background-color: rgba(8, 150, 71, 0.1); -fx-background-radius: 5;");
                                 break;
                             case "En pause":
-                                setStyle("-fx-text-fill: #F9A825; -fx-font-weight: bold;");
+                                setStyle("-fx-text-fill: #E1B323; -fx-font-weight: bold; " +
+                                        "-fx-background-color: rgba(225, 179, 35, 0.1); -fx-background-radius: 5;");
                                 break;
                             case "Expiree":
-                                setStyle("-fx-text-fill: #C62828; -fx-font-weight: bold;");
+                                setStyle("-fx-text-fill: #848A86; -fx-font-weight: bold; " +
+                                        "-fx-background-color: rgba(132, 138, 134, 0.1); -fx-background-radius: 5;");
                                 break;
                             default:
                                 setStyle("-fx-font-weight: bold;");
@@ -93,10 +96,25 @@ public class AdminOffreController {
                     super.updateItem(banque, empty);
                     if (empty || banque == null || banque.isEmpty()) {
                         setText("Non assignée");
-                        setStyle("-fx-text-fill: #999; -fx-font-style: italic;");
+                        setStyle("-fx-text-fill: #848A86; -fx-font-style: italic;");
                     } else {
                         setText("🏦 " + banque);
-                        setStyle("-fx-text-fill: #7B1FA2; -fx-font-weight: bold;");
+                        setStyle("-fx-text-fill: #476C1A; -fx-font-weight: bold;");
+                    }
+                }
+            });
+
+            // Style pour la colonne produit
+            colProduit.setCellFactory(column -> new TableCell<OffreFinanciere, String>() {
+                @Override
+                protected void updateItem(String produit, boolean empty) {
+                    super.updateItem(produit, empty);
+                    if (empty || produit == null || produit.isEmpty()) {
+                        setText("N/A");
+                        setStyle("-fx-text-fill: #848A86;");
+                    } else {
+                        setText("📦 " + produit);
+                        setStyle("-fx-text-fill: #133D03;");
                     }
                 }
             });
@@ -123,7 +141,6 @@ public class AdminOffreController {
 
     private void chargerDonnees() {
         try {
-            // Admin voit TOUTES les offres
             offresList = offreService.getAllOffresAvecProduit();
             tableOffres.setItems(offresList);
             mettreAJourStats();
@@ -179,6 +196,7 @@ public class AdminOffreController {
         offresList.clear();
         offresList.addAll(resultats);
         tableOffres.setItems(offresList);
+        mettreAJourStats();
         lblCount.setText(offresList.size() + " résultats");
     }
 
@@ -213,19 +231,32 @@ public class AdminOffreController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            // Fallback: afficher dans une alerte
             showDetailsInAlert(selected);
         }
     }
 
     private void showDetailsInAlert(OffreFinanciere offre) {
-        String details = "=== DÉTAILS DE L'OFFRE ===\n\n" +
-                "ID: #" + offre.getIdOffre() + "\n" +
-                "Nom: " + offre.getNomOffre() + "\n" +
-                "Produit: " + (offre.getNomProduit() != null ? offre.getNomProduit() : "N/A") + "\n" +
-                "Statut: " + offre.getStatut() + "\n" +
-                "Banque: " + (offre.getNomBanque() != null ? offre.getNomBanque() : "Non assignée") + "\n\n" +
-                "CONDITIONS:\n" + (offre.getConditions() != null ? offre.getConditions() : "Aucune");
+        String statusIcon = "";
+        switch (offre.getStatut()) {
+            case "Active": statusIcon = "✅"; break;
+            case "En pause": statusIcon = "⏸️"; break;
+            case "Expiree": statusIcon = "⏱️"; break;
+            default: statusIcon = "📋";
+        }
+
+        String details = "═══════════════════════════════════\n" +
+                "       DÉTAILS DE L'OFFRE\n" +
+                "═══════════════════════════════════\n\n" +
+                "🆔 ID: #" + offre.getIdOffre() + "\n\n" +
+                "🎁 Nom: " + offre.getNomOffre() + "\n\n" +
+                "📦 Produit: " + (offre.getNomProduit() != null ? offre.getNomProduit() : "N/A") + "\n\n" +
+                statusIcon + " Statut: " + offre.getStatut() + "\n\n" +
+                "🏦 Banque: " + (offre.getNomBanque() != null ? offre.getNomBanque() : "Non assignée") + "\n\n" +
+                "═══════════════════════════════════\n" +
+                "       CONDITIONS\n" +
+                "═══════════════════════════════════\n\n" +
+                (offre.getConditions() != null ? offre.getConditions() : "Aucune condition spécifiée") + "\n\n" +
+                "═══════════════════════════════════";
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Détails - " + offre.getNomOffre());
@@ -234,8 +265,9 @@ public class AdminOffreController {
         TextArea textArea = new TextArea(details);
         textArea.setEditable(false);
         textArea.setWrapText(true);
-        textArea.setPrefRowCount(15);
-        textArea.setPrefColumnCount(50);
+        textArea.setPrefRowCount(18);
+        textArea.setPrefColumnCount(45);
+        textArea.setStyle("-fx-font-family: 'Consolas', monospace; -fx-font-size: 13;");
 
         alert.getDialogPane().setContent(textArea);
         alert.showAndWait();
@@ -264,25 +296,29 @@ public class AdminOffreController {
             }
 
             if (banque != null) {
-                String details = "=== BANQUE PROPRIÉTAIRE ===\n\n" +
-                        "🏦 Nom: " + banque.getNom() + "\n" +
-                        "📋 Code: " + banque.getCodeBanque() + "\n" +
-                        "👤 Représentant: " + banque.getRepresentantLegal() + "\n" +
-                        "📍 Siège: " + banque.getAddresseSiege() + "\n" +
-                        "📧 Email: " + banque.getEmail() + "\n" +
-                        "📱 Tél: " + (banque.getTel() != null ? banque.getTel() : "N/A") + "\n" +
-                        "🌐 Site Web: " + (banque.getSiteWeb() != null ? banque.getSiteWeb() : "N/A") + "\n" +
-                        "📊 Statut: " + banque.getStatusCompte() + "\n" +
-                        "✓ Vérifié: " + (banque.isCompteVerifie() ? "Oui ✅" : "Non ⏳");
+                String details = "═══════════════════════════════════\n" +
+                        "       🏦 BANQUE PROPRIÉTAIRE\n" +
+                        "═══════════════════════════════════\n\n" +
+                        "🏛️ Nom: " + banque.getNom() + "\n\n" +
+                        "📋 Code: " + banque.getCodeBanque() + "\n\n" +
+                        "👤 Représentant: " + banque.getRepresentantLegal() + "\n\n" +
+                        "📍 Siège: " + banque.getAddresseSiege() + "\n\n" +
+                        "📧 Email: " + banque.getEmail() + "\n\n" +
+                        "📱 Tél: " + (banque.getTel() != null ? banque.getTel() : "N/A") + "\n\n" +
+                        "🌐 Site Web: " + (banque.getSiteWeb() != null ? banque.getSiteWeb() : "N/A") + "\n\n" +
+                        "📊 Statut: " + banque.getStatusCompte() + "\n\n" +
+                        "✓ Vérifié: " + (banque.isCompteVerifie() ? "Oui ✅" : "Non ⏳") + "\n\n" +
+                        "═══════════════════════════════════";
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Banque - " + banque.getNom());
-                alert.setHeaderText("🏦 Informations de la banque");
+                alert.setHeaderText(null);
 
                 TextArea textArea = new TextArea(details);
                 textArea.setEditable(false);
                 textArea.setWrapText(true);
-                textArea.setPrefRowCount(12);
+                textArea.setPrefRowCount(14);
+                textArea.setStyle("-fx-font-family: 'Consolas', monospace; -fx-font-size: 13;");
 
                 alert.getDialogPane().setContent(textArea);
                 alert.showAndWait();
@@ -305,15 +341,10 @@ public class AdminOffreController {
 
         try {
             String filePath = PDFGenerator.genererPDFOffre(selected);
-            showAlert("PDF généré avec succès!\n\nFichier: " + filePath, Alert.AlertType.INFORMATION);
+            showAlert("✅ PDF généré avec succès!\n\n📁 Fichier: " + filePath, Alert.AlertType.INFORMATION);
         } catch (Exception e) {
-            showAlert("Erreur PDF: " + e.getMessage(), Alert.AlertType.ERROR);
+            showAlert("❌ Erreur PDF: " + e.getMessage(), Alert.AlertType.ERROR);
         }
-    }
-
-    @FXML
-    private void handleRetour() {
-        com.agrifund.Main.navigateTo("/com/agrifund/fxml/admin/admin-dashboard.fxml");
     }
 
     private void showAlert(String message, Alert.AlertType type) {

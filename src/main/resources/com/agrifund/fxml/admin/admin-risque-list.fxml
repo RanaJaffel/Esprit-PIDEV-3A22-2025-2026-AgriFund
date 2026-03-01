@@ -1,94 +1,232 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.effect.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.agrifund.controller.admin.AdminRisqueListController"
-            prefWidth="1500" prefHeight="850"
-            styleClass="root"
-            stylesheets="@admin-styles.css">
+<HBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.agrifund.controller.admin.AdminRisqueListController"
+      stylesheets="@../../css/styles.css"
+      style="-fx-background-color: #f8faf8;">
 
-    <!-- Sidebar Admin -->
-    <left>
-        <fx:include source="/com/agrifund/fxml/admin/admin-sidebar.fxml"/>
-    </left>
+    <!-- SIDEBAR - Prend toute la hauteur -->
+    <fx:include source="admin-sidebar.fxml"/>
 
-    <!-- Header -->
-    <top>
-        <HBox styleClass="header" alignment="CENTER_LEFT" spacing="20">
-            <Label styleClass="title" text="👁️ Consultation - Toutes les Évaluations de Risque"/>
+    <!-- MAIN CONTENT -->
+    <VBox HBox.hgrow="ALWAYS" spacing="0" style="-fx-background-color: #f8faf8;">
+
+        <!-- ========== HEADER ========== -->
+        <HBox alignment="CENTER_LEFT" spacing="20"
+              style="-fx-background-color: linear-gradient(to right, #089647, #076A39, #095032); -fx-padding: 22 30;">
+            <effect>
+                <DropShadow color="rgba(8, 150, 71, 0.3)" offsetY="3" radius="10"/>
+            </effect>
+
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Label text="📊" style="-fx-font-size: 36px;"/>
+                <VBox spacing="3">
+                    <Label text="Consultation - Évaluations de Risque"
+                           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;">
+                        <effect>
+                            <DropShadow color="rgba(0,0,0,0.2)" offsetY="1" radius="3"/>
+                        </effect>
+                    </Label>
+                    <Label text="Toutes les évaluations de risque des projets agricoles"
+                           style="-fx-text-fill: #B2D944; -fx-font-size: 13px;"/>
+                </VBox>
+            </HBox>
+
             <Region HBox.hgrow="ALWAYS"/>
-            <Label text="📖 Mode lecture seule" style="-fx-text-fill: #E1B323; -fx-font-weight: bold;"/>
-            <Button text="📋 Voir Décisions" styleClass="button-accent" onAction="#handleViewDecisions"/>
-        </HBox>
-    </top>
 
-    <!-- Contenu -->
-    <center>
-        <VBox spacing="20" styleClass="main-content">
-            <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>
+            <HBox spacing="12" alignment="CENTER">
+                <Label text="📖 Mode lecture seule"
+                       style="-fx-text-fill: #E1B323; -fx-font-weight: bold; -fx-font-size: 13px;
+                              -fx-background-color: rgba(225, 179, 35, 0.15); -fx-padding: 8 15;
+                              -fx-background-radius: 20;"/>
+
+                <Button text="📋 Voir Décisions" onAction="#handleViewDecisions"
+                        style="-fx-background-color: #E1B323; -fx-text-fill: #133D03;
+                               -fx-padding: 10 22; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand;">
+                    <effect>
+                        <DropShadow color="rgba(225, 179, 35, 0.4)" offsetY="2" radius="6"/>
+                    </effect>
+                </Button>
+            </HBox>
+        </HBox>
+
+        <!-- ========== CONTENT ========== -->
+        <VBox VBox.vgrow="ALWAYS" spacing="20">
+            <padding><Insets top="25" right="30" bottom="25" left="30"/></padding>
 
             <!-- Info Box -->
-            <HBox styleClass="info-box" alignment="CENTER_LEFT" spacing="10">
-                <padding><Insets top="10" right="15" bottom="10" left="15"/></padding>
-                <Label text="ℹ️" style="-fx-font-size: 20px;"/>
-                <Label text="En tant qu'administrateur, vous pouvez consulter toutes les évaluations de toutes les banques. Les modifications ne sont pas autorisées."
-                       style="-fx-text-fill: #666;" wrapText="true"/>
+            <HBox alignment="CENTER_LEFT" spacing="15"
+                  style="-fx-background-color: white; -fx-padding: 18; -fx-background-radius: 12;
+                         -fx-border-color: #B2D944; -fx-border-radius: 12; -fx-border-width: 2;">
+                <effect>
+                    <DropShadow color="rgba(0,0,0,0.06)" offsetY="2" radius="8"/>
+                </effect>
+                <Label text="ℹ️" style="-fx-font-size: 28px;"/>
+                <VBox spacing="4">
+                    <Label text="Mode Administrateur - Vue globale des risques"
+                           style="-fx-font-weight: bold; -fx-text-fill: #089647; -fx-font-size: 14px;"/>
+                    <Label text="En tant qu'administrateur, vous pouvez consulter toutes les évaluations de toutes les banques. Les modifications ne sont pas autorisées."
+                           style="-fx-text-fill: #848A86; -fx-font-size: 12px;" wrapText="true"/>
+                </VBox>
+            </HBox>
+
+            <!-- Statistics Cards -->
+            <HBox spacing="20" alignment="CENTER">
+                <!-- Total -->
+                <HBox spacing="15" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white; -fx-padding: 18; -fx-background-radius: 14;
+                             -fx-border-color: #e0e5e0; -fx-border-radius: 14; -fx-border-width: 1;">
+                    <effect>
+                        <DropShadow color="rgba(0,0,0,0.06)" offsetY="2" radius="8"/>
+                    </effect>
+                    <StackPane style="-fx-min-width: 50; -fx-min-height: 50;
+                                      -fx-background-color: linear-gradient(to bottom right, #089647, #076A39);
+                                      -fx-background-radius: 10;">
+                        <Label text="📊" style="-fx-font-size: 24px;"/>
+                    </StackPane>
+                    <VBox spacing="3">
+                        <Label text="Total Évaluations" style="-fx-text-fill: #848A86; -fx-font-size: 11px;"/>
+                        <Label fx:id="lblTotal" text="0"
+                               style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #089647;"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Faible -->
+                <HBox spacing="15" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: rgba(178, 217, 68, 0.1); -fx-padding: 18; -fx-background-radius: 14;
+                             -fx-border-color: #B2D944; -fx-border-radius: 14; -fx-border-width: 1;">
+                    <StackPane style="-fx-min-width: 50; -fx-min-height: 50;
+                                      -fx-background-color: #B2D944; -fx-background-radius: 10;">
+                        <Label text="✓" style="-fx-font-size: 24px; -fx-text-fill: #133D03;"/>
+                    </StackPane>
+                    <VBox spacing="3">
+                        <Label text="Risque Faible" style="-fx-text-fill: #476C1A; -fx-font-size: 11px;"/>
+                        <Label fx:id="lblFaible" text="0"
+                               style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #476C1A;"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Moyen -->
+                <HBox spacing="15" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: rgba(225, 179, 35, 0.1); -fx-padding: 18; -fx-background-radius: 14;
+                             -fx-border-color: #E1B323; -fx-border-radius: 14; -fx-border-width: 1;">
+                    <StackPane style="-fx-min-width: 50; -fx-min-height: 50;
+                                      -fx-background-color: #E1B323; -fx-background-radius: 10;">
+                        <Label text="⚠" style="-fx-font-size: 24px; -fx-text-fill: #133D03;"/>
+                    </StackPane>
+                    <VBox spacing="3">
+                        <Label text="Risque Moyen" style="-fx-text-fill: #9A951F; -fx-font-size: 11px;"/>
+                        <Label fx:id="lblMoyen" text="0"
+                               style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #9A951F;"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Élevé -->
+                <HBox spacing="15" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: rgba(225, 125, 35, 0.1); -fx-padding: 18; -fx-background-radius: 14;
+                             -fx-border-color: #E17D23; -fx-border-radius: 14; -fx-border-width: 1;">
+                    <StackPane style="-fx-min-width: 50; -fx-min-height: 50;
+                                      -fx-background-color: #E17D23; -fx-background-radius: 10;">
+                        <Label text="⚡" style="-fx-font-size: 24px; -fx-text-fill: white;"/>
+                    </StackPane>
+                    <VBox spacing="3">
+                        <Label text="Risque Élevé" style="-fx-text-fill: #E17D23; -fx-font-size: 11px;"/>
+                        <Label fx:id="lblEleve" text="0"
+                               style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #E17D23;"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Critique -->
+                <HBox spacing="15" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: rgba(220, 53, 69, 0.08); -fx-padding: 18; -fx-background-radius: 14;
+                             -fx-border-color: #dc3545; -fx-border-radius: 14; -fx-border-width: 1;">
+                    <StackPane style="-fx-min-width: 50; -fx-min-height: 50;
+                                      -fx-background-color: #dc3545; -fx-background-radius: 10;">
+                        <Label text="🚨" style="-fx-font-size: 24px;"/>
+                    </StackPane>
+                    <VBox spacing="3">
+                        <Label text="Risque Critique" style="-fx-text-fill: #c82333; -fx-font-size: 11px;"/>
+                        <Label fx:id="lblCritique" text="0"
+                               style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #dc3545;"/>
+                    </VBox>
+                </HBox>
             </HBox>
 
             <!-- Toolbar -->
-            <HBox spacing="15" alignment="CENTER_LEFT" styleClass="toolbar">
-                <padding><Insets top="10" right="15" bottom="10" left="15"/></padding>
-                <Label text="🔍 Rechercher:" styleClass="form-label"/>
-                <TextField fx:id="tfSearch" promptText="Projet, banque, niveau..." onKeyReleased="#handleSearch" prefWidth="350"/>
-                <Button text="🔄 Rafraîchir" styleClass="button-accent" onAction="#handleRefresh"/>
+            <HBox spacing="15" alignment="CENTER_LEFT"
+                  style="-fx-background-color: white; -fx-padding: 15 20; -fx-background-radius: 12;
+                         -fx-border-color: #e0e5e0; -fx-border-radius: 12; -fx-border-width: 1;">
+                <effect>
+                    <DropShadow color="rgba(0,0,0,0.05)" offsetY="2" radius="6"/>
+                </effect>
+
+                <HBox alignment="CENTER_LEFT" spacing="8"
+                      style="-fx-background-color: #f5f7f5; -fx-background-radius: 25; -fx-padding: 10 18;
+                             -fx-border-color: #089647; -fx-border-radius: 25; -fx-border-width: 2;">
+                    <Label text="🔍" style="-fx-font-size: 16px;"/>
+                    <TextField fx:id="tfSearch" promptText="Projet, banque, niveau de risque..."
+                               onKeyReleased="#handleSearch" prefWidth="400"
+                               style="-fx-background-color: transparent; -fx-border-width: 0; -fx-font-size: 13px;"/>
+                </HBox>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Button text="🔄 Rafraîchir" onAction="#handleRefresh"
+                        style="-fx-background-color: linear-gradient(to bottom, #089647, #076A39);
+                               -fx-text-fill: white; -fx-font-weight: bold;
+                               -fx-padding: 10 25; -fx-background-radius: 10; -fx-cursor: hand;">
+                    <effect>
+                        <DropShadow color="rgba(8, 150, 71, 0.3)" offsetY="2" radius="6"/>
+                    </effect>
+                </Button>
             </HBox>
 
-            <!-- Table (sans colonne Actions) -->
-            <TableView fx:id="tableEvaluations" VBox.vgrow="ALWAYS">
+            <!-- Table -->
+            <TableView fx:id="tableEvaluations" VBox.vgrow="ALWAYS"
+                       style="-fx-background-color: white; -fx-border-color: #089647;
+                              -fx-border-width: 2; -fx-border-radius: 12; -fx-background-radius: 12;">
+                <effect>
+                    <DropShadow color="rgba(8, 150, 71, 0.12)" offsetY="3" radius="10"/>
+                </effect>
                 <columns>
                     <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
-                    <TableColumn fx:id="colNomProjet" text="Projet" prefWidth="180"/>
-                    <TableColumn fx:id="colBanque" text="Banque" prefWidth="150"/>
-                    <TableColumn fx:id="colScoreGlobal" text="Score" prefWidth="80"/>
-                    <TableColumn fx:id="colNiveauRisque" text="Niveau Risque" prefWidth="120"/>
-                    <TableColumn fx:id="colFiabiliteDonnees" text="Fiabilité" prefWidth="100"/>
-                    <TableColumn fx:id="colFacteurPrincipal" text="Facteurs" prefWidth="250"/>
-                    <TableColumn fx:id="colRecommandation" text="Recommandation" prefWidth="130"/>
-                    <TableColumn fx:id="colDateEvaluation" text="Date" prefWidth="130"/>
+                    <TableColumn fx:id="colNomProjet" text="📁 Projet" prefWidth="180"/>
+                    <TableColumn fx:id="colBanque" text="🏦 Banque" prefWidth="150"/>
+                    <TableColumn fx:id="colScoreGlobal" text="📈 Score" prefWidth="80"/>
+                    <TableColumn fx:id="colNiveauRisque" text="⚡ Niveau Risque" prefWidth="130"/>
+                    <TableColumn fx:id="colFiabiliteDonnees" text="🎯 Fiabilité" prefWidth="100"/>
+                    <TableColumn fx:id="colFacteurPrincipal" text="📋 Facteurs" prefWidth="250"/>
+                    <TableColumn fx:id="colRecommandation" text="💡 Recommandation" prefWidth="130"/>
+                    <TableColumn fx:id="colDateEvaluation" text="📅 Date" prefWidth="130"/>
                 </columns>
+                <placeholder>
+                    <VBox alignment="CENTER" spacing="15" style="-fx-padding: 50;">
+                        <Label text="📊" style="-fx-font-size: 48; -fx-opacity: 0.5;"/>
+                        <Label text="Aucune évaluation de risque"
+                               style="-fx-text-fill: #848A86; -fx-font-size: 16; -fx-font-weight: bold;"/>
+                        <Label text="Les évaluations des banques apparaîtront ici"
+                               style="-fx-text-fill: #a0a5a0; -fx-font-size: 13;"/>
+                    </VBox>
+                </placeholder>
             </TableView>
-
-            <!-- Stats -->
-            <HBox spacing="20" alignment="CENTER_LEFT">
-                <VBox spacing="5" alignment="CENTER">
-                    <Label text="Total" styleClass="stats-label"/>
-                    <Label fx:id="lblTotal" text="0" styleClass="stats-value"/>
-                </VBox>
-                <Separator orientation="VERTICAL"/>
-                <VBox spacing="5" alignment="CENTER">
-                    <Label text="Faible" styleClass="stats-label"/>
-                    <Label fx:id="lblFaible" text="0" style="-fx-text-fill: #28a745; -fx-font-weight: bold;"/>
-                </VBox>
-                <Separator orientation="VERTICAL"/>
-                <VBox spacing="5" alignment="CENTER">
-                    <Label text="Moyen" styleClass="stats-label"/>
-                    <Label fx:id="lblMoyen" text="0" style="-fx-text-fill: #E1B323; -fx-font-weight: bold;"/>
-                </VBox>
-                <Separator orientation="VERTICAL"/>
-                <VBox spacing="5" alignment="CENTER">
-                    <Label text="Élevé" styleClass="stats-label"/>
-                    <Label fx:id="lblEleve" text="0" style="-fx-text-fill: #E17D23; -fx-font-weight: bold;"/>
-                </VBox>
-                <Separator orientation="VERTICAL"/>
-                <VBox spacing="5" alignment="CENTER">
-                    <Label text="Critique" styleClass="stats-label"/>
-                    <Label fx:id="lblCritique" text="0" style="-fx-text-fill: #dc3545; -fx-font-weight: bold;"/>
-                </VBox>
-            </HBox>
-
-            <Label fx:id="lblStatus" styleClass="status-label" text="Mode consultation"/>
         </VBox>
-    </center>
-</BorderPane>
+
+        <!-- ========== FOOTER ========== -->
+        <HBox alignment="CENTER_LEFT" spacing="15"
+              style="-fx-background-color: linear-gradient(to right, #095032, #076A39, #095032); -fx-padding: 15 30;">
+            <Label fx:id="lblStatus" text="Mode consultation"
+                   style="-fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="🛡️ Panel Admin - Évaluations de Risque"
+                   style="-fx-text-fill: #B2D944; -fx-font-size: 12px;"/>
+            <Label text="•" style="-fx-text-fill: #B2D944;"/>
+            <Label text="AgriFund 2025"
+                   style="-fx-text-fill: #B2D944; -fx-font-size: 11px;"/>
+        </HBox>
+    </VBox>
+</HBox>

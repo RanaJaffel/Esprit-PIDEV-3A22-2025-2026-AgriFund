@@ -31,7 +31,7 @@ public class AdminProduitController {
     @FXML private TableColumn<ProduitFinancier, Double> colTaux;
     @FXML private TableColumn<ProduitFinancier, Double> colMontantMin;
     @FXML private TableColumn<ProduitFinancier, Double> colMontantMax;
-    @FXML private TableColumn<ProduitFinancier, String> colBanque; // NOUVELLE COLONNE
+    @FXML private TableColumn<ProduitFinancier, String> colBanque;
 
     @FXML private Label lblTotalProduits;
     @FXML private Label lblCount;
@@ -56,6 +56,78 @@ public class AdminProduitController {
             colMontantMax.setCellValueFactory(new PropertyValueFactory<>("montantMax"));
             colBanque.setCellValueFactory(new PropertyValueFactory<>("nomBanque"));
 
+            // Style colonne Type
+            colType.setCellFactory(column -> new TableCell<ProduitFinancier, String>() {
+                @Override
+                protected void updateItem(String type, boolean empty) {
+                    super.updateItem(type, empty);
+                    if (empty || type == null) {
+                        setText(null);
+                        setStyle("");
+                    } else {
+                        setText(type);
+                        setStyle("-fx-text-fill: #089647; -fx-font-weight: bold;");
+                    }
+                }
+            });
+
+            // Style colonne Taux
+            colTaux.setCellFactory(column -> new TableCell<ProduitFinancier, Double>() {
+                @Override
+                protected void updateItem(Double taux, boolean empty) {
+                    super.updateItem(taux, empty);
+                    if (empty || taux == null) {
+                        setText(null);
+                        setStyle("");
+                    } else {
+                        setText(String.format("%.2f%%", taux));
+                        setStyle("-fx-text-fill: #E1B323; -fx-font-weight: bold;");
+                    }
+                }
+            });
+
+            // Style colonne Banque
+            colBanque.setCellFactory(column -> new TableCell<ProduitFinancier, String>() {
+                @Override
+                protected void updateItem(String banque, boolean empty) {
+                    super.updateItem(banque, empty);
+                    if (empty || banque == null || banque.isEmpty()) {
+                        setText("Non assignée");
+                        setStyle("-fx-text-fill: #848A86; -fx-font-style: italic;");
+                    } else {
+                        setText("🏦 " + banque);
+                        setStyle("-fx-text-fill: #476C1A; -fx-font-weight: bold;");
+                    }
+                }
+            });
+
+            // Style colonnes montants
+            colMontantMin.setCellFactory(column -> new TableCell<ProduitFinancier, Double>() {
+                @Override
+                protected void updateItem(Double montant, boolean empty) {
+                    super.updateItem(montant, empty);
+                    if (empty || montant == null) {
+                        setText(null);
+                    } else {
+                        setText(String.format("%,.0f DT", montant));
+                        setStyle("-fx-text-fill: #133D03;");
+                    }
+                }
+            });
+
+            colMontantMax.setCellFactory(column -> new TableCell<ProduitFinancier, Double>() {
+                @Override
+                protected void updateItem(Double montant, boolean empty) {
+                    super.updateItem(montant, empty);
+                    if (empty || montant == null) {
+                        setText(null);
+                    } else {
+                        setText(String.format("%,.0f DT", montant));
+                        setStyle("-fx-text-fill: #133D03; -fx-font-weight: bold;");
+                    }
+                }
+            });
+
             chargerDonnees();
 
         } catch (SQLException e) {
@@ -64,7 +136,6 @@ public class AdminProduitController {
     }
 
     private void chargerDonnees() {
-        // Charger TOUS les produits (admin voit tout)
         produitsList = produitService.getAllProduits();
         tableView.setItems(produitsList);
         lblTotalProduits.setText(String.valueOf(produitsList.size()));
@@ -117,8 +188,37 @@ public class AdminProduitController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Erreur: " + e.getMessage(), Alert.AlertType.ERROR);
+            // Fallback: afficher dans une alerte stylisée
+            showDetailsInAlert(selected);
         }
+    }
+
+    private void showDetailsInAlert(ProduitFinancier produit) {
+        String details = "═══════════════════════════════════\n" +
+                "       DÉTAILS DU PRODUIT\n" +
+                "═══════════════════════════════════\n\n" +
+                "🆔 ID: #" + produit.getIdProduit() + "\n\n" +
+                "📦 Nom: " + produit.getNomProduit() + "\n\n" +
+                "📋 Type: " + produit.getTypeFinancement() + "\n\n" +
+                "💰 Taux d'intérêt: " + String.format("%.2f%%", produit.getTauxInteret()) + "\n\n" +
+                "📊 Montant Min: " + String.format("%,.0f DT", produit.getMontantMin()) + "\n\n" +
+                "📊 Montant Max: " + String.format("%,.0f DT", produit.getMontantMax()) + "\n\n" +
+                "🏦 Banque: " + (produit.getNomBanque() != null ? produit.getNomBanque() : "Non assignée") + "\n\n" +
+                "═══════════════════════════════════";
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Détails - " + produit.getNomProduit());
+        alert.setHeaderText(null);
+
+        TextArea textArea = new TextArea(details);
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+        textArea.setPrefRowCount(15);
+        textArea.setPrefColumnCount(45);
+        textArea.setStyle("-fx-font-family: 'Consolas', monospace; -fx-font-size: 13;");
+
+        alert.getDialogPane().setContent(textArea);
+        alert.showAndWait();
     }
 
     @FXML
@@ -137,16 +237,34 @@ public class AdminProduitController {
         try {
             Banque banque = banqueService.rechercherParUtilisateurId(selected.getBanqueId());
             if (banque != null) {
-                String details = "=== BANQUE ===\n\n" +
-                        "Nom: " + banque.getNom() + "\n" +
-                        "Code: " + banque.getCodeBanque() + "\n" +
-                        "Représentant: " + banque.getRepresentantLegal() + "\n" +
-                        "Siège: " + banque.getAddresseSiege() + "\n" +
-                        "Site Web: " + (banque.getSiteWeb() != null ? banque.getSiteWeb() : "N/A") + "\n" +
-                        "Statut: " + banque.getStatusCompte() + "\n" +
-                        "Vérifié: " + (banque.isCompteVerifie() ? "Oui" : "Non");
+                String details = "═══════════════════════════════════\n" +
+                        "       🏦 BANQUE PROPRIÉTAIRE\n" +
+                        "═══════════════════════════════════\n\n" +
+                        "🏛️ Nom: " + banque.getNom() + "\n\n" +
+                        "📋 Code: " + banque.getCodeBanque() + "\n\n" +
+                        "👤 Représentant: " + banque.getRepresentantLegal() + "\n\n" +
+                        "📍 Siège: " + banque.getAddresseSiege() + "\n\n" +
+                        "📧 Email: " + banque.getEmail() + "\n\n" +
+                        "📱 Tél: " + (banque.getTel() != null ? banque.getTel() : "N/A") + "\n\n" +
+                        "🌐 Site Web: " + (banque.getSiteWeb() != null ? banque.getSiteWeb() : "N/A") + "\n\n" +
+                        "📊 Statut: " + banque.getStatusCompte() + "\n\n" +
+                        "✓ Vérifié: " + (banque.isCompteVerifie() ? "Oui ✅" : "Non ⏳") + "\n\n" +
+                        "═══════════════════════════════════";
 
-                showAlert(details, Alert.AlertType.INFORMATION);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Banque - " + banque.getNom());
+                alert.setHeaderText(null);
+
+                TextArea textArea = new TextArea(details);
+                textArea.setEditable(false);
+                textArea.setWrapText(true);
+                textArea.setPrefRowCount(14);
+                textArea.setStyle("-fx-font-family: 'Consolas', monospace; -fx-font-size: 13;");
+
+                alert.getDialogPane().setContent(textArea);
+                alert.showAndWait();
+            } else {
+                showAlert("Banque introuvable", Alert.AlertType.WARNING);
             }
         } catch (SQLException e) {
             showAlert("Erreur: " + e.getMessage(), Alert.AlertType.ERROR);
@@ -163,15 +281,10 @@ public class AdminProduitController {
 
         try {
             String filePath = PDFGenerator.genererPDFProduit(selected);
-            showAlert("PDF généré: " + filePath, Alert.AlertType.INFORMATION);
+            showAlert("✅ PDF généré avec succès!\n\n📁 Fichier: " + filePath, Alert.AlertType.INFORMATION);
         } catch (Exception e) {
-            showAlert("Erreur PDF: " + e.getMessage(), Alert.AlertType.ERROR);
+            showAlert("❌ Erreur PDF: " + e.getMessage(), Alert.AlertType.ERROR);
         }
-    }
-
-    @FXML
-    private void handleRetour() {
-        com.agrifund.Main.navigateTo("/com/agrifund/fxml/admin/admin-dashboard.fxml");
     }
 
     private void showAlert(String message, Alert.AlertType type) {

@@ -172,86 +172,105 @@ public class BanqueRessourceController implements Initializable {
     }
 
     private VBox createBanqueCard(RessourceDetailDTO dto) {
-        VBox card = new VBox(10);
-        card.getStyleClass().add("project-card");
+        VBox card = new VBox(12);
         card.setPrefWidth(340);
         card.setMaxWidth(340);
-        card.setPadding(new Insets(15));
+        card.setPadding(new Insets(18));
+        card.setStyle("-fx-background-color: linear-gradient(to bottom right, #FFFFFF, #F8FFF8);" +
+                "-fx-background-radius: 16;" +
+                "-fx-border-color: rgba(178,217,68,0.4);" +
+                "-fx-border-width: 1;" +
+                "-fx-border-radius: 16;" +
+                "-fx-effect: dropshadow(three-pass-box, rgba(7,106,57,0.12), 10, 0, 0, 3);" +
+                "-fx-cursor: hand;");
 
-        // Header avec montant mis en évidence (important pour la banque)
+        // Header avec montant mis en évidence
         HBox header = new HBox(10);
         header.setAlignment(Pos.CENTER_LEFT);
 
+        // Icon circle
+        StackPane iconCircle = new StackPane();
+        iconCircle.setMinSize(44, 44);
+        iconCircle.setMaxSize(44, 44);
+        iconCircle.setStyle("-fx-background-color: rgba(178,217,68,0.2); -fx-background-radius: 12;");
+
         Label icon = new Label(getTypeIcon(dto.getTyperessource()));
-        icon.setStyle("-fx-font-size: 24px;");
+        icon.setStyle("-fx-font-size: 22px;");
+        iconCircle.getChildren().add(icon);
 
         VBox titleBox = new VBox(2);
         Label title = new Label(dto.getNomressource());
-        title.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2D6A4F;");
+        title.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #076A39;");
         title.setWrapText(true);
+        title.setMaxWidth(150);
 
         titleBox.getChildren().add(title);
-        header.getChildren().addAll(icon, titleBox);
+        header.getChildren().addAll(iconCircle, titleBox);
         HBox.setHgrow(titleBox, Priority.ALWAYS);
 
-        // Montant total (mis en évidence pour la banque)
+        // Montant total (mis en évidence)
         VBox montantBox = new VBox(2);
         montantBox.setAlignment(Pos.CENTER_RIGHT);
+        montantBox.setStyle("-fx-background-color: rgba(225,179,35,0.15); -fx-padding: 8 12; -fx-background-radius: 10;");
 
         Label montantLabel = new Label("Montant Total");
-        montantLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: #666;");
+        montantLabel.setStyle("-fx-font-size: 9px; -fx-text-fill: #9A951F;");
 
         Label montantValue = new Label(String.format("%.2f DT", dto.getCoutTotal()));
-        montantValue.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #E65100;");
+        montantValue.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #E1B323;");
 
         montantBox.getChildren().addAll(montantLabel, montantValue);
         header.getChildren().add(montantBox);
 
         // Badges
-        HBox badges = new HBox(5);
+        HBox badges = new HBox(6);
+        badges.setAlignment(Pos.CENTER_LEFT);
+
         Label typeBadge = new Label(capitalizeType(dto.getTyperessource()));
-        typeBadge.getStyleClass().add(getTypeBadgeClass(dto.getTyperessource()));
+        typeBadge.setStyle(getTypeBadgeStyleInline(dto.getTyperessource()));
 
         Label statusBadge = new Label(capitalizeStatus(dto.getStatut()));
-        statusBadge.getStyleClass().add(getStatusBadgeClass(dto.getStatut()));
+        statusBadge.setStyle(getStatusBadgeStyleInline(dto.getStatut()));
 
         // Badge statut projet
         Label projetStatutBadge = new Label(dto.getStatutProjet() != null ? dto.getStatutProjet().toUpperCase() : "N/A");
-        projetStatutBadge.setStyle("-fx-background-color: #E3F2FD; -fx-text-fill: #1565C0; " +
-                "-fx-padding: 3 8; -fx-background-radius: 10; -fx-font-size: 10px; -fx-font-weight: bold;");
+        projetStatutBadge.setStyle("-fx-background-color: rgba(71,108,26,0.12); -fx-text-fill: #476C1A; " +
+                "-fx-padding: 4 10; -fx-background-radius: 12; -fx-font-size: 9px; -fx-font-weight: bold;");
 
         badges.getChildren().addAll(typeBadge, statusBadge, projetStatutBadge);
 
-        // Agriculteur & Projet Info (compact pour la banque)
+        // Agriculteur & Projet Info
         VBox infoSection = new VBox(8);
-        infoSection.setStyle("-fx-background-color: #F5F5F5; -fx-padding: 10; -fx-background-radius: 8;");
+        infoSection.setStyle("-fx-background-color: rgba(178,217,68,0.08); -fx-padding: 12; -fx-background-radius: 10;");
 
-        HBox agriculteurRow = new HBox(5);
+        HBox agriculteurRow = new HBox(6);
         agriculteurRow.setAlignment(Pos.CENTER_LEFT);
         Label agriIcon = new Label("👨‍🌾");
+        agriIcon.setStyle("-fx-font-size: 14px;");
         Label agriName = new Label(dto.getNomCompletAgriculteur());
-        agriName.setStyle("-fx-font-weight: bold; -fx-font-size: 12px;");
+        agriName.setStyle("-fx-font-weight: bold; -fx-font-size: 12px; -fx-text-fill: #133D03;");
         Label agriEmail = new Label("(" + (dto.getEmailAgriculteur() != null ? dto.getEmailAgriculteur() : "N/A") + ")");
-        agriEmail.setStyle("-fx-font-size: 10px; -fx-text-fill: #666;");
+        agriEmail.setStyle("-fx-font-size: 9px; -fx-text-fill: #848A86;");
         agriculteurRow.getChildren().addAll(agriIcon, agriName, agriEmail);
 
-        HBox projetRow = new HBox(5);
+        HBox projetRow = new HBox(6);
         projetRow.setAlignment(Pos.CENTER_LEFT);
         Label projetIcon = new Label("📁");
+        projetIcon.setStyle("-fx-font-size: 14px;");
         Label projetName = new Label(dto.getNomproject());
-        projetName.setStyle("-fx-font-weight: bold; -fx-font-size: 12px;");
+        projetName.setStyle("-fx-font-weight: bold; -fx-font-size: 12px; -fx-text-fill: #076A39;");
         Label projetBudget = new Label("Budget: " +
                 (dto.getBudgetdemande() != null ? String.format("%.2f DT", dto.getBudgetdemande()) : "N/A"));
-        projetBudget.setStyle("-fx-font-size: 10px; -fx-text-fill: #666;");
+        projetBudget.setStyle("-fx-font-size: 9px; -fx-text-fill: #848A86;");
         projetRow.getChildren().addAll(projetIcon, projetName, projetBudget);
 
         infoSection.getChildren().addAll(agriculteurRow, projetRow);
 
-        // Détails financiers (important pour la banque)
+        // Détails financiers
         GridPane financeGrid = new GridPane();
         financeGrid.setHgap(15);
-        financeGrid.setVgap(5);
-        financeGrid.setStyle("-fx-background-color: #FFF3E0; -fx-padding: 10; -fx-background-radius: 8;");
+        financeGrid.setVgap(6);
+        financeGrid.setStyle("-fx-background-color: rgba(225,179,35,0.08); -fx-padding: 10; -fx-background-radius: 10;");
 
         addFinanceRow(financeGrid, 0, "Quantité:", String.valueOf(dto.getQuantite()));
         addFinanceRow(financeGrid, 1, "Prix unitaire:", String.format("%.2f DT", dto.getCout()));
@@ -259,25 +278,86 @@ public class BanqueRessourceController implements Initializable {
 
         // Bouton voir détails
         Button btnDetails = new Button("📋 Voir fiche complète");
-        btnDetails.getStyleClass().add("btn-info");
         btnDetails.setMaxWidth(Double.MAX_VALUE);
+        btnDetails.setStyle("-fx-background-color: linear-gradient(to right, #076A39, #089647); -fx-text-fill: white; " +
+                "-fx-padding: 10 20; -fx-background-radius: 10; -fx-cursor: hand; -fx-font-weight: bold; -fx-font-size: 11px;");
         btnDetails.setOnAction(e -> showBanqueDetails(dto));
 
-        card.getChildren().addAll(header, badges, new Separator(), infoSection, financeGrid, btnDetails);
+        btnDetails.setOnMouseEntered(e ->
+                btnDetails.setStyle("-fx-background-color: linear-gradient(to right, #089647, #B2D944); -fx-text-fill: #133D03; " +
+                        "-fx-padding: 10 20; -fx-background-radius: 10; -fx-cursor: hand; -fx-font-weight: bold; -fx-font-size: 11px;")
+        );
+        btnDetails.setOnMouseExited(e ->
+                btnDetails.setStyle("-fx-background-color: linear-gradient(to right, #076A39, #089647); -fx-text-fill: white; " +
+                        "-fx-padding: 10 20; -fx-background-radius: 10; -fx-cursor: hand; -fx-font-weight: bold; -fx-font-size: 11px;")
+        );
+
+        Separator sep = new Separator();
+        sep.setStyle("-fx-padding: 3 0;");
+
+        card.getChildren().addAll(header, badges, sep, infoSection, financeGrid, btnDetails);
+
+        // Hover effect
+        card.setOnMouseEntered(e ->
+                card.setStyle("-fx-background-color: linear-gradient(to bottom right, #FFFFFF, #F0FFF0);" +
+                        "-fx-background-radius: 16;" +
+                        "-fx-border-color: #089647;" +
+                        "-fx-border-width: 2;" +
+                        "-fx-border-radius: 16;" +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(8,150,71,0.25), 16, 0, 0, 4);" +
+                        "-fx-cursor: hand;")
+        );
+        card.setOnMouseExited(e ->
+                card.setStyle("-fx-background-color: linear-gradient(to bottom right, #FFFFFF, #F8FFF8);" +
+                        "-fx-background-radius: 16;" +
+                        "-fx-border-color: rgba(178,217,68,0.4);" +
+                        "-fx-border-width: 1;" +
+                        "-fx-border-radius: 16;" +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(7,106,57,0.12), 10, 0, 0, 3);" +
+                        "-fx-cursor: hand;")
+        );
+
         return card;
     }
 
     private void addFinanceRow(GridPane grid, int row, String label, String value) {
         Label lblLabel = new Label(label);
-        lblLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #666;");
+        lblLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: #848A86;");
 
         Label lblValue = new Label(value);
-        lblValue.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #E65100;");
+        lblValue.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #9A951F;");
 
         grid.add(lblLabel, 0, row);
         grid.add(lblValue, 1, row);
     }
 
+    private String getTypeBadgeStyleInline(String type) {
+        String base = "-fx-padding: 4 10; -fx-background-radius: 12; -fx-font-size: 9px; -fx-font-weight: bold;";
+        if (type == null) return base + "-fx-background-color: #848A86; -fx-text-fill: white;";
+        switch (type.toLowerCase()) {
+            case "equipement":
+                return base + "-fx-background-color: linear-gradient(to right, #476C1A, #095032); -fx-text-fill: white;";
+            case "materiaux":
+                return base + "-fx-background-color: linear-gradient(to right, #095032, #076A39); -fx-text-fill: white;";
+            case "service":
+                return base + "-fx-background-color: linear-gradient(to right, #B2D944, #9A951F); -fx-text-fill: #133D03;";
+            default:
+                return base + "-fx-background-color: #848A86; -fx-text-fill: white;";
+        }
+    }
+
+    private String getStatusBadgeStyleInline(String statut) {
+        String base = "-fx-padding: 4 10; -fx-background-radius: 12; -fx-font-size: 9px; -fx-font-weight: bold;";
+        if (statut == null) return base + "-fx-background-color: rgba(225,179,35,0.2); -fx-text-fill: #9A951F;";
+        switch (statut.toLowerCase()) {
+            case "achete":
+                return base + "-fx-background-color: linear-gradient(to right, #089647, #076A39); -fx-text-fill: white;";
+            case "prevu":
+                return base + "-fx-background-color: linear-gradient(to right, #E1B323, #9A951F); -fx-text-fill: #133D03;";
+            default:
+                return base + "-fx-background-color: rgba(225,179,35,0.2); -fx-text-fill: #9A951F;";
+        }
+    }
     // ============================================================================
     // DETAILS DIALOG (Vue Banque)
     // ============================================================================

@@ -2026,6 +2026,8 @@ public class projectagricolecontroller implements Initializable {
         alert.showAndWait();
     }
 
+
+
     public void cleanup() {
         if (autoRefreshTimeline != null) {
             autoRefreshTimeline.stop();

@@ -6,8 +6,7 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.agrifund.controller.banque.BanqueDecisionController"
             prefWidth="850" prefHeight="700"
-            styleClass="root"
-            stylesheets="@banque-styles.css">
+            stylesheets="@banque-styles.css" style="-fx-background-color: #F8FAF8;">
 
     <!-- En-tête -->
     <top>
@@ -62,15 +61,15 @@
                                       promptText="Expliquez les raisons de cette décision...&#10;&#10;Minimum 20 caractères requis."
                                       styleClass="text-area"/>
                             <Label text="💡 Cette justification sera envoyée par email à l'agriculteur."
-                                   style="-fx-text-fill: #666; -fx-font-size: 11px; -fx-font-style: italic;"/>
+                                   style="-fx-text-fill: #848A86; -fx-font-size: 11px; -fx-font-style: italic;"/>
                         </VBox>
 
                         <!-- Boutons -->
                         <HBox spacing="15" GridPane.rowIndex="4" GridPane.columnSpan="2" alignment="CENTER">
                             <padding><Insets top="25"/></padding>
-                            <Button text="❌ Annuler" styleClass="button-secondary" onAction="#handleCancel" prefWidth="140" prefHeight="40"/>
-                            <Button text="🗑️ Effacer" styleClass="button-accent" onAction="#handleClear" prefWidth="140" prefHeight="40"/>
-                            <Button text="✅ Enregistrer" styleClass="button-primary" onAction="#handleSave" prefWidth="160" prefHeight="40"/>
+                            <Button text="❌ Annuler" styleClass="button-secondary" onAction="#handleCancel" prefWidth="140" prefHeight="42"/>
+                            <Button text="🗑️ Effacer" styleClass="button-accent" onAction="#handleClear" prefWidth="140" prefHeight="42"/>
+                            <Button text="✅ Enregistrer" styleClass="button-primary" onAction="#handleSave" prefWidth="160" prefHeight="42"/>
                         </HBox>
                     </GridPane>
                 </VBox>
@@ -90,9 +89,9 @@
     <bottom>
         <HBox styleClass="footer" alignment="CENTER_LEFT" spacing="20">
             <padding><Insets top="12" right="25" bottom="12" left="25"/></padding>
-            <Label styleClass="signature" text="💚"/>
+            <Label styleClass="signature" text="🌿"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Label fx:id="lblStatus" styleClass="status-label" text="Prêt"/>
+            <Label fx:id="lblStatus" styleClass="status-label" text="Prêt" style="-fx-text-fill: #B2D944;"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Label styleClass="signature" text="AgriFund"/>
         </HBox>

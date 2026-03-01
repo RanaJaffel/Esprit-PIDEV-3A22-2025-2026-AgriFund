@@ -5,101 +5,103 @@
 
 <StackPane xmlns:fx="http://javafx.com/fxml"
            fx:controller="com.agrifund.controller.banque.BanqueRisqueListController"
-           prefWidth="1400" prefHeight="850"
-           styleClass="root"
-           stylesheets="@banque-styles.css">
+           stylesheets="@banque-styles.css" style="-fx-background-color: #F8FAF8;">
 
     <!-- Contenu Principal -->
-    <BorderPane>
+    <HBox>
+        <!-- Sidebar Banque (Full Height) -->
+        <fx:include source="banque-sidebar.fxml"/>
 
-        <!-- Sidebar Banque -->
-        <left>
-            <fx:include source="banque-sidebar.fxml"/>
-        </left>
+        <!-- Main Content -->
+        <BorderPane HBox.hgrow="ALWAYS">
 
-        <!-- Header -->
-        <top>
-            <HBox styleClass="header" alignment="CENTER_LEFT" spacing="20">
-                <padding><Insets top="15" right="25" bottom="15" left="25"/></padding>
-                <Label fx:id="lblBanqueInfo" styleClass="title" text="🏦 Mes Évaluations de Risque"/>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Button text="➕ Nouvelle Évaluation" styleClass="button-primary" onAction="#handleNewEvaluation"/>
-                <Button text="📋 Mes Décisions" styleClass="button-accent" onAction="#handleViewDecisions"/>
-            </HBox>
-        </top>
-
-        <!-- Contenu -->
-        <center>
-            <VBox spacing="20" styleClass="main-content">
-                <padding><Insets top="25" right="30" bottom="25" left="30"/></padding>
-
-                <!-- Toolbar -->
-                <HBox spacing="15" alignment="CENTER_LEFT" styleClass="toolbar">
-                    <padding><Insets top="12" right="20" bottom="12" left="20"/></padding>
-                    <Label text="🔍 Rechercher:" styleClass="form-label"/>
-                    <TextField fx:id="tfSearch" promptText="Projet, niveau, score..."
-                               onKeyReleased="#handleSearch" prefWidth="300"/>
-                    <Button text="🔄 Rafraîchir" styleClass="button-accent" onAction="#handleRefresh"/>
+            <!-- Header -->
+            <top>
+                <HBox styleClass="header" alignment="CENTER_LEFT" spacing="20">
+                    <padding><Insets top="18" right="30" bottom="18" left="30"/></padding>
+                    <VBox spacing="3">
+                        <Label styleClass="title" text="📊 Mes Évaluations de Risque"/>
+                        <Label fx:id="lblBanqueInfo" styleClass="subtitle" text="🏦 Banque"/>
+                    </VBox>
                     <Region HBox.hgrow="ALWAYS"/>
-                    <!-- ✅ Bouton Export PDF -->
-                    <Button text="📄 Exporter PDF" styleClass="button-export" onAction="#handleExportPdf"/>
+                    <Button text="➕ Nouvelle Évaluation" styleClass="button-primary" onAction="#handleNewEvaluation" prefHeight="42"/>
+                    <Button text="📋 Mes Décisions" styleClass="button-accent" onAction="#handleViewDecisions" prefHeight="42"/>
                 </HBox>
+            </top>
 
-                <!-- Table -->
-                <TableView fx:id="tableEvaluations" VBox.vgrow="ALWAYS">
-                    <columns>
-                        <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
-                        <TableColumn fx:id="colNomProjet" text="Projet" prefWidth="180"/>
-                        <TableColumn fx:id="colScoreGlobal" text="Score" prefWidth="80"/>
-                        <TableColumn fx:id="colNiveauRisque" text="Niveau Risque" prefWidth="120"/>
-                        <TableColumn fx:id="colFiabiliteDonnees" text="Fiabilité" prefWidth="100"/>
-                        <TableColumn fx:id="colFacteurPrincipal" text="Facteurs" prefWidth="200"/>
-                        <TableColumn fx:id="colRecommandation" text="Recommandation" prefWidth="130"/>
-                        <TableColumn fx:id="colDateEvaluation" text="Date" prefWidth="120"/>
-                        <TableColumn fx:id="colActions" text="Actions" prefWidth="100"/>
-                    </columns>
-                </TableView>
+            <!-- Contenu -->
+            <center>
+                <VBox spacing="20" styleClass="main-content">
+                    <padding><Insets top="25" right="30" bottom="25" left="30"/></padding>
 
-                <!-- Stats -->
-                <HBox spacing="25" alignment="CENTER" styleClass="stats-container">
-                    <padding><Insets top="15" right="25" bottom="15" left="25"/></padding>
+                    <!-- Toolbar -->
+                    <HBox spacing="15" alignment="CENTER_LEFT" styleClass="toolbar">
+                        <padding><Insets top="12" right="20" bottom="12" left="20"/></padding>
+                        <Label text="🔍" style="-fx-font-size: 16px;"/>
+                        <TextField fx:id="tfSearch" promptText="Rechercher projet, niveau, score..."
+                                   onKeyReleased="#handleSearch" prefWidth="300"/>
+                        <Button text="🔄 Rafraîchir" styleClass="button-secondary" onAction="#handleRefresh" prefHeight="38"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="📄 Exporter PDF" styleClass="button-export" onAction="#handleExportPdf" prefHeight="38"/>
+                    </HBox>
 
-                    <VBox spacing="5" alignment="CENTER" styleClass="stat-box">
-                        <Label text="📊 Total" styleClass="stats-label"/>
-                        <Label fx:id="lblTotal" text="0" styleClass="stats-value"/>
-                    </VBox>
-                    <Separator orientation="VERTICAL"/>
-                    <VBox spacing="5" alignment="CENTER" styleClass="stat-box">
-                        <Label text="🟢 Faible" styleClass="stats-label"/>
-                        <Label fx:id="lblFaible" text="0" styleClass="stats-value-green"/>
-                    </VBox>
-                    <Separator orientation="VERTICAL"/>
-                    <VBox spacing="5" alignment="CENTER" styleClass="stat-box">
-                        <Label text="🟡 Moyen" styleClass="stats-label"/>
-                        <Label fx:id="lblMoyen" text="0" styleClass="stats-value-yellow"/>
-                    </VBox>
-                    <Separator orientation="VERTICAL"/>
-                    <VBox spacing="5" alignment="CENTER" styleClass="stat-box">
-                        <Label text="🟠 Élevé" styleClass="stats-label"/>
-                        <Label fx:id="lblEleve" text="0" styleClass="stats-value-orange"/>
-                    </VBox>
-                    <Separator orientation="VERTICAL"/>
-                    <VBox spacing="5" alignment="CENTER" styleClass="stat-box">
-                        <Label text="🔴 Critique" styleClass="stats-label"/>
-                        <Label fx:id="lblCritique" text="0" styleClass="stats-value-red"/>
-                    </VBox>
-                </HBox>
+                    <!-- Table -->
+                    <TableView fx:id="tableEvaluations" VBox.vgrow="ALWAYS" styleClass="table-view">
+                        <columns>
+                            <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
+                            <TableColumn fx:id="colNomProjet" text="Projet" prefWidth="180"/>
+                            <TableColumn fx:id="colScoreGlobal" text="Score" prefWidth="80"/>
+                            <TableColumn fx:id="colNiveauRisque" text="Niveau Risque" prefWidth="120"/>
+                            <TableColumn fx:id="colFiabiliteDonnees" text="Fiabilité" prefWidth="100"/>
+                            <TableColumn fx:id="colFacteurPrincipal" text="Facteurs" prefWidth="200"/>
+                            <TableColumn fx:id="colRecommandation" text="Recommandation" prefWidth="130"/>
+                            <TableColumn fx:id="colDateEvaluation" text="Date" prefWidth="120"/>
+                            <TableColumn fx:id="colActions" text="Actions" prefWidth="100"/>
+                        </columns>
+                    </TableView>
 
-                <!-- Status -->
-                <HBox alignment="CENTER_LEFT" styleClass="status-bar">
-                    <padding><Insets top="8" right="15" bottom="8" left="15"/></padding>
-                    <Label fx:id="lblStatus" styleClass="status-label" text="Prêt"/>
-                </HBox>
-            </VBox>
-        </center>
-    </BorderPane>
+                    <!-- Stats -->
+                    <HBox spacing="25" alignment="CENTER" styleClass="stats-container">
+                        <padding><Insets top="15" right="25" bottom="15" left="25"/></padding>
 
-    <!-- ✅ Bouton Chat Flottant (FAB) -->
+                        <VBox spacing="5" alignment="CENTER" styleClass="stat-box">
+                            <Label text="📊 Total" styleClass="stats-label"/>
+                            <Label fx:id="lblTotal" text="0" styleClass="stats-value"/>
+                        </VBox>
+                        <Separator orientation="VERTICAL" styleClass="vertical-separator"/>
+                        <VBox spacing="5" alignment="CENTER" styleClass="stat-box">
+                            <Label text="🟢 Faible" styleClass="stats-label"/>
+                            <Label fx:id="lblFaible" text="0" styleClass="stats-value-green"/>
+                        </VBox>
+                        <Separator orientation="VERTICAL" styleClass="vertical-separator"/>
+                        <VBox spacing="5" alignment="CENTER" styleClass="stat-box">
+                            <Label text="🟡 Moyen" styleClass="stats-label"/>
+                            <Label fx:id="lblMoyen" text="0" styleClass="stats-value-yellow"/>
+                        </VBox>
+                        <Separator orientation="VERTICAL" styleClass="vertical-separator"/>
+                        <VBox spacing="5" alignment="CENTER" styleClass="stat-box">
+                            <Label text="🟠 Élevé" styleClass="stats-label"/>
+                            <Label fx:id="lblEleve" text="0" styleClass="stats-value-orange"/>
+                        </VBox>
+                        <Separator orientation="VERTICAL" styleClass="vertical-separator"/>
+                        <VBox spacing="5" alignment="CENTER" styleClass="stat-box">
+                            <Label text="🔴 Critique" styleClass="stats-label"/>
+                            <Label fx:id="lblCritique" text="0" styleClass="stats-value-red"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Status -->
+                    <HBox alignment="CENTER_LEFT" styleClass="status-bar">
+                        <padding><Insets top="10" right="15" bottom="10" left="15"/></padding>
+                        <Label fx:id="lblStatus" styleClass="status-label" text="Prêt"/>
+                    </HBox>
+                </VBox>
+            </center>
+
+        </BorderPane>
+    </HBox>
+
+    <!-- Bouton Chat Flottant (FAB) -->
     <Button fx:id="btnChat"
             text="💬"
             styleClass="fab-chat-btn"

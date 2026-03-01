@@ -132,27 +132,7 @@
                 </graphic>
             </Button>
 
-            <Button fx:id="btnDemandeFinancement" styleClass="sidebar-menu-item"
-                    onAction="#goToDemandeFinancement" maxWidth="Infinity">
-                <graphic>
-                    <HBox spacing="12" alignment="CENTER_LEFT">
-                        <Label text="💳" styleClass="menu-icon"/>
-                        <Label text="Demande Financement" styleClass="menu-text"/>
-                        <Region HBox.hgrow="ALWAYS"/>
-                        <Label text="NOUVEAU" styleClass="new-badge"/>
-                    </HBox>
-                </graphic>
-            </Button>
 
-            <Button fx:id="btnAccueilProduits" styleClass="sidebar-menu-item"
-                    onAction="#goToAccueilProduits" maxWidth="Infinity">
-                <graphic>
-                    <HBox spacing="12" alignment="CENTER_LEFT">
-                        <Label text="🏪" styleClass="menu-icon"/>
-                        <Label text="Accueil Produits" styleClass="menu-text"/>
-                    </HBox>
-                </graphic>
-            </Button>
 
             <!-- ══════════════════════════════════════════════════════════
                  SECTION: AGRICULTURE
@@ -208,15 +188,7 @@
                 </graphic>
             </Button>
 
-            <Button fx:id="btnRapports" styleClass="sidebar-menu-item"
-                    onAction="#goToRapports" maxWidth="Infinity">
-                <graphic>
-                    <HBox spacing="12" alignment="CENTER_LEFT">
-                        <Label text="📝" styleClass="menu-icon"/>
-                        <Label text="Rapports" styleClass="menu-text"/>
-                    </HBox>
-                </graphic>
-            </Button>
+
 
             <!-- ══════════════════════════════════════════════════════════
                  SECTION: COMMUNICATION

@@ -46,6 +46,27 @@ public class AgriculteurOffreController {
     private OffreFinanciereService offreService;
     private ObservableList<OffreFinanciere> toutesLesOffres;
 
+    // Palette de couleurs AgriFund
+    private static final String VERT_VIF = "#089647";
+    private static final String VERT_FONCE = "#076A39";
+    private static final String VERT_FORET = "#095032";
+    private static final String GRIS = "#848A86";
+    private static final String VERT_TRES_FONCE = "#133D03";
+    private static final String JAUNE_MOUTARDE = "#E1B323";
+    private static final String VERT_CITRON = "#B2D944";
+    private static final String OLIVE = "#9A951F";
+    private static final String VERT_OLIVE_FONCE = "#476C1A";
+
+    // Thèmes de cartes avec la nouvelle palette
+    private static final String[][] CARD_THEMES = {
+            {VERT_CITRON, "#1a2e10", "#243d15"},      // Vert citron
+            {JAUNE_MOUTARDE, "#2a2205", "#3d330a"},   // Jaune moutarde
+            {VERT_VIF, "#0a2e1a", "#10422a"},         // Vert vif
+            {OLIVE, "#1e1f0a", "#2d2e10"},            // Olive
+            {VERT_FONCE, "#0a1e15", "#103220"},       // Vert foncé
+            {VERT_OLIVE_FONCE, "#1a2a10", "#253d18"}, // Vert olive foncé
+    };
+
     @FXML
     public void initialize() {
         offreService = new OffreFinanciereService();
@@ -105,7 +126,7 @@ public class AgriculteurOffreController {
 
         if (offres.isEmpty()) {
             Label lblVide = new Label("🔍 Aucune offre trouvée");
-            lblVide.setStyle("-fx-text-fill: #666; -fx-font-size: 16; -fx-padding: 40;");
+            lblVide.setStyle("-fx-text-fill: " + GRIS + "; -fx-font-size: 16; -fx-padding: 40;");
             containerOffres.getChildren().add(lblVide);
             lblNombreOffres.setText("(0)");
             return;
@@ -123,19 +144,24 @@ public class AgriculteurOffreController {
     }
 
     private VBox creerCarteOffre(OffreFinanciere offre, int index) {
+        String[] theme = CARD_THEMES[index % CARD_THEMES.length];
+        String accent = theme[0];
+        String bgStart = theme[1];
+        String bgEnd = theme[2];
+
         VBox card = new VBox(0);
         card.setPrefWidth(320);
         card.setMinWidth(290);
         card.setMaxWidth(350);
         card.setStyle(
-                "-fx-background-color: linear-gradient(to bottom right, #2a1a05, #1e1608);" +
+                "-fx-background-color: linear-gradient(to bottom right, " + bgStart + ", " + bgEnd + ");" +
                         "-fx-background-radius: 20;" +
-                        "-fx-border-color: rgba(255,183,77,0.15);" +
+                        "-fx-border-color: " + accent + "25;" +
                         "-fx-border-radius: 20;" +
                         "-fx-border-width: 1;" +
                         "-fx-cursor: hand;"
         );
-        card.setEffect(new DropShadow(16, Color.rgb(255, 152, 0, 0.15)));
+        card.setEffect(new DropShadow(16, Color.web(VERT_FONCE + "40")));
 
         // Header
         HBox header = new HBox(12);
@@ -145,7 +171,7 @@ public class AgriculteurOffreController {
         StackPane giftCircle = new StackPane();
         giftCircle.setPrefSize(48, 48);
         giftCircle.setMinSize(48, 48);
-        giftCircle.setStyle("-fx-background-color: rgba(255,183,77,0.15); -fx-background-radius: 50;");
+        giftCircle.setStyle("-fx-background-color: " + accent + "25; -fx-background-radius: 50;");
         Label giftIcon = new Label("🎁");
         giftIcon.setStyle("-fx-font-size: 22;");
         giftCircle.getChildren().add(giftIcon);
@@ -153,15 +179,15 @@ public class AgriculteurOffreController {
         VBox nameBox = new VBox(3);
         HBox.setHgrow(nameBox, Priority.ALWAYS);
         Label lblNom = new Label(offre.getNomOffre());
-        lblNom.setStyle("-fx-text-fill: #ffb74d; -fx-font-size: 15; -fx-font-weight: bold;");
+        lblNom.setStyle("-fx-text-fill: " + accent + "; -fx-font-size: 15; -fx-font-weight: bold;");
         lblNom.setWrapText(true);
 
-        // Statut badge
+        // Statut badge avec nouvelles couleurs
         String statut = offre.getStatut();
         String statutColor = switch (statut) {
-            case "Active" -> "#66bb6a";
-            case "En pause" -> "#ffa726";
-            default -> "#ef5350";
+            case "Active" -> VERT_VIF;
+            case "En pause" -> JAUNE_MOUTARDE;
+            default -> OLIVE;
         };
         Label lblStatut = new Label("● " + statut);
         lblStatut.setStyle("-fx-text-fill: " + statutColor + "; -fx-font-size: 11; -fx-font-weight: bold;");
@@ -189,7 +215,7 @@ public class AgriculteurOffreController {
 
             if (offre.getProduitFinancier() != null) {
                 Label lblTaux = new Label("Taux: " + String.format("%.2f%%", offre.getProduitFinancier().getTauxInteret()));
-                lblTaux.setStyle("-fx-text-fill: #B2D944; -fx-font-size: 10;");
+                lblTaux.setStyle("-fx-text-fill: " + VERT_CITRON + "; -fx-font-size: 10;");
                 prodInfo.getChildren().addAll(lblProd, lblTaux);
             } else {
                 prodInfo.getChildren().add(lblProd);
@@ -212,34 +238,50 @@ public class AgriculteurOffreController {
         lblConditions.setWrapText(true);
         lblConditions.setMaxHeight(40);
 
-        // Bouton
+        // Bouton avec nouvelles couleurs
         Button btnProfiter = new Button("Profiter de cette offre →");
         btnProfiter.setMaxWidth(Double.MAX_VALUE);
         btnProfiter.setStyle(
-                "-fx-background-color: linear-gradient(to right, #e65100, #ff8f00);" +
+                "-fx-background-color: linear-gradient(to right, " + VERT_FONCE + ", " + VERT_VIF + ");" +
                         "-fx-text-fill: white; -fx-font-weight: bold;" +
                         "-fx-padding: 12 20; -fx-background-radius: 12; -fx-cursor: hand; -fx-font-size: 12;"
         );
         btnProfiter.setOnAction(e -> ouvrirFormulaireDemande(offre));
 
+        // Hover effect pour le bouton
+        btnProfiter.setOnMouseEntered(ev ->
+                btnProfiter.setStyle(
+                        "-fx-background-color: linear-gradient(to right, " + VERT_VIF + ", " + VERT_CITRON + ");" +
+                                "-fx-text-fill: " + VERT_TRES_FONCE + "; -fx-font-weight: bold;" +
+                                "-fx-padding: 12 20; -fx-background-radius: 12; -fx-cursor: hand; -fx-font-size: 12;"
+                )
+        );
+        btnProfiter.setOnMouseExited(ev ->
+                btnProfiter.setStyle(
+                        "-fx-background-color: linear-gradient(to right, " + VERT_FONCE + ", " + VERT_VIF + ");" +
+                                "-fx-text-fill: white; -fx-font-weight: bold;" +
+                                "-fx-padding: 12 20; -fx-background-radius: 12; -fx-cursor: hand; -fx-font-size: 12;"
+                )
+        );
+
         body.getChildren().addAll(lblBanque, lblConditions, btnProfiter);
 
         card.getChildren().addAll(header, body);
 
-        // Hover effects
+        // Hover effects pour la carte
         card.setOnMouseEntered(e -> {
             ScaleTransition st = new ScaleTransition(Duration.millis(180), card);
             st.setToX(1.03);
             st.setToY(1.03);
             st.play();
-            card.setEffect(new DropShadow(24, Color.rgb(255, 152, 0, 0.3)));
+            card.setEffect(new DropShadow(24, Color.web(accent + "50")));
         });
         card.setOnMouseExited(e -> {
             ScaleTransition st = new ScaleTransition(Duration.millis(180), card);
             st.setToX(1.0);
             st.setToY(1.0);
             st.play();
-            card.setEffect(new DropShadow(16, Color.rgb(255, 152, 0, 0.15)));
+            card.setEffect(new DropShadow(16, Color.web(VERT_FONCE + "40")));
         });
 
         return card;

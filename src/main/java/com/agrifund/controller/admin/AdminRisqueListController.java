@@ -48,6 +48,13 @@ public class AdminRisqueListController {
     private ObservableList<EvaluationRisque> evaluationsData;
     private ObservableList<EvaluationRisque> filteredData;
 
+    // Couleurs AgriFund
+    private static final String PRIMARY_GREEN = "#089647";
+    private static final String LIGHT_GREEN = "#B2D944";
+    private static final String YELLOW = "#E1B323";
+    private static final String OLIVE = "#476C1A";
+    private static final String OLIVE_DARK = "#133D03";
+
     @FXML
     public void initialize() {
         serviceEvaluation = new ServiceEvaluationRisque();
@@ -78,12 +85,12 @@ public class AdminRisqueListController {
             }
         });
 
-        // ✅ Colonne Banque (pour l'admin)
+        // Colonne Banque
         colBanque.setCellValueFactory(cellData -> {
             try {
                 var banque = banqueService.rechercherParUtilisateurId(cellData.getValue().getBanqueId());
                 return new javafx.beans.property.SimpleStringProperty(
-                        banque != null ? banque.getNom() : "N/A"
+                        banque != null ? "🏦 " + banque.getNom() : "N/A"
                 );
             } catch (SQLException e) {
                 return new javafx.beans.property.SimpleStringProperty("Erreur");
@@ -91,8 +98,22 @@ public class AdminRisqueListController {
         });
 
         colScoreGlobal.setCellValueFactory(new PropertyValueFactory<>("scoreGlobal"));
-        colScoreGlobal.setStyle("-fx-alignment: CENTER;");
+        colScoreGlobal.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(String.valueOf(item));
+                    setAlignment(Pos.CENTER);
+                    setStyle("-fx-font-weight: bold; -fx-text-fill: " + PRIMARY_GREEN + ";");
+                }
+            }
+        });
 
+        // Colonne Niveau Risque avec couleurs AgriFund
         colNiveauRisque.setCellValueFactory(new PropertyValueFactory<>("niveauRisque"));
         colNiveauRisque.setCellFactory(column -> new TableCell<>() {
             @Override
@@ -105,11 +126,24 @@ public class AdminRisqueListController {
                     setText(item);
                     setAlignment(Pos.CENTER);
                     switch (item) {
-                        case "Faible": setStyle("-fx-background-color: #B2D944; -fx-text-fill: #133D03; -fx-font-weight: bold; -fx-padding: 5 10; -fx-background-radius: 5;"); break;
-                        case "Moyen": setStyle("-fx-background-color: #E1B323; -fx-text-fill: #133D03; -fx-font-weight: bold; -fx-padding: 5 10; -fx-background-radius: 5;"); break;
-                        case "Élevé": setStyle("-fx-background-color: #E17D23; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 10; -fx-background-radius: 5;"); break;
-                        case "Critique": setStyle("-fx-background-color: #D94444; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 10; -fx-background-radius: 5;"); break;
-                        default: setStyle("");
+                        case "Faible":
+                            setStyle("-fx-background-color: " + LIGHT_GREEN + "; -fx-text-fill: " + OLIVE_DARK + "; " +
+                                    "-fx-font-weight: bold; -fx-padding: 5 10; -fx-background-radius: 8;");
+                            break;
+                        case "Moyen":
+                            setStyle("-fx-background-color: " + YELLOW + "; -fx-text-fill: " + OLIVE_DARK + "; " +
+                                    "-fx-font-weight: bold; -fx-padding: 5 10; -fx-background-radius: 8;");
+                            break;
+                        case "Élevé":
+                            setStyle("-fx-background-color: #E17D23; -fx-text-fill: white; " +
+                                    "-fx-font-weight: bold; -fx-padding: 5 10; -fx-background-radius: 8;");
+                            break;
+                        case "Critique":
+                            setStyle("-fx-background-color: #dc3545; -fx-text-fill: white; " +
+                                    "-fx-font-weight: bold; -fx-padding: 5 10; -fx-background-radius: 8;");
+                            break;
+                        default:
+                            setStyle("");
                     }
                 }
             }
@@ -118,6 +152,7 @@ public class AdminRisqueListController {
         colFiabiliteDonnees.setCellValueFactory(new PropertyValueFactory<>("fiabiliteDonnees"));
         colFiabiliteDonnees.setStyle("-fx-alignment: CENTER;");
 
+        // Colonne Facteur Principal avec Tooltip
         colFacteurPrincipal.setCellValueFactory(new PropertyValueFactory<>("facteurPrincipal"));
         colFacteurPrincipal.setCellFactory(column -> new TableCell<>() {
             @Override
@@ -136,12 +171,38 @@ public class AdminRisqueListController {
             }
         });
 
+        // Colonne Recommandation
         colRecommandation.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(
                         getRecommandationString(cellData.getValue().getRecommandation())
                 )
         );
-        colRecommandation.setStyle("-fx-alignment: CENTER;");
+        colRecommandation.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(item);
+                    setAlignment(Pos.CENTER);
+                    switch (item) {
+                        case "Recommandé":
+                            setStyle("-fx-text-fill: " + PRIMARY_GREEN + "; -fx-font-weight: bold;");
+                            break;
+                        case "Surveillance":
+                            setStyle("-fx-text-fill: #E17D23; -fx-font-weight: bold;");
+                            break;
+                        case "Non recommandé":
+                            setStyle("-fx-text-fill: #dc3545; -fx-font-weight: bold;");
+                            break;
+                        default:
+                            setStyle("");
+                    }
+                }
+            }
+        });
 
         colDateEvaluation.setCellValueFactory(new PropertyValueFactory<>("dateEvaluation"));
         colDateEvaluation.setCellFactory(column -> new TableCell<>() {
@@ -158,12 +219,11 @@ public class AdminRisqueListController {
     private void loadEvaluations() {
         try {
             evaluationsData.clear();
-            // ✅ Admin voit TOUTES les évaluations
             evaluationsData.addAll(serviceEvaluation.afficher());
             filteredData.setAll(evaluationsData);
             tableEvaluations.setItems(filteredData);
             updateStatistics();
-            updateStatus("✅ " + evaluationsData.size() + " évaluation(s) - Mode consultation");
+            updateStatus("✅ " + evaluationsData.size() + " évaluation(s) chargée(s) — Mode consultation");
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", e.getMessage());
         }
@@ -199,11 +259,12 @@ public class AdminRisqueListController {
                 } catch (SQLException ex) {}
             }
         }
-        updateStatus(filteredData.size() + " résultat(s)");
+        updateStatus("🔍 " + filteredData.size() + " résultat(s)");
     }
 
     @FXML
     private void handleRefresh() {
+        tfSearch.clear();
         loadEvaluations();
     }
 
@@ -214,7 +275,7 @@ public class AdminRisqueListController {
             Parent root = loader.load();
 
             Stage stage = new Stage();
-            stage.setTitle("📊 Toutes les Décisions Financières");
+            stage.setTitle("📊 Toutes les Décisions Financières — AgriFund");
             stage.setScene(new Scene(root));
             stage.setMinWidth(1400);
             stage.setMinHeight(800);

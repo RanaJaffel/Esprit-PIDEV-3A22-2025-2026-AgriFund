@@ -52,31 +52,19 @@ public class AdminProjectController implements Initializable {
     // ============================================================================
     // FXML FIELDS
     // ============================================================================
-    @FXML
-    private FlowPane projectsContainer;
+    @FXML private FlowPane projectsContainer;
+    @FXML private TextField tfSearchProject;
+    @FXML private ComboBox<String> cbFilterStatut;
+    @FXML private ComboBox<String> cbFilterAgriculteur;
 
-    @FXML
-    private TextField tfSearchProject;
-    @FXML
-    private ComboBox<String> cbFilterStatut;
-    @FXML
-    private ComboBox<String> cbFilterAgriculteur;
+    @FXML private Label lblTotalProjects;
+    @FXML private Label lblAcceptedProjects;
+    @FXML private Label lblInProgressProjects;
+    @FXML private Label lblRefusedProjects;
 
-    @FXML
-    private Label lblTotalProjects;
-    @FXML
-    private Label lblAcceptedProjects;
-    @FXML
-    private Label lblInProgressProjects;
-    @FXML
-    private Label lblRefusedProjects;
-
-    @FXML
-    private Label lblTotalBudget;
-    @FXML
-    private Label lblTotalSurface;
-    @FXML
-    private Label lblLastUpdate;
+    @FXML private Label lblTotalBudget;
+    @FXML private Label lblTotalSurface;
+    @FXML private Label lblLastUpdate;
 
     // ============================================================================
     // SHARED FIELDS
@@ -84,7 +72,17 @@ public class AdminProjectController implements Initializable {
     private List<ProjectWithAgriculteur> allProjects = new ArrayList<>();
     private projectagricoleCRUD service;
     private Timeline autoRefreshTimeline;
-    private static final int REFRESH_INTERVAL_SECONDS = 5;
+    private static final int REFRESH_INTERVAL_SECONDS = 30;
+
+    // Couleurs AgriFund
+    private static final String PRIMARY_GREEN = "#089647";
+    private static final String DARK_GREEN = "#076A39";
+    private static final String FOREST_GREEN = "#095032";
+    private static final String OLIVE_DARK = "#133D03";
+    private static final String OLIVE = "#476C1A";
+    private static final String YELLOW = "#E1B323";
+    private static final String LIGHT_GREEN = "#B2D944";
+    private static final String GRAY = "#848A86";
 
     // ============================================================================
     // INITIALIZATION
@@ -93,7 +91,6 @@ public class AdminProjectController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         service = new projectagricoleCRUD();
 
-        // Initialize filter ComboBoxes
         if (cbFilterStatut != null) {
             cbFilterStatut.getItems().addAll("Tous les statuts", "en cours", "accepte", "refuse");
             cbFilterStatut.setValue("Tous les statuts");
@@ -106,12 +103,10 @@ public class AdminProjectController implements Initializable {
             cbFilterAgriculteur.setOnAction(e -> updateCardsDisplay());
         }
 
-        // Setup search listener
         if (tfSearchProject != null) {
             tfSearchProject.textProperty().addListener((obs, old, newVal) -> updateCardsDisplay());
         }
 
-        // Load data
         if (projectsContainer != null) {
             refreshDataFromDB();
             startAutoRefresh();
@@ -125,25 +120,19 @@ public class AdminProjectController implements Initializable {
     public void refreshDataFromDB() {
         try {
             allProjects = service.afficherTousAvecAgriculteur();
-
             if (allProjects == null) {
                 allProjects = new ArrayList<>();
             }
-
-            // Populate agriculteur filter
             populateAgriculteurFilter();
-
             updateCardsDisplay();
             updateStatistics();
-
         } catch (SQLException e) {
             System.err.println("Database error: " + e.getMessage());
             e.printStackTrace();
             allProjects = new ArrayList<>();
             updateCardsDisplay();
             updateStatistics();
-            showAlert(Alert.AlertType.ERROR, "Erreur",
-                    "Impossible de charger les projets: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger les projets: " + e.getMessage());
         }
     }
 
@@ -154,7 +143,6 @@ public class AdminProjectController implements Initializable {
         cbFilterAgriculteur.getItems().clear();
         cbFilterAgriculteur.getItems().add("Tous les agriculteurs");
 
-        // Get unique agriculteurs
         List<String> agriculteurs = allProjects.stream()
                 .map(ProjectWithAgriculteur::getAgriculteurNomComplet)
                 .distinct()
@@ -163,7 +151,6 @@ public class AdminProjectController implements Initializable {
 
         cbFilterAgriculteur.getItems().addAll(agriculteurs);
 
-        // Restore selection
         if (currentSelection != null && cbFilterAgriculteur.getItems().contains(currentSelection)) {
             cbFilterAgriculteur.setValue(currentSelection);
         } else {
@@ -208,7 +195,6 @@ public class AdminProjectController implements Initializable {
         if (lblTotalBudget != null) lblTotalBudget.setText(String.format("%,.2f DT", totalBudget));
         if (lblTotalSurface != null) lblTotalSurface.setText(String.format("%.2f Ha", totalSurface));
 
-        // ✅ CORRECTION - Utiliser LocalDateTime
         if (lblLastUpdate != null) {
             lblLastUpdate.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
         }
@@ -241,9 +227,22 @@ public class AdminProjectController implements Initializable {
                 .collect(Collectors.toList());
 
         if (filteredList.isEmpty()) {
-            Label emptyLabel = new Label("📋 Aucun projet trouvé.");
-            emptyLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #848A86; -fx-padding: 50;");
-            projectsContainer.getChildren().add(emptyLabel);
+            VBox emptyState = new VBox(15);
+            emptyState.setAlignment(Pos.CENTER);
+            emptyState.setPadding(new Insets(60));
+            emptyState.setStyle("-fx-background-color: white; -fx-background-radius: 16;");
+
+            Label emptyIcon = new Label("📋");
+            emptyIcon.setStyle("-fx-font-size: 48px; -fx-opacity: 0.5;");
+
+            Label emptyLabel = new Label("Aucun projet trouvé");
+            emptyLabel.setStyle("-fx-font-size: 18px; -fx-text-fill: " + GRAY + "; -fx-font-weight: bold;");
+
+            Label emptySubtitle = new Label("Modifiez vos critères de recherche");
+            emptySubtitle.setStyle("-fx-font-size: 13px; -fx-text-fill: #a0a5a0;");
+
+            emptyState.getChildren().addAll(emptyIcon, emptyLabel, emptySubtitle);
+            projectsContainer.getChildren().add(emptyState);
         } else {
             for (ProjectWithAgriculteur p : filteredList) {
                 projectsContainer.getChildren().add(createProjectCard(p));
@@ -252,59 +251,67 @@ public class AdminProjectController implements Initializable {
     }
 
     private VBox createProjectCard(ProjectWithAgriculteur project) {
-        VBox card = new VBox(10);
-        card.getStyleClass().add("project-card");
-        card.setPadding(new Insets(18));
-        card.setMaxWidth(400);
-        card.setPrefWidth(400);
-        card.setStyle("-fx-background-color: white; -fx-background-radius: 12; " +
-                "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 3);");
+        VBox card = new VBox(12);
+        card.setPadding(new Insets(20));
+        card.setMaxWidth(420);
+        card.setPrefWidth(420);
+        card.setStyle("-fx-background-color: white; -fx-background-radius: 16; " +
+                "-fx-border-color: #e0e5e0; -fx-border-radius: 16; -fx-border-width: 1; " +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 3);");
 
-        // Header avec icône et titre
+        // Hover effect
+        card.setOnMouseEntered(e -> card.setStyle("-fx-background-color: white; -fx-background-radius: 16; " +
+                "-fx-border-color: " + PRIMARY_GREEN + "; -fx-border-radius: 16; -fx-border-width: 1; " +
+                "-fx-effect: dropshadow(gaussian, rgba(8, 150, 71, 0.15), 15, 0, 0, 5);"));
+        card.setOnMouseExited(e -> card.setStyle("-fx-background-color: white; -fx-background-radius: 16; " +
+                "-fx-border-color: #e0e5e0; -fx-border-radius: 16; -fx-border-width: 1; " +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 3);"));
+
+        // Header
         HBox header = new HBox(12);
         header.setAlignment(Pos.CENTER_LEFT);
 
         Label icon = new Label(getProjectIcon(project.getStatut()));
-        icon.setStyle("-fx-font-size: 28px;");
+        icon.setStyle("-fx-font-size: 32px;");
 
-        VBox titleBox = new VBox(2);
+        VBox titleBox = new VBox(3);
         Label title = new Label(project.getNomproject());
-        title.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #133D03;");
+        title.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: " + OLIVE_DARK + ";");
         title.setWrapText(true);
 
-        Label idLabel = new Label("ID: " + project.getIdproject());
-        idLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: #848A86;");
+        Label idLabel = new Label("ID: #" + project.getIdproject());
+        idLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: " + GRAY + ";");
 
         titleBox.getChildren().addAll(title, idLabel);
+        HBox.setHgrow(titleBox, Priority.ALWAYS);
         header.getChildren().addAll(icon, titleBox);
 
         // Agriculteur info
-        HBox agriculteurBox = new HBox(8);
+        HBox agriculteurBox = new HBox(10);
         agriculteurBox.setAlignment(Pos.CENTER_LEFT);
-        agriculteurBox.setStyle("-fx-background-color: #E8F5E9; -fx-padding: 8 12; -fx-background-radius: 8;");
+        agriculteurBox.setStyle("-fx-background-color: rgba(8, 150, 71, 0.08); -fx-padding: 12 15; -fx-background-radius: 10;");
 
         Label farmerIcon = new Label("👨‍🌾");
-        farmerIcon.setStyle("-fx-font-size: 18px;");
+        farmerIcon.setStyle("-fx-font-size: 20px;");
 
-        VBox farmerInfo = new VBox(2);
+        VBox farmerInfo = new VBox(3);
+        HBox.setHgrow(farmerInfo, Priority.ALWAYS);
+
         Label farmerName = new Label(project.getAgriculteurNomComplet());
-        farmerName.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #2E7D32;");
+        farmerName.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: " + PRIMARY_GREEN + ";");
 
         Label farmerEmail = new Label(project.getAgriculteurEmail());
-        farmerEmail.setStyle("-fx-font-size: 11px; -fx-text-fill: #666;");
+        farmerEmail.setStyle("-fx-font-size: 11px; -fx-text-fill: " + GRAY + ";");
 
         farmerInfo.getChildren().addAll(farmerName, farmerEmail);
         agriculteurBox.getChildren().addAll(farmerIcon, farmerInfo);
 
-        // Badge vérification
         if (project.isCompteVerifie()) {
             Label verifiedBadge = new Label("✓ Vérifié");
-            verifiedBadge.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; " +
-                    "-fx-padding: 2 8; -fx-background-radius: 10; -fx-font-size: 10px;");
+            verifiedBadge.setStyle("-fx-background-color: " + PRIMARY_GREEN + "; -fx-text-fill: white; " +
+                    "-fx-padding: 4 10; -fx-background-radius: 12; -fx-font-size: 10px; -fx-font-weight: bold;");
             agriculteurBox.getChildren().add(verifiedBadge);
         }
-
-        HBox.setHgrow(farmerInfo, Priority.ALWAYS);
 
         // Status badge
         Label statusBadge = new Label(capitalizeStatus(project.getStatut()));
@@ -312,8 +319,9 @@ public class AdminProjectController implements Initializable {
 
         // Détails du projet
         GridPane detailsGrid = new GridPane();
-        detailsGrid.setHgap(10);
-        detailsGrid.setVgap(6);
+        detailsGrid.setHgap(15);
+        detailsGrid.setVgap(8);
+        detailsGrid.setStyle("-fx-padding: 10 0;");
 
         addCardDetailRow(detailsGrid, 0, "🌾 Surface:", String.format("%.2f Ha", project.getSurface()));
         addCardDetailRow(detailsGrid, 1, "💰 Budget:", String.format("%,.2f DT", project.getBudgetdemande()));
@@ -321,23 +329,30 @@ public class AdminProjectController implements Initializable {
         addCardDetailRow(detailsGrid, 3, "🌱 Culture:", project.getTypeCulture() != null ? project.getTypeCulture() : "N/A");
 
         // Boutons d'action
-        HBox actions = new HBox(8);
+        HBox actions = new HBox(10);
         actions.setAlignment(Pos.CENTER);
-        actions.setPadding(new Insets(8, 0, 0, 0));
+        actions.setPadding(new Insets(10, 0, 0, 0));
 
         Button btnView = new Button("👁 Détails");
-        btnView.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white; " +
-                "-fx-padding: 8 16; -fx-background-radius: 6; -fx-cursor: hand;");
+        btnView.setStyle("-fx-background-color: " + PRIMARY_GREEN + "; -fx-text-fill: white; " +
+                "-fx-padding: 10 20; -fx-background-radius: 8; -fx-cursor: hand; -fx-font-weight: bold;");
         btnView.setOnAction(e -> showProjectDetails(project));
+        btnView.setOnMouseEntered(e -> btnView.setStyle("-fx-background-color: " + DARK_GREEN + "; -fx-text-fill: white; " +
+                "-fx-padding: 10 20; -fx-background-radius: 8; -fx-cursor: hand; -fx-font-weight: bold;"));
+        btnView.setOnMouseExited(e -> btnView.setStyle("-fx-background-color: " + PRIMARY_GREEN + "; -fx-text-fill: white; " +
+                "-fx-padding: 10 20; -fx-background-radius: 8; -fx-cursor: hand; -fx-font-weight: bold;"));
 
         Button btnDelete = new Button("🗑 Supprimer");
-        btnDelete.setStyle("-fx-background-color: #f44336; -fx-text-fill: white; " +
-                "-fx-padding: 8 16; -fx-background-radius: 6; -fx-cursor: hand;");
+        btnDelete.setStyle("-fx-background-color: #dc3545; -fx-text-fill: white; " +
+                "-fx-padding: 10 20; -fx-background-radius: 8; -fx-cursor: hand; -fx-font-weight: bold;");
         btnDelete.setOnAction(e -> handleDelete(project));
+        btnDelete.setOnMouseEntered(e -> btnDelete.setStyle("-fx-background-color: #c82333; -fx-text-fill: white; " +
+                "-fx-padding: 10 20; -fx-background-radius: 8; -fx-cursor: hand; -fx-font-weight: bold;"));
+        btnDelete.setOnMouseExited(e -> btnDelete.setStyle("-fx-background-color: #dc3545; -fx-text-fill: white; " +
+                "-fx-padding: 10 20; -fx-background-radius: 8; -fx-cursor: hand; -fx-font-weight: bold;"));
 
         actions.getChildren().addAll(btnView, btnDelete);
 
-        // Assembler la carte
         card.getChildren().addAll(header, agriculteurBox, statusBadge, new Separator(), detailsGrid, actions);
 
         return card;
@@ -345,10 +360,10 @@ public class AdminProjectController implements Initializable {
 
     private void addCardDetailRow(GridPane grid, int row, String label, String value) {
         Label lblLabel = new Label(label);
-        lblLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #848A86;");
+        lblLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + GRAY + ";");
 
         Label lblValue = new Label(value);
-        lblValue.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #333;");
+        lblValue.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: " + OLIVE_DARK + ";");
 
         grid.add(lblLabel, 0, row);
         grid.add(lblValue, 1, row);
@@ -363,39 +378,44 @@ public class AdminProjectController implements Initializable {
         detailStage.initModality(Modality.APPLICATION_MODAL);
         detailStage.setTitle("Détails du Projet — " + project.getNomproject());
 
-        VBox content = new VBox(15);
-        content.setPadding(new Insets(25));
-        content.setStyle("-fx-background-color: white;");
+        VBox content = new VBox(18);
+        content.setPadding(new Insets(0));
+        content.setStyle("-fx-background-color: #f8faf8;");
 
         // Header
-        HBox headerBox = new HBox(15);
+        HBox headerBox = new HBox(18);
         headerBox.setAlignment(Pos.CENTER_LEFT);
-        headerBox.setStyle("-fx-background-color: linear-gradient(to right, #076A39, #089647); " +
-                "-fx-padding: 15 20; -fx-background-radius: 10;");
+        headerBox.setStyle("-fx-background-color: linear-gradient(to right, " + PRIMARY_GREEN + ", " + DARK_GREEN + "); " +
+                "-fx-padding: 25;");
 
         Label iconLarge = new Label(getProjectIcon(project.getStatut()));
-        iconLarge.setStyle("-fx-font-size: 36px;");
+        iconLarge.setStyle("-fx-font-size: 42px;");
 
-        VBox titleBox = new VBox(4);
+        VBox titleBox = new VBox(5);
         Label titleLabel = new Label(project.getNomproject());
-        titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;");
+        titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;");
 
         Label statusLabel = new Label(capitalizeStatus(project.getStatut()));
-        statusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: rgba(255,255,255,0.9);");
+        statusLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + LIGHT_GREEN + "; -fx-font-weight: bold;");
 
         titleBox.getChildren().addAll(titleLabel, statusLabel);
         headerBox.getChildren().addAll(iconLarge, titleBox);
 
+        // Content sections
+        VBox sectionsBox = new VBox(15);
+        sectionsBox.setPadding(new Insets(20));
+
         // Section Agriculteur
-        VBox agriculteurSection = new VBox(8);
-        agriculteurSection.setStyle("-fx-background-color: #E3F2FD; -fx-padding: 15; -fx-background-radius: 8;");
+        VBox agriculteurSection = new VBox(10);
+        agriculteurSection.setStyle("-fx-background-color: white; -fx-padding: 18; -fx-background-radius: 12; " +
+                "-fx-border-color: #e0e5e0; -fx-border-radius: 12;");
 
         Label sectionTitle1 = new Label("👨‍🌾 Informations Agriculteur");
-        sectionTitle1.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1565C0;");
+        sectionTitle1.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: " + PRIMARY_GREEN + ";");
 
         GridPane agriculteurGrid = new GridPane();
-        agriculteurGrid.setHgap(15);
-        agriculteurGrid.setVgap(8);
+        agriculteurGrid.setHgap(20);
+        agriculteurGrid.setVgap(10);
 
         addDetailRow(agriculteurGrid, 0, "Nom complet:", project.getAgriculteurNomComplet());
         addDetailRow(agriculteurGrid, 1, "Email:", project.getAgriculteurEmail());
@@ -409,15 +429,16 @@ public class AdminProjectController implements Initializable {
         agriculteurSection.getChildren().addAll(sectionTitle1, agriculteurGrid);
 
         // Section Projet
-        VBox projetSection = new VBox(8);
-        projetSection.setStyle("-fx-background-color: #E8F5E9; -fx-padding: 15; -fx-background-radius: 8;");
+        VBox projetSection = new VBox(10);
+        projetSection.setStyle("-fx-background-color: white; -fx-padding: 18; -fx-background-radius: 12; " +
+                "-fx-border-color: #e0e5e0; -fx-border-radius: 12;");
 
         Label sectionTitle2 = new Label("📋 Détails du Projet");
-        sectionTitle2.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2E7D32;");
+        sectionTitle2.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: " + OLIVE + ";");
 
         GridPane projetGrid = new GridPane();
-        projetGrid.setHgap(15);
-        projetGrid.setVgap(8);
+        projetGrid.setHgap(20);
+        projetGrid.setVgap(10);
 
         addDetailRow(projetGrid, 0, "ID Projet:", String.valueOf(project.getIdproject()));
         addDetailRow(projetGrid, 1, "Surface:", String.format("%.2f Hectares", project.getSurface()));
@@ -432,31 +453,34 @@ public class AdminProjectController implements Initializable {
 
         projetSection.getChildren().addAll(sectionTitle2, projetGrid);
 
+        sectionsBox.getChildren().addAll(agriculteurSection, projetSection);
+
         // Bouton fermer
         Button closeBtn = new Button("✖  Fermer");
-        closeBtn.setStyle("-fx-background-color: #076A39; -fx-text-fill: white; -fx-font-weight: bold; " +
-                "-fx-padding: 10 30; -fx-background-radius: 8; -fx-cursor: hand;");
+        closeBtn.setStyle("-fx-background-color: " + PRIMARY_GREEN + "; -fx-text-fill: white; -fx-font-weight: bold; " +
+                "-fx-padding: 12 35; -fx-background-radius: 10; -fx-cursor: hand;");
         closeBtn.setOnAction(e -> detailStage.close());
 
         HBox btnRow = new HBox(closeBtn);
         btnRow.setAlignment(Pos.CENTER_RIGHT);
+        btnRow.setPadding(new Insets(0, 20, 20, 20));
 
-        content.getChildren().addAll(headerBox, agriculteurSection, projetSection, btnRow);
+        content.getChildren().addAll(headerBox, sectionsBox, btnRow);
 
         ScrollPane scrollPane = new ScrollPane(content);
         scrollPane.setFitToWidth(true);
-        scrollPane.setStyle("-fx-background-color: white;");
+        scrollPane.setStyle("-fx-background-color: #f8faf8;");
 
-        detailStage.setScene(new Scene(scrollPane, 550, 600));
+        detailStage.setScene(new Scene(scrollPane, 580, 650));
         detailStage.showAndWait();
     }
 
     private void addDetailRow(GridPane grid, int row, String label, String value) {
         Label lblLabel = new Label(label);
-        lblLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #666;");
+        lblLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: " + GRAY + ";");
 
         Label lblValue = new Label(value);
-        lblValue.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #333;");
+        lblValue.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: " + OLIVE_DARK + ";");
 
         grid.add(lblLabel, 0, row);
         grid.add(lblValue, 1, row);
@@ -477,7 +501,7 @@ public class AdminProjectController implements Initializable {
             if (response == ButtonType.OK) {
                 try {
                     service.supprimer(project.getIdproject());
-                    showAlert(Alert.AlertType.INFORMATION, "Succès", "Projet supprimé avec succès!");
+                    showAlert(Alert.AlertType.INFORMATION, "Succès", "✓ Projet supprimé avec succès!");
                     refreshDataFromDB();
                 } catch (SQLException e) {
                     showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la suppression: " + e.getMessage());
@@ -507,7 +531,7 @@ public class AdminProjectController implements Initializable {
         if (file != null) {
             try {
                 generatePDFReport(file.getAbsolutePath());
-                showAlert(Alert.AlertType.INFORMATION, "Succès", "Rapport PDF généré: " + file.getAbsolutePath());
+                showAlert(Alert.AlertType.INFORMATION, "Succès", "✓ Rapport PDF généré!\n\n📁 " + file.getAbsolutePath());
             } catch (Exception e) {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur PDF: " + e.getMessage());
             }
@@ -519,34 +543,35 @@ public class AdminProjectController implements Initializable {
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
 
-        // Title
-        document.add(new Paragraph("Rapport des Projets Agricoles - Administration")
-                .setFontSize(18).setBold().setTextAlignment(TextAlignment.CENTER));
+        // AgriFund Green
+        Color agrifundGreen = new DeviceRgb(8, 150, 71);
+
+        document.add(new Paragraph("🌾 Rapport des Projets Agricoles - AgriFund")
+                .setFontSize(20).setBold().setTextAlignment(TextAlignment.CENTER)
+                .setFontColor(agrifundGreen));
         document.add(new Paragraph("Généré le: " +
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")))
-                .setFontSize(10).setTextAlignment(TextAlignment.CENTER));
+                .setFontSize(11).setTextAlignment(TextAlignment.CENTER));
         document.add(new Paragraph("\n"));
 
-        // Stats
-        document.add(new Paragraph("Statistiques Globales").setFontSize(14).setBold());
-        document.add(new Paragraph("Total: " + allProjects.size() + " projets"));
-        document.add(new Paragraph("Acceptés: " + allProjects.stream().filter(p -> "accepte".equals(p.getStatut())).count()));
-        document.add(new Paragraph("En cours: " + allProjects.stream().filter(p -> "en cours".equals(p.getStatut())).count()));
-        document.add(new Paragraph("Refusés: " + allProjects.stream().filter(p -> "refuse".equals(p.getStatut())).count()));
+        document.add(new Paragraph("📊 Statistiques Globales").setFontSize(14).setBold()
+                .setFontColor(agrifundGreen));
+        document.add(new Paragraph("• Total: " + allProjects.size() + " projets"));
+        document.add(new Paragraph("• Acceptés: " + allProjects.stream().filter(p -> "accepte".equals(p.getStatut())).count()));
+        document.add(new Paragraph("• En cours: " + allProjects.stream().filter(p -> "en cours".equals(p.getStatut())).count()));
+        document.add(new Paragraph("• Refusés: " + allProjects.stream().filter(p -> "refuse".equals(p.getStatut())).count()));
         document.add(new Paragraph("\n"));
 
-        // Table
         float[] columnWidths = {1, 2.5f, 2.5f, 1.5f, 1.5f, 1.5f, 1.5f};
         Table table = new Table(UnitValue.createPercentArray(columnWidths));
         table.setWidth(UnitValue.createPercentValue(100));
 
-        Color headerColor = new DeviceRgb(7, 106, 57);
         String[] headers = {"ID", "Projet", "Agriculteur", "Surface", "Budget", "Statut", "Date"};
 
         for (String header : headers) {
             table.addHeaderCell(new Cell()
                     .add(new Paragraph(header).setFontSize(9))
-                    .setBackgroundColor(headerColor)
+                    .setBackgroundColor(agrifundGreen)
                     .setFontColor(ColorConstants.WHITE)
                     .setBold()
                     .setTextAlignment(TextAlignment.CENTER));
@@ -606,7 +631,7 @@ public class AdminProjectController implements Initializable {
 
         Stage mapStage = new Stage();
         mapStage.initModality(Modality.APPLICATION_MODAL);
-        mapStage.setTitle("🗺 Tous les Projets sur la Carte");
+        mapStage.setTitle("🗺 Tous les Projets sur la Carte — AgriFund");
         mapStage.setWidth(1100);
         mapStage.setHeight(720);
 
@@ -651,7 +676,7 @@ public class AdminProjectController implements Initializable {
     @FXML
     void handleRefresh(ActionEvent event) {
         refreshDataFromDB();
-        showAlert(Alert.AlertType.INFORMATION, "Actualisation", "Les projets ont été actualisés!");
+        showAlert(Alert.AlertType.INFORMATION, "Actualisation", "✓ Les projets ont été actualisés!");
     }
 
     // ============================================================================
@@ -675,14 +700,17 @@ public class AdminProjectController implements Initializable {
     }
 
     private String getStatusBadgeStyle(String statut) {
-        String baseStyle = "-fx-padding: 4 12; -fx-background-radius: 12; -fx-font-size: 11px; -fx-font-weight: bold;";
+        String baseStyle = "-fx-padding: 6 14; -fx-background-radius: 15; -fx-font-size: 11px; -fx-font-weight: bold;";
         switch (statut.toLowerCase()) {
             case "accepte":
-                return baseStyle + "-fx-background-color: #C8E6C9; -fx-text-fill: #2E7D32;";
+                return baseStyle + "-fx-background-color: rgba(178, 217, 68, 0.2); -fx-text-fill: " + OLIVE + "; " +
+                        "-fx-border-color: " + LIGHT_GREEN + "; -fx-border-radius: 15;";
             case "refuse":
-                return baseStyle + "-fx-background-color: #FFCDD2; -fx-text-fill: #C62828;";
+                return baseStyle + "-fx-background-color: rgba(220, 53, 69, 0.1); -fx-text-fill: #dc3545; " +
+                        "-fx-border-color: #dc3545; -fx-border-radius: 15;";
             default:
-                return baseStyle + "-fx-background-color: #FFF3E0; -fx-text-fill: #E65100;";
+                return baseStyle + "-fx-background-color: rgba(225, 179, 35, 0.15); -fx-text-fill: #9A951F; " +
+                        "-fx-border-color: " + YELLOW + "; -fx-border-radius: 15;";
         }
     }
 

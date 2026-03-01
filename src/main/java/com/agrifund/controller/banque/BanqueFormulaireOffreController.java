@@ -115,11 +115,15 @@ public class BanqueFormulaireOffreController {
 
     @FXML private void handleFermer() { fermerFenetre(); }
 
+    // Dans BanqueFormulaireOffreController et BanqueFormulaireProduitController
+
     @FXML
     private void onControlButtonHover(MouseEvent event) {
         if (event.getSource() instanceof Button) {
             Button btn = (Button) event.getSource();
-            btn.setStyle("-fx-background-color: #DDDDDD; -fx-text-fill: #333333; -fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12; -fx-cursor: hand; -fx-background-radius: 3;");
+            btn.setStyle("-fx-background-color: rgba(178,217,68,0.3); -fx-text-fill: #B2D944; " +
+                    "-fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12; " +
+                    "-fx-cursor: hand; -fx-background-radius: 3;");
         }
     }
 
@@ -127,7 +131,9 @@ public class BanqueFormulaireOffreController {
     private void onControlButtonExit(MouseEvent event) {
         if (event.getSource() instanceof Button) {
             Button btn = (Button) event.getSource();
-            btn.setStyle("-fx-background-color: transparent; -fx-text-fill: #666666; -fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12; -fx-cursor: hand; -fx-background-radius: 3;");
+            btn.setStyle("-fx-background-color: transparent; -fx-text-fill: rgba(255,255,255,0.7); " +
+                    "-fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12; " +
+                    "-fx-cursor: hand; -fx-background-radius: 3;");
         }
     }
 
@@ -135,7 +141,9 @@ public class BanqueFormulaireOffreController {
     private void onCloseButtonHover(MouseEvent event) {
         if (event.getSource() instanceof Button) {
             Button btn = (Button) event.getSource();
-            btn.setStyle("-fx-background-color: #E53935; -fx-text-fill: white; -fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12; -fx-cursor: hand; -fx-background-radius: 3;");
+            btn.setStyle("-fx-background-color: #E1B323; -fx-text-fill: #133D03; " +
+                    "-fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12; " +
+                    "-fx-cursor: hand; -fx-background-radius: 3;");
         }
     }
 
@@ -143,10 +151,11 @@ public class BanqueFormulaireOffreController {
     private void onCloseButtonExit(MouseEvent event) {
         if (event.getSource() instanceof Button) {
             Button btn = (Button) event.getSource();
-            btn.setStyle("-fx-background-color: transparent; -fx-text-fill: #666666; -fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12; -fx-cursor: hand; -fx-background-radius: 3;");
+            btn.setStyle("-fx-background-color: transparent; -fx-text-fill: rgba(255,255,255,0.7); " +
+                    "-fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12; " +
+                    "-fx-cursor: hand; -fx-background-radius: 3;");
         }
     }
-
     public void setModeAjout(int banqueId) {
         this.banqueId = banqueId;
         modeModification = false;
@@ -282,4 +291,6 @@ public class BanqueFormulaireOffreController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+
 }

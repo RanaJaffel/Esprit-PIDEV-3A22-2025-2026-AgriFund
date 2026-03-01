@@ -184,28 +184,45 @@ public class BanqueProjectController implements Initializable {
     }
 
     private VBox createProjectCard(ProjectWithAgriculteur project) {
-        VBox card = new VBox(10);
-        card.setPadding(new Insets(18));
+        VBox card = new VBox(12);
+        card.setPadding(new Insets(20));
         card.setMaxWidth(420);
         card.setPrefWidth(420);
-        card.setStyle("-fx-background-color: white; -fx-background-radius: 12; " +
-                "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 3);" +
-                "-fx-border-color: #E0E0E0; -fx-border-width: 1; -fx-border-radius: 12;");
+        card.setStyle("-fx-background-color: linear-gradient(to bottom right, #FFFFFF, #F8FFF8);" +
+                "-fx-background-radius: 16;" +
+                "-fx-border-color: rgba(178,217,68,0.4);" +
+                "-fx-border-width: 1;" +
+                "-fx-border-radius: 16;" +
+                "-fx-effect: dropshadow(three-pass-box, rgba(7,106,57,0.12), 10, 0, 0, 3);" +
+                "-fx-cursor: hand;");
 
         // Header
         HBox header = new HBox(12);
         header.setAlignment(Pos.CENTER_LEFT);
 
-        Label icon = new Label(getProjectIcon(project.getStatut()));
-        icon.setStyle("-fx-font-size: 28px;");
+        // Icon circle
+        StackPane iconCircle = new StackPane();
+        iconCircle.setMinSize(48, 48);
+        iconCircle.setMaxSize(48, 48);
+        String iconBgColor = switch (project.getStatut().toLowerCase()) {
+            case "accepte" -> "rgba(8,150,71,0.15)";
+            case "refuse" -> "rgba(198,40,40,0.1)";
+            default -> "rgba(225,179,35,0.15)";
+        };
+        iconCircle.setStyle("-fx-background-color: " + iconBgColor + "; -fx-background-radius: 12;");
 
-        VBox titleBox = new VBox(2);
+        Label icon = new Label(getProjectIcon(project.getStatut()));
+        icon.setStyle("-fx-font-size: 26px;");
+        iconCircle.getChildren().add(icon);
+
+        VBox titleBox = new VBox(4);
         Label title = new Label(project.getNomproject());
-        title.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1565C0;");
+        title.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #076A39;");
         title.setWrapText(true);
+        title.setMaxWidth(220);
 
         Label budgetLabel = new Label(String.format("💰 %,.2f DT", project.getBudgetdemande()));
-        budgetLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #2E7D32;");
+        budgetLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #089647;");
 
         titleBox.getChildren().addAll(title, budgetLabel);
         HBox.setHgrow(titleBox, Priority.ALWAYS);
@@ -214,27 +231,27 @@ public class BanqueProjectController implements Initializable {
         Label statusBadge = new Label(capitalizeStatus(project.getStatut()));
         statusBadge.setStyle(getStatusBadgeStyle(project.getStatut()));
 
-        header.getChildren().addAll(icon, titleBox, statusBadge);
+        header.getChildren().addAll(iconCircle, titleBox, statusBadge);
 
         // Agriculteur info
         HBox agriculteurBox = new HBox(10);
         agriculteurBox.setAlignment(Pos.CENTER_LEFT);
-        agriculteurBox.setStyle("-fx-background-color: #FFF3E0; -fx-padding: 10 14; -fx-background-radius: 8;");
+        agriculteurBox.setStyle("-fx-background-color: rgba(178,217,68,0.1); -fx-padding: 12 14; -fx-background-radius: 10;");
 
         Label farmerIcon = new Label("👨‍🌾");
         farmerIcon.setStyle("-fx-font-size: 20px;");
 
         VBox farmerInfo = new VBox(3);
         Label farmerName = new Label(project.getAgriculteurNomComplet());
-        farmerName.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #E65100;");
+        farmerName.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #133D03;");
 
         HBox contactRow = new HBox(15);
         Label emailLabel = new Label("📧 " + project.getAgriculteurEmail());
-        emailLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: #666;");
+        emailLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: #848A86;");
 
         String tel = project.getAgriculteurTel() != null ? project.getAgriculteurTel() : "N/A";
         Label telLabel = new Label("📱 " + tel);
-        telLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: #666;");
+        telLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: #848A86;");
 
         contactRow.getChildren().addAll(emailLabel, telLabel);
         farmerInfo.getChildren().addAll(farmerName, contactRow);
@@ -244,13 +261,13 @@ public class BanqueProjectController implements Initializable {
         badgeBox.setAlignment(Pos.CENTER_RIGHT);
         if (project.isCompteVerifie()) {
             Label verifiedBadge = new Label("✓ Vérifié");
-            verifiedBadge.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; " +
-                    "-fx-padding: 3 10; -fx-background-radius: 10; -fx-font-size: 10px;");
+            verifiedBadge.setStyle("-fx-background-color: #089647; -fx-text-fill: white; " +
+                    "-fx-padding: 4 12; -fx-background-radius: 12; -fx-font-size: 10px; -fx-font-weight: bold;");
             badgeBox.getChildren().add(verifiedBadge);
         } else {
             Label unverifiedBadge = new Label("⚠ Non vérifié");
-            unverifiedBadge.setStyle("-fx-background-color: #FF9800; -fx-text-fill: white; " +
-                    "-fx-padding: 3 10; -fx-background-radius: 10; -fx-font-size: 10px;");
+            unverifiedBadge.setStyle("-fx-background-color: #E1B323; -fx-text-fill: #133D03; " +
+                    "-fx-padding: 4 12; -fx-background-radius: 12; -fx-font-size: 10px; -fx-font-weight: bold;");
             badgeBox.getChildren().add(unverifiedBadge);
         }
 
@@ -260,7 +277,7 @@ public class BanqueProjectController implements Initializable {
         // Détails
         GridPane detailsGrid = new GridPane();
         detailsGrid.setHgap(15);
-        detailsGrid.setVgap(6);
+        detailsGrid.setVgap(8);
 
         addCardDetailRow(detailsGrid, 0, "🌾 Surface:", String.format("%.2f Ha", project.getSurface()));
         addCardDetailRow(detailsGrid, 1, "📅 Soumission:", project.getDatesoumission().toString());
@@ -274,28 +291,86 @@ public class BanqueProjectController implements Initializable {
         actions.setPadding(new Insets(10, 0, 0, 0));
 
         Button btnDetails = new Button("📋 Voir Dossier");
-        btnDetails.setStyle("-fx-background-color: #1565C0; -fx-text-fill: white; " +
-                "-fx-padding: 10 20; -fx-background-radius: 8; -fx-cursor: hand; -fx-font-weight: bold;");
+        btnDetails.setStyle("-fx-background-color: linear-gradient(to right, #076A39, #089647); -fx-text-fill: white; " +
+                "-fx-padding: 10 20; -fx-background-radius: 10; -fx-cursor: hand; -fx-font-weight: bold; -fx-font-size: 12px;");
         btnDetails.setOnAction(e -> showProjectDetails(project));
 
-        // Bouton décision si en cours
+        // Hover effect
+        btnDetails.setOnMouseEntered(e ->
+                btnDetails.setStyle("-fx-background-color: linear-gradient(to right, #089647, #B2D944); -fx-text-fill: #133D03; " +
+                        "-fx-padding: 10 20; -fx-background-radius: 10; -fx-cursor: hand; -fx-font-weight: bold; -fx-font-size: 12px;")
+        );
+        btnDetails.setOnMouseExited(e ->
+                btnDetails.setStyle("-fx-background-color: linear-gradient(to right, #076A39, #089647); -fx-text-fill: white; " +
+                        "-fx-padding: 10 20; -fx-background-radius: 10; -fx-cursor: hand; -fx-font-weight: bold; -fx-font-size: 12px;")
+        );
+
+        actions.getChildren().add(btnDetails);
+
+        // Boutons décision si en cours
         if ("en cours".equals(project.getStatut())) {
             Button btnAccept = new Button("✓ Accepter");
-            btnAccept.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; " +
-                    "-fx-padding: 10 16; -fx-background-radius: 8; -fx-cursor: hand;");
+            btnAccept.setStyle("-fx-background-color: rgba(8,150,71,0.12); -fx-text-fill: #089647; " +
+                    "-fx-padding: 10 16; -fx-background-radius: 10; -fx-cursor: hand; -fx-font-weight: bold;" +
+                    "-fx-border-color: #089647; -fx-border-radius: 10; -fx-border-width: 1.5;");
             btnAccept.setOnAction(e -> handleDecision(project, "accepte"));
 
+            btnAccept.setOnMouseEntered(e ->
+                    btnAccept.setStyle("-fx-background-color: #089647; -fx-text-fill: white; " +
+                            "-fx-padding: 10 16; -fx-background-radius: 10; -fx-cursor: hand; -fx-font-weight: bold;" +
+                            "-fx-border-color: #089647; -fx-border-radius: 10; -fx-border-width: 1.5;")
+            );
+            btnAccept.setOnMouseExited(e ->
+                    btnAccept.setStyle("-fx-background-color: rgba(8,150,71,0.12); -fx-text-fill: #089647; " +
+                            "-fx-padding: 10 16; -fx-background-radius: 10; -fx-cursor: hand; -fx-font-weight: bold;" +
+                            "-fx-border-color: #089647; -fx-border-radius: 10; -fx-border-width: 1.5;")
+            );
+
             Button btnRefuse = new Button("✗ Refuser");
-            btnRefuse.setStyle("-fx-background-color: #f44336; -fx-text-fill: white; " +
-                    "-fx-padding: 10 16; -fx-background-radius: 8; -fx-cursor: hand;");
+            btnRefuse.setStyle("-fx-background-color: rgba(198,40,40,0.1); -fx-text-fill: #C62828; " +
+                    "-fx-padding: 10 16; -fx-background-radius: 10; -fx-cursor: hand; -fx-font-weight: bold;" +
+                    "-fx-border-color: #C62828; -fx-border-radius: 10; -fx-border-width: 1.5;");
             btnRefuse.setOnAction(e -> handleDecision(project, "refuse"));
 
-            actions.getChildren().addAll(btnDetails, btnAccept, btnRefuse);
-        } else {
-            actions.getChildren().add(btnDetails);
+            btnRefuse.setOnMouseEntered(e ->
+                    btnRefuse.setStyle("-fx-background-color: #C62828; -fx-text-fill: white; " +
+                            "-fx-padding: 10 16; -fx-background-radius: 10; -fx-cursor: hand; -fx-font-weight: bold;" +
+                            "-fx-border-color: #C62828; -fx-border-radius: 10; -fx-border-width: 1.5;")
+            );
+            btnRefuse.setOnMouseExited(e ->
+                    btnRefuse.setStyle("-fx-background-color: rgba(198,40,40,0.1); -fx-text-fill: #C62828; " +
+                            "-fx-padding: 10 16; -fx-background-radius: 10; -fx-cursor: hand; -fx-font-weight: bold;" +
+                            "-fx-border-color: #C62828; -fx-border-radius: 10; -fx-border-width: 1.5;")
+            );
+
+            actions.getChildren().addAll(btnAccept, btnRefuse);
         }
 
-        card.getChildren().addAll(header, agriculteurBox, new Separator(), detailsGrid, actions);
+        // Separator avec style
+        Separator sep = new Separator();
+        sep.setStyle("-fx-padding: 5 0;");
+
+        card.getChildren().addAll(header, agriculteurBox, sep, detailsGrid, actions);
+
+        // Hover effect pour la carte
+        card.setOnMouseEntered(e ->
+                card.setStyle("-fx-background-color: linear-gradient(to bottom right, #FFFFFF, #F0FFF0);" +
+                        "-fx-background-radius: 16;" +
+                        "-fx-border-color: #089647;" +
+                        "-fx-border-width: 2;" +
+                        "-fx-border-radius: 16;" +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(8,150,71,0.25), 16, 0, 0, 4);" +
+                        "-fx-cursor: hand;")
+        );
+        card.setOnMouseExited(e ->
+                card.setStyle("-fx-background-color: linear-gradient(to bottom right, #FFFFFF, #F8FFF8);" +
+                        "-fx-background-radius: 16;" +
+                        "-fx-border-color: rgba(178,217,68,0.4);" +
+                        "-fx-border-width: 1;" +
+                        "-fx-border-radius: 16;" +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(7,106,57,0.12), 10, 0, 0, 3);" +
+                        "-fx-cursor: hand;")
+        );
 
         return card;
     }
@@ -305,11 +380,12 @@ public class BanqueProjectController implements Initializable {
         lblLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #848A86;");
 
         Label lblValue = new Label(value);
-        lblValue.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #333;");
+        lblValue.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #076A39;");
 
         grid.add(lblLabel, 0, row);
         grid.add(lblValue, 1, row);
     }
+
 
     // ============================================================================
     // DECISION HANDLING
@@ -625,14 +701,14 @@ public class BanqueProjectController implements Initializable {
     }
 
     private String getStatusBadgeStyle(String statut) {
-        String baseStyle = "-fx-padding: 5 14; -fx-background-radius: 15; -fx-font-size: 11px; -fx-font-weight: bold;";
+        String baseStyle = "-fx-padding: 6 16; -fx-background-radius: 15; -fx-font-size: 11px; -fx-font-weight: bold;";
         switch (statut.toLowerCase()) {
             case "accepte":
-                return baseStyle + "-fx-background-color: #C8E6C9; -fx-text-fill: #2E7D32;";
+                return baseStyle + "-fx-background-color: linear-gradient(to right, #089647, #076A39); -fx-text-fill: white;";
             case "refuse":
-                return baseStyle + "-fx-background-color: #FFCDD2; -fx-text-fill: #C62828;";
+                return baseStyle + "-fx-background-color: linear-gradient(to right, #C62828, #B71C1C); -fx-text-fill: white;";
             default:
-                return baseStyle + "-fx-background-color: #BBDEFB; -fx-text-fill: #1565C0;";
+                return baseStyle + "-fx-background-color: linear-gradient(to right, #E1B323, #9A951F); -fx-text-fill: #133D03;";
         }
     }
 
