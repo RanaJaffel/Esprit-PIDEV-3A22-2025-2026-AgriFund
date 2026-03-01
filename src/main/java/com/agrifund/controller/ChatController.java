@@ -37,7 +37,7 @@ public class ChatController {
     // ══════════════════════════════════════════════════════════════
 
     private static final String HF_API_KEY = System.getenv("HF_API_KEY") != null
-            ? System.getenv("HF_API_KEY")
+           ? System.getenv("HF_API_KEY")
             : "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";
 
     // ✅ Nouvelle URL du router
