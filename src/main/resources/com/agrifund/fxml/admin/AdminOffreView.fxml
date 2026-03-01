@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.shape.*?>
+
+<VBox prefHeight="750" prefWidth="1300" spacing="0"
+      style="-fx-background-color: linear-gradient(to bottom, #f5f5f5, #e8f5e9);"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.agrifund.controller.admin.AdminOffreController">
+
+    <!-- ========== HEADER ========== -->
+    <HBox alignment="CENTER_LEFT" spacing="20"
+          style="-fx-background-color: linear-gradient(to right, #1a237e, #283593, #1a237e); -fx-padding: 25;">
+        <Button text="← Retour" onAction="#handleRetour"
+                style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white;
+                       -fx-font-weight: bold; -fx-padding: 10 25; -fx-background-radius: 20; -fx-cursor: hand;"/>
+        <VBox spacing="3">
+            <Label text="🎁 Gestion des Offres"
+                   style="-fx-text-fill: white; -fx-font-size: 26; -fx-font-weight: bold;">
+                <effect>
+                    <DropShadow color="#000" offsetY="2" radius="5"/>
+                </effect>
+            </Label>
+            <Label text="Toutes les offres financières de la plateforme"
+                   style="-fx-text-fill: #9fa8da; -fx-font-size: 13;"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label text="Admin" style="-fx-text-fill: white; -fx-font-size: 12; -fx-font-weight: bold;
+               -fx-background-color: rgba(255,255,255,0.15); -fx-padding: 6 15; -fx-background-radius: 15;"/>
+    </HBox>
+
+    <!-- ========== BARRE D'OUTILS ========== -->
+    <HBox alignment="CENTER_LEFT" spacing="15"
+          style="-fx-background-color: white; -fx-padding: 15;
+                 -fx-border-color: #c5cae9; -fx-border-width: 0 0 2 0;">
+
+        <Label text="🔍" style="-fx-font-size: 18;"/>
+        <TextField fx:id="txtRecherche" promptText="Rechercher une offre, statut ou banque..." prefWidth="350"
+                   style="-fx-background-color: #f5f5f5; -fx-background-radius: 20; -fx-padding: 12 20;
+                          -fx-border-color: #1a237e; -fx-border-radius: 20; -fx-border-width: 2; -fx-font-size: 13;"/>
+
+        <Button text="Rechercher" onAction="#handleRechercher"
+                style="-fx-background-color: linear-gradient(to bottom, #1a237e, #283593);
+                       -fx-text-fill: white; -fx-font-weight: bold;
+                       -fx-padding: 12 25; -fx-background-radius: 20; -fx-cursor: hand;">
+            <effect>
+                <DropShadow color="#1a237e" offsetY="2" radius="5"/>
+            </effect>
+        </Button>
+
+        <Button text="↻ Actualiser" onAction="#handleActualiser"
+                style="-fx-background-color: #e8eaf6; -fx-text-fill: #1a237e; -fx-font-weight: bold;
+                       -fx-padding: 12 20; -fx-background-radius: 20; -fx-cursor: hand;
+                       -fx-border-color: #1a237e; -fx-border-radius: 20; -fx-border-width: 2;"/>
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <HBox spacing="8" alignment="CENTER">
+            <Circle radius="6" fill="#4CAF50"/>
+            <Label fx:id="lblCount" text="0 offres"
+                   style="-fx-text-fill: #1a237e; -fx-font-weight: bold; -fx-font-size: 12;"/>
+        </HBox>
+    </HBox>
+
+    <!-- ========== STATS ========== -->
+    <HBox alignment="CENTER" spacing="15" style="-fx-padding: 20;">
+        <VBox alignment="CENTER" prefWidth="150"
+              style="-fx-background-color: linear-gradient(to bottom, #2E7D32, #1B5E20);
+                     -fx-padding: 18; -fx-background-radius: 15;">
+            <effect>
+                <DropShadow color="#1B5E20" offsetY="4" radius="10"/>
+            </effect>
+            <Label fx:id="lblTotalOffres" text="0"
+                   style="-fx-text-fill: white; -fx-font-size: 32; -fx-font-weight: bold;"/>
+            <Label text="Total" style="-fx-text-fill: #A5D6A7; -fx-font-size: 11; -fx-font-weight: bold;"/>
+        </VBox>
+
+        <VBox alignment="CENTER" prefWidth="150"
+              style="-fx-background-color: linear-gradient(to bottom, #4CAF50, #388E3C);
+                     -fx-padding: 18; -fx-background-radius: 15;">
+            <effect>
+                <DropShadow color="#388E3C" offsetY="4" radius="10"/>
+            </effect>
+            <Label fx:id="lblActives" text="0"
+                   style="-fx-text-fill: white; -fx-font-size: 32; -fx-font-weight: bold;"/>
+            <Label text="Actives" style="-fx-text-fill: #C8E6C9; -fx-font-size: 11; -fx-font-weight: bold;"/>
+        </VBox>
+
+        <VBox alignment="CENTER" prefWidth="150"
+              style="-fx-background-color: linear-gradient(to bottom, #FFA000, #FF8F00);
+                     -fx-padding: 18; -fx-background-radius: 15;">
+            <effect>
+                <DropShadow color="#FF8F00" offsetY="4" radius="10"/>
+            </effect>
+            <Label fx:id="lblEnPause" text="0"
+                   style="-fx-text-fill: white; -fx-font-size: 32; -fx-font-weight: bold;"/>
+            <Label text="En pause" style="-fx-text-fill: #FFE0B2; -fx-font-size: 11; -fx-font-weight: bold;"/>
+        </VBox>
+
+        <VBox alignment="CENTER" prefWidth="150"
+              style="-fx-background-color: linear-gradient(to bottom, #E53935, #C62828);
+                     -fx-padding: 18; -fx-background-radius: 15;">
+            <effect>
+                <DropShadow color="#C62828" offsetY="4" radius="10"/>
+            </effect>
+            <Label fx:id="lblExpirees" text="0"
+                   style="-fx-text-fill: white; -fx-font-size: 32; -fx-font-weight: bold;"/>
+            <Label text="Expirées" style="-fx-text-fill: #FFCDD2; -fx-font-size: 11; -fx-font-weight: bold;"/>
+        </VBox>
+    </HBox>
+
+    <!-- ========== TABLEAU ========== -->
+    <VBox VBox.vgrow="ALWAYS" style="-fx-padding: 0 20 20 20;">
+        <TableView fx:id="tableOffres" VBox.vgrow="ALWAYS"
+                   style="-fx-background-color: white; -fx-border-color: #1a237e;
+                          -fx-border-width: 2; -fx-border-radius: 15; -fx-background-radius: 15;">
+            <effect>
+                <DropShadow color="#1a237e" offsetY="4" radius="10"/>
+            </effect>
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="60" style="-fx-alignment: CENTER;"/>
+                <TableColumn fx:id="colNom" text="Nom de l'Offre" prefWidth="220"/>
+                <TableColumn fx:id="colProduit" text="Produit Associé" prefWidth="180"/>
+                <TableColumn fx:id="colConditions" text="Conditions" prefWidth="250"/>
+                <TableColumn fx:id="colStatut" text="Statut" prefWidth="100" style="-fx-alignment: CENTER;"/>
+                <TableColumn fx:id="colBanque" text="🏦 Banque" prefWidth="180"/>
+            </columns>
+            <placeholder>
+                <VBox alignment="CENTER" spacing="15" style="-fx-padding: 40;">
+                    <Label text="Aucune offre dans la base de données"
+                           style="-fx-text-fill: #1a237e; -fx-font-size: 16; -fx-font-weight: bold;"/>
+                </VBox>
+            </placeholder>
+        </TableView>
+    </VBox>
+
+    <!-- ========== BOUTONS D'ACTION ========== -->
+    <HBox alignment="CENTER" spacing="20" style="-fx-padding: 0 20 20 20;">
+        <Button text="📋 VOIR DÉTAILS" onAction="#handleVoirDetails" prefWidth="180" prefHeight="50"
+                style="-fx-background-color: linear-gradient(to right, #1a237e, #283593);
+                       -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14;
+                       -fx-background-radius: 25; -fx-cursor: hand;">
+            <effect>
+                <DropShadow color="#1a237e" offsetY="5" radius="12"/>
+            </effect>
+        </Button>
+
+        <Button text="🏦 VOIR BANQUE" onAction="#handleVoirBanque" prefWidth="180" prefHeight="50"
+                style="-fx-background-color: linear-gradient(to right, #7B1FA2, #8E24AA);
+                       -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14;
+                       -fx-background-radius: 25; -fx-cursor: hand;">
+            <effect>
+                <DropShadow color="#4A148C" offsetY="5" radius="12"/>
+            </effect>
+        </Button>
+
+        <Button text="📥 TÉLÉCHARGER PDF" onAction="#handleDownloadPDF" prefWidth="200" prefHeight="50"
+                style="-fx-background-color: linear-gradient(to right, #00796B, #00897B);
+                       -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14;
+                       -fx-background-radius: 25; -fx-cursor: hand;">
+            <effect>
+                <DropShadow color="#004D40" offsetY="5" radius="12"/>
+            </effect>
+        </Button>
+    </HBox>
+
+    <!-- ========== FOOTER ========== -->
+    <HBox alignment="CENTER" spacing="20"
+          style="-fx-background-color: linear-gradient(to right, #1a237e, #283593, #1a237e); -fx-padding: 15;">
+        <Label text="🛡️ Panel Admin - Gestion des Offres"
+               style="-fx-text-fill: white; -fx-font-size: 12; -fx-font-weight: bold;"/>
+        <Label text="AgriFund 2025"
+               style="-fx-text-fill: #9fa8da; -fx-font-size: 11;"/>
+    </HBox>
+</VBox>

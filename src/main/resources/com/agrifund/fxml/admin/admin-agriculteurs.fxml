@@ -3,54 +3,105 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.geometry.Insets?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.agrifund.controller.admin.AdminAgricultureController"
-            stylesheets="@../../css/styles.css">
+            styleClass="main-container"
+            stylesheets="@../../fxml/admin/admin-agriculteurs.css">
+
     <!-- SIDEBAR -->
     <left>
         <fx:include source="admin-sidebar.fxml"/>
     </left>
 
-
     <!-- MAIN CONTENT -->
     <center>
-        <VBox styleClass="content-area" spacing="0">
-            <!-- Top Bar -->
-            <HBox alignment="CENTER" style="-fx-padding: 0 0 30 0;">
-                <VBox HBox.hgrow="ALWAYS">
-                    <Label text="Gestion des Agriculteurs" styleClass="page-title"/>
-                    <Label text="Gérer et vérifier les comptes agriculteurs" styleClass="page-subtitle"/>
-                </VBox>
+        <VBox styleClass="content-wrapper" spacing="0">
 
-                <HBox spacing="15" alignment="CENTER_RIGHT">
-                    <Label fx:id="statsLabel" text="0 agriculteur(s)" style="-fx-text-fill: #848A86;"/>
+            <!-- HEADER SECTION -->
+            <VBox styleClass="header-section" spacing="8">
+                <HBox alignment="CENTER_LEFT" spacing="15">
+                    <StackPane styleClass="header-icon-container">
+                        <Label text="👨‍🌾" styleClass="header-icon"/>
+                    </StackPane>
+                    <VBox spacing="4">
+                        <Label text="Gestion des Agriculteurs" styleClass="page-title"/>
+                        <Label text="Gérer et vérifier les comptes agriculteurs de la plateforme" styleClass="page-subtitle"/>
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <VBox alignment="CENTER_RIGHT" spacing="2">
+                        <Label fx:id="statsLabel" text="0 agriculteur(s)" styleClass="stats-label"/>
+                        <Label fx:id="dateLabel" text="" styleClass="date-label"/>
+                    </VBox>
                 </HBox>
+            </VBox>
+
+            <!-- STATS CARDS -->
+            <HBox fx:id="statsCardsContainer" styleClass="stats-cards-container" spacing="20">
+                <VBox styleClass="stat-card stat-card-total" HBox.hgrow="ALWAYS">
+                    <Label fx:id="totalCountLabel" text="0" styleClass="stat-number"/>
+                    <Label text="Total Agriculteurs" styleClass="stat-label"/>
+                    <HBox styleClass="stat-icon-row">
+                        <Label text="👥" styleClass="stat-icon"/>
+                    </HBox>
+                </VBox>
+                <VBox styleClass="stat-card stat-card-pending" HBox.hgrow="ALWAYS">
+                    <Label fx:id="pendingCountLabel" text="0" styleClass="stat-number"/>
+                    <Label text="En Attente" styleClass="stat-label"/>
+                    <HBox styleClass="stat-icon-row">
+                        <Label text="⏳" styleClass="stat-icon"/>
+                    </HBox>
+                </VBox>
+                <VBox styleClass="stat-card stat-card-verified" HBox.hgrow="ALWAYS">
+                    <Label fx:id="verifiedCountLabel" text="0" styleClass="stat-number"/>
+                    <Label text="Vérifiés" styleClass="stat-label"/>
+                    <HBox styleClass="stat-icon-row">
+                        <Label text="✓" styleClass="stat-icon"/>
+                    </HBox>
+                </VBox>
+                <VBox styleClass="stat-card stat-card-rejected" HBox.hgrow="ALWAYS">
+                    <Label fx:id="rejectedCountLabel" text="0" styleClass="stat-number"/>
+                    <Label text="Refusés" styleClass="stat-label"/>
+                    <HBox styleClass="stat-icon-row">
+                        <Label text="✗" styleClass="stat-icon"/>
+                    </HBox>
+                </VBox>
             </HBox>
 
-            <!-- Filter Tabs -->
-            <HBox spacing="10" style="-fx-padding: 0 0 20 0;">
-                <Button fx:id="btnAll" text="Tous" styleClass="btn" onAction="#filterAll"
-                        style="-fx-background-color: #089647; -fx-text-fill: white;"/>
-                <Button fx:id="btnPending" text="⏳ En attente" styleClass="btn, btn-secondary" onAction="#filterPending"/>
-                <Button fx:id="btnVerified" text="✓ Vérifiés" styleClass="btn, btn-secondary" onAction="#filterVerified"/>
-                <Button fx:id="btnRejected" text="✗ Refusés" styleClass="btn, btn-secondary" onAction="#filterRejected"/>
+            <!-- TOOLBAR SECTION -->
+            <HBox styleClass="toolbar-section" spacing="15" alignment="CENTER_LEFT">
+                <!-- Filter Tabs -->
+                <HBox styleClass="filter-tabs" spacing="0">
+                    <Button fx:id="btnAll" text="Tous" styleClass="filter-btn, filter-btn-active" onAction="#filterAll"/>
+                    <Button fx:id="btnPending" text="En attente" styleClass="filter-btn" onAction="#filterPending"/>
+                    <Button fx:id="btnVerified" text="Vérifiés" styleClass="filter-btn" onAction="#filterVerified"/>
+                    <Button fx:id="btnRejected" text="Refusés" styleClass="filter-btn" onAction="#filterRejected"/>
+                </HBox>
 
                 <Region HBox.hgrow="ALWAYS"/>
 
-                <TextField fx:id="searchField" promptText="🔍 Rechercher..." styleClass="form-control"
-                           prefWidth="250" onKeyReleased="#handleSearch"/>
-                <Button text="🔄" styleClass="btn, btn-secondary" onAction="#refreshList"/>
+                <!-- Search Bar -->
+                <HBox fx:id="searchContainer" styleClass="search-container" alignment="CENTER_LEFT" spacing="0">
+                    <Label text="🔍" styleClass="search-icon"/>
+                    <TextField fx:id="searchField" promptText="Rechercher par nom, email..."
+                               styleClass="search-field" onKeyReleased="#handleSearch"/>
+                </HBox>
+
+                <!-- Refresh Button -->
+                <Button fx:id="refreshBtn" text="↻" styleClass="refresh-btn" onAction="#refreshList"/>
             </HBox>
 
-            <!-- Agriculteurs List -->
-            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
-                <VBox fx:id="agriculteursList" spacing="15">
-                    <!-- Rempli dynamiquement -->
-                </VBox>
-            </ScrollPane>
+            <!-- AGRICULTEURS LIST -->
+            <VBox styleClass="list-container" VBox.vgrow="ALWAYS">
+                <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="custom-scroll-pane">
+                    <VBox fx:id="agriculteursList" styleClass="agriculteurs-list" spacing="16">
+                        <!-- Rempli dynamiquement -->
+                    </VBox>
+                </ScrollPane>
+            </VBox>
+
         </VBox>
     </center>
-
 </BorderPane>

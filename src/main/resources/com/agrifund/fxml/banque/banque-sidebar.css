@@ -1,0 +1,451 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   AGRIFUND - SIDEBAR BANQUE MODERNE
+   Thème: Corporate Banking avec palette verts et jaune moutarde
+═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────────────────
+   SIDEBAR PRINCIPALE - THÈME CORPORATE SOMBRE
+───────────────────────────────────────────────────────────────────────── */
+.sidebar {
+    -fx-background-color: linear-gradient(to bottom,
+    #0d1f12 0%,
+    #0a1a0e 20%,
+    #081408 50%,
+    #060d06 80%,
+    #040804 100%);
+    -fx-min-width: 285px;
+    -fx-max-width: 285px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 30, 0, 10, 0);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   HEADER - LOGO CORPORATE
+───────────────────────────────────────────────────────────────────────── */
+.sidebar-header {
+    -fx-padding: 25 15 20 15;
+    -fx-alignment: center;
+    -fx-background-color: linear-gradient(to bottom,
+    rgba(225, 179, 35, 0.08),
+    transparent);
+    -fx-border-color: transparent transparent rgba(225, 179, 35, 0.15) transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.space-badge {
+    -fx-text-fill: #E1B323;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 3px;
+    -fx-padding: 6 14;
+    -fx-background-color: rgba(225, 179, 35, 0.1);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(225, 179, 35, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   CARTE PROFIL BANQUE - STYLE PREMIUM
+───────────────────────────────────────────────────────────────────────── */
+.bank-profile-card {
+    -fx-background-color: linear-gradient(to bottom right,
+    rgba(225, 179, 35, 0.08),
+    rgba(71, 108, 26, 0.1),
+    rgba(19, 61, 3, 0.15));
+    -fx-background-radius: 20;
+    -fx-border-color: linear-gradient(to bottom right,
+    rgba(225, 179, 35, 0.3),
+    rgba(178, 217, 68, 0.15));
+    -fx-border-width: 1;
+    -fx-border-radius: 20;
+    -fx-effect: dropshadow(gaussian, rgba(225, 179, 35, 0.1), 15, 0, 0, 5);
+    -fx-margin: 15;
+}
+
+/* Avatar avec effets dorés */
+.avatar-outer-ring {
+    -fx-fill: rgba(225, 179, 35, 0.1);
+    -fx-effect: dropshadow(gaussian, rgba(225, 179, 35, 0.2), 20, 0, 0, 0);
+}
+
+.avatar-inner-ring {
+    -fx-fill: transparent;
+    -fx-stroke: linear-gradient(to bottom right, #E1B323, #9A951F);
+    -fx-stroke-width: 3;
+}
+
+.verified-indicator {
+    -fx-fill: #089647;
+    -fx-stroke: #0d1f12;
+    -fx-stroke-width: 3;
+    -fx-effect: dropshadow(gaussian, rgba(8, 150, 71, 0.7), 8, 0, 0, 0);
+}
+
+.bank-name {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 3, 0, 0, 1);
+}
+
+.bank-code {
+    -fx-text-fill: #E1B323;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 2px;
+    -fx-padding: 3 10;
+    -fx-background-color: rgba(225, 179, 35, 0.1);
+    -fx-background-radius: 8;
+}
+
+/* Badges de vérification */
+.verification-badge-verified {
+    -fx-background-color: linear-gradient(to right, #089647, #076A39);
+    -fx-text-fill: white;
+    -fx-padding: 4 14;
+    -fx-background-radius: 12;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(8, 150, 71, 0.5), 6, 0, 0, 2);
+}
+
+.verification-badge-pending {
+    -fx-background-color: linear-gradient(to right, #E1B323, #9A951F);
+    -fx-text-fill: #0d1f12;
+    -fx-padding: 4 14;
+    -fx-background-radius: 12;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(225, 179, 35, 0.5), 6, 0, 0, 2);
+}
+
+/* Statistiques banque */
+.bank-stats {
+    -fx-padding: 15;
+    -fx-background-color: rgba(0, 0, 0, 0.2);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(225, 179, 35, 0.1);
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+}
+
+.stat-label {
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 1px;
+}
+
+.stat-value {
+    -fx-text-fill: rgba(255, 255, 255, 0.85);
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+}
+
+.stat-value-gold {
+    -fx-text-fill: #E1B323;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.stat-divider {
+    -fx-background-color: rgba(225, 179, 35, 0.2);
+    -fx-pref-width: 1;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   SCROLLPANE & MENU CONTAINER
+───────────────────────────────────────────────────────────────────────── */
+.menu-scroll {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.menu-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.menu-scroll .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 5px;
+}
+
+.menu-scroll .scroll-bar:vertical .track {
+    -fx-background-color: rgba(255, 255, 255, 0.02);
+    -fx-background-radius: 2.5;
+}
+
+.menu-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(225, 179, 35, 0.3);
+    -fx-background-radius: 2.5;
+}
+
+.menu-scroll .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: rgba(225, 179, 35, 0.5);
+}
+
+.menu-scroll .scroll-bar .increment-button,
+.menu-scroll .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.menu-scroll .scroll-bar .increment-arrow,
+.menu-scroll .scroll-bar .decrement-arrow {
+    -fx-shape: "";
+    -fx-padding: 0;
+}
+
+.menu-container {
+    -fx-padding: 8 0 25 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   TITRES DE SECTION - STYLE CORPORATE
+───────────────────────────────────────────────────────────────────────── */
+.section-title {
+    -fx-text-fill: rgba(225, 179, 35, 0.6);
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 2px;
+    -fx-padding: 18 20 8 20;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   DIVISEUR DE MENU - LIGNE DORÉE
+───────────────────────────────────────────────────────────────────────── */
+.menu-divider {
+    -fx-min-height: 1;
+    -fx-max-height: 1;
+    -fx-background-color: linear-gradient(
+            to right,
+            transparent 5%,
+            rgba(225, 179, 35, 0.1) 25%,
+            rgba(225, 179, 35, 0.2) 50%,
+            rgba(225, 179, 35, 0.1) 75%,
+            transparent 95%
+    );
+    -fx-margin: 5 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   ÉLÉMENTS DE MENU - ÉTAT NORMAL
+───────────────────────────────────────────────────────────────────────── */
+.sidebar-menu-item {
+    -fx-background-color: transparent;
+    -fx-padding: 11 15 11 18;
+    -fx-alignment: CENTER_LEFT;
+    -fx-cursor: hand;
+    -fx-background-radius: 0 20 20 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 0 3;
+    -fx-border-radius: 0;
+    -fx-margin: 0 12 0 0;
+}
+
+.sidebar-menu-item .menu-text {
+    -fx-text-fill: rgba(255, 255, 255, 0.65);
+    -fx-font-size: 12.5px;
+    -fx-font-weight: 500;
+}
+
+.sidebar-menu-item .menu-icon {
+    -fx-font-size: 15px;
+    -fx-min-width: 22;
+    -fx-alignment: center;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   ÉLÉMENTS DE MENU - ÉTAT HOVER
+───────────────────────────────────────────────────────────────────────── */
+.sidebar-menu-item:hover {
+    -fx-background-color: linear-gradient(to right,
+    rgba(225, 179, 35, 0.15),
+    rgba(225, 179, 35, 0.05),
+    transparent);
+    -fx-border-color: #B2D944;
+    -fx-translate-x: 5;
+}
+
+.sidebar-menu-item:hover .menu-text {
+    -fx-text-fill: white;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   ÉLÉMENTS DE MENU - ÉTAT ACTIF ★★★ STYLE DORÉ ★★★
+───────────────────────────────────────────────────────────────────────── */
+.sidebar-menu-item-active {
+    -fx-background-color: linear-gradient(to right,
+    rgba(225, 179, 35, 0.2),
+    rgba(225, 179, 35, 0.08),
+    transparent) !important;
+    -fx-border-color: #E1B323 !important;
+    -fx-border-width: 0 0 0 3 !important;
+}
+
+.sidebar-menu-item-active .menu-text {
+    -fx-text-fill: #E1B323 !important;
+    -fx-font-weight: bold !important;
+}
+
+.sidebar-menu-item-active .menu-icon {
+    -fx-effect: dropshadow(gaussian, rgba(225, 179, 35, 0.6), 6, 0, 0, 0);
+}
+
+.sidebar-menu-item-active:hover {
+    -fx-background-color: linear-gradient(to right,
+    rgba(225, 179, 35, 0.25),
+    rgba(225, 179, 35, 0.1),
+    transparent) !important;
+    -fx-translate-x: 5;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   BADGES SPÉCIAUX
+───────────────────────────────────────────────────────────────────────── */
+.notification-badge {
+    -fx-background-color: linear-gradient(to bottom right, #E1B323, #9A951F);
+    -fx-text-fill: #0d1f12;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-padding: 2 7;
+    -fx-background-radius: 10;
+    -fx-min-width: 18;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(225, 179, 35, 0.5), 4, 0, 0, 1);
+}
+
+.pending-badge {
+    -fx-background-color: linear-gradient(to right, #ff6b6b, #ee5a5a);
+    -fx-text-fill: white;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-padding: 2 7;
+    -fx-background-radius: 10;
+    -fx-min-width: 18;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(255, 107, 107, 0.5), 4, 0, 0, 1);
+}
+
+.pro-badge {
+    -fx-background-color: linear-gradient(to right, #476C1A, #095032);
+    -fx-text-fill: #B2D944;
+    -fx-font-size: 8px;
+    -fx-font-weight: bold;
+    -fx-padding: 2 6;
+    -fx-background-radius: 8;
+    -fx-letter-spacing: 1px;
+    -fx-border-color: rgba(178, 217, 68, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+}
+
+.ai-badge {
+    -fx-background-color: linear-gradient(to right, #9A951F, #476C1A);
+    -fx-text-fill: white;
+    -fx-font-size: 8px;
+    -fx-font-weight: bold;
+    -fx-padding: 2 6;
+    -fx-background-radius: 8;
+    -fx-letter-spacing: 1px;
+}
+
+.live-dot {
+    -fx-fill: #B2D944;
+    -fx-effect: dropshadow(gaussian, rgba(178, 217, 68, 0.8), 8, 0, 0, 0);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   BOUTON DÉCONNEXION - STYLE DANGER
+───────────────────────────────────────────────────────────────────────── */
+.sidebar-logout {
+    -fx-background-color: transparent;
+    -fx-padding: 11 15 11 18;
+    -fx-alignment: CENTER_LEFT;
+    -fx-cursor: hand;
+    -fx-background-radius: 0 20 20 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 0 3;
+}
+
+.sidebar-logout .menu-text {
+    -fx-text-fill: rgba(255, 107, 107, 0.75);
+    -fx-font-size: 12.5px;
+    -fx-font-weight: 500;
+}
+
+.sidebar-logout:hover {
+    -fx-background-color: linear-gradient(to right,
+    rgba(255, 107, 107, 0.15),
+    rgba(255, 107, 107, 0.05),
+    transparent);
+    -fx-border-color: #ff6b6b;
+    -fx-translate-x: 5;
+}
+
+.sidebar-logout:hover .menu-text {
+    -fx-text-fill: #ff6b6b;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   FOOTER - STATUS CORPORATE
+───────────────────────────────────────────────────────────────────────── */
+.sidebar-footer {
+    -fx-padding: 15;
+    -fx-background-color: linear-gradient(to top,
+    rgba(0, 0, 0, 0.4),
+    rgba(0, 0, 0, 0.2),
+    transparent);
+    -fx-border-color: rgba(225, 179, 35, 0.1) transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+}
+
+.status-online {
+    -fx-fill: #089647;
+    -fx-effect: dropshadow(gaussian, rgba(8, 150, 71, 0.7), 6, 0, 0, 0);
+}
+
+.status-text {
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+    -fx-font-size: 10px;
+}
+
+.version-text {
+    -fx-text-fill: rgba(255, 255, 255, 0.4);
+    -fx-font-size: 10px;
+    -fx-font-weight: 500;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   ANIMATIONS & TRANSITIONS
+───────────────────────────────────────────────────────────────────────── */
+.sidebar-menu-item,
+.sidebar-logout {
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   TOOLTIP CORPORATE
+───────────────────────────────────────────────────────────────────────── */
+.sidebar .tooltip {
+    -fx-background-color: linear-gradient(to bottom right, #1a2f1a, #0d1f12);
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-padding: 8 14;
+    -fx-background-radius: 8;
+    -fx-border-color: rgba(225, 179, 35, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 12, 0, 3, 3);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   EFFETS SPÉCIAUX - GLOW DORÉ
+───────────────────────────────────────────────────────────────────────── */
+.gold-glow {
+    -fx-effect: dropshadow(gaussian, rgba(225, 179, 35, 0.4), 10, 0, 0, 0);
+}
+
+.subtle-glow {
+    -fx-effect: dropshadow(gaussian, rgba(178, 217, 68, 0.3), 8, 0, 0, 0);
+}

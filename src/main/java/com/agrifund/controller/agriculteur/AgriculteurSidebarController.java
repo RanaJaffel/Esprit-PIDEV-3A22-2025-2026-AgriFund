@@ -2,6 +2,7 @@ package com.agrifund.controller.agriculteur;
 
 import com.agrifund.Main;
 import com.agrifund.services.AgriculteurService;
+import com.agrifund.util.NavigationManager;
 import com.agrifund.util.SessionManager;
 import com.agrifund.entities.Agriculteur;
 import com.agrifund.entities.Utilisateur;
@@ -18,6 +19,8 @@ import javafx.scene.shape.Circle;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AgriculteurSidebarController {
 
@@ -28,155 +31,102 @@ public class AgriculteurSidebarController {
     @FXML private Label superficieLabel;
 
     // ══════════════════════════════════════════════════════════
-    // PRINCIPAL
+    // BOUTONS DE NAVIGATION
     // ══════════════════════════════════════════════════════════
     @FXML private Button btnDashboard;
     @FXML private Button btnProfile;
     @FXML private Button btnDocuments;
-
-    // ══════════════════════════════════════════════════════════
-    // FINANCE
-    // ══════════════════════════════════════════════════════════
     @FXML private Button btnProduitsFinanciers;
     @FXML private Button btnOffresFinancieres;
-    @FXML private Button btnDemandeFinancement;
     @FXML private Button btnAccueilProduits;
-
-    // ══════════════════════════════════════════════════════════
-    // AGRICULTURE
-    // ══════════════════════════════════════════════════════════
     @FXML private Button btnProjetsAgricoles;
     @FXML private Button btnRessources;
-
-    // ══════════════════════════════════════════════════════════
-    // DÉCISIONS & RISQUES
-    // ══════════════════════════════════════════════════════════
     @FXML private Button btnDecisions;
     @FXML private Button btnRisques;
-
-    // ══════════════════════════════════════════════════════════
-    // IoT & RAPPORTS
-    // ══════════════════════════════════════════════════════════
     @FXML private Button btnCapteurs;
     @FXML private Button btnRapports;
     @FXML private Button btnMeteo;
-    // ══════════════════════════════════════════════════════════
-    // COMMUNICATION
-    // ══════════════════════════════════════════════════════════
     @FXML private Button btnMessagerie;
-
-    // ══════════════════════════════════════════════════════════
-    // OUTILS
-    // ══════════════════════════════════════════════════════════
     @FXML private Button btnCarte;
     @FXML private Button btnChatbot;
-
-    // ══════════════════════════════════════════════════════════
-    // COMPTE
-    // ══════════════════════════════════════════════════════════
     @FXML private Button btnSecurity;
 
+    // Map pour associer les pages aux boutons
+    private Map<String, Button> pageButtonMap;
+
+    // Gestionnaire de navigation
+    private final NavigationManager navigationManager = NavigationManager.getInstance();
+
     private AgriculteurService agriculteurService;
-    private String currentPage = "dashboard";
 
     @FXML
     public void initialize() {
         try {
             agriculteurService = new AgriculteurService();
+            initializePageButtonMap();
             loadUserInfo();
-            updateActiveButton();
+
+            // Mettre à jour le bouton actif selon la page courante
+            updateActiveButton(navigationManager.getCurrentPage());
+
+            // Écouter les changements de page
+            navigationManager.currentPageProperty().addListener((obs, oldPage, newPage) -> {
+                updateActiveButton(newPage);
+            });
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void setCurrentPage(String page) {
-        this.currentPage = page;
-        updateActiveButton();
+    /**
+     * Initialise la map des pages et boutons correspondants
+     */
+    private void initializePageButtonMap() {
+        pageButtonMap = new HashMap<>();
+        pageButtonMap.put("dashboard", btnDashboard);
+        pageButtonMap.put("profile", btnProfile);
+        pageButtonMap.put("documents", btnDocuments);
+        pageButtonMap.put("produits-financiers", btnProduitsFinanciers);
+        pageButtonMap.put("offres-financieres", btnOffresFinancieres);
+        pageButtonMap.put("accueil-produits", btnAccueilProduits);
+        pageButtonMap.put("projets-agricoles", btnProjetsAgricoles);
+        pageButtonMap.put("ressources", btnRessources);
+        pageButtonMap.put("decisions", btnDecisions);
+        pageButtonMap.put("risques", btnRisques);
+        pageButtonMap.put("capteurs", btnCapteurs);
+        pageButtonMap.put("rapports", btnRapports);
+        pageButtonMap.put("meteo", btnMeteo);
+        pageButtonMap.put("messagerie", btnMessagerie);
+        pageButtonMap.put("carte", btnCarte);
+        pageButtonMap.put("chatbot", btnChatbot);
+        pageButtonMap.put("security", btnSecurity);
     }
 
-    private void updateActiveButton() {
-        // Liste de tous les boutons
-        Button[] allButtons = {
-                btnDashboard, btnProfile, btnDocuments,
-                btnProduitsFinanciers, btnOffresFinancieres, btnDemandeFinancement, btnAccueilProduits,
-                btnProjetsAgricoles, btnRessources,
-                btnDecisions, btnRisques,
-                btnCapteurs, btnRapports,btnMeteo,
-                btnMessagerie,
-                btnCarte, btnChatbot,
-                btnSecurity
-        };
-
+    /**
+     * Met à jour le style du bouton actif
+     */
+    private void updateActiveButton(String currentPage) {
         // Retirer la classe active de tous les boutons
-        for (Button btn : allButtons) {
+        for (Button btn : pageButtonMap.values()) {
             if (btn != null) {
                 btn.getStyleClass().remove("sidebar-menu-item-active");
             }
         }
 
-        // Ajouter la classe active au bouton actuel
-        Button activeBtn = null;
-        switch (currentPage) {
-            case "dashboard":
-                activeBtn = btnDashboard;
-                break;
-            case "profile":
-                activeBtn = btnProfile;
-                break;
-            case "documents":
-                activeBtn = btnDocuments;
-                break;
-            case "produits-financiers":
-                activeBtn = btnProduitsFinanciers;
-                break;
-            case "offres-financieres":
-                activeBtn = btnOffresFinancieres;
-                break;
-            case "demande-financement":
-                activeBtn = btnDemandeFinancement;
-                break;
-            case "accueil-produits":
-                activeBtn = btnAccueilProduits;
-                break;
-            case "projets-agricoles":
-                activeBtn = btnProjetsAgricoles;
-                break;
-            case "ressources":
-                activeBtn = btnRessources;
-                break;
-            case "decisions":
-                activeBtn = btnDecisions;
-                break;
-            case "risques":
-                activeBtn = btnRisques;
-                break;
-            case "capteurs":
-                activeBtn = btnCapteurs;
-                break;
-            case "rapports":
-                activeBtn = btnRapports;
-                break;
-            case "meteo":
-                activeBtn = btnMeteo;
-                break;
-            case "messagerie":
-                activeBtn = btnMessagerie;
-                break;
-            case "carte":
-                activeBtn = btnCarte;
-                break;
-            case "chatbot":
-                activeBtn = btnChatbot;
-                break;
-            case "security":
-                activeBtn = btnSecurity;
-                break;
-        }
-
-        if (activeBtn != null) {
+        // Ajouter la classe active au bouton correspondant à la page courante
+        Button activeBtn = pageButtonMap.get(currentPage);
+        if (activeBtn != null && !activeBtn.getStyleClass().contains("sidebar-menu-item-active")) {
             activeBtn.getStyleClass().add("sidebar-menu-item-active");
         }
+    }
+
+    /**
+     * Méthode générique pour la navigation
+     */
+    private void navigateTo(String page, String fxmlPath) {
+        navigationManager.setCurrentPage(page);
+        Main.navigateTo(fxmlPath);
     }
 
     private void loadUserInfo() throws SQLException {
@@ -195,10 +145,10 @@ public class AgriculteurSidebarController {
                 Label badge = new Label();
                 if (agri.isCompteVerifie()) {
                     badge.setText("✓ Vérifié");
-                    badge.setStyle("-fx-background-color: #089647; -fx-text-fill: white; -fx-padding: 3 8; -fx-background-radius: 10; -fx-font-size: 10px;");
+                    badge.getStyleClass().add("verification-badge-verified");
                 } else {
                     badge.setText("⏳ En attente");
-                    badge.setStyle("-fx-background-color: #E1B323; -fx-text-fill: #060806; -fx-padding: 3 8; -fx-background-radius: 10; -fx-font-size: 10px;");
+                    badge.getStyleClass().add("verification-badge-pending");
                 }
                 verificationBadge.getChildren().add(badge);
 
@@ -227,13 +177,13 @@ public class AgriculteurSidebarController {
             try {
                 image = new Image(getClass().getResourceAsStream("/com/agrifund/images/default-avatar.png"));
             } catch (Exception e) {
-                // Fallback
+                System.err.println("Erreur chargement avatar: " + e.getMessage());
             }
         }
 
         if (image != null) {
             userAvatar.setImage(image);
-            Circle clip = new Circle(30, 30, 30);
+            Circle clip = new Circle(35, 35, 35);
             userAvatar.setClip(clip);
         }
     }
@@ -244,23 +194,17 @@ public class AgriculteurSidebarController {
 
     @FXML
     public void goToDashboard() {
-        currentPage = "dashboard";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/fxml/agriculteur/agriculteur-dashboard.fxml");
+        navigateTo("dashboard", "/com/agrifund/fxml/agriculteur/agriculteur-dashboard.fxml");
     }
 
     @FXML
     public void goToProfile() {
-        currentPage = "profile";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/fxml/agriculteur/agriculteur-profile.fxml");
+        navigateTo("profile", "/com/agrifund/fxml/agriculteur/agriculteur-profile.fxml");
     }
 
     @FXML
     public void goToDocuments() {
-        currentPage = "documents";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/fxml/agriculteur/agriculteur-documents.fxml");
+        navigateTo("documents", "/com/agrifund/fxml/agriculteur/agriculteur-documents.fxml");
     }
 
     // ══════════════════════════════════════════════════════════
@@ -269,30 +213,22 @@ public class AgriculteurSidebarController {
 
     @FXML
     public void goToProduitsFinanciers() {
-        currentPage = "produits-financiers";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/view/ProduitFinancierView.fxml");
+        navigateTo("produits-financiers", "/com/agrifund/fxml/agriculteur/AgriculteurProduitView.fxml");
     }
 
     @FXML
     public void goToOffresFinancieres() {
-        currentPage = "offres-financieres";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/view/OffreFinanciereView.fxml");
+        navigateTo("offres-financieres", "/com/agrifund/fxml/agriculteur/AgriculteurOffreView.fxml");
     }
 
     @FXML
     public void goToDemandeFinancement() {
-        currentPage = "demande-financement";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/view/DemandeFinancementView.fxml");
+        navigateTo("demande-financement", "/com/agrifund/view/DemandeFinancementView.fxml");
     }
 
     @FXML
     public void goToAccueilProduits() {
-        currentPage = "accueil-produits";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/view/AccueilUtilisateurView.fxml");
+        navigateTo("accueil-produits", "/com/agrifund/view/AccueilUtilisateurView.fxml");
     }
 
     // ══════════════════════════════════════════════════════════
@@ -301,16 +237,12 @@ public class AgriculteurSidebarController {
 
     @FXML
     public void goToProjetsAgricoles() {
-        currentPage = "projets-agricoles";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/fxml/agriculteur/agriculteur-projects.fxml");
+        navigateTo("projets-agricoles", "/com/agrifund/fxml/agriculteur/agriculteur-projects.fxml");
     }
 
     @FXML
     public void goToRessources() {
-        currentPage = "ressources";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/fxml/agriculteur/ressourcesAgriculteur.fxml");
+        navigateTo("ressources", "/com/agrifund/fxml/agriculteur/ressourcesAgriculteur.fxml");
     }
 
     // ══════════════════════════════════════════════════════════
@@ -319,16 +251,12 @@ public class AgriculteurSidebarController {
 
     @FXML
     public void goToDecisions() {
-        currentPage = "decisions";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/fxml/DecisionList.fxml");
+        navigateTo("decisions", "/com/agrifund/fxml/DecisionList.fxml");
     }
 
     @FXML
     public void goToRisques() {
-        currentPage = "risques";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/fxml/RisqueList.fxml");
+        navigateTo("risques", "/com/agrifund/fxml/RisqueList.fxml");
     }
 
     // ══════════════════════════════════════════════════════════
@@ -337,23 +265,17 @@ public class AgriculteurSidebarController {
 
     @FXML
     public void goToCapteurs() {
-        currentPage = "capteurs";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/fxml/agriculteur/agriculteur-capteur.fxml");
+        navigateTo("capteurs", "/com/agrifund/fxml/agriculteur/agriculteur-capteur.fxml");
     }
 
     @FXML
     public void goToMeteo() {
-        currentPage = "meteo";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/fxml/agriculteur/meteo.fxml");
+        navigateTo("meteo", "/com/agrifund/fxml/agriculteur/meteo.fxml");
     }
 
     @FXML
     public void goToRapports() {
-        currentPage = "rapports";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/fxml/agriculteur/rapport.fxml");
+        navigateTo("rapports", "/com/agrifund/fxml/agriculteur/rapport.fxml");
     }
 
     // ══════════════════════════════════════════════════════════
@@ -362,9 +284,7 @@ public class AgriculteurSidebarController {
 
     @FXML
     public void goToMessagerie() {
-        currentPage = "messagerie";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/fxml/agriculteur/agriculteur-messagerie.fxml");
+        navigateTo("messagerie", "/com/agrifund/fxml/agriculteur/agriculteur-messagerie.fxml");
     }
 
     // ══════════════════════════════════════════════════════════
@@ -373,16 +293,12 @@ public class AgriculteurSidebarController {
 
     @FXML
     public void goToCarte() {
-        currentPage = "carte";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/view/MapView.fxml");
+        navigateTo("carte", "/com/agrifund/view/MapView.fxml");
     }
 
     @FXML
     public void goToChatbot() {
-        currentPage = "chatbot";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/view/ChatbotView.fxml");
+        navigateTo("chatbot", "/com/agrifund/fxml/agriculteur/AgriculteurChatbotView.fxml");
     }
 
     // ══════════════════════════════════════════════════════════
@@ -391,9 +307,7 @@ public class AgriculteurSidebarController {
 
     @FXML
     public void goToSecurity() {
-        currentPage = "security";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/fxml/agriculteur/agriculteur-security.fxml");
+        navigateTo("security", "/com/agrifund/fxml/agriculteur/agriculteur-security.fxml");
     }
 
     // ══════════════════════════════════════════════════════════
@@ -405,8 +319,10 @@ public class AgriculteurSidebarController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Déconnexion");
         alert.setHeaderText("Voulez-vous vraiment vous déconnecter ?");
+        alert.setContentText("Vous serez redirigé vers la page de connexion.");
 
         if (alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
+            navigationManager.reset();
             Main.handleLogout();
         }
     }

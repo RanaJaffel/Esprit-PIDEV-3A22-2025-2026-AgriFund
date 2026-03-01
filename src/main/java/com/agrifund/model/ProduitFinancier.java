@@ -9,6 +9,10 @@ public class ProduitFinancier {
     private double montantMax;
     private String reglesFinancieres;
 
+    // NOUVEAU: Lien avec la banque
+    private Integer banqueId;
+    private String nomBanque; // Pour affichage
+
     // Constructeur vide
     public ProduitFinancier() {
     }
@@ -26,84 +30,37 @@ public class ProduitFinancier {
         this.reglesFinancieres = reglesFinancieres;
     }
 
-    // Constructeur sans ID (pour insertion)
-    public ProduitFinancier(String nomProduit, String typeFinancement,
-                            double tauxInteret, double montantMin, double montantMax,
-                            String reglesFinancieres) {
-        this.nomProduit = nomProduit;
-        this.typeFinancement = typeFinancement;
-        this.tauxInteret = tauxInteret;
-        this.montantMin = montantMin;
-        this.montantMax = montantMax;
-        this.reglesFinancieres = reglesFinancieres;
-    }
+    // Getters et Setters existants...
+    public int getIdProduit() { return idProduit; }
+    public void setIdProduit(int idProduit) { this.idProduit = idProduit; }
 
-    // Getters et Setters
-    public int getIdProduit() {
-        return idProduit;
-    }
+    public String getNomProduit() { return nomProduit; }
+    public void setNomProduit(String nomProduit) { this.nomProduit = nomProduit; }
 
-    public void setIdProduit(int idProduit) {
-        this.idProduit = idProduit;
-    }
+    public String getTypeFinancement() { return typeFinancement; }
+    public void setTypeFinancement(String typeFinancement) { this.typeFinancement = typeFinancement; }
 
-    public String getNomProduit() {
-        return nomProduit;
-    }
+    public double getTauxInteret() { return tauxInteret; }
+    public void setTauxInteret(double tauxInteret) { this.tauxInteret = tauxInteret; }
 
-    public void setNomProduit(String nomProduit) {
-        this.nomProduit = nomProduit;
-    }
+    public double getMontantMin() { return montantMin; }
+    public void setMontantMin(double montantMin) { this.montantMin = montantMin; }
 
-    public String getTypeFinancement() {
-        return typeFinancement;
-    }
+    public double getMontantMax() { return montantMax; }
+    public void setMontantMax(double montantMax) { this.montantMax = montantMax; }
 
-    public void setTypeFinancement(String typeFinancement) {
-        this.typeFinancement = typeFinancement;
-    }
+    public String getReglesFinancieres() { return reglesFinancieres; }
+    public void setReglesFinancieres(String reglesFinancieres) { this.reglesFinancieres = reglesFinancieres; }
 
-    public double getTauxInteret() {
-        return tauxInteret;
-    }
+    // NOUVEAUX Getters/Setters
+    public Integer getBanqueId() { return banqueId; }
+    public void setBanqueId(Integer banqueId) { this.banqueId = banqueId; }
 
-    public void setTauxInteret(double tauxInteret) {
-        this.tauxInteret = tauxInteret;
-    }
-
-    public double getMontantMin() {
-        return montantMin;
-    }
-
-    public void setMontantMin(double montantMin) {
-        this.montantMin = montantMin;
-    }
-
-    public double getMontantMax() {
-        return montantMax;
-    }
-
-    public void setMontantMax(double montantMax) {
-        this.montantMax = montantMax;
-    }
-
-    public String getReglesFinancieres() {
-        return reglesFinancieres;
-    }
-
-    public void setReglesFinancieres(String reglesFinancieres) {
-        this.reglesFinancieres = reglesFinancieres;
-    }
+    public String getNomBanque() { return nomBanque; }
+    public void setNomBanque(String nomBanque) { this.nomBanque = nomBanque; }
 
     @Override
     public String toString() {
-        return "ProduitFinancier{" +
-                "idProduit=" + idProduit +
-                ", nomProduit='" + nomProduit + '\'' +
-                ", typeFinancement='" + typeFinancement + '\'' +
-                ", tauxInteret=" + tauxInteret +
-                ", montantMin=" + montantMin +
-                ", montantMax=" + montantMax +
-                '}';
+        return nomProduit + " (" + typeFinancement + ")";
     }
 }

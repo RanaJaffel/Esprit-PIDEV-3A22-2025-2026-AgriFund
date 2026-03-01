@@ -8,7 +8,7 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.agrifund.controller.admin.AdminDashboardController"
-            stylesheets="@../../css/styles.css">
+            stylesheets="@../../css/styles.css, @../../css/admin-dashboard.css">
     <!-- SIDEBAR -->
     <left>
         <fx:include source="admin-sidebar.fxml"/>
@@ -27,11 +27,11 @@
 
                 <HBox spacing="15" alignment="CENTER_RIGHT">
                     <!-- Notifications -->
-                    <Button text="🔔" styleClass="btn, btn-icon" style="-fx-background-color: white;"/>
+                    <Button text="🔔" styleClass="btn, btn-icon" />
 
                     <!-- Messages non lus -->
                     <StackPane>
-                        <Button text="💬" styleClass="btn, btn-icon" style="-fx-background-color: white;"
+                        <Button text="💬" styleClass="btn, btn-icon"
                                 onAction="#goToMessagerie"/>
                         <Label fx:id="unreadBadge" text="3" styleClass="conversation-unread-badge"
                                StackPane.alignment="TOP_RIGHT" translateX="5" translateY="-5"/>

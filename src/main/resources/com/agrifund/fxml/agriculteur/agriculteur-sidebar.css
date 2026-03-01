@@ -1,0 +1,396 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   AGRIFUND - SIDEBAR AGRICULTEUR MODERNE
+   Palette: Verts naturels avec accents jaune moutarde
+═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────────────────
+   SIDEBAR PRINCIPALE
+───────────────────────────────────────────────────────────────────────── */
+.sidebar {
+    -fx-background-color: linear-gradient(to bottom,
+    #0a5e3a 0%,
+    #095032 25%,
+    #133D03 70%,
+    #0d2e1a 100%);
+    -fx-min-width: 280px;
+    -fx-max-width: 280px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 25, 0, 8, 0);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   HEADER - LOGO
+───────────────────────────────────────────────────────────────────────── */
+.sidebar-header {
+    -fx-padding: 20 15 15 15;
+    -fx-alignment: center;
+    -fx-background-color: linear-gradient(to bottom, rgba(255, 255, 255, 0.05), transparent);
+    -fx-border-color: transparent transparent rgba(178, 217, 68, 0.15) transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.space-badge {
+    -fx-text-fill: #B2D944;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 3px;
+    -fx-padding: 5 12;
+    -fx-background-color: rgba(178, 217, 68, 0.12);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(178, 217, 68, 0.25);
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   CARTE PROFIL UTILISATEUR
+───────────────────────────────────────────────────────────────────────── */
+.user-profile-card {
+    -fx-background-color: linear-gradient(to bottom right,
+    rgba(8, 150, 71, 0.2),
+    rgba(19, 61, 3, 0.3));
+    -fx-background-radius: 20;
+    -fx-border-color: rgba(178, 217, 68, 0.2);
+    -fx-border-width: 1;
+    -fx-border-radius: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 8, 0, 0, 4);
+    -fx-margin: 15;
+}
+
+/* Avatar Styles */
+.avatar-glow {
+    -fx-fill: rgba(225, 179, 35, 0.15);
+    -fx-effect: dropshadow(gaussian, rgba(225, 179, 35, 0.3), 15, 0, 0, 0);
+}
+
+.avatar-border {
+    -fx-fill: transparent;
+    -fx-stroke: linear-gradient(to bottom right, #E1B323, #B2D944);
+    -fx-stroke-width: 3;
+}
+
+.status-indicator {
+    -fx-fill: #B2D944;
+    -fx-stroke: #095032;
+    -fx-stroke-width: 3;
+    -fx-effect: dropshadow(gaussian, rgba(178, 217, 68, 0.8), 8, 0, 0, 0);
+}
+
+.user-name {
+    -fx-text-fill: white;
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 3, 0, 0, 1);
+}
+
+/* Badges de vérification */
+.verification-badge-verified {
+    -fx-background-color: linear-gradient(to right, #089647, #076A39);
+    -fx-text-fill: white;
+    -fx-padding: 4 12;
+    -fx-background-radius: 12;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(8, 150, 71, 0.4), 5, 0, 0, 2);
+}
+
+.verification-badge-pending {
+    -fx-background-color: linear-gradient(to right, #E1B323, #c9a11e);
+    -fx-text-fill: #133D03;
+    -fx-padding: 4 12;
+    -fx-background-radius: 12;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(225, 179, 35, 0.4), 5, 0, 0, 2);
+}
+
+/* Stats rapides */
+.quick-stats {
+    -fx-padding: 12 15;
+    -fx-background-color: rgba(0, 0, 0, 0.15);
+    -fx-background-radius: 12;
+}
+
+.stat-value {
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+    -fx-font-size: 11px;
+}
+
+.stat-value-highlight {
+    -fx-text-fill: #B2D944;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.stat-separator {
+    -fx-background-color: rgba(178, 217, 68, 0.3);
+    -fx-pref-width: 1;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   SCROLLPANE & CONTAINER
+───────────────────────────────────────────────────────────────────────── */
+.menu-scroll {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.menu-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.menu-scroll .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 6px;
+}
+
+.menu-scroll .scroll-bar:vertical .track {
+    -fx-background-color: rgba(255, 255, 255, 0.03);
+    -fx-background-radius: 3;
+}
+
+.menu-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(178, 217, 68, 0.4);
+    -fx-background-radius: 3;
+}
+
+.menu-scroll .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: rgba(178, 217, 68, 0.6);
+}
+
+.menu-scroll .scroll-bar .increment-button,
+.menu-scroll .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.menu-scroll .scroll-bar .increment-arrow,
+.menu-scroll .scroll-bar .decrement-arrow {
+    -fx-shape: "";
+    -fx-padding: 0;
+}
+
+.menu-container {
+    -fx-padding: 10 0 25 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   TITRES DE SECTION
+───────────────────────────────────────────────────────────────────────── */
+.section-title {
+    -fx-text-fill: #848A86;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 2px;
+    -fx-padding: 18 20 8 20;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   DIVISEUR DE MENU
+───────────────────────────────────────────────────────────────────────── */
+.menu-divider {
+    -fx-min-height: 1;
+    -fx-max-height: 1;
+    -fx-background-color: linear-gradient(
+            to right,
+            transparent 5%,
+            rgba(178, 217, 68, 0.15) 25%,
+            rgba(178, 217, 68, 0.25) 50%,
+            rgba(178, 217, 68, 0.15) 75%,
+            transparent 95%
+    );
+    -fx-margin: 8 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   ÉLÉMENTS DE MENU - ÉTAT NORMAL
+───────────────────────────────────────────────────────────────────────── */
+.sidebar-menu-item {
+    -fx-background-color: transparent;
+    -fx-padding: 12 15 12 20;
+    -fx-alignment: CENTER_LEFT;
+    -fx-cursor: hand;
+    -fx-background-radius: 0 25 25 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 0 4;
+    -fx-border-radius: 0;
+    -fx-margin: 0 10 0 0;
+}
+
+.sidebar-menu-item .menu-text {
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+}
+
+.sidebar-menu-item .menu-icon {
+    -fx-font-size: 16px;
+    -fx-min-width: 24;
+    -fx-alignment: center;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   ÉLÉMENTS DE MENU - ÉTAT HOVER
+───────────────────────────────────────────────────────────────────────── */
+.sidebar-menu-item:hover {
+    -fx-background-color: linear-gradient(to right,
+    rgba(178, 217, 68, 0.2),
+    rgba(178, 217, 68, 0.05),
+    transparent);
+    -fx-border-color: #B2D944;
+    -fx-translate-x: 6;
+}
+
+.sidebar-menu-item:hover .menu-text {
+    -fx-text-fill: white;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   ÉLÉMENTS DE MENU - ÉTAT ACTIF ★★★ IMPORTANT ★★★
+───────────────────────────────────────────────────────────────────────── */
+.sidebar-menu-item-active {
+    -fx-background-color: linear-gradient(to right,
+    rgba(225, 179, 35, 0.25),
+    rgba(225, 179, 35, 0.08),
+    transparent) !important;
+    -fx-border-color: #E1B323 !important;
+    -fx-border-width: 0 0 0 4 !important;
+}
+
+.sidebar-menu-item-active .menu-text {
+    -fx-text-fill: #E1B323 !important;
+    -fx-font-weight: bold !important;
+}
+
+.sidebar-menu-item-active .menu-icon {
+    -fx-effect: dropshadow(gaussian, rgba(225, 179, 35, 0.5), 5, 0, 0, 0);
+}
+
+.sidebar-menu-item-active:hover {
+    -fx-background-color: linear-gradient(to right,
+    rgba(225, 179, 35, 0.3),
+    rgba(225, 179, 35, 0.1),
+    transparent) !important;
+    -fx-translate-x: 6;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   BADGES & INDICATEURS
+───────────────────────────────────────────────────────────────────────── */
+.notification-badge {
+    -fx-background-color: linear-gradient(to bottom right, #E1B323, #c9a11e);
+    -fx-text-fill: #133D03;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 2 8;
+    -fx-background-radius: 10;
+    -fx-min-width: 18;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(225, 179, 35, 0.5), 4, 0, 0, 1);
+}
+
+.new-badge {
+    -fx-background-color: linear-gradient(to right, #089647, #076A39);
+    -fx-text-fill: white;
+    -fx-font-size: 8px;
+    -fx-font-weight: bold;
+    -fx-padding: 2 6;
+    -fx-background-radius: 8;
+    -fx-letter-spacing: 1px;
+}
+
+.beta-badge {
+    -fx-background-color: linear-gradient(to right, #9A951F, #476C1A);
+    -fx-text-fill: white;
+    -fx-font-size: 8px;
+    -fx-font-weight: bold;
+    -fx-padding: 2 6;
+    -fx-background-radius: 8;
+    -fx-letter-spacing: 1px;
+}
+
+.live-indicator {
+    -fx-fill: #B2D944;
+    -fx-effect: dropshadow(gaussian, rgba(178, 217, 68, 0.8), 6, 0, 0, 0);
+}
+
+/* Animation pulse pour live indicator */
+@keyframes pulse {
+    0% { -fx-opacity: 1; }
+    50% { -fx-opacity: 0.5; }
+    100% { -fx-opacity: 1; }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   BOUTON DÉCONNEXION
+───────────────────────────────────────────────────────────────────────── */
+.sidebar-logout {
+    -fx-background-color: transparent;
+    -fx-padding: 12 15 12 20;
+    -fx-alignment: CENTER_LEFT;
+    -fx-cursor: hand;
+    -fx-background-radius: 0 25 25 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 0 4;
+}
+
+.sidebar-logout .menu-text {
+    -fx-text-fill: rgba(255, 107, 107, 0.8);
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+}
+
+.sidebar-logout:hover {
+    -fx-background-color: linear-gradient(to right,
+    rgba(255, 107, 107, 0.2),
+    rgba(255, 107, 107, 0.05),
+    transparent);
+    -fx-border-color: #ff6b6b;
+    -fx-translate-x: 6;
+}
+
+.sidebar-logout:hover .menu-text {
+    -fx-text-fill: #ff6b6b;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────────────────────────────────────── */
+.sidebar-footer {
+    -fx-padding: 12 15;
+    -fx-background-color: linear-gradient(to top, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1));
+    -fx-border-color: rgba(255, 255, 255, 0.05) transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+}
+
+.footer-text {
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+    -fx-font-size: 11px;
+}
+
+.connection-dot {
+    -fx-fill: #B2D944;
+    -fx-effect: dropshadow(gaussian, rgba(178, 217, 68, 0.6), 4, 0, 0, 0);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   RESPONSIVE - ANIMATION TRANSITIONS
+───────────────────────────────────────────────────────────────────────── */
+.sidebar-menu-item,
+.sidebar-logout {
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   TOOLTIP PERSONNALISÉ
+───────────────────────────────────────────────────────────────────────── */
+.sidebar .tooltip {
+    -fx-background-color: #133D03;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-padding: 8 14;
+    -fx-background-radius: 8;
+    -fx-border-color: rgba(178, 217, 68, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 10, 0, 3, 3);
+}

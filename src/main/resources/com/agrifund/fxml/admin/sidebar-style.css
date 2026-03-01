@@ -1,0 +1,279 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   AGRIFUND - SIDEBAR MODERNE
+   Palette: Verts naturels avec accents jaune moutarde
+═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────────────────
+   SIDEBAR PRINCIPALE
+───────────────────────────────────────────────────────────────────────── */
+.sidebar {
+    -fx-background-color: linear-gradient(to bottom, #095032 0%, #133D03 50%, #0a3d1f 100%);
+    -fx-min-width: 280px;
+    -fx-max-width: 280px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 20, 0, 5, 0);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   EN-TÊTE SIDEBAR (LOGO)
+───────────────────────────────────────────────────────────────────────── */
+.sidebar-header {
+    -fx-padding: 25 20 15 20;
+    -fx-alignment: center;
+    -fx-background-color: linear-gradient(to right, rgba(8, 150, 71, 0.15), transparent);
+    -fx-border-color: transparent transparent rgba(255, 255, 255, 0.08) transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.admin-badge {
+    -fx-text-fill: #B2D944;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 4px;
+    -fx-padding: 6 16;
+    -fx-background-color: rgba(178, 217, 68, 0.12);
+    -fx-background-radius: 15;
+    -fx-border-color: rgba(178, 217, 68, 0.25);
+    -fx-border-width: 1;
+    -fx-border-radius: 15;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   WIDGET PROFIL UTILISATEUR
+───────────────────────────────────────────────────────────────────────── */
+.user-profile-widget {
+    -fx-padding: 20;
+    -fx-background-color: linear-gradient(to bottom right, rgba(8, 150, 71, 0.2), rgba(7, 106, 57, 0.1));
+    -fx-background-radius: 16;
+    -fx-border-color: rgba(178, 217, 68, 0.2);
+    -fx-border-width: 1;
+    -fx-border-radius: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0, 0, 3);
+}
+
+.user-avatar {
+    -fx-effect: dropshadow(gaussian, rgba(225, 179, 35, 0.4), 15, 0, 0, 0);
+}
+
+.avatar-ring {
+    -fx-fill: transparent;
+    -fx-stroke: linear-gradient(to bottom right, #E1B323, #B2D944);
+    -fx-stroke-width: 3;
+}
+
+.online-indicator {
+    -fx-fill: #B2D944;
+    -fx-stroke: #095032;
+    -fx-stroke-width: 3;
+    -fx-effect: dropshadow(gaussian, rgba(178, 217, 68, 0.6), 5, 0, 0, 0);
+}
+
+.user-name {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.user-role {
+    -fx-text-fill: #B2D944;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-padding: 4 16;
+    -fx-background-color: rgba(178, 217, 68, 0.15);
+    -fx-background-radius: 15;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   SCROLLPANE
+───────────────────────────────────────────────────────────────────────── */
+.sidebar .scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.sidebar .scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.sidebar .scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 6px;
+}
+
+.sidebar .scroll-pane .scroll-bar:vertical .track {
+    -fx-background-color: rgba(255, 255, 255, 0.03);
+    -fx-background-radius: 3;
+}
+
+.sidebar .scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(178, 217, 68, 0.4);
+    -fx-background-radius: 3;
+}
+
+.sidebar .scroll-pane .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: rgba(178, 217, 68, 0.6);
+}
+
+.sidebar .scroll-pane .scroll-bar .increment-button,
+.sidebar .scroll-pane .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.sidebar .scroll-pane .scroll-bar .increment-arrow,
+.sidebar .scroll-pane .scroll-bar .decrement-arrow {
+    -fx-shape: "";
+    -fx-padding: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   TITRES DE SECTION
+───────────────────────────────────────────────────────────────────────── */
+.sidebar-section-title {
+    -fx-text-fill: #848A86;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 2px;
+    -fx-padding: 18 20 8 20;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   ÉLÉMENTS DE MENU - ÉTAT NORMAL
+───────────────────────────────────────────────────────────────────────── */
+.sidebar-menu-item {
+    -fx-background-color: transparent;
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-padding: 12 20;
+    -fx-alignment: CENTER_LEFT;
+    -fx-cursor: hand;
+    -fx-background-radius: 0 25 25 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 0 4;
+    -fx-border-radius: 0;
+}
+
+.sidebar-menu-item .label {
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   ÉLÉMENTS DE MENU - ÉTAT HOVER
+───────────────────────────────────────────────────────────────────────── */
+.sidebar-menu-item:hover {
+    -fx-background-color: linear-gradient(to right, rgba(8, 150, 71, 0.3), rgba(8, 150, 71, 0.05));
+    -fx-border-color: #B2D944;
+    -fx-translate-x: 5;
+}
+
+.sidebar-menu-item:hover .label {
+    -fx-text-fill: white;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   ÉLÉMENTS DE MENU - ÉTAT ACTIF ★★★
+───────────────────────────────────────────────────────────────────────── */
+.sidebar-menu-item-active {
+    -fx-background-color: linear-gradient(to right, rgba(225, 179, 35, 0.25), rgba(225, 179, 35, 0.03));
+    -fx-border-color: #E1B323;
+    -fx-border-width: 0 0 0 4;
+}
+
+.sidebar-menu-item-active .label {
+    -fx-text-fill: #E1B323 !important;
+    -fx-font-weight: bold;
+}
+
+.sidebar-menu-item-active:hover {
+    -fx-background-color: linear-gradient(to right, rgba(225, 179, 35, 0.3), rgba(225, 179, 35, 0.05));
+    -fx-border-color: #E1B323;
+    -fx-translate-x: 5;
+}
+
+.sidebar-menu-item-active:hover .label {
+    -fx-text-fill: #E1B323 !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   BOUTON DÉCONNEXION
+───────────────────────────────────────────────────────────────────────── */
+.sidebar-logout {
+    -fx-background-color: transparent;
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-padding: 12 20;
+    -fx-alignment: CENTER_LEFT;
+    -fx-cursor: hand;
+    -fx-background-radius: 0 25 25 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 0 4;
+}
+
+.sidebar-logout .label {
+    -fx-text-fill: rgba(255, 100, 100, 0.8);
+}
+
+.sidebar-logout:hover {
+    -fx-background-color: linear-gradient(to right, rgba(255, 100, 100, 0.2), transparent);
+    -fx-border-color: #ff6b6b;
+    -fx-translate-x: 5;
+}
+
+.sidebar-logout:hover .label {
+    -fx-text-fill: #ff6b6b;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   SÉPARATEUR
+───────────────────────────────────────────────────────────────────────── */
+.sidebar-separator {
+    -fx-min-height: 1;
+    -fx-max-height: 1;
+    -fx-background-color: linear-gradient(
+            to right,
+            transparent 0%,
+            rgba(178, 217, 68, 0.2) 20%,
+            rgba(178, 217, 68, 0.3) 50%,
+            rgba(178, 217, 68, 0.2) 80%,
+            transparent 100%
+    );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   BADGE DE NOTIFICATION
+───────────────────────────────────────────────────────────────────────── */
+.notification-badge {
+    -fx-background-color: linear-gradient(to bottom right, #E1B323, #c9a11e);
+    -fx-text-fill: #133D03;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 2 8;
+    -fx-background-radius: 10;
+    -fx-min-width: 20;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(225, 179, 35, 0.5), 5, 0, 0, 2);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   ICÔNE MENU
+───────────────────────────────────────────────────────────────────────── */
+.menu-icon {
+    -fx-font-size: 16px;
+    -fx-min-width: 24;
+    -fx-alignment: center;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────────────────────────────────────── */
+.sidebar-footer {
+    -fx-padding: 12 20;
+    -fx-background-color: linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent);
+    -fx-border-color: rgba(255, 255, 255, 0.05) transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+}
+
+.version-label {
+    -fx-text-fill: rgba(255, 255, 255, 0.4);
+    -fx-font-size: 11px;
+}

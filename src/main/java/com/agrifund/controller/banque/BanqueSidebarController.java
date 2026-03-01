@@ -2,6 +2,7 @@ package com.agrifund.controller.banque;
 
 import com.agrifund.Main;
 import com.agrifund.services.BanqueService;
+import com.agrifund.util.NavigationManager;
 import com.agrifund.util.SessionManager;
 import com.agrifund.entities.Banque;
 import com.agrifund.entities.Utilisateur;
@@ -18,6 +19,8 @@ import javafx.scene.shape.Circle;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BanqueSidebarController {
 
@@ -26,163 +29,105 @@ public class BanqueSidebarController {
     @FXML private Label codeBanque;
     @FXML private HBox verificationBadge;
     @FXML private Label siegeLabel;
+    @FXML private Label totalClientsLabel;
 
     // ══════════════════════════════════════════════════════════
-    // PRINCIPAL
+    // BOUTONS DE NAVIGATION
     // ══════════════════════════════════════════════════════════
     @FXML private Button btnDashboard;
     @FXML private Button btnProfile;
     @FXML private Button btnDocuments;
-
-    // ══════════════════════════════════════════════════════════
-    // FINANCE
-    // ══════════════════════════════════════════════════════════
-    @FXML private Button btnProduitsFinanciers;
-    @FXML private Button btnOffresFinancieres;
-    @FXML private Button btnDemandeFinancement;
-
-    // ══════════════════════════════════════════════════════════
-    // AGRICULTURE
-    // ══════════════════════════════════════════════════════════
+    @FXML private Button btnProduit;
+    @FXML private Button btnOffre;
     @FXML private Button btnProjetsAgricoles;
     @FXML private Button btnRessources;
-
-    // ══════════════════════════════════════════════════════════
-    // DÉCISIONS & RISQUES
-    // ══════════════════════════════════════════════════════════
     @FXML private Button btnDecisions;
     @FXML private Button btnRisques;
-
-    // ══════════════════════════════════════════════════════════
-    // DONNÉES SATELLITE
-    // ══════════════════════════════════════════════════════════
     @FXML private Button btnSatellite;
-
-    // ══════════════════════════════════════════════════════════
-    // IoT & RAPPORTS
-    // ══════════════════════════════════════════════════════════
     @FXML private Button btnCapteurs;
     @FXML private Button btnDashboardIoT;
     @FXML private Button btnRapports;
-
-    // ══════════════════════════════════════════════════════════
-    // COMMUNICATION
-    // ══════════════════════════════════════════════════════════
     @FXML private Button btnMessagerie;
-
-    // ══════════════════════════════════════════════════════════
-    // OUTILS
-    // ══════════════════════════════════════════════════════════
     @FXML private Button btnCarte;
     @FXML private Button btnChatbot;
-
-    // ══════════════════════════════════════════════════════════
-    // COMPTE
-    // ══════════════════════════════════════════════════════════
     @FXML private Button btnSecurity;
 
+    // Map pour associer les pages aux boutons
+    private Map<String, Button> pageButtonMap;
+
+    // Gestionnaire de navigation
+    private final NavigationManager navigationManager = NavigationManager.getInstance();
+
     private BanqueService banqueService;
-    private String currentPage = "dashboard";
 
     @FXML
     public void initialize() {
         try {
             banqueService = new BanqueService();
+            initializePageButtonMap();
             loadUserInfo();
-            updateActiveButton();
+
+            // Mettre à jour le bouton actif selon la page courante
+            updateActiveButton(navigationManager.getCurrentPage());
+
+            // Écouter les changements de page
+            navigationManager.currentPageProperty().addListener((obs, oldPage, newPage) -> {
+                updateActiveButton(newPage);
+            });
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void setCurrentPage(String page) {
-        this.currentPage = page;
-        updateActiveButton();
+    /**
+     * Initialise la map des pages et boutons correspondants
+     */
+    private void initializePageButtonMap() {
+        pageButtonMap = new HashMap<>();
+        pageButtonMap.put("dashboard", btnDashboard);
+        pageButtonMap.put("profile", btnProfile);
+        pageButtonMap.put("documents", btnDocuments);
+        pageButtonMap.put("produits-financiers", btnProduit);
+        pageButtonMap.put("offres-financieres", btnOffre);
+        pageButtonMap.put("projets-agricoles", btnProjetsAgricoles);
+        pageButtonMap.put("ressources", btnRessources);
+        pageButtonMap.put("decisions", btnDecisions);
+        pageButtonMap.put("risques", btnRisques);
+        pageButtonMap.put("satellite", btnSatellite);
+        pageButtonMap.put("capteurs", btnCapteurs);
+        pageButtonMap.put("dashboard-iot", btnDashboardIoT);
+        pageButtonMap.put("rapports", btnRapports);
+        pageButtonMap.put("messagerie", btnMessagerie);
+        pageButtonMap.put("carte", btnCarte);
+        pageButtonMap.put("chatbot", btnChatbot);
+        pageButtonMap.put("security", btnSecurity);
     }
 
-    private void updateActiveButton() {
-        // Liste de tous les boutons
-        Button[] allButtons = {
-                btnDashboard, btnProfile, btnDocuments,
-                btnProduitsFinanciers, btnOffresFinancieres, btnDemandeFinancement,
-                btnProjetsAgricoles, btnRessources,
-                btnDecisions, btnRisques,
-                btnSatellite,
-                btnCapteurs, btnDashboardIoT, btnRapports,
-                btnMessagerie,
-                btnCarte, btnChatbot,
-                btnSecurity
-        };
-
+    /**
+     * Met à jour le style du bouton actif
+     */
+    private void updateActiveButton(String currentPage) {
         // Retirer la classe active de tous les boutons
-        for (Button btn : allButtons) {
+        for (Button btn : pageButtonMap.values()) {
             if (btn != null) {
                 btn.getStyleClass().remove("sidebar-menu-item-active");
             }
         }
 
-        // Ajouter la classe active au bouton actuel
-        Button activeBtn = null;
-        switch (currentPage) {
-            case "dashboard":
-                activeBtn = btnDashboard;
-                break;
-            case "profile":
-                activeBtn = btnProfile;
-                break;
-            case "documents":
-                activeBtn = btnDocuments;
-                break;
-            case "produits-financiers":
-                activeBtn = btnProduitsFinanciers;
-                break;
-            case "offres-financieres":
-                activeBtn = btnOffresFinancieres;
-                break;
-            case "demande-financement":
-                activeBtn = btnDemandeFinancement;
-                break;
-            case "projets-agricoles":
-                activeBtn = btnProjetsAgricoles;
-                break;
-            case "ressources":
-                activeBtn = btnRessources;
-                break;
-            case "decisions":
-                activeBtn = btnDecisions;
-                break;
-            case "risques":
-                activeBtn = btnRisques;
-                break;
-            case "satellite":
-                activeBtn = btnSatellite;
-                break;
-            case "capteurs":
-                activeBtn = btnCapteurs;
-                break;
-            case "dashboard-iot":
-                activeBtn = btnDashboardIoT;
-                break;
-            case "rapports":
-                activeBtn = btnRapports;
-                break;
-            case "messagerie":
-                activeBtn = btnMessagerie;
-                break;
-            case "carte":
-                activeBtn = btnCarte;
-                break;
-            case "chatbot":
-                activeBtn = btnChatbot;
-                break;
-            case "security":
-                activeBtn = btnSecurity;
-                break;
-        }
-
-        if (activeBtn != null) {
+        // Ajouter la classe active au bouton correspondant à la page courante
+        Button activeBtn = pageButtonMap.get(currentPage);
+        if (activeBtn != null && !activeBtn.getStyleClass().contains("sidebar-menu-item-active")) {
             activeBtn.getStyleClass().add("sidebar-menu-item-active");
         }
+    }
+
+    /**
+     * Méthode générique pour la navigation
+     */
+    private void navigateTo(String page, String fxmlPath) {
+        navigationManager.setCurrentPage(page);
+        Main.navigateTo(fxmlPath);
     }
 
     private void loadUserInfo() throws SQLException {
@@ -197,14 +142,14 @@ public class BanqueSidebarController {
             Banque banque = banqueService.rechercherParUtilisateurId(user.getId());
             if (banque != null) {
                 if (codeBanque != null) {
-                    codeBanque.setText("[" + banque.getCodeBanque() + "]");
+                    codeBanque.setText(banque.getCodeBanque());
                 }
 
-                // Siège (tronqué si trop long)
+                // Siège
                 if (siegeLabel != null) {
                     String siege = banque.getAddresseSiege();
-                    if (siege != null && siege.length() > 30) {
-                        siege = siege.substring(0, 30) + "...";
+                    if (siege != null && siege.length() > 25) {
+                        siege = siege.substring(0, 25) + "...";
                     }
                     siegeLabel.setText(siege != null ? siege : "Non défini");
                 }
@@ -215,10 +160,10 @@ public class BanqueSidebarController {
                     Label badge = new Label();
                     if (banque.isCompteVerifie()) {
                         badge.setText("✓ Vérifiée");
-                        badge.setStyle("-fx-background-color: #089647; -fx-text-fill: white; -fx-padding: 3 8; -fx-background-radius: 10; -fx-font-size: 10px;");
+                        badge.getStyleClass().add("verification-badge-verified");
                     } else {
                         badge.setText("⏳ En attente");
-                        badge.setStyle("-fx-background-color: #E1B323; -fx-text-fill: #060806; -fx-padding: 3 8; -fx-background-radius: 10; -fx-font-size: 10px;");
+                        badge.getStyleClass().add("verification-badge-pending");
                     }
                     verificationBadge.getChildren().add(badge);
                 }
@@ -238,15 +183,19 @@ public class BanqueSidebarController {
 
         if (image == null) {
             try {
-                image = new Image(getClass().getResourceAsStream("/com/agrifund/images/default-avatar.png"));
+                image = new Image(getClass().getResourceAsStream("/com/agrifund/images/default-bank-avatar.png"));
             } catch (Exception e) {
-                // Fallback
+                try {
+                    image = new Image(getClass().getResourceAsStream("/com/agrifund/images/default-avatar.png"));
+                } catch (Exception ex) {
+                    System.err.println("Erreur chargement avatar: " + ex.getMessage());
+                }
             }
         }
 
         if (image != null) {
             userAvatar.setImage(image);
-            Circle clip = new Circle(30, 30, 30);
+            Circle clip = new Circle(35, 35, 35);
             userAvatar.setClip(clip);
         }
     }
@@ -257,23 +206,17 @@ public class BanqueSidebarController {
 
     @FXML
     public void goToDashboard() {
-        currentPage = "dashboard";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/fxml/banque/banque-dashboard.fxml");
+        navigateTo("dashboard", "/com/agrifund/fxml/banque/banque-dashboard.fxml");
     }
 
     @FXML
     public void goToProfile() {
-        currentPage = "profile";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/fxml/banque/banque-profile.fxml");
+        navigateTo("profile", "/com/agrifund/fxml/banque/banque-profile.fxml");
     }
 
     @FXML
     public void goToDocuments() {
-        currentPage = "documents";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/fxml/banque/banque-documents.fxml");
+        navigateTo("documents", "/com/agrifund/fxml/banque/banque-documents.fxml");
     }
 
     // ══════════════════════════════════════════════════════════
@@ -282,23 +225,17 @@ public class BanqueSidebarController {
 
     @FXML
     public void goToProduitsFinanciers() {
-        currentPage = "produits-financiers";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/view/ProduitFinancierView.fxml");
+        navigateTo("produits-financiers", "/com/agrifund/fxml/banque/BanqueProduitView.fxml");
     }
 
     @FXML
     public void goToOffresFinancieres() {
-        currentPage = "offres-financieres";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/view/OffreFinanciereView.fxml");
+        navigateTo("offres-financieres", "/com/agrifund/fxml/banque/BanqueOffreView.fxml");
     }
 
     @FXML
     public void goToDemandeFinancement() {
-        currentPage = "demande-financement";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/view/DemandeFinancementView.fxml");
+        navigateTo("demande-financement", "/com/agrifund/view/DemandeFinancementView.fxml");
     }
 
     // ══════════════════════════════════════════════════════════
@@ -307,16 +244,12 @@ public class BanqueSidebarController {
 
     @FXML
     public void goToProjetsAgricoles() {
-        currentPage = "projets-agricoles";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/fxml/banque/banque-projects.fxml");
+        navigateTo("projets-agricoles", "/com/agrifund/fxml/banque/banque-projects.fxml");
     }
 
     @FXML
     public void goToRessources() {
-        currentPage = "ressources";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/fxml/banque/ressourcesBanque.fxml");
+        navigateTo("ressources", "/com/agrifund/fxml/banque/ressourcesBanque.fxml");
     }
 
     // ══════════════════════════════════════════════════════════
@@ -325,16 +258,12 @@ public class BanqueSidebarController {
 
     @FXML
     public void goToDecisions() {
-        currentPage = "decisions";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/fxml/banque/banque-decision-list.fxml");
+        navigateTo("decisions", "/com/agrifund/fxml/banque/banque-decision-list.fxml");
     }
 
     @FXML
     public void goToRisques() {
-        currentPage = "risques";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/fxml/banque/banque-risque-list.fxml");
+        navigateTo("risques", "/com/agrifund/fxml/banque/banque-risque-list.fxml");
     }
 
     // ══════════════════════════════════════════════════════════
@@ -343,9 +272,7 @@ public class BanqueSidebarController {
 
     @FXML
     public void goToSatellite() {
-        currentPage = "satellite";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/fxml/banque/banque-satellite.fxml");
+        navigateTo("satellite", "/com/agrifund/fxml/banque/banque-satellite.fxml");
     }
 
     // ══════════════════════════════════════════════════════════
@@ -354,23 +281,17 @@ public class BanqueSidebarController {
 
     @FXML
     public void goToCapteurs() {
-        currentPage = "capteurs";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/fxml/capteur.fxml");
+        navigateTo("capteurs", "/com/agrifund/fxml/capteur.fxml");
     }
 
     @FXML
     public void goToDashboardIoT() {
-        currentPage = "dashboard-iot";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/fxml/dashboard-rana.fxml");
+        navigateTo("dashboard-iot", "/com/agrifund/fxml/dashboard-rana.fxml");
     }
 
     @FXML
     public void goToRapports() {
-        currentPage = "rapports";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/fxml/rapport.fxml");
+        navigateTo("rapports", "/com/agrifund/fxml/rapport.fxml");
     }
 
     // ══════════════════════════════════════════════════════════
@@ -379,9 +300,7 @@ public class BanqueSidebarController {
 
     @FXML
     public void goToMessagerie() {
-        currentPage = "messagerie";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/fxml/banque/banque-messagerie.fxml");
+        navigateTo("messagerie", "/com/agrifund/fxml/banque/banque-messagerie.fxml");
     }
 
     // ══════════════════════════════════════════════════════════
@@ -390,16 +309,12 @@ public class BanqueSidebarController {
 
     @FXML
     public void goToCarte() {
-        currentPage = "carte";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/view/MapView.fxml");
+        navigateTo("carte", "/com/agrifund/view/MapView.fxml");
     }
 
     @FXML
     public void goToChatbot() {
-        currentPage = "chatbot";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/view/ChatbotView.fxml");
+        navigateTo("chatbot", "/com/agrifund/view/ChatbotView.fxml");
     }
 
     // ══════════════════════════════════════════════════════════
@@ -408,9 +323,7 @@ public class BanqueSidebarController {
 
     @FXML
     public void goToSecurity() {
-        currentPage = "security";
-        updateActiveButton();
-        Main.navigateTo("/com/agrifund/fxml/banque/banque-security.fxml");
+        navigateTo("security", "/com/agrifund/fxml/banque/banque-security.fxml");
     }
 
     // ══════════════════════════════════════════════════════════
@@ -422,8 +335,10 @@ public class BanqueSidebarController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Déconnexion");
         alert.setHeaderText("Voulez-vous vraiment vous déconnecter ?");
+        alert.setContentText("Vous serez redirigé vers la page de connexion.");
 
         if (alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
+            navigationManager.reset();
             Main.handleLogout();
         }
     }
