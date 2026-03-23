@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Agriculteur{% endblock %}
+
+{% block body %}
+    <h1>Agriculteur</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ agriculteur.id }}</td>
+            </tr>
+            <tr>
+                <th>Adresseferme</th>
+                <td>{{ agriculteur.adresseferme }}</td>
+            </tr>
+            <tr>
+                <th>Superficieferme</th>
+                <td>{{ agriculteur.superficieferme }}</td>
+            </tr>
+            <tr>
+                <th>Typeculture</th>
+                <td>{{ agriculteur.typeculture }}</td>
+            </tr>
+            <tr>
+                <th>Statuscompte</th>
+                <td>{{ agriculteur.statuscompte }}</td>
+            </tr>
+            <tr>
+                <th>Compteverifie</th>
+                <td>{{ agriculteur.compteverifie ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_agriculteur_index') }}">back to list</a>
+
+    <a href="{{ path('app_agriculteur_edit', {'id': agriculteur.id}) }}">edit</a>
+
+    {{ include('agriculteur/_delete_form.html.twig') }}
+{% endblock %}

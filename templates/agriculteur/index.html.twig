@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Agriculteur index{% endblock %}
+
+{% block body %}
+    <h1>Agriculteur index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Adresseferme</th>
+                <th>Superficieferme</th>
+                <th>Typeculture</th>
+                <th>Statuscompte</th>
+                <th>Compteverifie</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for agriculteur in agriculteurs %}
+            <tr>
+                <td>{{ agriculteur.id }}</td>
+                <td>{{ agriculteur.adresseferme }}</td>
+                <td>{{ agriculteur.superficieferme }}</td>
+                <td>{{ agriculteur.typeculture }}</td>
+                <td>{{ agriculteur.statuscompte }}</td>
+                <td>{{ agriculteur.compteverifie ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_agriculteur_show', {'id': agriculteur.id}) }}">show</a>
+                    <a href="{{ path('app_agriculteur_edit', {'id': agriculteur.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_agriculteur_new') }}">Create new</a>
+{% endblock %}
