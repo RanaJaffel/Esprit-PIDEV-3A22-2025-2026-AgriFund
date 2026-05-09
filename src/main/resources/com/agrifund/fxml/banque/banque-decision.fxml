@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.agrifund.controller.banque.BanqueDecisionController"
+            prefWidth="850" prefHeight="700"
+            stylesheets="@banque-styles.css" style="-fx-background-color: #F8FAF8;">
+
+    <!-- En-tête -->
+    <top>
+        <VBox styleClass="header" spacing="5">
+            <padding><Insets top="20" right="25" bottom="20" left="25"/></padding>
+            <Label styleClass="title" text="📋 Décision Financière"/>
+            <Label fx:id="lblBanqueInfo" styleClass="subtitle" text="🏦 Banque"/>
+        </VBox>
+    </top>
+
+    <!-- Contenu principal -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+            <VBox spacing="25" styleClass="main-content">
+                <padding><Insets top="30" right="40" bottom="30" left="40"/></padding>
+
+                <!-- Section Formulaire -->
+                <VBox spacing="20" styleClass="form-section">
+                    <Label text="INFORMATIONS DE LA DÉCISION" styleClass="section-title"/>
+
+                    <GridPane hgap="20" vgap="20" styleClass="form-grid">
+                        <padding><Insets top="20" right="25" bottom="20" left="25"/></padding>
+
+                        <!-- ID (masqué) -->
+                        <TextField fx:id="tfIdDecision" visible="false" managed="false"/>
+
+                        <!-- Évaluation -->
+                        <Label text="📊 Évaluation concernée :" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
+                        <ComboBox fx:id="cbEvaluation"
+                                  GridPane.rowIndex="0" GridPane.columnIndex="1"
+                                  prefWidth="450" promptText="Sélectionnez une évaluation" styleClass="combo-box"/>
+
+                        <!-- Statut -->
+                        <Label text="🎯 Statut de la décision :" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+                        <ComboBox fx:id="cbStatut"
+                                  GridPane.rowIndex="1" GridPane.columnIndex="1"
+                                  prefWidth="450" promptText="Choisir un statut" styleClass="combo-box"/>
+
+                        <!-- Date -->
+                        <Label text="📅 Date de la décision :" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
+                        <DatePicker fx:id="dpDateDecision"
+                                    GridPane.rowIndex="2" GridPane.columnIndex="1"
+                                    prefWidth="450" promptText="Sélectionner une date" styleClass="date-picker"/>
+
+                        <!-- Justification -->
+                        <Label text="📝 Justification :" GridPane.rowIndex="3" GridPane.columnIndex="0"
+                               GridPane.valignment="TOP" styleClass="form-label"/>
+                        <VBox GridPane.rowIndex="3" GridPane.columnIndex="1" spacing="5">
+                            <TextArea fx:id="taJustification"
+                                      prefHeight="180" prefWidth="450"
+                                      wrapText="true"
+                                      promptText="Expliquez les raisons de cette décision...&#10;&#10;Minimum 20 caractères requis."
+                                      styleClass="text-area"/>
+                            <Label text="💡 Cette justification sera envoyée par email à l'agriculteur."
+                                   style="-fx-text-fill: #848A86; -fx-font-size: 11px; -fx-font-style: italic;"/>
+                        </VBox>
+
+                        <!-- Boutons -->
+                        <HBox spacing="15" GridPane.rowIndex="4" GridPane.columnSpan="2" alignment="CENTER">
+                            <padding><Insets top="25"/></padding>
+                            <Button text="❌ Annuler" styleClass="button-secondary" onAction="#handleCancel" prefWidth="140" prefHeight="42"/>
+                            <Button text="🗑️ Effacer" styleClass="button-accent" onAction="#handleClear" prefWidth="140" prefHeight="42"/>
+                            <Button text="✅ Enregistrer" styleClass="button-primary" onAction="#handleSave" prefWidth="160" prefHeight="42"/>
+                        </HBox>
+                    </GridPane>
+                </VBox>
+
+                <!-- Note d'information -->
+                <HBox styleClass="info-note" alignment="CENTER_LEFT" spacing="10">
+                    <padding><Insets top="15" right="20" bottom="15" left="20"/></padding>
+                    <Label text="📧" style="-fx-font-size: 20px;"/>
+                    <Label text="Un email de notification sera automatiquement envoyé à l'agriculteur concerné lors de l'enregistrement de la décision."
+                           style="-fx-text-fill: #133D03; -fx-font-size: 12px;" wrapText="true"/>
+                </HBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <!-- Pied de page -->
+    <bottom>
+        <HBox styleClass="footer" alignment="CENTER_LEFT" spacing="20">
+            <padding><Insets top="12" right="25" bottom="12" left="25"/></padding>
+            <Label styleClass="signature" text="🌿"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lblStatus" styleClass="status-label" text="Prêt" style="-fx-text-fill: #B2D944;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label styleClass="signature" text="AgriFund"/>
+        </HBox>
+    </bottom>
+</BorderPane>

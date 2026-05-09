@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.agrifund.controller.banque.BanqueSidebarController"
+      styleClass="sidebar"
+      fx:id="sidebar"
+      stylesheets="@/com/agrifund/fxml/banque/banque-sidebar.css">
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         HEADER - LOGO & BRANDING CORPORATE
+    ═══════════════════════════════════════════════════════════════════ -->
+    <VBox styleClass="sidebar-header" spacing="10" alignment="CENTER">
+        <ImageView fitWidth="160" preserveRatio="true" smooth="true" cache="true">
+            <image>
+                <Image url="@/com/agrifund/images/logo.png"/>
+            </image>
+        </ImageView>
+        <HBox alignment="CENTER" spacing="8">
+            <Label text="🏦" style="-fx-font-size: 14px;"/>
+            <Label text="ESPACE BANQUE" styleClass="space-badge"/>
+        </HBox>
+    </VBox>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         CARTE PROFIL BANQUE
+    ═══════════════════════════════════════════════════════════════════ -->
+    <VBox styleClass="bank-profile-card" spacing="12" alignment="CENTER">
+        <padding>
+            <Insets top="20" right="15" bottom="20" left="15"/>
+        </padding>
+
+        <!-- Logo Banque avec effets -->
+        <StackPane>
+            <Circle radius="45" styleClass="avatar-outer-ring"/>
+            <Circle radius="40" styleClass="avatar-inner-ring"/>
+            <ImageView fx:id="userAvatar" fitWidth="70" fitHeight="70" preserveRatio="true"/>
+            <Circle radius="10" styleClass="verified-indicator" translateX="30" translateY="30"/>
+        </StackPane>
+
+        <!-- Nom et code banque -->
+        <VBox spacing="5" alignment="CENTER">
+            <Label fx:id="userName" text="Banque" styleClass="bank-name"/>
+            <Label fx:id="codeBanque" text="CODE" styleClass="bank-code"/>
+            <HBox fx:id="verificationBadge" alignment="CENTER" spacing="5">
+                <!-- Badge dynamique -->
+            </HBox>
+        </VBox>
+
+        <!-- Statistiques rapides -->
+        <HBox styleClass="bank-stats" spacing="20" alignment="CENTER">
+            <VBox alignment="CENTER" spacing="3">
+                <Label text="📍" style="-fx-font-size: 16px;"/>
+                <Label text="Siège" styleClass="stat-label"/>
+                <Label fx:id="siegeLabel" text="--" styleClass="stat-value"/>
+            </VBox>
+            <Separator orientation="VERTICAL" styleClass="stat-divider"/>
+            <VBox alignment="CENTER" spacing="3">
+                <Label text="👥" style="-fx-font-size: 16px;"/>
+                <Label text="Clients" styleClass="stat-label"/>
+                <Label fx:id="totalClientsLabel" text="--" styleClass="stat-value-gold"/>
+            </VBox>
+        </HBox>
+    </VBox>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         MENU DE NAVIGATION SCROLLABLE
+    ═══════════════════════════════════════════════════════════════════ -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="menu-scroll">
+        <VBox spacing="2" styleClass="menu-container">
+
+            <!-- ══════════════════════════════════════════════════════════
+                 SECTION: PRINCIPAL
+            ══════════════════════════════════════════════════════════ -->
+            <Label text="PRINCIPAL" styleClass="section-title"/>
+
+            <Button fx:id="btnDashboard" styleClass="sidebar-menu-item"
+                    onAction="#goToDashboard" maxWidth="Infinity">
+                <graphic>
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <Label text="📊" styleClass="menu-icon"/>
+                        <Label text="Tableau de bord" styleClass="menu-text"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <Button fx:id="btnProfile" styleClass="sidebar-menu-item"
+                    onAction="#goToProfile" maxWidth="Infinity">
+                <graphic>
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <Label text="🏦" styleClass="menu-icon"/>
+                        <Label text="Profil Banque" styleClass="menu-text"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <Button fx:id="btnDocuments" styleClass="sidebar-menu-item"
+                    onAction="#goToDocuments" maxWidth="Infinity">
+                <graphic>
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <Label text="📄" styleClass="menu-icon"/>
+                        <Label text="Documents" styleClass="menu-text"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <!-- ══════════════════════════════════════════════════════════
+                 SECTION: FINANCE
+            ══════════════════════════════════════════════════════════ -->
+            <Region styleClass="menu-divider"/>
+            <Label text="FINANCE" styleClass="section-title"/>
+
+            <Button fx:id="btnProduitsFinanciers" styleClass="sidebar-menu-item"
+                    onAction="#goToProduitsFinanciers" maxWidth="Infinity">
+                <graphic>
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <Label text="💰" styleClass="menu-icon"/>
+                        <Label text="Produits Financiers" styleClass="menu-text"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <Button fx:id="btnOffresFinancieres" styleClass="sidebar-menu-item"
+                    onAction="#goToOffresFinancieres" maxWidth="Infinity">
+                <graphic>
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <Label text="📋" styleClass="menu-icon"/>
+                        <Label text="Offres Financières" styleClass="menu-text"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <Button fx:id="btnDemandeFinancement" styleClass="sidebar-menu-item"
+                    onAction="#goToDemandeFinancement" maxWidth="Infinity">
+                <graphic>
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <Label text="💳" styleClass="menu-icon"/>
+                        <Label text="Demandes" styleClass="menu-text"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label text="12" styleClass="pending-badge"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <!-- ══════════════════════════════════════════════════════════
+                 SECTION: PORTEFEUILLE AGRICOLE
+            ══════════════════════════════════════════════════════════ -->
+            <Region styleClass="menu-divider"/>
+            <Label text="PORTEFEUILLE AGRICOLE" styleClass="section-title"/>
+
+            <Button fx:id="btnProjetsAgricoles" styleClass="sidebar-menu-item"
+                    onAction="#goToProjetsAgricoles" maxWidth="Infinity">
+                <graphic>
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <Label text="🌾" styleClass="menu-icon"/>
+                        <Label text="Projets Financés" styleClass="menu-text"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <Button fx:id="btnRessources" styleClass="sidebar-menu-item"
+                    onAction="#goToRessources" maxWidth="Infinity">
+                <graphic>
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <Label text="🌿" styleClass="menu-icon"/>
+                        <Label text="Ressources" styleClass="menu-text"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <!-- ══════════════════════════════════════════════════════════
+                 SECTION: ANALYSE & RISQUES
+            ══════════════════════════════════════════════════════════ -->
+            <Region styleClass="menu-divider"/>
+            <Label text="ANALYSE &amp; RISQUES" styleClass="section-title"/>
+
+            <Button fx:id="btnDecisions" styleClass="sidebar-menu-item"
+                    onAction="#goToDecisions" maxWidth="Infinity">
+                <graphic>
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <Label text="⚖️" styleClass="menu-icon"/>
+                        <Label text="Décisions" styleClass="menu-text"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <Button fx:id="btnRisques" styleClass="sidebar-menu-item"
+                    onAction="#goToRisques" maxWidth="Infinity">
+                <graphic>
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <Label text="📈" styleClass="menu-icon"/>
+                        <Label text="Analyse Risques" styleClass="menu-text"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label text="PRO" styleClass="pro-badge"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <!-- ══════════════════════════════════════════════════════════
+                 SECTION: DONNÉES SATELLITE
+            ══════════════════════════════════════════════════════════ -->
+            <Region styleClass="menu-divider"/>
+            <Label text="DONNÉES SATELLITE" styleClass="section-title"/>
+
+            <Button fx:id="btnSatellite" styleClass="sidebar-menu-item"
+                    onAction="#goToSatellite" maxWidth="Infinity">
+                <graphic>
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <Label text="🛰️" styleClass="menu-icon"/>
+                        <Label text="Imagerie Satellite" styleClass="menu-text"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Circle radius="5" styleClass="live-dot"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <!-- ══════════════════════════════════════════════════════════
+                 SECTION: IoT & MONITORING
+            ══════════════════════════════════════════════════════════ -->
+            <Region styleClass="menu-divider"/>
+            <Label text="IoT &amp; MONITORING" styleClass="section-title"/>
+            <!-- ══════════════════════════════════════════════════════════
+                 SECTION: COMMUNICATION
+            ══════════════════════════════════════════════════════════ -->
+            <Region styleClass="menu-divider"/>
+            <Label text="COMMUNICATION" styleClass="section-title"/>
+
+            <Button fx:id="btnMessagerie" styleClass="sidebar-menu-item"
+                    onAction="#goToMessagerie" maxWidth="Infinity">
+                <graphic>
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <Label text="💬" styleClass="menu-icon"/>
+                        <Label text="Messagerie" styleClass="menu-text"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label text="5" styleClass="notification-badge"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <!-- ══════════════════════════════════════════════════════════
+                 SECTION: OUTILS AVANCÉS
+            ══════════════════════════════════════════════════════════ -->
+            <Region styleClass="menu-divider"/>
+            <Label text="OUTILS AVANCÉS" styleClass="section-title"/>
+
+            <!-- ══════════════════════════════════════════════════════════
+                 SECTION: PARAMÈTRES
+            ══════════════════════════════════════════════════════════ -->
+            <Region styleClass="menu-divider"/>
+            <Label text="PARAMÈTRES" styleClass="section-title"/>
+
+            <Button fx:id="btnSecurity" styleClass="sidebar-menu-item"
+                    onAction="#goToSecurity" maxWidth="Infinity">
+                <graphic>
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <Label text="🔐" styleClass="menu-icon"/>
+                        <Label text="Sécurité" styleClass="menu-text"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <Button fx:id="btnLogout" styleClass="sidebar-logout"
+                    onAction="#handleLogout" maxWidth="Infinity">
+                <graphic>
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <Label text="🚪" styleClass="menu-icon"/>
+                        <Label text="Déconnexion" styleClass="menu-text"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+        </VBox>
+    </ScrollPane>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         FOOTER - BRANDING & STATUS
+    ═══════════════════════════════════════════════════════════════════ -->
+    <VBox styleClass="sidebar-footer" spacing="8" alignment="CENTER">
+        <HBox alignment="CENTER" spacing="8">
+            <Circle radius="5" styleClass="status-online"/>
+            <Label text="Système opérationnel" styleClass="status-text"/>
+        </HBox>
+        <HBox alignment="CENTER" spacing="6">
+            <Label text="🏦" style="-fx-font-size: 10px;"/>
+            <Label text="AgriFund Banking v2.0" styleClass="version-text"/>
+        </HBox>
+    </VBox>
+
+</VBox>

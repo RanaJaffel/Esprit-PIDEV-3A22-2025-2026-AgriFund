@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<?import java.lang.String?>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.agrifund.controller.agriculteur.AgriculteurProfileController"
+            stylesheets="@../../css/styles.css">
+    <left>
+        <fx:include source="agriculteur-sidebar.fxml"/>
+    </left>
+    <!-- MAIN CONTENT -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+            <VBox styleClass="content-area" spacing="30">
+                <!-- Header -->
+                <HBox alignment="CENTER">
+                    <VBox HBox.hgrow="ALWAYS">
+                        <Label text="Mon Profil" styleClass="page-title"/>
+                        <Label text="Gérer vos informations personnelles et de votre ferme" styleClass="page-subtitle"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Alert Box -->
+                <HBox fx:id="alertBox" styleClass="alert" visible="false" managed="false">
+                    <Label fx:id="alertMessage"/>
+                </HBox>
+
+                <!-- Profile Card -->
+                <HBox spacing="30">
+                    <!-- Left: Photo -->
+                    <VBox styleClass="card" alignment="CENTER" spacing="20" prefWidth="300">
+                        <ImageView fx:id="profilePhoto" fitWidth="150" fitHeight="150"/>
+                        <Label fx:id="userFullName" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+                        <HBox fx:id="verificationBadge" alignment="CENTER">
+                            <!-- Rempli dynamiquement -->
+                        </HBox>
+
+                        <VBox spacing="10" style="-fx-padding: 20 0 0 0;">
+                            <Button text="📷 Changer la photo" styleClass="btn, btn-secondary"
+                                    onAction="#changePhoto" maxWidth="Infinity"/>
+                            <Button text="🗑️ Supprimer la photo" styleClass="btn"
+                                    style="-fx-background-color: transparent; -fx-text-fill: #dc3545;"
+                                    onAction="#deletePhoto" maxWidth="Infinity"/>
+                        </VBox>
+                    </VBox>
+
+                    <!-- Right: Form -->
+                    <VBox styleClass="card" HBox.hgrow="ALWAYS" spacing="20">
+                        <Label text="Informations personnelles" styleClass="card-header"/>
+
+                        <HBox spacing="20">
+                            <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                                <Label text="Nom" styleClass="form-label"/>
+                                <TextField fx:id="nomField" styleClass="form-control"/>
+                            </VBox>
+                            <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                                <Label text="Prénom" styleClass="form-label"/>
+                                <TextField fx:id="prenomField" styleClass="form-control"/>
+                            </VBox>
+                        </HBox>
+
+                        <HBox spacing="20">
+                            <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                                <Label text="Email" styleClass="form-label"/>
+                                <TextField fx:id="emailField" styleClass="form-control"/>
+                            </VBox>
+                            <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                                <Label text="Téléphone" styleClass="form-label"/>
+                                <TextField fx:id="telField" styleClass="form-control" promptText="+216 XX XXX XXX"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </HBox>
+
+                <!-- Farm Info Card -->
+                <VBox styleClass="card" spacing="20">
+                    <Label text="🌾 Informations de la ferme" styleClass="card-header"/>
+
+                    <VBox styleClass="form-group" spacing="8">
+                        <Label text="Adresse de la ferme" styleClass="form-label"/>
+                        <TextField fx:id="adresseFermeField" styleClass="form-control" promptText="Adresse complète"/>
+                    </VBox>
+
+                    <HBox spacing="20">
+                        <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="Superficie (hectares)" styleClass="form-label"/>
+                            <TextField fx:id="superficieField" styleClass="form-control" promptText="Ex: 10.5"/>
+                        </VBox>
+                        <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="Type de culture" styleClass="form-label"/>
+                            <ComboBox fx:id="typeCultureCombo" styleClass="combo-box" maxWidth="Infinity">
+                                <items>
+                                    <javafx.collections.FXCollections fx:factory="observableArrayList">
+                                        <String fx:value="Céréales"/>
+                                        <String fx:value="Maraîchage"/>
+                                        <String fx:value="Arboriculture"/>
+                                        <String fx:value="Oléiculture"/>
+                                        <String fx:value="Viticulture"/>
+                                        <String fx:value="Élevage"/>
+                                        <String fx:value="Polyculture"/>
+                                        <String fx:value="Autre"/>
+                                    </javafx.collections.FXCollections>
+                                </items>
+                            </ComboBox>
+                        </VBox>
+                    </HBox>
+
+                    <HBox spacing="15" alignment="CENTER_RIGHT">
+                        <Button text="Annuler" styleClass="btn, btn-secondary" onAction="#cancelChanges"/>
+                        <Button text="💾 Sauvegarder" styleClass="btn, btn-primary" onAction="#saveProfile"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Change Password Card -->
+                <VBox styleClass="card" spacing="20">
+                    <Label text="🔐 Changer le mot de passe" styleClass="card-header"/>
+
+                    <HBox spacing="20">
+                        <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="Mot de passe actuel" styleClass="form-label"/>
+                            <PasswordField fx:id="currentPassword" styleClass="form-control"/>
+                        </VBox>
+                        <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="Nouveau mot de passe" styleClass="form-label"/>
+                            <PasswordField fx:id="newPassword" styleClass="form-control"/>
+                        </VBox>
+                        <VBox styleClass="form-group" spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="Confirmer" styleClass="form-label"/>
+                            <PasswordField fx:id="confirmPassword" styleClass="form-control"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox alignment="CENTER_RIGHT">
+                        <Button text="🔐 Changer le mot de passe" styleClass="btn, btn-accent" onAction="#changePassword"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Account Status Card -->
+                <VBox styleClass="card" spacing="15">
+                    <Label text="📋 Statut du compte" styleClass="card-header"/>
+
+                    <HBox spacing="50">
+                        <VBox spacing="5">
+                            <Label text="Date d'inscription" style="-fx-text-fill: #848A86;"/>
+                            <Label fx:id="dateInscription" style="-fx-font-weight: bold;-fx-text-fill: #0a371d;"/>
+                        </VBox>
+                        <VBox spacing="5">
+                            <Label text="Statut" style="-fx-text-fill: #848A86;"/>
+                            <Label fx:id="statusLabel" style="-fx-font-weight: bold;-fx-text-fill: #0a371d;"/>
+                        </VBox>
+                        <VBox spacing="5">
+                            <Label text="Vérification" style="-fx-text-fill: #848A86;"/>
+                            <HBox fx:id="verificationStatus" spacing="5">
+                                <!-- Rempli dynamiquement -->
+                            </HBox>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

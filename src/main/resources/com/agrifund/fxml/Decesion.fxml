@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.agrifund.controller.DecesionController"
+            prefWidth="900"
+            prefHeight="750"
+            styleClass="root"
+            stylesheets="@decesion.css">
+
+    <!-- En-tête -->
+    <top>
+        <HBox styleClass="header">
+            <Label styleClass="title" text="Gestion Agricole Pro - Décision Financière"/>
+        </HBox>
+    </top>
+
+    <!-- Contenu principal -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+            <VBox spacing="20" styleClass="main-content">
+                <padding>
+                    <Insets top="30" right="30" bottom="30" left="30"/>
+                </padding>
+
+                <!-- Section Formulaire -->
+                <VBox spacing="20" styleClass="form-section">
+                    <Label text="INFORMATIONS DE LA DÉCISION" styleClass="section-title"/>
+
+                    <GridPane hgap="20" vgap="20" styleClass="form-grid">
+                        <padding>
+                            <Insets top="20" right="20" bottom="20" left="20"/>
+                        </padding>
+
+                        <!-- Ligne 1 (masquée) -->
+                        <Label text="ID Décision :" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label" visible="false"/>
+                        <TextField fx:id="tfIdDecision" editable="false"
+                                   GridPane.rowIndex="0" GridPane.columnIndex="1"
+                                   prefWidth="350" styleClass="text-field-readonly" visible="false"/>
+
+                        <!-- Ligne 2 -->
+                        <Label text="ID Évaluation :" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+                        <ComboBox fx:id="cbIdEvaluation"
+                                  promptText="Sélectionner une évaluation"
+                                  GridPane.rowIndex="1" GridPane.columnIndex="1"
+                                  prefWidth="350" styleClass="combo-box"/>
+
+                        <!-- Ligne 3 -->
+                        <Label text="Statut :" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
+                        <ComboBox fx:id="cbStatut"
+                                  promptText="Sélectionner un statut"
+                                  GridPane.rowIndex="2" GridPane.columnIndex="1"
+                                  prefWidth="350" styleClass="combo-box"/>
+
+                        <!-- Ligne 4 -->
+                        <Label text="Date de la Décision :" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label"/>
+                        <DatePicker fx:id="dpDateDecision"
+                                    GridPane.rowIndex="3" GridPane.columnIndex="1"
+                                    prefWidth="350" promptText="Sélectionner une date" styleClass="date-picker"/>
+
+                        <!-- Ligne 5 - Justification sur 2 colonnes -->
+                        <Label text="Justification :" GridPane.rowIndex="4" GridPane.columnIndex="0"
+                               GridPane.valignment="TOP" styleClass="form-label"/>
+                        <TextArea fx:id="taJustification"
+                                  prefHeight="200"
+                                  prefWidth="350"
+                                  wrapText="true"
+                                  promptText="Entrez la justification de la décision..."
+                                  GridPane.rowIndex="4" GridPane.columnIndex="1" styleClass="text-area"/>
+
+                        <!-- Ligne 6 - Boutons -->
+                        <HBox spacing="15" GridPane.rowIndex="5" GridPane.columnSpan="2" alignment="CENTER">
+                            <padding>
+                                <Insets top="20"/>
+                            </padding>
+                            <Button text="Annuler" styleClass="button-secondary" onAction="#handleCancel" prefWidth="150"/>
+                            <Button text="Enregistrer" styleClass="button-primary" onAction="#handleSave" prefWidth="150"/>
+                            <Button text="Effacer" styleClass="button-accent" onAction="#handleClear" prefWidth="150"/>
+                        </HBox>
+                    </GridPane>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <!-- Pied de page -->
+    <bottom>
+        <HBox styleClass="footer" alignment="CENTER_LEFT" spacing="20">
+            <Label styleClass="signature" text="💚"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lblStatus" styleClass="status-label" text="Prêt"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label styleClass="signature" text="Développé par SawSaw"/>
+        </HBox>
+    </bottom>
+</BorderPane>

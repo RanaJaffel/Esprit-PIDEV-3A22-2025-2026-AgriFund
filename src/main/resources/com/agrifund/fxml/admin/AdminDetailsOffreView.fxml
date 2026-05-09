@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.effect.*?>
+
+<VBox spacing="0"
+      style="-fx-background-color: #FFFFFF;"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.agrifund.controller.admin.AdminDetailsOffreController">
+
+    <!-- ========== CUSTOM TITLE BAR ========== -->
+    <HBox fx:id="titleBar" alignment="CENTER_LEFT" spacing="10"
+          style="-fx-background-color: linear-gradient(to right, #1a237e, #283593, #1a237e);
+                 -fx-padding: 10 15;"
+          onMousePressed="#handleTitleBarPressed"
+          onMouseDragged="#handleTitleBarDragged">
+
+        <Label text="🛡️" style="-fx-font-size: 18;"/>
+        <Label fx:id="lblWindowTitle" text="Détails de l'Offre"
+               style="-fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold;"/>
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <Button text="─" onAction="#handleMinimize"
+                style="-fx-background-color: transparent; -fx-text-fill: white;
+                       -fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12;
+                       -fx-cursor: hand; -fx-background-radius: 3;"
+                onMouseEntered="#onControlButtonHover" onMouseExited="#onControlButtonExit"/>
+
+        <Button text="□" onAction="#handleMaximize"
+                style="-fx-background-color: transparent; -fx-text-fill: white;
+                       -fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12;
+                       -fx-cursor: hand; -fx-background-radius: 3;"
+                onMouseEntered="#onControlButtonHover" onMouseExited="#onControlButtonExit"/>
+
+        <Button text="✕" onAction="#handleFermer"
+                style="-fx-background-color: transparent; -fx-text-fill: white;
+                       -fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12;
+                       -fx-cursor: hand; -fx-background-radius: 3;"
+                onMouseEntered="#onCloseButtonHover" onMouseExited="#onCloseButtonExit"/>
+    </HBox>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS"
+                style="-fx-background-color: transparent; -fx-background: transparent;">
+
+        <VBox spacing="25"
+              style="-fx-padding: 30; -fx-background-color: linear-gradient(to bottom, #FFFFFF, #e8eaf6, #c5cae9);">
+
+            <!-- HEADER -->
+            <VBox alignment="CENTER" spacing="10"
+                  style="-fx-background-color: linear-gradient(to right, #2E7D32, #388E3C, #2E7D32);
+                         -fx-padding: 25; -fx-background-radius: 20;">
+                <effect>
+                    <DropShadow color="#1B5E20" offsetY="5" radius="15"/>
+                </effect>
+
+                <Label text="🎁 DÉTAILS DE L'OFFRE"
+                       style="-fx-text-fill: #FFFFFF; -fx-font-size: 22; -fx-font-weight: bold;"/>
+                <Label fx:id="lblNomOffre" text="Nom de l'offre"
+                       style="-fx-text-fill: #C8E6C9; -fx-font-size: 18; -fx-font-weight: bold;"/>
+            </VBox>
+
+            <!-- INFORMATIONS OFFRE -->
+            <VBox spacing="20" style="-fx-background-color: #FFFFFF; -fx-padding: 25; -fx-background-radius: 15;
+                                      -fx-border-color: #2E7D32; -fx-border-width: 2; -fx-border-radius: 15;">
+                <effect>
+                    <DropShadow color="#4CAF50" offsetY="5" radius="12"/>
+                </effect>
+
+                <Label text="📋 INFORMATIONS DE L'OFFRE" style="-fx-text-fill: #2E7D32; -fx-font-size: 16; -fx-font-weight: bold;"/>
+                <Separator style="-fx-background-color: #C8E6C9;"/>
+
+                <HBox spacing="20">
+                    <VBox spacing="8" HBox.hgrow="ALWAYS"
+                          style="-fx-background-color: #E8F5E9; -fx-padding: 18; -fx-background-radius: 12;">
+                        <Label text="🆔 Identifiant" style="-fx-text-fill: #2E7D32; -fx-font-size: 12; -fx-font-weight: bold;"/>
+                        <Label fx:id="lblId" text="#0" style="-fx-text-fill: #1B5E20; -fx-font-size: 26; -fx-font-weight: bold;"/>
+                    </VBox>
+
+                    <VBox spacing="8" HBox.hgrow="ALWAYS" alignment="CENTER"
+                          style="-fx-background-color: #f5f5f5; -fx-padding: 18; -fx-background-radius: 12;">
+                        <Label text="📊 Statut" style="-fx-text-fill: #666; -fx-font-size: 12; -fx-font-weight: bold;"/>
+                        <Label fx:id="lblStatut" text="Active" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                    </VBox>
+                </HBox>
+
+                <!-- PRODUIT ASSOCIÉ -->
+                <VBox spacing="10"
+                      style="-fx-background-color: #FFF8E1; -fx-padding: 18; -fx-background-radius: 12;
+                             -fx-border-color: #FFA000; -fx-border-width: 2; -fx-border-radius: 12;">
+                    <Label text="📦 PRODUIT ASSOCIÉ" style="-fx-text-fill: #E65100; -fx-font-size: 14; -fx-font-weight: bold;"/>
+                    <HBox spacing="20">
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <Label text="Nom" style="-fx-text-fill: #E65100; -fx-font-size: 10;"/>
+                            <Label fx:id="lblProduitNom" text="-" style="-fx-text-fill: #BF360C; -fx-font-size: 14; -fx-font-weight: bold;"/>
+                        </VBox>
+                        <VBox spacing="5">
+                            <Label text="Type" style="-fx-text-fill: #E65100; -fx-font-size: 10;"/>
+                            <Label fx:id="lblProduitType" text="-" style="-fx-text-fill: #BF360C; -fx-font-size: 14;"/>
+                        </VBox>
+                        <VBox spacing="5">
+                            <Label text="Taux" style="-fx-text-fill: #E65100; -fx-font-size: 10;"/>
+                            <Label fx:id="lblProduitTaux" text="-" style="-fx-text-fill: #BF360C; -fx-font-size: 14; -fx-font-weight: bold;"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <!-- CONDITIONS -->
+                <VBox spacing="10">
+                    <Label text="📜 Conditions de l'offre" style="-fx-text-fill: #2E7D32; -fx-font-size: 13; -fx-font-weight: bold;"/>
+                    <TextArea fx:id="txtConditions" wrapText="true" editable="false" prefHeight="100"
+                              style="-fx-background-color: #f5f5f5; -fx-border-color: #4CAF50;
+                                     -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10;
+                                     -fx-font-size: 13; -fx-padding: 10;"/>
+                </VBox>
+            </VBox>
+
+            <!-- SECTION BANQUE -->
+            <VBox fx:id="sectionBanque" spacing="15" style="-fx-background-color: #FFFFFF; -fx-padding: 25; -fx-background-radius: 15;
+                                      -fx-border-color: #7B1FA2; -fx-border-width: 2; -fx-border-radius: 15;">
+                <effect>
+                    <DropShadow color="#7B1FA2" offsetY="5" radius="12"/>
+                </effect>
+
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="🏦" style="-fx-font-size: 24;"/>
+                    <Label text="BANQUE PROPRIÉTAIRE" style="-fx-text-fill: #7B1FA2; -fx-font-size: 16; -fx-font-weight: bold;"/>
+                </HBox>
+                <Separator style="-fx-background-color: #E1BEE7;"/>
+
+                <HBox spacing="20">
+                    <VBox spacing="8" HBox.hgrow="ALWAYS"
+                          style="-fx-background-color: #f3e5f5; -fx-padding: 15; -fx-background-radius: 10;">
+                        <Label text="Nom de la Banque" style="-fx-text-fill: #7B1FA2; -fx-font-size: 11; -fx-font-weight: bold;"/>
+                        <Label fx:id="lblBanqueNom" text="-" style="-fx-text-fill: #4A148C; -fx-font-size: 16; -fx-font-weight: bold;"/>
+                    </VBox>
+
+                    <VBox spacing="8" HBox.hgrow="ALWAYS"
+                          style="-fx-background-color: #f3e5f5; -fx-padding: 15; -fx-background-radius: 10;">
+                        <Label text="Code Banque" style="-fx-text-fill: #7B1FA2; -fx-font-size: 11; -fx-font-weight: bold;"/>
+                        <Label fx:id="lblBanqueCode" text="-" style="-fx-text-fill: #4A148C; -fx-font-size: 16; -fx-font-weight: bold;"/>
+                    </VBox>
+                </HBox>
+
+                <HBox spacing="20">
+                    <VBox spacing="8" HBox.hgrow="ALWAYS"
+                          style="-fx-background-color: #f3e5f5; -fx-padding: 15; -fx-background-radius: 10;">
+                        <Label text="Représentant Légal" style="-fx-text-fill: #7B1FA2; -fx-font-size: 11; -fx-font-weight: bold;"/>
+                        <Label fx:id="lblBanqueRepresentant" text="-" style="-fx-text-fill: #4A148C; -fx-font-size: 14;"/>
+                    </VBox>
+
+                    <VBox spacing="8" HBox.hgrow="ALWAYS"
+                          style="-fx-background-color: #f3e5f5; -fx-padding: 15; -fx-background-radius: 10;">
+                        <Label text="Siège" style="-fx-text-fill: #7B1FA2; -fx-font-size: 11; -fx-font-weight: bold;"/>
+                        <Label fx:id="lblBanqueSiege" text="-" style="-fx-text-fill: #4A148C; -fx-font-size: 14;"/>
+                    </VBox>
+                </HBox>
+
+                <HBox spacing="20">
+                    <VBox spacing="8" HBox.hgrow="ALWAYS"
+                          style="-fx-background-color: #f3e5f5; -fx-padding: 15; -fx-background-radius: 10;">
+                        <Label text="Site Web" style="-fx-text-fill: #7B1FA2; -fx-font-size: 11; -fx-font-weight: bold;"/>
+                        <Label fx:id="lblBanqueSiteWeb" text="-" style="-fx-text-fill: #4A148C; -fx-font-size: 14;"/>
+                    </VBox>
+
+                    <VBox spacing="8" HBox.hgrow="ALWAYS"
+                          style="-fx-background-color: #f3e5f5; -fx-padding: 15; -fx-background-radius: 10;">
+                        <Label text="Statut du Compte" style="-fx-text-fill: #7B1FA2; -fx-font-size: 11; -fx-font-weight: bold;"/>
+                        <Label fx:id="lblBanqueStatut" text="-" style="-fx-text-fill: #4A148C; -fx-font-size: 14; -fx-font-weight: bold;"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <!-- BOUTONS -->
+            <HBox spacing="20" alignment="CENTER">
+                <Button text="📥 TÉLÉCHARGER PDF" onAction="#handleTelechargerPDF"
+                        prefWidth="200" prefHeight="50"
+                        style="-fx-background-color: linear-gradient(to right, #7E57C2, #5E35B1);
+                               -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14;
+                               -fx-background-radius: 25; -fx-cursor: hand;">
+                    <effect>
+                        <DropShadow color="#4527A0" offsetY="5" radius="12"/>
+                    </effect>
+                </Button>
+
+                <Button text="FERMER" onAction="#handleFermer"
+                        prefWidth="150" prefHeight="50"
+                        style="-fx-background-color: transparent;
+                               -fx-text-fill: #1a237e; -fx-font-weight: bold; -fx-font-size: 14;
+                               -fx-border-color: #1a237e; -fx-border-width: 2;
+                               -fx-background-radius: 25; -fx-border-radius: 25; -fx-cursor: hand;">
+                </Button>
+            </HBox>
+
+        </VBox>
+    </ScrollPane>
+</VBox>

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.agrifund.controller.banque.BanqueDashboardController"
+            stylesheets="@../../css/styles.css">
+    <left>
+        <fx:include source="banque-sidebar.fxml"/>
+    </left>
+    <!-- MAIN CONTENT -->
+    <center>
+        <VBox styleClass="content-area" spacing="0">
+            <!-- Top Bar -->
+            <HBox alignment="CENTER" style="-fx-padding: 0 0 30 0;">
+                <VBox HBox.hgrow="ALWAYS">
+                    <Label text="Tableau de bord" styleClass="page-title"/>
+                    <Label fx:id="welcomeLabel" text="Bienvenue sur votre espace banque" styleClass="page-subtitle"/>
+                </VBox>
+
+                <HBox spacing="15" alignment="CENTER_RIGHT">
+                    <!-- Notifications -->
+                    <StackPane>
+                        <Button text="🔔" styleClass="btn, btn-icon" style="-fx-background-color: white;"/>
+                    </StackPane>
+
+                    <!-- Messages -->
+                    <StackPane>
+                        <Button text="💬" styleClass="btn, btn-icon" style="-fx-background-color: white;"
+                                onAction="#goToMessagerie"/>
+                        <Label fx:id="unreadBadge" text="0" styleClass="conversation-unread-badge"
+                               StackPane.alignment="TOP_RIGHT" translateX="5" translateY="-5" visible="false"/>
+                    </StackPane>
+
+                    <!-- User -->
+                    <HBox spacing="10" alignment="CENTER" style="-fx-background-color: white; -fx-background-radius: 30; -fx-padding: 8 15;">
+                        <ImageView fx:id="topBarAvatar" fitWidth="35" fitHeight="35"/>
+                        <Label fx:id="topBarUserName" text=""/>
+                    </HBox>
+                </HBox>
+            </HBox>
+
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
+                <VBox spacing="30">
+
+                    <!-- Alert si compte non vérifié -->
+                    <HBox fx:id="verificationAlert" styleClass="alert, alert-warning" spacing="15" alignment="CENTER_LEFT"
+                          visible="false" managed="false">
+                        <Label text="⚠️" style="-fx-font-size: 24px;"/>
+                        <VBox HBox.hgrow="ALWAYS">
+                            <Label text="Compte en attente de vérification" style="-fx-font-weight: bold; -fx-text-fill: #856404;"/>
+                            <Label text="Votre compte est en cours de vérification par un administrateur. Certaines fonctionnalités peuvent être limitées."
+                                   style="-fx-text-fill: #856404;" wrapText="true"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Stats Cards -->
+                    <HBox spacing="20">
+                        <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="10"
+                              style="-fx-background-color: linear-gradient(to right, #E1B323, #c9a11f);">
+                            <HBox alignment="CENTER">
+                                <VBox HBox.hgrow="ALWAYS">
+                                    <Label fx:id="documentsCount" text="0" styleClass="stat-value" style="-fx-text-fill: #060806;"/>
+                                    <Label text="Documents" styleClass="stat-label" style="-fx-text-fill: rgba(0,0,0,0.7);"/>
+                                </VBox>
+                                <Label text="📄" styleClass="stat-icon" style="-fx-text-fill: rgba(0,0,0,0.2);"/>
+                            </HBox>
+                            <Label fx:id="documentsStatus" text="0 validé(s)" style="-fx-text-fill: rgba(0,0,0,0.6);"/>
+                        </VBox>
+
+                        <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="10"
+                              style="-fx-background-color: linear-gradient(to right, #089647, #076A39);">
+                            <HBox alignment="CENTER">
+                                <VBox HBox.hgrow="ALWAYS">
+                                    <Label fx:id="messagesCount" text="0" styleClass="stat-value"/>
+                                    <Label text="Messages" styleClass="stat-label"/>
+                                </VBox>
+                                <Label text="💬" styleClass="stat-icon"/>
+                            </HBox>
+                            <Label text="Non lus" style="-fx-text-fill: rgba(255,255,255,0.8);"/>
+                        </VBox>
+
+                        <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" spacing="10"
+                              style="-fx-background-color: linear-gradient(to right, #476C1A, #133D03);">
+                            <HBox alignment="CENTER">
+                                <VBox HBox.hgrow="ALWAYS">
+                                    <Label fx:id="agriculteurCount" text="0" styleClass="stat-value"/>
+                                    <Label text="Agriculteurs" styleClass="stat-label"/>
+                                </VBox>
+                                <Label text="🌾" styleClass="stat-icon"/>
+                            </HBox>
+                            <Label text="sur la plateforme" style="-fx-text-fill: rgba(255,255,255,0.8);"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Quick Actions & Profile Summary -->
+                    <HBox spacing="20">
+                        <!-- Quick Actions -->
+                        <VBox styleClass="card" HBox.hgrow="ALWAYS" spacing="20">
+                            <Label text="Actions rapides" styleClass="card-header"/>
+
+                            <HBox spacing="15">
+                                <Button text="📄 Mes documents" styleClass="btn, btn-accent" onAction="#goToDocuments"/>
+                                <Button text="🏦 Modifier profil" styleClass="btn, btn-secondary" onAction="#goToProfile"/>
+                                <Button text="💬 Messagerie" styleClass="btn, btn-primary" onAction="#goToMessagerie"/>
+                            </HBox>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Profile Summary & Recent Activity -->
+                    <HBox spacing="20">
+                        <!-- Profile Summary -->
+                        <VBox styleClass="card" prefWidth="450" spacing="15">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="🏦 Profil de la banque" styleClass="card-header" HBox.hgrow="ALWAYS"/>
+                                <Button text="Modifier →" styleClass="btn, btn-small, btn-secondary" onAction="#goToProfile"/>
+                            </HBox>
+
+                            <VBox spacing="12">
+                                <HBox spacing="15">
+                                    <ImageView fx:id="profilePhoto" fitWidth="80" fitHeight="80"/>
+                                    <VBox spacing="5">
+                                        <HBox spacing="10" alignment="CENTER_LEFT">
+                                            <Label fx:id="profileName" text="" style="-fx-font-size: 18px; -fx-font-weight: bold;-fx-text-fill: #E1B323;"/>
+                                            <Label fx:id="profileCode" text="" style="-fx-text-fill: #E1B323; -fx-font-weight: bold;"/>
+                                        </HBox>
+                                        <Label fx:id="profileEmail" text="" style="-fx-text-fill: #848A86;"/>
+                                        <Label fx:id="profileTel" text="" style="-fx-text-fill: #848A86;"/>
+                                    </VBox>
+                                </HBox>
+
+                                <Separator/>
+
+                                <VBox spacing="8">
+                                    <HBox spacing="10">
+                                        <Label text="👔" style="-fx-font-size: 16px;"/>
+                                        <Label text="Représentant:" style="-fx-text-fill: #848A86;"/>
+                                        <Label fx:id="profileRepresentant" text="" style="-fx-text-fill: #0a371d;" />
+                                    </HBox>
+                                    <HBox spacing="10">
+                                        <Label text="🏛️" style="-fx-font-size: 16px;"/>
+                                        <Label fx:id="profileSiege" text="" wrapText="true" style="-fx-text-fill: #0a371d;"/>
+                                    </HBox>
+                                    <HBox spacing="10">
+                                        <Label text="🌐" style="-fx-font-size: 16px;"/>
+                                        <Label fx:id="profileSiteWeb" text="" style="-fx-text-fill: #089647;"/>
+                                    </HBox>
+                                </VBox>
+                            </VBox>
+                        </VBox>
+
+                        <!-- Recent Documents -->
+                        <VBox styleClass="card" HBox.hgrow="ALWAYS" spacing="15">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="📄 Documents récents" styleClass="card-header" HBox.hgrow="ALWAYS"/>
+                                <Button text="Voir tout →" styleClass="btn, btn-small, btn-secondary" onAction="#goToDocuments"/>
+                            </HBox>
+
+                            <VBox fx:id="recentDocumentsContainer" spacing="10">
+                                <!-- Rempli dynamiquement -->
+                            </VBox>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Info Card -->
+                    <VBox styleClass="card" spacing="15" style="-fx-background-color: linear-gradient(to right, rgba(225,179,35,0.1), rgba(71,108,26,0.1));">
+                        <Label text="💡 Informations" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #476C1A;"/>
+
+                        <HBox spacing="30">
+                            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Label text="🔍" style="-fx-font-size: 20px;"/>
+                                    <Label text="Consultez les profils des agriculteurs vérifiés" style="-fx-text-fill: #876c00;"/>
+                                </HBox>
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Label text="💬" style="-fx-font-size: 20px;"/>
+                                    <Label text="Communiquez directement avec les agriculteurs" style="-fx-text-fill: #876c00;"/>
+                                </HBox>
+                            </VBox>
+                            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Label text="📄" style="-fx-font-size: 20px;"/>
+                                    <Label text="Téléchargez vos documents officiels" style="-fx-text-fill: #876c00;"/>
+                                </HBox>
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Label text="🔐" style="-fx-font-size: 20px;"/>
+                                    <Label text="Sécurisez votre compte avec la 2FA" style="-fx-text-fill: #876c00;"/>
+                                </HBox>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </center>
+
+</BorderPane>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.agrifund.controller.DecisionListController"
+            prefWidth="1450"
+            prefHeight="850"
+            styleClass="root"
+            stylesheets="@decisionlist.css">
+
+    <!-- ========== SIDEBAR GAUCHE ========== -->
+    <left>
+        <fx:include source="/com/agrifund/fxml/admin/admin-sidebar.fxml"/>
+    </left>
+
+    <!-- En-tête -->
+    <top>
+        <HBox styleClass="header" alignment="CENTER_LEFT" spacing="20">
+            <Label styleClass="title" text="Gestion Agricole Pro - Liste des Décisions"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="➕ Nouvelle Décision" styleClass="button-primary" onAction="#handleNewDecision"/>
+            <Button text="📊 Évaluations de Risque" styleClass="button-accent" onAction="#handleViewRisqueList"/>
+        </HBox>
+    </top>
+
+    <!-- Contenu principal -->
+    <center>
+        <VBox spacing="20" styleClass="main-content">
+            <padding>
+                <Insets top="30" right="30" bottom="30" left="30"/>
+            </padding>
+
+            <!-- Barre d'outils -->
+            <HBox spacing="15" alignment="CENTER_LEFT" styleClass="toolbar">
+                <padding>
+                    <Insets top="10" right="15" bottom="10" left="15"/>
+                </padding>
+                <Label text="🔍 Rechercher:" styleClass="form-label"/>
+                <TextField fx:id="tfSearch" promptText="Rechercher..." onKeyReleased="#handleSearch" prefWidth="300" styleClass="text-field"/>
+                <Button text="🔄 Rafraîchir" styleClass="button-accent" onAction="#handleRefresh"/>
+            </HBox>
+
+            <!-- Tableau des décisions -->
+            <TableView fx:id="tableDecisions" prefHeight="500" VBox.vgrow="ALWAYS" styleClass="table-view">
+                <columns>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="50" styleClass="table-column"/>
+                    <TableColumn fx:id="colStatut" text="Statut" prefWidth="100" styleClass="table-column"/>
+                    <TableColumn fx:id="colDate" text="Date" prefWidth="150" styleClass="table-column"/>
+                    <TableColumn fx:id="colJustification" text="Justification" prefWidth="300" styleClass="table-column"/>
+                    <TableColumn fx:id="colIdEvaluation" text="ID Évaluation" prefWidth="100" styleClass="table-column"/>
+                    <TableColumn fx:id="colActions" text="Actions" prefWidth="150" styleClass="table-column"/>
+                </columns>
+            </TableView>
+
+            <!-- Statistiques -->
+            <HBox spacing="20" alignment="CENTER_LEFT">
+                <VBox spacing="5" alignment="CENTER">
+                    <Label text="Total" styleClass="stats-label"/>
+                    <Label fx:id="lblTotal" text="0" styleClass="stats-value"/>
+                </VBox>
+                <Separator orientation="VERTICAL" styleClass="vertical-separator"/>
+                <VBox spacing="5" alignment="CENTER">
+                    <Label text="Approuvés" styleClass="stats-label"/>
+                    <Label fx:id="lblApprouves" text="0" styleClass="stats-value"/>
+                </VBox>
+                <Separator orientation="VERTICAL" styleClass="vertical-separator"/>
+                <VBox spacing="5" alignment="CENTER">
+                    <Label text="En attente" styleClass="stats-label"/>
+                    <Label fx:id="lblEnAttente" text="0" styleClass="stats-value"/>
+                </VBox>
+            </HBox>
+
+            <Label fx:id="lblStatus" styleClass="status-label" text="Prêt"/>
+        </VBox>
+    </center>
+
+</BorderPane>

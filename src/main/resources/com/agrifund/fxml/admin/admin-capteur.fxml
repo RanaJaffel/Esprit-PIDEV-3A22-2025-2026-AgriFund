@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.agrifund.controller.admin.AdminCapteurController"
+            prefWidth="1450"
+            prefHeight="850"
+            stylesheets="@../stylerane.css">
+
+    <!-- SIDEBAR ADMIN -->
+    <left>
+        <fx:include source="admin-sidebar.fxml"/>
+    </left>
+
+    <!-- CONTENU PRINCIPAL -->
+    <center>
+        <VBox spacing="0" styleClass="content-area">
+
+            <!-- En-tête -->
+            <VBox spacing="4" style="-fx-padding: 0 0 10 0;">
+                <Label text="📡  Tous les Capteurs (Administration)" styleClass="title"/>
+                <Label text="Consultation des capteurs de tous les agriculteurs"
+                       styleClass="subtitle"
+                       style="-fx-font-size:14px; -fx-text-fill:#848A86; -fx-padding:0;"/>
+            </VBox>
+
+            <Separator styleClass="separator" style="-fx-padding: 0 0 20 0;"/>
+
+            <!-- Statistiques -->
+            <HBox spacing="20" style="-fx-padding: 0 0 20 0;">
+                <VBox styleClass="stat-card" alignment="CENTER" spacing="5" style="-fx-padding:15 30; -fx-background-color:#E8F5E9; -fx-background-radius:10;">
+                    <Label text="📊 Total" style="-fx-font-size:12px; -fx-text-fill:#666;"/>
+                    <Label fx:id="lblTotal" text="0" style="-fx-font-size:24px; -fx-font-weight:bold; -fx-text-fill:#2E7D32;"/>
+                </VBox>
+                <VBox styleClass="stat-card" alignment="CENTER" spacing="5" style="-fx-padding:15 30; -fx-background-color:#E3F2FD; -fx-background-radius:10;">
+                    <Label text="✅ Actifs" style="-fx-font-size:12px; -fx-text-fill:#666;"/>
+                    <Label fx:id="lblActifs" text="0" style="-fx-font-size:24px; -fx-font-weight:bold; -fx-text-fill:#1565C0;"/>
+                </VBox>
+                <VBox styleClass="stat-card" alignment="CENTER" spacing="5" style="-fx-padding:15 30; -fx-background-color:#FFEBEE; -fx-background-radius:10;">
+                    <Label text="⚠️ Inactifs" style="-fx-font-size:12px; -fx-text-fill:#666;"/>
+                    <Label fx:id="lblInactifs" text="0" style="-fx-font-size:24px; -fx-font-weight:bold; -fx-text-fill:#C62828;"/>
+                </VBox>
+            </HBox>
+
+            <!-- Barre de recherche et actions -->
+            <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 0 0 15 0;">
+                <TextField fx:id="tfRecherche"
+                           promptText="🔍 Rechercher par type, localisation, projet ou agriculteur..."
+                           prefWidth="400"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="🔄 Rafraîchir" onAction="#rafraichir" styleClass="btn"/>
+                <Button text="📥 Exporter CSV" onAction="#exporterCSV" styleClass="btn, btn-secondary"/>
+            </HBox>
+
+            <!-- Table des capteurs -->
+            <VBox styleClass="panel" spacing="16" VBox.vgrow="ALWAYS">
+
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="📋" style="-fx-font-size:18px;"/>
+                    <Label text="Liste complète des capteurs" styleClass="section-title" style="-fx-padding:0;"/>
+                </HBox>
+
+                <Separator/>
+
+                <TableView fx:id="tableCapteur" styleClass="table-view" minHeight="400" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+                        <TableColumn fx:id="colType" text="Type" prefWidth="150"/>
+                        <TableColumn fx:id="colLocalisation" text="Localisation" prefWidth="180"/>
+                        <TableColumn fx:id="colStatut" text="Statut" prefWidth="100"/>
+                        <TableColumn fx:id="colProjet" text="Projet" prefWidth="150"/>
+                        <TableColumn fx:id="colAgriculteur" text="Agriculteur" prefWidth="180"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="Aucun capteur enregistré dans le système"
+                               style="-fx-text-fill:#848A86; -fx-font-style:italic; -fx-font-size:13px;"/>
+                    </placeholder>
+                </TableView>
+
+            </VBox>
+
+        </VBox>
+    </center>
+
+</BorderPane>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.agrifund.controller.admin.AdminBanquesController"
+            stylesheets="@../../css/styles.css">
+    <!-- SIDEBAR -->
+    <left>
+        <fx:include source="admin-sidebar.fxml"/>
+    </left>
+
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <VBox styleClass="content-area" spacing="0">
+            <!-- Top Bar -->
+            <HBox alignment="CENTER" style="-fx-padding: 0 0 30 0;">
+                <VBox HBox.hgrow="ALWAYS">
+                    <Label text="Gestion des Banques" styleClass="page-title"/>
+                    <Label text="Gérer et vérifier les comptes des institutions financières" styleClass="page-subtitle"/>
+                </VBox>
+
+                <HBox spacing="15" alignment="CENTER_RIGHT">
+                    <Label fx:id="statsLabel" text="0 banque(s)" style="-fx-text-fill: #848A86;"/>
+                </HBox>
+            </HBox>
+
+            <!-- Filter Tabs -->
+            <HBox spacing="10" style="-fx-padding: 0 0 20 0;">
+                <Button fx:id="btnAll" text="Toutes" styleClass="btn" onAction="#filterAll"
+                        style="-fx-background-color: #E1B323; -fx-text-fill: #060806;"/>
+                <Button fx:id="btnPending" text="⏳ En attente" styleClass="btn, btn-secondary" onAction="#filterPending"/>
+                <Button fx:id="btnVerified" text="✓ Vérifiées" styleClass="btn, btn-secondary" onAction="#filterVerified"/>
+                <Button fx:id="btnRejected" text="✗ Refusées" styleClass="btn, btn-secondary" onAction="#filterRejected"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <TextField fx:id="searchField" promptText="🔍 Rechercher..." styleClass="form-control"
+                           prefWidth="250" onKeyReleased="#handleSearch"/>
+                <Button text="🔄" styleClass="btn, btn-secondary" onAction="#refreshList"/>
+            </HBox>
+
+            <!-- Banques List -->
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
+                <VBox fx:id="banquesList" spacing="15">
+                    <!-- Rempli dynamiquement -->
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </center>
+
+</BorderPane>

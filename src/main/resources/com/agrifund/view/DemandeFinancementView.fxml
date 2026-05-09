@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" 
+            xmlns="http://javafx.com/javafx/17"
+            fx:controller="com.agrifund.controller.DemandeFinancementController"
+            style="-fx-background-color: #f5f5f5;">
+
+    <!-- HEADER -->
+    <top>
+        <VBox spacing="0">
+            <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-background-color: linear-gradient(to right, #076A39, #089647); -fx-padding: 25;">
+                <Button text="← Retour" 
+                        style="-fx-background-color: white; -fx-text-fill: #076A39; -fx-font-weight: bold; -fx-padding: 8 20; -fx-background-radius: 5; -fx-cursor: hand;"
+                        onAction="#handleRetour"/>
+                <VBox spacing="5">
+                    <Label text="Demande de Financement" style="-fx-text-fill: white; -fx-font-size: 24; -fx-font-weight: bold;"/>
+                    <Label text="Vous serez redirigé vers notre plateforme de gestion des utilisateurs" style="-fx-text-fill: #B2D944; -fx-font-size: 14;"/>
+                </VBox>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <VBox alignment="CENTER" spacing="30" style="-fx-padding: 50;">
+            
+            <!-- Integration Message -->
+            <VBox alignment="CENTER" spacing="20" style="-fx-background-color: white; -fx-padding: 40; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 15, 0, 0, 3); -fx-max-width: 700;">
+                
+                <!-- Icon/Title -->
+                <Label text="🔗" style="-fx-font-size: 60;"/>
+                <Label text="Intégration avec Système Externe" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #076A39;"/>
+                
+                <!-- Description -->
+                <VBox spacing="10" alignment="CENTER">
+                    <Label text="Pour soumettre une demande de financement," style="-fx-font-size: 14; -fx-text-fill: #555;"/>
+                    <Label text="vous serez redirigé vers notre plateforme de gestion des utilisateurs." style="-fx-font-size: 14; -fx-text-fill: #555;"/>
+                </VBox>
+                
+                <Separator prefWidth="300"/>
+                
+                <!-- Product Info Section -->
+                <VBox spacing="15" style="-fx-background-color: #E8F5E9; -fx-padding: 20; -fx-background-radius: 10;" fx:id="vboxProduitInfo">
+                    <Label text="📦 Produit Sélectionné" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #076A39;"/>
+                    <VBox spacing="8">
+                        <Label fx:id="lblNomProduit" text="Nom: -" style="-fx-font-size: 14; -fx-text-fill: #333;"/>
+                        <Label fx:id="lblTypeProduit" text="Type: -" style="-fx-font-size: 14; -fx-text-fill: #333;"/>
+                        <Label fx:id="lblTauxProduit" text="Taux: -" style="-fx-font-size: 14; -fx-text-fill: #333;"/>
+                        <Label fx:id="lblMontantProduit" text="Montant: -" style="-fx-font-size: 14; -fx-text-fill: #333;"/>
+                    </VBox>
+                </VBox>
+                
+                <!-- Configuration Section -->
+                <VBox spacing="15" alignment="CENTER" style="-fx-background-color: #FFF9C4; -fx-padding: 20; -fx-background-radius: 10;">
+                    <Label text="⚙️ Configuration de l'Intégration" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #F57F17;"/>
+                    <VBox spacing="8" alignment="CENTER_LEFT">
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="URL du système:" style="-fx-font-size: 12; -fx-text-fill: #666; -fx-min-width: 120;"/>
+                            <TextField fx:id="txtUrlSysteme" promptText="http://localhost:8080/demande" 
+                                      style="-fx-pref-width: 400; -fx-padding: 8; -fx-border-color: #F9A825; -fx-border-radius: 5; -fx-background-radius: 5;"/>
+                        </HBox>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="Méthode:" style="-fx-font-size: 12; -fx-text-fill: #666; -fx-min-width: 120;"/>
+                            <ComboBox fx:id="cmbMethode" promptText="Redirect" style="-fx-pref-width: 150;"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+                
+                <!-- Action Buttons -->
+                <HBox spacing="15" alignment="CENTER">
+                    <Button text="✖ Annuler" 
+                            style="-fx-background-color: #e0e0e0; -fx-text-fill: #333; -fx-font-size: 14; -fx-font-weight: bold; -fx-padding: 12 40; -fx-background-radius: 5; -fx-cursor: hand;"
+                            onAction="#handleRetour"/>
+                    
+                    <Button fx:id="btnRediriger" text="🔗 Rediriger vers Système Externe" 
+                            style="-fx-background-color: linear-gradient(to bottom, #089647, #076A39); -fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold; -fx-padding: 12 40; -fx-background-radius: 5; -fx-cursor: hand;"
+                            onAction="#handleRedirection"/>
+                </HBox>
+                
+                <!-- Status Label -->
+                <Label fx:id="lblStatut" text="" style="-fx-font-size: 12; -fx-text-fill: #666; -fx-font-style: italic;"/>
+                
+                <!-- Instructions -->
+                <VBox spacing="8" alignment="CENTER_LEFT" style="-fx-padding: 15; -fx-border-color: #B2D944; -fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5;">
+                    <Label text="💡 Instructions d'Intégration:" style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #076A39;"/>
+                    <Label text="1. Configurez l'URL de votre système externe ci-dessus" style="-fx-font-size: 11; -fx-text-fill: #555;"/>
+                    <Label text="2. Choisissez la méthode d'intégration (POST, GET ou Redirect)" style="-fx-font-size: 11; -fx-text-fill: #555;"/>
+                    <Label text="3. Les informations du produit seront transmises automatiquement" style="-fx-font-size: 11; -fx-text-fill: #555;"/>
+                    <Label text="4. Votre système externe gérera l'authentification et la création de l'utilisateur" style="-fx-font-size: 11; -fx-text-fill: #555;"/>
+                </VBox>
+                
+            </VBox>
+            
+        </VBox>
+    </center>
+
+</BorderPane>

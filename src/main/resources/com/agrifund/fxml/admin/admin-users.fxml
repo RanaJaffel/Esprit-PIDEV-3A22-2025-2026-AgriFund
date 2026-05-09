@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+
+<?import java.lang.String?>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.agrifund.controller.admin.AdminUsersController"
+            stylesheets="@../../css/styles.css">
+    <left>
+        <fx:include source="admin-sidebar.fxml"/>
+    </left>
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <VBox styleClass="content-area" spacing="0">
+            <!-- Top Bar -->
+            <HBox alignment="CENTER" style="-fx-padding: 0 0 30 0;">
+                <VBox HBox.hgrow="ALWAYS">
+                    <Label text="Gestion des Utilisateurs" styleClass="page-title"/>
+                    <Label text="Gérer tous les utilisateurs de la plateforme" styleClass="page-subtitle"/>
+                </VBox>
+
+                <HBox spacing="15" alignment="CENTER_RIGHT">
+                    <Button text="➕ Nouvel Admin" styleClass="btn, btn-primary" onAction="#showAddAdminDialog"/>
+                </HBox>
+            </HBox>
+
+            <!-- Search & Filter Bar -->
+            <HBox spacing="15" style="-fx-padding: 0 0 20 0;">
+                <TextField fx:id="searchField" promptText="🔍 Rechercher par nom, email..."
+                           styleClass="form-control" prefWidth="300" onKeyReleased="#handleSearch"/>
+
+                <ComboBox fx:id="filterType" promptText="Type" styleClass="combo-box" prefWidth="150">
+                    <items>
+                        <javafx.collections.FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Tous"/>
+                            <String fx:value="Admin"/>
+                            <String fx:value="Agriculteur"/>
+                            <String fx:value="Banque"/>
+                        </javafx.collections.FXCollections>
+                    </items>
+                </ComboBox>
+
+                <ComboBox fx:id="filterStatus" promptText="Statut" styleClass="combo-box" prefWidth="150">
+                    <items>
+                        <javafx.collections.FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Tous"/>
+                            <String fx:value="Vérifié"/>
+                            <String fx:value="En attente"/>
+                        </javafx.collections.FXCollections>
+                    </items>
+                </ComboBox>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Button text="🔄 Actualiser" styleClass="btn, btn-secondary" onAction="#refreshList"/>
+            </HBox>
+
+            <!-- Users Table -->
+            <VBox styleClass="card" VBox.vgrow="ALWAYS">
+                <TableView fx:id="usersTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colPhoto" text="" prefWidth="60">
+                            <!-- Photo cell factory définie dans le controller -->
+                        </TableColumn>
+                        <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+                        <TableColumn fx:id="colNom" text="Nom" prefWidth="150"/>
+                        <TableColumn fx:id="colPrenom" text="Prénom" prefWidth="150"/>
+                        <TableColumn fx:id="colEmail" text="Email" prefWidth="200"/>
+                        <TableColumn fx:id="colTel" text="Téléphone" prefWidth="120"/>
+                        <TableColumn fx:id="colType" text="Type" prefWidth="120"/>
+                        <TableColumn fx:id="colDate" text="Date inscription" prefWidth="120"/>
+                        <TableColumn fx:id="colActions" text="Actions" prefWidth="150"/>
+                    </columns>
+
+                    <placeholder>
+                        <Label text="Aucun utilisateur trouvé"/>
+                    </placeholder>
+                </TableView>
+
+                <!-- Pagination -->
+                <HBox alignment="CENTER" style="-fx-padding: 20 0 0 0;">
+                    <Pagination fx:id="pagination" maxPageIndicatorCount="5"/>
+                </HBox>
+            </VBox>
+
+        </VBox>
+    </center>
+
+</BorderPane>

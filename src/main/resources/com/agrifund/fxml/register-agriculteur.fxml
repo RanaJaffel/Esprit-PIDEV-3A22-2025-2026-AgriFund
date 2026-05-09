@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.agrifund.controller.RegisterAgriculteurController"
+           stylesheets="@../css/register-agriculteur.css"
+           prefWidth="1200" prefHeight="900">
+
+    <!-- Background avec gradient agricole -->
+    <Pane styleClass="gradient-background"/>
+
+    <!-- Formes décoratives agricoles -->
+    <Pane mouseTransparent="true">
+        <Circle layoutX="90" layoutY="130" radius="100" styleClass="floating-shape, shape-1"/>
+        <Circle layoutX="1110" layoutY="680" radius="140" styleClass="floating-shape, shape-2"/>
+        <Circle layoutX="160" layoutY="780" radius="80" styleClass="floating-shape, shape-3"/>
+        <Rectangle layoutX="1030" layoutY="90" width="90" height="90" arcWidth="25" arcHeight="25"
+                   styleClass="floating-shape, shape-4" rotate="45"/>
+        <Circle layoutX="980" layoutY="250" radius="50" styleClass="floating-shape, shape-5"/>
+        <Rectangle layoutX="80" layoutY="450" width="60" height="60" arcWidth="18" arcHeight="18"
+                   styleClass="floating-shape, shape-2" rotate="30"/>
+        <Circle layoutX="1150" layoutY="400" radius="35" styleClass="floating-shape, shape-1"/>
+    </Pane>
+
+    <BorderPane>
+        <!-- NAVBAR AGRICOLE -->
+        <top>
+            <HBox styleClass="navbar-modern" alignment="CENTER">
+                <padding>
+                    <Insets top="15" right="50" bottom="15" left="50"/>
+                </padding>
+
+                <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS" spacing="15">
+                    <StackPane styleClass="logo-container">
+                        <Label text="🌾" style="-fx-font-size: 28px;"/>
+                    </StackPane>
+                    <VBox alignment="CENTER_LEFT" style="-fx-cursor: hand;" onMouseClicked="#goToHome">
+                        <Label text="AgriFund" styleClass="navbar-brand-modern"/>
+                        <Label text="Financement Agricole" styleClass="navbar-subtitle"/>
+                    </VBox>
+                </HBox>
+
+                <HBox spacing="25" alignment="CENTER_RIGHT">
+                    <HBox styleClass="nav-pills" spacing="5">
+                        <Button text="🌱 Agriculteur" styleClass="nav-pill, nav-pill-active"/>
+                        <Button text="🏦 Banque" styleClass="nav-pill" onAction="#goToRegisterBanque"/>
+                    </HBox>
+                    <Button text="Se connecter" styleClass="btn-glass" onAction="#goToLogin"/>
+                </HBox>
+            </HBox>
+        </top>
+
+        <!-- MAIN CONTENT -->
+        <center>
+            <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="transparent-scroll">
+                <HBox alignment="CENTER" spacing="80">
+                    <padding>
+                        <Insets top="50" right="80" bottom="50" left="80"/>
+                    </padding>
+
+                    <!-- LEFT SIDE - Branding Agricole -->
+                    <VBox alignment="CENTER" spacing="35" prefWidth="480" styleClass="branding-section">
+
+                        <!-- Illustration agricole -->
+                        <StackPane styleClass="illustration-container">
+                            <VBox alignment="CENTER" spacing="15">
+                                <Label text="👨‍🌾" style="-fx-font-size: 90px;" styleClass="bounce-animation"/>
+                                <HBox spacing="10" alignment="CENTER">
+                                    <Label text="🌾" style="-fx-font-size: 35px;"/>
+                                    <Label text="🚜" style="-fx-font-size: 35px;"/>
+                                    <Label text="🌻" style="-fx-font-size: 35px;"/>
+                                </HBox>
+                            </VBox>
+                        </StackPane>
+
+                        <!-- Titres -->
+                        <VBox spacing="12" alignment="CENTER">
+                            <Label text="Rejoignez" styleClass="hero-title"/>
+                            <Label text="AgriFund" styleClass="hero-title-accent"/>
+                            <Label text="Accédez aux financements adaptés à votre exploitation agricole"
+                                   styleClass="hero-subtitle" wrapText="true" textAlignment="CENTER"
+                                   maxWidth="400"/>
+                        </VBox>
+
+                        <!-- Features agricoles -->
+                        <VBox spacing="18" styleClass="features-container">
+                            <HBox spacing="18" alignment="CENTER_LEFT" styleClass="feature-item">
+                                <StackPane styleClass="feature-icon-container">
+                                    <Label text="💰" style="-fx-font-size: 22px;"/>
+                                </StackPane>
+                                <VBox spacing="3">
+                                    <Label text="Accès aux Financements" styleClass="feature-title"/>
+                                    <Label text="Trouvez le crédit adapté à vos besoins" styleClass="feature-desc"/>
+                                </VBox>
+                            </HBox>
+
+                            <HBox spacing="18" alignment="CENTER_LEFT" styleClass="feature-item">
+                                <StackPane styleClass="feature-icon-container">
+                                    <Label text="📋" style="-fx-font-size: 22px;"/>
+                                </StackPane>
+                                <VBox spacing="3">
+                                    <Label text="Gestion Simplifiée" styleClass="feature-title"/>
+                                    <Label text="Gérez vos documents en ligne facilement" styleClass="feature-desc"/>
+                                </VBox>
+                            </HBox>
+
+                            <HBox spacing="18" alignment="CENTER_LEFT" styleClass="feature-item">
+                                <StackPane styleClass="feature-icon-container">
+                                    <Label text="📊" style="-fx-font-size: 22px;"/>
+                                </StackPane>
+                                <VBox spacing="3">
+                                    <Label text="Suivi en Temps Réel" styleClass="feature-title"/>
+                                    <Label text="Suivez vos demandes à tout moment" styleClass="feature-desc"/>
+                                </VBox>
+                            </HBox>
+
+                            <HBox spacing="18" alignment="CENTER_LEFT" styleClass="feature-item">
+                                <StackPane styleClass="feature-icon-container">
+                                    <Label text="💬" style="-fx-font-size: 22px;"/>
+                                </StackPane>
+                                <VBox spacing="3">
+                                    <Label text="Messagerie Intégrée" styleClass="feature-title"/>
+                                    <Label text="Communiquez directement avec les banques" styleClass="feature-desc"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Stats -->
+                        <HBox spacing="50" alignment="CENTER" styleClass="stats-container">
+                            <VBox alignment="CENTER" spacing="5">
+                                <Label text="12" styleClass="stat-number"/>
+                                <Label text="Banques" styleClass="stat-label"/>
+                            </VBox>
+                            <Separator orientation="VERTICAL" styleClass="stat-separator" prefHeight="50"/>
+                            <VBox alignment="CENTER" spacing="5">
+                                <Label text="500+" styleClass="stat-number"/>
+                                <Label text="Agriculteurs" styleClass="stat-label"/>
+                            </VBox>
+                            <Separator orientation="VERTICAL" styleClass="stat-separator" prefHeight="50"/>
+                            <VBox alignment="CENTER" spacing="5">
+                                <Label text="24h" styleClass="stat-number"/>
+                                <Label text="Réponse" styleClass="stat-label"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+
+                    <!-- RIGHT SIDE - Form Card -->
+                    <VBox fx:id="formCard" styleClass="form-card-modern" prefWidth="560" spacing="22">
+                        <padding>
+                            <Insets top="40" right="45" bottom="40" left="45"/>
+                        </padding>
+
+                        <!-- Header du formulaire -->
+                        <VBox spacing="8" alignment="CENTER">
+                            <HBox alignment="CENTER" spacing="10">
+                                <Label text="🌱" style="-fx-font-size: 28px;"/>
+                                <Label text="Inscription Agriculteur" styleClass="form-title"/>
+                            </HBox>
+                            <Label text="Créez votre compte et accédez aux financements" styleClass="form-subtitle"/>
+                        </VBox>
+
+                        <!-- Ligne décorative -->
+                        <HBox styleClass="accent-line" maxWidth="200" alignment="CENTER">
+                            <padding><Insets top="5" bottom="10"/></padding>
+                        </HBox>
+
+                        <!-- Alert Box -->
+                        <HBox fx:id="alertBox" styleClass="alert-modern, alert-error" visible="false" managed="false"
+                              alignment="CENTER_LEFT" spacing="12">
+                            <Label text="⚠️" style="-fx-font-size: 20px;"/>
+                            <Label fx:id="alertMessage" styleClass="alert-text" wrapText="true"/>
+                        </HBox>
+
+                        <!-- Success Box -->
+                        <HBox fx:id="successBox" styleClass="alert-modern, alert-success" visible="false" managed="false"
+                              alignment="CENTER_LEFT" spacing="12">
+                            <Label text="✅" style="-fx-font-size: 20px;"/>
+                            <Label fx:id="successMessage" styleClass="alert-text" wrapText="true"/>
+                        </HBox>
+
+                        <!-- Form Fields -->
+                        <VBox spacing="18">
+                            <!-- Nom + Prénom -->
+                            <HBox spacing="18">
+                                <VBox styleClass="input-group" spacing="8" HBox.hgrow="ALWAYS">
+                                    <Label text="Nom *" styleClass="input-label"/>
+                                    <HBox fx:id="nomContainer" styleClass="input-container">
+                                        <Label text="👤" styleClass="input-icon"/>
+                                        <TextField fx:id="nomField" styleClass="input-field"
+                                                   promptText="Votre nom" HBox.hgrow="ALWAYS"/>
+                                    </HBox>
+                                </VBox>
+                                <VBox styleClass="input-group" spacing="8" HBox.hgrow="ALWAYS">
+                                    <Label text="Prénom *" styleClass="input-label"/>
+                                    <HBox fx:id="prenomContainer" styleClass="input-container">
+                                        <Label text="👤" styleClass="input-icon"/>
+                                        <TextField fx:id="prenomField" styleClass="input-field"
+                                                   promptText="Votre prénom" HBox.hgrow="ALWAYS"/>
+                                    </HBox>
+                                </VBox>
+                            </HBox>
+
+                            <!-- Email -->
+                            <VBox styleClass="input-group" spacing="8">
+                                <Label text="Email *" styleClass="input-label"/>
+                                <HBox fx:id="emailContainer" styleClass="input-container">
+                                    <Label text="📧" styleClass="input-icon"/>
+                                    <TextField fx:id="emailField" styleClass="input-field"
+                                               promptText="votre@email.com" HBox.hgrow="ALWAYS"/>
+                                </HBox>
+                            </VBox>
+
+                            <!-- Passwords -->
+                            <HBox spacing="18">
+                                <VBox styleClass="input-group" spacing="8" HBox.hgrow="ALWAYS">
+                                    <Label text="Mot de passe *" styleClass="input-label"/>
+                                    <HBox fx:id="passwordContainer" styleClass="input-container">
+                                        <Label text="🔐" styleClass="input-icon"/>
+                                        <PasswordField fx:id="passwordField" styleClass="input-field"
+                                                       promptText="••••••••" HBox.hgrow="ALWAYS"/>
+                                    </HBox>
+                                    <HBox spacing="12" alignment="CENTER_LEFT">
+                                        <ProgressBar fx:id="passwordStrength" progress="0" prefWidth="130"
+                                                     styleClass="password-strength-bar"/>
+                                        <Label fx:id="passwordStrengthLabel" text="" styleClass="password-strength-label"/>
+                                    </HBox>
+                                </VBox>
+                                <VBox styleClass="input-group" spacing="8" HBox.hgrow="ALWAYS">
+                                    <Label text="Confirmer *" styleClass="input-label"/>
+                                    <HBox fx:id="confirmPasswordContainer" styleClass="input-container">
+                                        <Label text="🔐" styleClass="input-icon"/>
+                                        <PasswordField fx:id="confirmPasswordField" styleClass="input-field"
+                                                       promptText="••••••••" HBox.hgrow="ALWAYS"/>
+                                    </HBox>
+                                </VBox>
+                            </HBox>
+
+                            <!-- Téléphone -->
+                            <VBox styleClass="input-group" spacing="8">
+                                <Label text="Téléphone" styleClass="input-label"/>
+                                <HBox fx:id="telContainer" styleClass="input-container">
+                                    <Label text="📱" styleClass="input-icon"/>
+                                    <TextField fx:id="telField" styleClass="input-field"
+                                               promptText="+216 XX XXX XXX" HBox.hgrow="ALWAYS"/>
+                                </HBox>
+                                <Label fx:id="telErrorLabel" text="" styleClass="field-hint"
+                                       visible="false" managed="false"/>
+                            </VBox>
+
+                            <!-- Divider -->
+                            <HBox alignment="CENTER" styleClass="divider-container">
+                                <Separator HBox.hgrow="ALWAYS"/>
+                                <Label text="🌾 Votre Exploitation" styleClass="divider-text"/>
+                                <Separator HBox.hgrow="ALWAYS"/>
+                            </HBox>
+
+                            <!-- Adresse Ferme -->
+                            <VBox styleClass="input-group" spacing="8">
+                                <Label text="Adresse de la ferme *" styleClass="input-label"/>
+                                <HBox fx:id="adresseFermeContainer" styleClass="input-container">
+                                    <Label text="🏡" styleClass="input-icon"/>
+                                    <TextField fx:id="adresseFermeField" styleClass="input-field"
+                                               promptText="Adresse complète de votre ferme" HBox.hgrow="ALWAYS"/>
+                                </HBox>
+                            </VBox>
+
+                            <!-- Superficie + Type Culture -->
+                            <HBox spacing="18">
+                                <VBox styleClass="input-group" spacing="8" HBox.hgrow="ALWAYS">
+                                    <Label text="Superficie (hectares) *" styleClass="input-label"/>
+                                    <HBox fx:id="superficieContainer" styleClass="input-container">
+                                        <Label text="📐" styleClass="input-icon"/>
+                                        <TextField fx:id="superficieField" styleClass="input-field"
+                                                   promptText="Ex: 10.5" HBox.hgrow="ALWAYS"/>
+                                    </HBox>
+                                    <Label fx:id="superficieErrorLabel" text="" styleClass="field-hint"
+                                           visible="false" managed="false"/>
+                                </VBox>
+                                <VBox styleClass="input-group" spacing="8" HBox.hgrow="ALWAYS">
+                                    <Label text="Type de culture *" styleClass="input-label"/>
+                                    <HBox fx:id="typeCultureContainer" styleClass="input-container">
+                                        <Label text="🌿" styleClass="input-icon"/>
+                                        <ComboBox fx:id="typeCultureCombo" styleClass="combo-box-styled"
+                                                  promptText="Sélectionner" HBox.hgrow="ALWAYS">
+                                            <items>
+                                                <FXCollections fx:factory="observableArrayList">
+                                                    <String fx:value="🌾 Céréales"/>
+                                                    <String fx:value="🥬 Maraîchage"/>
+                                                    <String fx:value="🌳 Arboriculture"/>
+                                                    <String fx:value="🫒 Oléiculture"/>
+                                                    <String fx:value="🍇 Viticulture"/>
+                                                    <String fx:value="🐄 Élevage"/>
+                                                    <String fx:value="🌻 Polyculture"/>
+                                                    <String fx:value="📦 Autre"/>
+                                                </FXCollections>
+                                            </items>
+                                        </ComboBox>
+                                    </HBox>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Terms Checkbox -->
+                        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="terms-container">
+                            <CheckBox fx:id="termsCheckbox" styleClass="custom-checkbox"/>
+                            <Label text="J'accepte les" styleClass="terms-text"/>
+                            <Hyperlink text="conditions d'utilisation" styleClass="terms-link"/>
+                            <Label text="et la" styleClass="terms-text"/>
+                            <Hyperlink text="politique de confidentialité" styleClass="terms-link"/>
+                        </HBox>
+
+                        <!-- Submit Button -->
+                        <Button text="🌱 Créer mon compte agriculteur" styleClass="btn-submit"
+                                onAction="#handleRegister" maxWidth="Infinity"/>
+
+                        <!-- Links -->
+                        <VBox spacing="12" alignment="CENTER">
+                            <HBox alignment="CENTER" spacing="8">
+                                <Label text="Vous êtes une banque ?" styleClass="link-text"/>
+                                <Hyperlink text="Inscrivez-vous ici →" onAction="#goToRegisterBanque"
+                                           styleClass="link-accent"/>
+                            </HBox>
+                            <Hyperlink text="← Retour à l'accueil" onAction="#goToHome" styleClass="link-back"/>
+                        </VBox>
+                    </VBox>
+                </HBox>
+            </ScrollPane>
+        </center>
+    </BorderPane>
+</StackPane>

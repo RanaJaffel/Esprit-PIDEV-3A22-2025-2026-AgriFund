@@ -1,0 +1,13 @@
+# Environment variables
+.env
+
+# IDE
+.idea/
+*.iml
+
+# Maven
+target/
+
+# Temp files
+tmpclaude-*
+nul

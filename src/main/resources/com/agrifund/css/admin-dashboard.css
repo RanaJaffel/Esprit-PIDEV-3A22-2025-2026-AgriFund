@@ -1,0 +1,387 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   AGRIFUND - ADMIN DASHBOARD MODERNE
+   Design: Glassmorphism + Gradients + Animations fluides
+   Palette: Verts naturels avec accents dorés
+═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────────────────
+   ZONE DE CONTENU PRINCIPALE
+───────────────────────────────────────────────────────────────────────── */
+.content-area {
+    -fx-background-color: linear-gradient(to bottom right,
+    #f8fdf8 0%,
+    #f0f7f0 25%,
+    #e8f4e8 50%,
+    #f2f9f2 75%,
+    #f5fbf5 100%);
+    -fx-padding: 35 45;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   TITRES DE PAGE
+───────────────────────────────────────────────────────────────────────── */
+.page-title {
+    -fx-font-size: 34px;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(to right, #133D03, #095032);
+    -fx-effect: dropshadow(gaussian, rgba(19, 61, 3, 0.15), 3, 0, 0, 2);
+}
+
+.page-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: #848A86;
+    -fx-padding: 8 0 0 0;
+    -fx-font-style: italic;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   BOUTONS TOP BAR
+───────────────────────────────────────────────────────────────────────── */
+.btn-icon {
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #f8faf8);
+    -fx-background-radius: 50;
+    -fx-min-width: 48px;
+    -fx-min-height: 48px;
+    -fx-max-width: 48px;
+    -fx-max-height: 48px;
+    -fx-font-size: 20px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(8, 150, 71, 0.12), 10, 0, 0, 3);
+    -fx-border-color: rgba(8, 150, 71, 0.1);
+    -fx-border-width: 1;
+    -fx-border-radius: 50;
+}
+
+.btn-icon:hover {
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #f0fff0);
+    -fx-effect: dropshadow(gaussian, rgba(8, 150, 71, 0.25), 15, 0, 0, 5);
+    -fx-scale-x: 1.08;
+    -fx-scale-y: 1.08;
+    -fx-border-color: rgba(8, 150, 71, 0.25);
+}
+
+/* Badge messages non lus */
+.conversation-unread-badge {
+    -fx-background-color: linear-gradient(to bottom right, #E1B323, #c9a11e);
+    -fx-text-fill: #133D03;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 4 8;
+    -fx-background-radius: 12;
+    -fx-min-width: 22px;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(225, 179, 35, 0.6), 6, 0, 0, 2);
+}
+
+/* Avatar top bar */
+.user-avatar-small {
+    -fx-effect: dropshadow(gaussian, rgba(8, 150, 71, 0.2), 5, 0, 0, 2);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   CARTES DE STATISTIQUES
+───────────────────────────────────────────────────────────────────────── */
+.stat-card {
+    -fx-padding: 28 25;
+    -fx-background-radius: 24;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 20, 0, 0, 8);
+    -fx-cursor: hand;
+    -fx-border-width: 1;
+    -fx-border-radius: 24;
+}
+
+.stat-card:hover {
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.22), 28, 0, 0, 12);
+}
+
+/* Carte Verte - Utilisateurs */
+.stat-card-green {
+    -fx-background-color: linear-gradient(135deg,
+    #0aa854 0%,
+    #089647 25%,
+    #076A39 60%,
+    #095032 100%);
+    -fx-border-color: rgba(178, 217, 68, 0.4);
+}
+
+.stat-card-green:hover {
+    -fx-background-color: linear-gradient(135deg,
+    #0cc062 0%,
+    #0aa854 25%,
+    #088542 60%,
+    #0a5e3a 100%);
+}
+
+/* Carte Jaune - Agriculteurs */
+.stat-card-yellow {
+    -fx-background-color: linear-gradient(135deg,
+    #f0c830 0%,
+    #E1B323 25%,
+    #c9a11e 60%,
+    #9A951F 100%);
+    -fx-border-color: rgba(255, 255, 255, 0.4);
+}
+
+.stat-card-yellow:hover {
+    -fx-background-color: linear-gradient(135deg,
+    #ffd640 0%,
+    #f0c830 25%,
+    #d9b125 60%,
+    #a9a424 100%);
+}
+
+/* Carte Olive - Banques */
+.stat-card-olive {
+    -fx-background-color: linear-gradient(135deg,
+    #5a8520 0%,
+    #476C1A 25%,
+    #3a5a15 60%,
+    #133D03 100%);
+    -fx-border-color: rgba(178, 217, 68, 0.3);
+}
+
+.stat-card-olive:hover {
+    -fx-background-color: linear-gradient(135deg,
+    #6a9828 0%,
+    #5a8520 25%,
+    #476C1A 60%,
+    #1a4a08 100%);
+}
+
+/* Carte Claire - Documents */
+.stat-card-light {
+    -fx-background-color: linear-gradient(135deg,
+    #ffffff 0%,
+    #f8fcf8 25%,
+    #f0f8f0 60%,
+    #e8f4e8 100%);
+    -fx-border-color: rgba(8, 150, 71, 0.2);
+}
+
+.stat-card-light:hover {
+    -fx-background-color: linear-gradient(135deg,
+    #ffffff 0%,
+    #f5fff5 25%,
+    #eafaea 60%,
+    #e0f2e0 100%);
+    -fx-border-color: rgba(8, 150, 71, 0.35);
+}
+
+.stat-card-light .stat-value {
+    -fx-text-fill: #133D03;
+}
+
+.stat-card-light .stat-label {
+    -fx-text-fill: #476C1A;
+}
+
+.stat-card-light .stat-icon {
+    -fx-opacity: 0.85;
+}
+
+/* Valeurs statistiques */
+.stat-value {
+    -fx-font-size: 48px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 3, 0, 0, 2);
+}
+
+.stat-label {
+    -fx-font-size: 15px;
+    -fx-text-fill: rgba(255, 255, 255, 0.9);
+    -fx-font-weight: 600;
+}
+
+.stat-icon {
+    -fx-font-size: 52px;
+    -fx-opacity: 0.95;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 4, 0, 0, 2);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   CARTES GÉNÉRIQUES
+───────────────────────────────────────────────────────────────────────── */
+.card {
+    -fx-background-color: linear-gradient(to bottom right, #ffffff, #fcfefa);
+    -fx-background-radius: 22;
+    -fx-padding: 28;
+    -fx-effect: dropshadow(gaussian, rgba(8, 150, 71, 0.1), 18, 0, 0, 6);
+    -fx-border-color: rgba(8, 150, 71, 0.08);
+    -fx-border-width: 1;
+    -fx-border-radius: 22;
+}
+
+.card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(8, 150, 71, 0.18), 25, 0, 0, 10);
+    -fx-border-color: rgba(8, 150, 71, 0.15);
+}
+
+.card-header {
+    -fx-font-size: 19px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #133D03;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   BOUTONS
+───────────────────────────────────────────────────────────────────────── */
+.btn {
+    -fx-padding: 14 28;
+    -fx-background-radius: 14;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-border-width: 0;
+}
+
+.btn:hover {
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
+.btn-primary {
+    -fx-background-color: linear-gradient(to bottom, #0aa854, #089647, #076A39);
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(8, 150, 71, 0.4), 10, 0, 0, 4);
+}
+
+.btn-primary:hover {
+    -fx-background-color: linear-gradient(to bottom, #0cc062, #0aa854, #088542);
+    -fx-effect: dropshadow(gaussian, rgba(8, 150, 71, 0.55), 15, 0, 0, 6);
+}
+
+.btn-accent {
+    -fx-background-color: linear-gradient(to bottom, #f0c830, #E1B323, #c9a11e);
+    -fx-text-fill: #133D03;
+    -fx-effect: dropshadow(gaussian, rgba(225, 179, 35, 0.4), 10, 0, 0, 4);
+}
+
+.btn-accent:hover {
+    -fx-background-color: linear-gradient(to bottom, #ffd640, #f0c830, #d9b125);
+    -fx-effect: dropshadow(gaussian, rgba(225, 179, 35, 0.55), 15, 0, 0, 6);
+}
+
+.btn-success {
+    -fx-background-color: linear-gradient(to bottom, #c2e654, #B2D944, #9fc93d);
+    -fx-text-fill: #133D03;
+    -fx-effect: dropshadow(gaussian, rgba(178, 217, 68, 0.4), 10, 0, 0, 4);
+}
+
+.btn-success:hover {
+    -fx-background-color: linear-gradient(to bottom, #d2f064, #c2e654, #afd94d);
+    -fx-effect: dropshadow(gaussian, rgba(178, 217, 68, 0.55), 15, 0, 0, 6);
+}
+
+.btn-secondary {
+    -fx-background-color: transparent;
+    -fx-text-fill: #089647;
+    -fx-border-color: #089647;
+    -fx-border-width: 2;
+    -fx-border-radius: 14;
+    -fx-background-radius: 14;
+    -fx-effect: none;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: rgba(8, 150, 71, 0.1);
+    -fx-text-fill: #076A39;
+    -fx-border-color: #076A39;
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+}
+
+.btn-small {
+    -fx-padding: 10 18;
+    -fx-font-size: 12px;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+}
+
+.btn-danger {
+    -fx-background-color: linear-gradient(to bottom, #ff7b7b, #ff6b6b, #ee5a5a);
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(255, 107, 107, 0.4), 10, 0, 0, 4);
+}
+
+.btn-danger:hover {
+    -fx-background-color: linear-gradient(to bottom, #ff8b8b, #ff7b7b, #ff6a6a);
+    -fx-effect: dropshadow(gaussian, rgba(255, 107, 107, 0.55), 15, 0, 0, 6);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   INDICATEURS DE STATUT
+───────────────────────────────────────────────────────────────────────── */
+.status-online {
+    -fx-min-width: 14px;
+    -fx-min-height: 14px;
+    -fx-max-width: 14px;
+    -fx-max-height: 14px;
+    -fx-background-color: linear-gradient(to bottom right, #c2e654, #B2D944);
+    -fx-background-radius: 50;
+    -fx-effect: dropshadow(gaussian, rgba(178, 217, 68, 0.7), 8, 0, 0, 0);
+    -fx-border-color: white;
+    -fx-border-width: 2;
+    -fx-border-radius: 50;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   SCROLLPANE
+───────────────────────────────────────────────────────────────────────── */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 10px;
+    -fx-padding: 5 2;
+}
+
+.scroll-pane .scroll-bar:vertical .track {
+    -fx-background-color: rgba(8, 150, 71, 0.08);
+    -fx-background-radius: 5;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: linear-gradient(to bottom, rgba(8, 150, 71, 0.35), rgba(8, 150, 71, 0.25));
+    -fx-background-radius: 5;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: linear-gradient(to bottom, rgba(8, 150, 71, 0.5), rgba(8, 150, 71, 0.4));
+}
+
+.scroll-pane .scroll-bar .increment-button,
+.scroll-pane .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.scroll-pane .scroll-bar .increment-arrow,
+.scroll-pane .scroll-bar .decrement-arrow {
+    -fx-shape: "";
+    -fx-padding: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   TOOLTIPS
+───────────────────────────────────────────────────────────────────────── */
+.tooltip {
+    -fx-background-color: linear-gradient(to bottom right, #133D03, #095032);
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-padding: 12 18;
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(178, 217, 68, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.35), 12, 0, 4, 4);
+}

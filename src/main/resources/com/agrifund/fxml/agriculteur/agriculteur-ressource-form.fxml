@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.effect.*?>
+
+<VBox prefHeight="680.0" prefWidth="520.0" spacing="0" stylesheets="@../stylerayen.css"
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.agrifund.controller.agriculteur.AgriculteurRessourceFormController"
+      style="-fx-background-color: #F8FAF8;">
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="15" styleClass="page-header">
+        <padding>
+            <Insets top="22" right="28" bottom="22" left="28"/>
+        </padding>
+        <StackPane styleClass="icon-container" style="-fx-min-width: 52; -fx-min-height: 52;">
+            <Label text="📦" style="-fx-font-size: 28px;"/>
+        </StackPane>
+        <VBox spacing="3">
+            <Label fx:id="lblTitle" text="Nouvelle Ressource" styleClass="header-title" style="-fx-font-size: 22px;"/>
+            <Label fx:id="lblSubtitle" text="Ajouter une ressource à votre projet"
+                   style="-fx-text-fill: #B2D944; -fx-font-size: 13px;"/>
+        </VBox>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS" styleClass="scroll-pane">
+        <VBox spacing="24" style="-fx-background-color: white; -fx-padding: 30;">
+
+            <!-- Project Selection -->
+            <VBox spacing="10" style="-fx-background-color: rgba(178,217,68,0.08); -fx-background-radius: 12; -fx-padding: 18;
+                                      -fx-border-color: rgba(178,217,68,0.3); -fx-border-radius: 12; -fx-border-width: 1;">
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="📁" style="-fx-font-size: 16px;"/>
+                    <Label text="Projet associé *" style="-fx-font-weight: bold; -fx-text-fill: #076A39; -fx-font-size: 14px;"/>
+                </HBox>
+                <ComboBox fx:id="cbIdProjectDialog" maxWidth="Infinity" promptText="Sélectionner un projet...">
+                    <tooltip>
+                        <Tooltip text="Sélectionnez le projet auquel cette ressource sera associée"/>
+                    </tooltip>
+                </ComboBox>
+            </VBox>
+
+            <Separator/>
+
+            <!-- Resource Name -->
+            <VBox spacing="10">
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="📝" style="-fx-font-size: 16px;"/>
+                    <Label text="Nom de la ressource *" style="-fx-font-weight: bold; -fx-text-fill: #076A39;"/>
+                </HBox>
+                <TextField fx:id="tfNomRessourceDialog" promptText="Ex: Tracteur John Deere, Semences bio...">
+                    <tooltip>
+                        <Tooltip text="Nom descriptif de la ressource"/>
+                    </tooltip>
+                </TextField>
+            </VBox>
+
+            <!-- Type -->
+            <VBox spacing="10">
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="📦" style="-fx-font-size: 16px;"/>
+                    <Label text="Type de ressource *" style="-fx-font-weight: bold; -fx-text-fill: #076A39;"/>
+                </HBox>
+                <ComboBox fx:id="cbTypeRessourceDialog" maxWidth="Infinity" promptText="Sélectionner le type...">
+                    <tooltip>
+                        <Tooltip text="Catégorie: équipement, matériaux ou service"/>
+                    </tooltip>
+                </ComboBox>
+            </VBox>
+
+            <!-- Quantity & Cost Row -->
+            <HBox spacing="20">
+                <VBox spacing="10" HBox.hgrow="ALWAYS">
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Label text="🔢" style="-fx-font-size: 16px;"/>
+                        <Label text="Quantité *" style="-fx-font-weight: bold; -fx-text-fill: #076A39;"/>
+                    </HBox>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <TextField fx:id="tfQuantiteDialog" promptText="Ex: 10" HBox.hgrow="ALWAYS">
+                            <tooltip>
+                                <Tooltip text="Nombre d'unités"/>
+                            </tooltip>
+                        </TextField>
+                        <Label text="unités" style="-fx-text-fill: #848A86; -fx-font-weight: bold;"/>
+                    </HBox>
+                </VBox>
+
+                <VBox spacing="10" HBox.hgrow="ALWAYS">
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Label text="💰" style="-fx-font-size: 16px;"/>
+                        <Label text="Coût unitaire *" style="-fx-font-weight: bold; -fx-text-fill: #E1B323;"/>
+                    </HBox>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <TextField fx:id="tfCoutDialog" promptText="Ex: 5000.00" HBox.hgrow="ALWAYS">
+                            <tooltip>
+                                <Tooltip text="Prix unitaire en dinars"/>
+                            </tooltip>
+                        </TextField>
+                        <Label text="DT" style="-fx-font-weight: bold; -fx-text-fill: #E1B323;"/>
+                    </HBox>
+                </VBox>
+            </HBox>
+
+            <!-- Supplier -->
+            <VBox spacing="10">
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="🏭" style="-fx-font-size: 16px;"/>
+                    <Label text="Fournisseur *" style="-fx-font-weight: bold; -fx-text-fill: #076A39;"/>
+                </HBox>
+                <TextField fx:id="tfFournisseurDialog" promptText="Nom du fournisseur ou entreprise">
+                    <tooltip>
+                        <Tooltip text="Nom complet du fournisseur"/>
+                    </tooltip>
+                </TextField>
+            </VBox>
+
+            <!-- Status & Date Row -->
+            <HBox spacing="20">
+                <VBox spacing="10" HBox.hgrow="ALWAYS">
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Label text="📊" style="-fx-font-size: 16px;"/>
+                        <Label text="Statut *" style="-fx-font-weight: bold; -fx-text-fill: #076A39;"/>
+                    </HBox>
+                    <ComboBox fx:id="cbStatutRessourceDialog" maxWidth="Infinity" promptText="Statut...">
+                        <tooltip>
+                            <Tooltip text="Prévu = à acheter, Acheté = déjà acquis"/>
+                        </tooltip>
+                    </ComboBox>
+                </VBox>
+
+                <VBox spacing="10" HBox.hgrow="ALWAYS">
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Label text="📅" style="-fx-font-size: 16px;"/>
+                        <Label text="Date d'ajout *" style="-fx-font-weight: bold; -fx-text-fill: #076A39;"/>
+                    </HBox>
+                    <DatePicker fx:id="dpDateAjoutDialog" maxWidth="Infinity" promptText="Sélectionner...">
+                        <tooltip>
+                            <Tooltip text="Date d'enregistrement de la ressource"/>
+                        </tooltip>
+                    </DatePicker>
+                </VBox>
+            </HBox>
+
+            <!-- Spacer -->
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <!-- Buttons -->
+            <HBox spacing="15" alignment="CENTER_RIGHT">
+                <padding>
+                    <Insets top="20"/>
+                </padding>
+                <Button text="✖ Annuler" onAction="#handleCancel" prefWidth="140" prefHeight="44" styleClass="btn-danger"/>
+                <Button fx:id="btnSave" text="✓ Enregistrer" onAction="#handleSave" prefWidth="160" prefHeight="44" styleClass="btn-primary"/>
+            </HBox>
+        </VBox>
+    </ScrollPane>
+</VBox>

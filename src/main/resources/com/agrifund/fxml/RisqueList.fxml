@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<!--
+    IMPORTANT : Le BorderPane est enveloppé dans un StackPane
+    pour permettre au bouton FAB (chat flottant) de se superposer
+    au contenu principal, positionné en bas à droite.
+-->
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.agrifund.controller.RisqueListController"
+           prefWidth="1500"
+           prefHeight="850"
+           styleClass="root"
+           stylesheets="@risquelist.css">
+
+    <!-- ══ CONTENU PRINCIPAL ══════════════════════════════════════════════ -->
+    <BorderPane>
+
+        <!-- ========== SIDEBAR GAUCHE ========== -->
+        <left>
+            <fx:include source="/com/agrifund/fxml/admin/admin-sidebar.fxml"/>
+        </left>
+
+        <!-- En-tête -->
+        <top>
+            <HBox styleClass="header" alignment="CENTER_LEFT" spacing="20">
+                <Label styleClass="title" text="Gestion Agricole Pro - Liste des Évaluations de Risque"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="➕ Nouvelle Évaluation" styleClass="button-primary" onAction="#handleNewEvaluation"/>
+                <Button text="📊 Décisions Financières" styleClass="button-accent" onAction="#handleViewDecisionList"/>
+            </HBox>
+        </top>
+
+        <!-- Contenu principal -->
+        <center>
+            <VBox spacing="20" styleClass="main-content">
+                <padding>
+                    <Insets top="30" right="30" bottom="30" left="30"/>
+                </padding>
+
+                <!-- Barre d'outils -->
+                <HBox spacing="15" alignment="CENTER_LEFT" styleClass="toolbar">
+                    <padding>
+                        <Insets top="10" right="15" bottom="10" left="15"/>
+                    </padding>
+                    <Label text="🔍 Rechercher:" styleClass="form-label"/>
+                    <TextField fx:id="tfSearch" promptText="Rechercher..." onKeyReleased="#handleSearch" prefWidth="300" styleClass="text-field"/>
+                    <Button text="🔄 Rafraîchir" styleClass="button-accent" onAction="#handleRefresh"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="📄 Exporter PDF" styleClass="button-export" onAction="#handleExportPdf"/>
+                </HBox>
+
+                <!-- Tableau des évaluations -->
+                <TableView fx:id="tableEvaluations" prefHeight="500" VBox.vgrow="ALWAYS" styleClass="table-view">
+                    <columns>
+                        <TableColumn fx:id="colId" text="ID" prefWidth="50" styleClass="table-column"/>
+                        <TableColumn fx:id="colIdProjet" text="ID Projet" prefWidth="80" styleClass="table-column"/>
+                        <TableColumn fx:id="colScoreGlobal" text="Score Global" prefWidth="100" styleClass="table-column"/>
+                        <TableColumn fx:id="colNiveauRisque" text="Niveau de Risque" prefWidth="120" styleClass="table-column"/>
+                        <TableColumn fx:id="colFiabiliteDonnees" text="Fiabilité des Données" prefWidth="120" styleClass="table-column"/>
+                        <TableColumn fx:id="colFacteurPrincipal" text="Facteur Principal" prefWidth="220" styleClass="table-column"/>
+                        <TableColumn fx:id="colRecommandation" text="Recommandation" prefWidth="120" styleClass="table-column"/>
+                        <TableColumn fx:id="colDateEvaluation" text="Date d'Évaluation" prefWidth="130" styleClass="table-column"/>
+                        <TableColumn fx:id="colActions" text="Actions" prefWidth="140" styleClass="table-column"/>
+                    </columns>
+                </TableView>
+
+                <!-- Statistiques -->
+                <HBox spacing="20" alignment="CENTER_LEFT">
+                    <VBox spacing="5" alignment="CENTER">
+                        <Label text="Total" styleClass="stats-label"/>
+                        <Label fx:id="lblTotal" text="0" styleClass="stats-value"/>
+                    </VBox>
+                    <Separator orientation="VERTICAL" styleClass="vertical-separator"/>
+                    <VBox spacing="5" alignment="CENTER">
+                        <Label text="Faible" styleClass="stats-label"/>
+                        <Label fx:id="lblFaible" text="0" styleClass="stats-value"/>
+                    </VBox>
+                    <Separator orientation="VERTICAL" styleClass="vertical-separator"/>
+                    <VBox spacing="5" alignment="CENTER">
+                        <Label text="Moyen" styleClass="stats-label"/>
+                        <Label fx:id="lblMoyen" text="0" styleClass="stats-value"/>
+                    </VBox>
+                    <Separator orientation="VERTICAL" styleClass="vertical-separator"/>
+                    <VBox spacing="5" alignment="CENTER">
+                        <Label text="Élevé" styleClass="stats-label"/>
+                        <Label fx:id="lblEleve" text="0" styleClass="stats-value"/>
+                    </VBox>
+                    <Separator orientation="VERTICAL" styleClass="vertical-separator"/>
+                    <VBox spacing="5" alignment="CENTER">
+                        <Label text="Critique" styleClass="stats-label"/>
+                        <Label fx:id="lblCritique" text="0" styleClass="stats-value"/>
+                    </VBox>
+                </HBox>
+
+                <Label fx:id="lblStatus" styleClass="status-label" text="Prêt"/>
+            </VBox>
+        </center>
+    </BorderPane>
+
+    <!-- ══ BOUTON CHAT FLOTTANT (FAB) ════════════════════════════════════ -->
+    <!--
+        Ce bouton se superpose au BorderPane grâce au StackPane parent.
+        StackPane.alignment + StackPane.margin le placent en bas à droite.
+    -->
+    <Button fx:id="btnChat"
+            text="💬"
+            styleClass="fab-chat-btn"
+            onAction="#handleToggleChat"
+            StackPane.alignment="BOTTOM_RIGHT">
+        <StackPane.margin>
+            <Insets bottom="35" right="35"/>
+        </StackPane.margin>
+    </Button>
+
+</StackPane>
