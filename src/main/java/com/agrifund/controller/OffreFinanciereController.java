@@ -63,7 +63,7 @@ public class OffreFinanciereController {
     public ObservableList<OffreFinanciere> getAllOffresAvecProduit() {
         ObservableList<OffreFinanciere> offres = FXCollections.observableArrayList();
         String sql = "SELECT o.*, p.nom_produit, p.type_financement, p.taux_interet, " +
-                "p.montant_min, p.montant_max, p.regles_financieres " +
+                "p.prix_fixe, p.prix_fixe, p.regles_financieres " +
                 "FROM offre_financiere o " +
                 "INNER JOIN produit_financier p ON o.id_produit = p.id_produit";
 
@@ -86,8 +86,7 @@ public class OffreFinanciereController {
                         rs.getString("nom_produit"),
                         rs.getString("type_financement"),
                         rs.getDouble("taux_interet"),
-                        rs.getDouble("montant_min"),
-                        rs.getDouble("montant_max"),
+                        rs.getDouble("prix_fixe"),
                         rs.getString("regles_financieres")
                 );
 

@@ -61,7 +61,7 @@ public class DemandeFinancementController {
             if (lblNomProduit != null) lblNomProduit.setText("Nom: " + produit.getNomProduit());
             if (lblTypeProduit != null) lblTypeProduit.setText("Type: " + produit.getTypeFinancement());
             if (lblTauxProduit != null) lblTauxProduit.setText("Taux: " + produit.getTauxInteret() + "%");
-            if (lblMontantProduit != null) lblMontantProduit.setText("Montant: " + produit.getMontantMin() + " - " + produit.getMontantMax() + " MAD");
+            if (lblMontantProduit != null) lblMontantProduit.setText("Prix fixe: " + produit.getPrixFixe() + " MAD");
             if (vboxProduitInfo != null) vboxProduitInfo.setVisible(true);
         }
     }
@@ -116,8 +116,7 @@ public class DemandeFinancementController {
             url.append("&produit_nom=").append(URLEncoder.encode(produitSelectionne.getNomProduit(), StandardCharsets.UTF_8));
             url.append("&produit_type=").append(URLEncoder.encode(produitSelectionne.getTypeFinancement(), StandardCharsets.UTF_8));
             url.append("&taux=").append(produitSelectionne.getTauxInteret());
-            url.append("&montant_min=").append(produitSelectionne.getMontantMin());
-            url.append("&montant_max=").append(produitSelectionne.getMontantMax());
+            url.append("&prix_fixe=").append(produitSelectionne.getPrixFixe());
         }
         
         return url.toString();

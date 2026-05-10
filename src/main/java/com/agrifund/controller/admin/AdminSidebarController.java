@@ -198,12 +198,12 @@ public class AdminSidebarController {
 
     @FXML
     public void goToProduitsFinanciers() {
-        navigateTo("produits-financiers", "/com/agrifund/fxml/admin/AdminProduitView.fxml");
+        navigateTo("produits-financiers", "/com/agrifund/view/ProduitFinancierView.fxml");
     }
 
     @FXML
     public void goToOffresFinancieres() {
-        navigateTo("offres-financieres", "/com/agrifund/fxml/admin/AdminOffreView.fxml");
+        navigateTo("offres-financieres", "/com/agrifund/view/OffreFinanciereView.fxml");
     }
 
     // ══════════════════════════════════════════════════════════

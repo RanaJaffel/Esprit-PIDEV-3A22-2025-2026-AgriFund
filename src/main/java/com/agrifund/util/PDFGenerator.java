@@ -65,15 +65,14 @@ public class PDFGenerator {
         ajouterLigneTableau(tableInfo, "Nom du Produit", produit.getNomProduit());
         ajouterLigneTableau(tableInfo, "Type de Financement", produit.getTypeFinancement());
         ajouterLigneTableau(tableInfo, "Taux d'Interet", String.format("%.2f %%", produit.getTauxInteret()));
-        ajouterLigneTableau(tableInfo, "Montant Minimum", String.format("%,.2f DT", produit.getMontantMin()));
-        ajouterLigneTableau(tableInfo, "Montant Maximum", String.format("%,.2f DT", produit.getMontantMax()));
+        ajouterLigneTableau(tableInfo, "Prix Fixeimum", String.format("%,.2f DT", produit.getPrixFixe()));
 
         document.add(tableInfo);
         document.add(new Paragraph(" "));
 
         // Statistiques
-        double moyenne = (produit.getMontantMin() + produit.getMontantMax()) / 2;
-        double ecart = produit.getMontantMax() - produit.getMontantMin();
+        double moyenne = produit.getPrixFixe();
+        double ecart = 0;
 
         Paragraph statsTitle = new Paragraph("STATISTIQUES", FONT_SECTION);
         statsTitle.setSpacingBefore(15);

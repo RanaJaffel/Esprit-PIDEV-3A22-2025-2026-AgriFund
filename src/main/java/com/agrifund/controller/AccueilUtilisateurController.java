@@ -147,8 +147,8 @@ public class AccueilUtilisateurController {
         VBox details = new VBox(8);
         
         Label lblMontant = new Label(String.format("💰 Montant: %.0f - %.0f MAD", 
-                                                   produit.getMontantMin(), 
-                                                   produit.getMontantMax()));
+                                                   produit.getPrixFixe(), 
+                                                   produit.getPrixFixe()));
         lblMontant.setStyle("-fx-font-size: 14; -fx-text-fill: #555;");
         
         Label lblRegles = new Label("📋 " + produit.getReglesFinancieres());
@@ -382,3 +382,4 @@ public class AccueilUtilisateurController {
         alert.showAndWait();
     }
 }
+

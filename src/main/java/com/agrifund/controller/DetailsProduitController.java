@@ -25,8 +25,7 @@ public class DetailsProduitController {
     @FXML private Label lblId;
     @FXML private Label lblType;
     @FXML private Label lblTaux;
-    @FXML private Label lblMontantMin;
-    @FXML private Label lblMontantMax;
+    @FXML private Label lblPrixFixe;
     @FXML private TextArea txtRegles;
     @FXML private Label lblMontantMoyen;
     @FXML private Label lblEcart;
@@ -163,12 +162,12 @@ public class DetailsProduitController {
             }
 
             // Formater les montants
-            if (lblMontantMin != null) {
-                lblMontantMin.setText(String.format("%,.2f DT", produit.getMontantMin()));
+            if (lblPrixFixe != null) {
+                lblPrixFixe.setText(String.format("%,.2f DT", produit.getPrixFixe()));
             }
 
-            if (lblMontantMax != null) {
-                lblMontantMax.setText(String.format("%,.2f DT", produit.getMontantMax()));
+            if (lblPrixFixe != null) {
+                lblPrixFixe.setText(String.format("%,.2f DT", produit.getPrixFixe()));
             }
 
             if (txtRegles != null) {
@@ -178,8 +177,8 @@ public class DetailsProduitController {
             }
 
             // Calculs des statistiques
-            double moyenne = (produit.getMontantMin() + produit.getMontantMax()) / 2;
-            double ecart = produit.getMontantMax() - produit.getMontantMin();
+            double moyenne = produit.getPrixFixe();
+            double ecart = 0;
 
             if (lblMontantMoyen != null) {
                 lblMontantMoyen.setText(String.format("%,.2f DT", moyenne));
@@ -252,3 +251,4 @@ public class DetailsProduitController {
         alert.showAndWait();
     }
 }
+

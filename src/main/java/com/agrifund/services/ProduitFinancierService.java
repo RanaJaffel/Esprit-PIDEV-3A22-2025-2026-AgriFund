@@ -11,27 +11,37 @@ public class ProduitFinancierService {
 
     // CREATE - avec banque_id
     public boolean ajouterProduit(ProduitFinancier produit) {
-        String sql = "INSERT INTO produit_financier (nom_produit, type_financement, taux_interet, " +
-                "montant_min, montant_max, regles_financieres, banque_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
-
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(buildInsertSql(conn))) {
+
+            boolean hasPrixFixe = hasColumn(conn, "produit_financier", "prix_fixe");
+            boolean hasMontant = hasColumn(conn, "produit_financier", "montant");
 
             pstmt.setString(1, produit.getNomProduit());
             pstmt.setString(2, produit.getTypeFinancement());
             pstmt.setDouble(3, produit.getTauxInteret());
-            pstmt.setDouble(4, produit.getMontantMin());
-            pstmt.setDouble(5, produit.getMontantMax());
-            pstmt.setString(6, produit.getReglesFinancieres());
+            pstmt.setDouble(4, produit.getPrixFixe());
 
-            if (produit.getBanqueId() > 0) {
-                pstmt.setInt(7, produit.getBanqueId());
+            int nextIndex;
+            if (hasPrixFixe && hasMontant) {
+                pstmt.setDouble(5, produit.getPrixFixe());
+                nextIndex = 6;
+            } else if (hasPrixFixe || hasMontant) {
+                nextIndex = 5;
             } else {
-                pstmt.setNull(7, Types.INTEGER);
+                // Compat ancien schema: montant_min + montant_max
+                pstmt.setDouble(5, produit.getPrixFixe());
+                nextIndex = 6;
             }
 
-            int rowsAffected = pstmt.executeUpdate();
-            return rowsAffected > 0;
+            pstmt.setString(nextIndex, produit.getReglesFinancieres());
+            if (produit.getBanqueId() != null && produit.getBanqueId() > 0) {
+                pstmt.setInt(nextIndex + 1, produit.getBanqueId());
+            } else {
+                pstmt.setNull(nextIndex + 1, Types.INTEGER);
+            }
+
+            return pstmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -117,34 +127,78 @@ public class ProduitFinancierService {
 
     // UPDATE
     public boolean modifierProduit(ProduitFinancier produit) {
-        String sql = "UPDATE produit_financier SET nom_produit=?, type_financement=?, " +
-                "taux_interet=?, montant_min=?, montant_max=?, regles_financieres=?, banque_id=? " +
-                "WHERE id_produit=?";
-
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(buildUpdateSql(conn))) {
+
+            boolean hasPrixFixe = hasColumn(conn, "produit_financier", "prix_fixe");
+            boolean hasMontant = hasColumn(conn, "produit_financier", "montant");
 
             pstmt.setString(1, produit.getNomProduit());
             pstmt.setString(2, produit.getTypeFinancement());
             pstmt.setDouble(3, produit.getTauxInteret());
-            pstmt.setDouble(4, produit.getMontantMin());
-            pstmt.setDouble(5, produit.getMontantMax());
-            pstmt.setString(6, produit.getReglesFinancieres());
+            pstmt.setDouble(4, produit.getPrixFixe());
 
-            if (produit.getBanqueId() > 0) {
-                pstmt.setInt(7, produit.getBanqueId());
+            int nextIndex;
+            if (hasPrixFixe && hasMontant) {
+                pstmt.setDouble(5, produit.getPrixFixe());
+                nextIndex = 6;
+            } else if (hasPrixFixe || hasMontant) {
+                nextIndex = 5;
             } else {
-                pstmt.setNull(7, Types.INTEGER);
+                pstmt.setDouble(5, produit.getPrixFixe());
+                nextIndex = 6;
             }
 
-            pstmt.setInt(8, produit.getIdProduit());
+            pstmt.setString(nextIndex, produit.getReglesFinancieres());
+            if (produit.getBanqueId() != null && produit.getBanqueId() > 0) {
+                pstmt.setInt(nextIndex + 1, produit.getBanqueId());
+            } else {
+                pstmt.setNull(nextIndex + 1, Types.INTEGER);
+            }
+            pstmt.setInt(nextIndex + 2, produit.getIdProduit());
 
-            int rowsAffected = pstmt.executeUpdate();
-            return rowsAffected > 0;
+            return pstmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    private String buildInsertSql(Connection conn) throws SQLException {
+        boolean hasPrixFixe = hasColumn(conn, "produit_financier", "prix_fixe");
+        boolean hasMontant = hasColumn(conn, "produit_financier", "montant");
+        if (hasPrixFixe && hasMontant) {
+            return "INSERT INTO produit_financier (nom_produit, type_financement, taux_interet, prix_fixe, montant, regles_financieres, banque_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        }
+        if (hasPrixFixe) {
+            return "INSERT INTO produit_financier (nom_produit, type_financement, taux_interet, prix_fixe, regles_financieres, banque_id) VALUES (?, ?, ?, ?, ?, ?)";
+        }
+        if (hasMontant) {
+            return "INSERT INTO produit_financier (nom_produit, type_financement, taux_interet, montant, regles_financieres, banque_id) VALUES (?, ?, ?, ?, ?, ?)";
+        }
+        return "INSERT INTO produit_financier (nom_produit, type_financement, taux_interet, montant_min, montant_max, regles_financieres, banque_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    }
+
+    private String buildUpdateSql(Connection conn) throws SQLException {
+        boolean hasPrixFixe = hasColumn(conn, "produit_financier", "prix_fixe");
+        boolean hasMontant = hasColumn(conn, "produit_financier", "montant");
+        if (hasPrixFixe && hasMontant) {
+            return "UPDATE produit_financier SET nom_produit=?, type_financement=?, taux_interet=?, prix_fixe=?, montant=?, regles_financieres=?, banque_id=? WHERE id_produit=?";
+        }
+        if (hasPrixFixe) {
+            return "UPDATE produit_financier SET nom_produit=?, type_financement=?, taux_interet=?, prix_fixe=?, regles_financieres=?, banque_id=? WHERE id_produit=?";
+        }
+        if (hasMontant) {
+            return "UPDATE produit_financier SET nom_produit=?, type_financement=?, taux_interet=?, montant=?, regles_financieres=?, banque_id=? WHERE id_produit=?";
+        }
+        return "UPDATE produit_financier SET nom_produit=?, type_financement=?, taux_interet=?, montant_min=?, montant_max=?, regles_financieres=?, banque_id=? WHERE id_produit=?";
+    }
+
+    private boolean hasColumn(Connection conn, String tableName, String columnName) throws SQLException {
+        DatabaseMetaData meta = conn.getMetaData();
+        try (ResultSet rs = meta.getColumns(conn.getCatalog(), null, tableName, columnName)) {
+            return rs.next();
         }
     }
 
@@ -233,8 +287,7 @@ public class ProduitFinancierService {
                 rs.getString("nom_produit"),
                 rs.getString("type_financement"),
                 rs.getDouble("taux_interet"),
-                rs.getDouble("montant_min"),
-                rs.getDouble("montant_max"),
+                rs.getDouble("prix_fixe"),
                 rs.getString("regles_financieres")
         );
 

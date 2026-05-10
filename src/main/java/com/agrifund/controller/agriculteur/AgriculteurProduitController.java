@@ -206,11 +206,11 @@ public class AgriculteurProduitController {
         // Montant range
         HBox montantRow = new HBox(8);
         montantRow.setAlignment(Pos.CENTER_LEFT);
-        Label lblMin = new Label(String.format("%.0f DT", produit.getMontantMin()));
+        Label lblMin = new Label(String.format("%.0f DT", produit.getPrixFixe()));
         lblMin.setStyle("-fx-text-fill: rgba(255,255,255,0.55); -fx-font-size: 11;");
         Region rangeSpacer = new Region();
         HBox.setHgrow(rangeSpacer, Priority.ALWAYS);
-        Label lblMax = new Label(String.format("%.0f DT", produit.getMontantMax()));
+        Label lblMax = new Label(String.format("%.0f DT", produit.getPrixFixe()));
         lblMax.setStyle("-fx-text-fill: " + accent + "; -fx-font-size: 12; -fx-font-weight: bold;");
         montantRow.getChildren().addAll(lblMin, rangeSpacer, lblMax);
 
@@ -224,8 +224,8 @@ public class AgriculteurProduitController {
         barFill.setPrefHeight(5);
         barFill.setStyle("-fx-background-color: linear-gradient(to right, " + accent + "88, " + accent + "); -fx-background-radius: 3;");
         StackPane.setAlignment(barFill, Pos.CENTER_LEFT);
-        double maxGlobal = tousLesProduits.stream().mapToDouble(ProduitFinancier::getMontantMax).max().orElse(1);
-        double ratio = Math.min(produit.getMontantMax() / maxGlobal, 1.0);
+        double maxGlobal = tousLesProduits.stream().mapToDouble(ProduitFinancier::getPrixFixe).max().orElse(1);
+        double ratio = Math.min(produit.getPrixFixe() / maxGlobal, 1.0);
         barFill.maxWidthProperty().bind(barBg.widthProperty().multiply(ratio));
         barBg.getChildren().add(barFill);
 

@@ -36,8 +36,7 @@ public class BanqueProduitController {
     @FXML private TableColumn<ProduitFinancier, String> colNom;
     @FXML private TableColumn<ProduitFinancier, String> colType;
     @FXML private TableColumn<ProduitFinancier, Double> colTaux;
-    @FXML private TableColumn<ProduitFinancier, Double> colMontantMin;
-    @FXML private TableColumn<ProduitFinancier, Double> colMontantMax;
+    @FXML private TableColumn<ProduitFinancier, Double> colPrixFixe;
 
     @FXML private Label lblTotalProduits;
     @FXML private Label lblPrets;
@@ -79,8 +78,7 @@ public class BanqueProduitController {
             colNom.setCellValueFactory(new PropertyValueFactory<>("nomProduit"));
             colType.setCellValueFactory(new PropertyValueFactory<>("typeFinancement"));
             colTaux.setCellValueFactory(new PropertyValueFactory<>("tauxInteret"));
-            colMontantMin.setCellValueFactory(new PropertyValueFactory<>("montantMin"));
-            colMontantMax.setCellValueFactory(new PropertyValueFactory<>("montantMax"));
+            colPrixFixe.setCellValueFactory(new PropertyValueFactory<>("prixFixe"));
 
             chargerDonnees();
 

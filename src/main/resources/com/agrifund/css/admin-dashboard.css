@@ -98,7 +98,7 @@
 
 /* Carte Verte - Utilisateurs */
 .stat-card-green {
-    -fx-background-color: linear-gradient(135deg,
+    -fx-background-color: linear-gradient(to bottom right,
     #0aa854 0%,
     #089647 25%,
     #076A39 60%,
@@ -107,7 +107,7 @@
 }
 
 .stat-card-green:hover {
-    -fx-background-color: linear-gradient(135deg,
+    -fx-background-color: linear-gradient(to bottom right,
     #0cc062 0%,
     #0aa854 25%,
     #088542 60%,
@@ -116,7 +116,7 @@
 
 /* Carte Jaune - Agriculteurs */
 .stat-card-yellow {
-    -fx-background-color: linear-gradient(135deg,
+    -fx-background-color: linear-gradient(to bottom right,
     #f0c830 0%,
     #E1B323 25%,
     #c9a11e 60%,
@@ -125,7 +125,7 @@
 }
 
 .stat-card-yellow:hover {
-    -fx-background-color: linear-gradient(135deg,
+    -fx-background-color: linear-gradient(to bottom right,
     #ffd640 0%,
     #f0c830 25%,
     #d9b125 60%,
@@ -134,7 +134,7 @@
 
 /* Carte Olive - Banques */
 .stat-card-olive {
-    -fx-background-color: linear-gradient(135deg,
+    -fx-background-color: linear-gradient(to bottom right,
     #5a8520 0%,
     #476C1A 25%,
     #3a5a15 60%,
@@ -143,7 +143,7 @@
 }
 
 .stat-card-olive:hover {
-    -fx-background-color: linear-gradient(135deg,
+    -fx-background-color: linear-gradient(to bottom right,
     #6a9828 0%,
     #5a8520 25%,
     #476C1A 60%,
@@ -152,7 +152,7 @@
 
 /* Carte Claire - Documents */
 .stat-card-light {
-    -fx-background-color: linear-gradient(135deg,
+    -fx-background-color: linear-gradient(to bottom right,
     #ffffff 0%,
     #f8fcf8 25%,
     #f0f8f0 60%,
@@ -161,7 +161,7 @@
 }
 
 .stat-card-light:hover {
-    -fx-background-color: linear-gradient(135deg,
+    -fx-background-color: linear-gradient(to bottom right,
     #ffffff 0%,
     #f5fff5 25%,
     #eafaea 60%,

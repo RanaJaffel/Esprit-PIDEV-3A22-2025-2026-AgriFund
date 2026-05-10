@@ -30,8 +30,7 @@ public class FormulaireProduitController {
     @FXML private TextField txtNom;
     @FXML private ComboBox<String> cbType;
     @FXML private TextField txtTaux;
-    @FXML private TextField txtMontantMin;
-    @FXML private TextField txtMontantMax;
+    @FXML private TextField txtPrixFixe;
     @FXML private TextArea txtRegles;
     @FXML private Button btnValider;
 
@@ -170,8 +169,7 @@ public class FormulaireProduitController {
         if (txtNom != null) txtNom.clear();
         if (cbType != null) cbType.setValue(null);
         if (txtTaux != null) txtTaux.clear();
-        if (txtMontantMin != null) txtMontantMin.clear();
-        if (txtMontantMax != null) txtMontantMax.clear();
+        if (txtPrixFixe != null) txtPrixFixe.clear();
         if (txtRegles != null) txtRegles.clear();
     }
 
@@ -199,8 +197,7 @@ public class FormulaireProduitController {
         if (txtNom != null) txtNom.setText(produit.getNomProduit());
         if (cbType != null) cbType.setValue(produit.getTypeFinancement());
         if (txtTaux != null) txtTaux.setText(String.valueOf(produit.getTauxInteret()));
-        if (txtMontantMin != null) txtMontantMin.setText(String.valueOf(produit.getMontantMin()));
-        if (txtMontantMax != null) txtMontantMax.setText(String.valueOf(produit.getMontantMax()));
+        if (txtPrixFixe != null) txtPrixFixe.setText(String.valueOf(produit.getPrixFixe()));
         if (txtRegles != null) txtRegles.setText(produit.getReglesFinancieres());
     }
 
@@ -225,8 +222,7 @@ public class FormulaireProduitController {
                 produitAModifier.setNomProduit(txtNom.getText().trim());
                 produitAModifier.setTypeFinancement(cbType.getValue().trim());
                 produitAModifier.setTauxInteret(Double.parseDouble(txtTaux.getText().trim()));
-                produitAModifier.setMontantMin(Double.parseDouble(txtMontantMin.getText().trim()));
-                produitAModifier.setMontantMax(Double.parseDouble(txtMontantMax.getText().trim()));
+                produitAModifier.setPrixFixe(Double.parseDouble(txtPrixFixe.getText().trim()));
                 produitAModifier.setReglesFinancieres(txtRegles.getText().trim());
 
                 boolean success = produitService.modifierProduit(produitAModifier);
@@ -247,8 +243,7 @@ public class FormulaireProduitController {
                 nouveauProduit.setNomProduit(txtNom.getText().trim());
                 nouveauProduit.setTypeFinancement(cbType.getValue().trim());
                 nouveauProduit.setTauxInteret(Double.parseDouble(txtTaux.getText().trim()));
-                nouveauProduit.setMontantMin(Double.parseDouble(txtMontantMin.getText().trim()));
-                nouveauProduit.setMontantMax(Double.parseDouble(txtMontantMax.getText().trim()));
+                nouveauProduit.setPrixFixe(Double.parseDouble(txtPrixFixe.getText().trim()));
                 nouveauProduit.setReglesFinancieres(txtRegles.getText().trim());
 
                 boolean success = produitService.ajouterProduit(nouveauProduit);
@@ -301,28 +296,17 @@ public class FormulaireProduitController {
             }
         }
 
-        if (txtMontantMin == null || txtMontantMin.getText() == null || txtMontantMin.getText().trim().isEmpty()) {
-            erreurs += "Le montant minimum est obligatoire\n";
-        }
-
-        if (txtMontantMax == null || txtMontantMax.getText() == null || txtMontantMax.getText().trim().isEmpty()) {
-            erreurs += "Le montant maximum est obligatoire\n";
-        }
-
-        try {
-            if (txtMontantMin != null && txtMontantMax != null &&
-                    !txtMontantMin.getText().trim().isEmpty() && !txtMontantMax.getText().trim().isEmpty()) {
-                double min = Double.parseDouble(txtMontantMin.getText().trim());
-                double max = Double.parseDouble(txtMontantMax.getText().trim());
-                if (min >= max) {
-                    erreurs += "Le montant maximum doit etre superieur au minimum\n";
+        if (txtPrixFixe == null || txtPrixFixe.getText() == null || txtPrixFixe.getText().trim().isEmpty()) {
+            erreurs += "Le prix fixe est obligatoire\n";
+        } else {
+            try {
+                double prix = Double.parseDouble(txtPrixFixe.getText().trim());
+                if (prix < 0) {
+                    erreurs += "Le prix fixe ne peut pas etre negatif\n";
                 }
-                if (min < 0) {
-                    erreurs += "Le montant minimum ne peut pas etre negatif\n";
-                }
+            } catch (NumberFormatException e) {
+                erreurs += "Le prix fixe doit etre un nombre valide\n";
             }
-        } catch (NumberFormatException e) {
-            erreurs += "Les montants doivent etre des nombres valides\n";
         }
 
         if (!erreurs.isEmpty()) {

@@ -14,14 +14,17 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+public class Main {
 
     private static Stage primaryStage;
     private static StackPane contentArea;
     private static BorderPane mainLayout;
 
-    @Override
-    public void start(Stage stage) {
+    public static void main(String[] args) {
+        Application.launch(AgriFundApp.class, args);
+    }
+
+    static void start(Stage stage) {
         try {
             primaryStage = stage;
 
@@ -30,7 +33,7 @@ public class Main extends Application {
 
             // Set window icon
             try {
-                Image icon = new Image(getClass().getResourceAsStream(
+                Image icon = new Image(Main.class.getResourceAsStream(
                         "/com/agrifund/images/image_2026-01-25_212530957-removebg-preview.png"));
                 stage.getIcons().add(icon);
             } catch (Exception e) {
@@ -51,7 +54,7 @@ public class Main extends Application {
             Scene scene = new Scene(mainLayout, 1400, 800);
             try {
                 scene.getStylesheets().add(
-                        getClass().getResource("/com/agrifund/css/styles.css").toExternalForm());
+                        Main.class.getResource("/com/agrifund/css/styles.css").toExternalForm());
             } catch (Exception e) {
                 System.err.println("CSS non trouve: " + e.getMessage());
             }
@@ -73,7 +76,6 @@ public class Main extends Application {
     // ═══════════════════════════════════════════════════════════
     // PUBLIC API — called from controllers
     // ═══════════════════════════════════════════════════════════
-
     /**
      * Called after successful login to load the appropriate dashboard.
      */
@@ -122,7 +124,9 @@ public class Main extends Application {
 
     /**
      * Load a view into the content area from anywhere.
-     * @param fxmlPath absolute resource path, e.g. "/com/agrifund/fxml/login.fxml"
+     *
+     * @param fxmlPath absolute resource path, e.g.
+     * "/com/agrifund/fxml/login.fxml"
      */
     public static void navigateTo(String fxmlPath) {
         loadView(fxmlPath);
@@ -135,9 +139,5 @@ public class Main extends Application {
     public static void setRoot(String fxml) throws Exception {
         Parent root = FXMLLoader.load(Main.class.getResource("/com/agrifund/fxml/" + fxml + ".fxml"));
         primaryStage.getScene().setRoot(root);
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

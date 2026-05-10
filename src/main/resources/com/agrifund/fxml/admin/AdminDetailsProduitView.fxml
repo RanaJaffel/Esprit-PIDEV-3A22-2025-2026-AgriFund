@@ -101,15 +101,15 @@
                     <VBox spacing="10" HBox.hgrow="ALWAYS" alignment="CENTER"
                           style="-fx-background-color: #e8f5e9; -fx-padding: 20; -fx-background-radius: 12;
                                  -fx-border-color: #4CAF50; -fx-border-width: 2; -fx-border-radius: 12;">
-                        <Label text="💰 Montant Minimum" style="-fx-text-fill: #2E7D32; -fx-font-size: 12; -fx-font-weight: bold;"/>
-                        <Label fx:id="lblMontantMin" text="0.00 DT" style="-fx-text-fill: #1B5E20; -fx-font-size: 22; -fx-font-weight: bold;"/>
+                        <Label text="💰 Prix Fixeimum" style="-fx-text-fill: #2E7D32; -fx-font-size: 12; -fx-font-weight: bold;"/>
+                        <Label fx:id="lblPrixFixe" text="0.00 DT" style="-fx-text-fill: #1B5E20; -fx-font-size: 22; -fx-font-weight: bold;"/>
                     </VBox>
 
                     <VBox spacing="10" HBox.hgrow="ALWAYS" alignment="CENTER"
                           style="-fx-background-color: #fff8e1; -fx-padding: 20; -fx-background-radius: 12;
                                  -fx-border-color: #FFA000; -fx-border-width: 2; -fx-border-radius: 12;">
-                        <Label text="💵 Montant Maximum" style="-fx-text-fill: #FF8F00; -fx-font-size: 12; -fx-font-weight: bold;"/>
-                        <Label fx:id="lblMontantMax" text="0.00 DT" style="-fx-text-fill: #E65100; -fx-font-size: 22; -fx-font-weight: bold;"/>
+                        <Label text="💵 Prix Fixeimum" style="-fx-text-fill: #FF8F00; -fx-font-size: 12; -fx-font-weight: bold;"/>
+                        <Label fx:id="lblPrixFixe" text="0.00 DT" style="-fx-text-fill: #E65100; -fx-font-size: 22; -fx-font-weight: bold;"/>
                     </VBox>
                 </HBox>
 

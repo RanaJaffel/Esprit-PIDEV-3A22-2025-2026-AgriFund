@@ -124,10 +124,10 @@
                             <DropShadow color="#81C784" offsetY="3" radius="8"/>
                         </effect>
 
-                        <Label text="💰 Montant Minimum"
+                        <Label text="💰 Prix Fixeimum"
                                style="-fx-text-fill: #388E3C; -fx-font-size: 12; -fx-font-weight: bold;"/>
 
-                        <Label fx:id="lblMontantMin" text="0.00 DH"
+                        <Label fx:id="lblPrixFixe" text="0.00 DH"
                                style="-fx-text-fill: #1B5E20; -fx-font-size: 22; -fx-font-weight: bold;"/>
                     </VBox>
 
@@ -139,10 +139,10 @@
                             <DropShadow color="#F9A825" offsetY="3" radius="8"/>
                         </effect>
 
-                        <Label text="💵 Montant Maximum"
+                        <Label text="💵 Prix Fixeimum"
                                style="-fx-text-fill: #F9A825; -fx-font-size: 12; -fx-font-weight: bold;"/>
 
-                        <Label fx:id="lblMontantMax" text="0.00 DH"
+                        <Label fx:id="lblPrixFixe" text="0.00 DH"
                                style="-fx-text-fill: #F57F17; -fx-font-size: 22; -fx-font-weight: bold;"/>
                     </VBox>
                 </HBox>

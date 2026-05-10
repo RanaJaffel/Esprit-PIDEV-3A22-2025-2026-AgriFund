@@ -34,7 +34,7 @@ public class GoogleMapView extends StackPane {
 
         // Écouter le chargement
         webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
-            System.out.println("�� WebView State: " + newState);
+            System.out.println("ï¿½ï¿½ WebView State: " + newState);
 
             if (newState == Worker.State.SUCCEEDED) {
                 mapReady = true;

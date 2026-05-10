@@ -191,8 +191,7 @@
                             <TableColumn fx:id="colNom" text="Nom du Produit" prefWidth="220"/>
                             <TableColumn fx:id="colType" text="Type" prefWidth="120"/>
                             <TableColumn fx:id="colTaux" text="Taux %" prefWidth="80"/>
-                            <TableColumn fx:id="colMontantMin" text="Min (DT)" prefWidth="110"/>
-                            <TableColumn fx:id="colMontantMax" text="Max (DT)" prefWidth="110"/>
+                            <TableColumn fx:id="colPrixFixe" text="Prix Fixe (DT)" prefWidth="140"/>
                         </columns>
                         <placeholder>
                             <VBox alignment="CENTER" spacing="15" style="-fx-padding: 40;">

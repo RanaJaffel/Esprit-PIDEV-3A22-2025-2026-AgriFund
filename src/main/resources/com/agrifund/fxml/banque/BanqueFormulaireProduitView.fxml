@@ -19,25 +19,25 @@
           onMousePressed="#handleTitleBarPressed"
           onMouseDragged="#handleTitleBarDragged">
 
-        <Label text="🏦" style="-fx-font-size: 18;"/>
+        <Label text="APP" style="-fx-font-size: 18;"/>
         <Label fx:id="lblWindowTitle" text="Nouveau Produit"
                style="-fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold;"/>
 
         <Region HBox.hgrow="ALWAYS"/>
 
-        <Button text="─" onAction="#handleMinimize"
+        <Button text="-" onAction="#handleMinimize"
                 style="-fx-background-color: transparent; -fx-text-fill: rgba(255,255,255,0.7);
                        -fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12;
                        -fx-cursor: hand; -fx-background-radius: 3;"
                 onMouseEntered="#onControlButtonHover" onMouseExited="#onControlButtonExit"/>
 
-        <Button text="□" onAction="#handleMaximize"
+        <Button text="[]" onAction="#handleMaximize"
                 style="-fx-background-color: transparent; -fx-text-fill: rgba(255,255,255,0.7);
                        -fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12;
                        -fx-cursor: hand; -fx-background-radius: 3;"
                 onMouseEntered="#onControlButtonHover" onMouseExited="#onControlButtonExit"/>
 
-        <Button fx:id="btnClose" text="✕" onAction="#handleFermer"
+        <Button fx:id="btnClose" text="X" onAction="#handleFermer"
                 style="-fx-background-color: transparent; -fx-text-fill: rgba(255,255,255,0.7);
                        -fx-font-size: 12; -fx-font-weight: bold; -fx-padding: 5 12;
                        -fx-cursor: hand; -fx-background-radius: 3;"
@@ -106,29 +106,16 @@
                 </VBox>
 
                 <!-- Montants Min et Max -->
-                <HBox spacing="18">
-                    <VBox spacing="8" HBox.hgrow="ALWAYS">
-                        <Label text="MONTANT MIN (DT) *" style="-fx-text-fill: #089647; -fx-font-size: 12; -fx-font-weight: bold;"/>
-                        <TextField fx:id="txtMontantMin" promptText="Ex: 10000"
-                                   prefHeight="48"
-                                   style="-fx-background-color: #E8F5E0;
-                                          -fx-text-fill: #076A39; -fx-prompt-text-fill: #848A86;
-                                          -fx-background-radius: 12; -fx-padding: 0 18;
-                                          -fx-border-color: #089647; -fx-border-radius: 12; -fx-border-width: 2;
-                                          -fx-font-size: 14;"/>
-                    </VBox>
-
-                    <VBox spacing="8" HBox.hgrow="ALWAYS">
-                        <Label text="MONTANT MAX (DT) *" style="-fx-text-fill: #089647; -fx-font-size: 12; -fx-font-weight: bold;"/>
-                        <TextField fx:id="txtMontantMax" promptText="Ex: 500000"
-                                   prefHeight="48"
-                                   style="-fx-background-color: #E8F5E0;
-                                          -fx-text-fill: #076A39; -fx-prompt-text-fill: #848A86;
-                                          -fx-background-radius: 12; -fx-padding: 0 18;
-                                          -fx-border-color: #089647; -fx-border-radius: 12; -fx-border-width: 2;
-                                          -fx-font-size: 14;"/>
-                    </VBox>
-                </HBox>
+                <VBox spacing="8">
+                    <Label text="PRIX FIXE (DT) *" style="-fx-text-fill: #089647; -fx-font-size: 12; -fx-font-weight: bold;"/>
+                    <TextField fx:id="txtPrixFixe" promptText="Ex: 10000"
+                               prefHeight="48"
+                               style="-fx-background-color: #E8F5E0;
+                                      -fx-text-fill: #076A39; -fx-prompt-text-fill: #848A86;
+                                      -fx-background-radius: 12; -fx-padding: 0 18;
+                                      -fx-border-color: #089647; -fx-border-radius: 12; -fx-border-width: 2;
+                                      -fx-font-size: 14;"/>
+                </VBox>
 
                 <!-- Règles financières -->
                 <VBox spacing="8">

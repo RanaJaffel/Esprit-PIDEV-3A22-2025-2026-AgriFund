@@ -210,8 +210,7 @@
                             <TableColumn fx:id="colNom" text="Nom du Produit" prefWidth="230"/>
                             <TableColumn fx:id="colType" text="Type" prefWidth="110" style="-fx-alignment: CENTER;"/>
                             <TableColumn fx:id="colTaux" text="Taux %" prefWidth="80" style="-fx-alignment: CENTER;"/>
-                            <TableColumn fx:id="colMontantMin" text="Min (DT)" prefWidth="105" style="-fx-alignment: CENTER-RIGHT;"/>
-                            <TableColumn fx:id="colMontantMax" text="Max (DT)" prefWidth="105" style="-fx-alignment: CENTER-RIGHT;"/>
+                            <TableColumn fx:id="colPrixFixe" text="Prix Fixe (DT)" prefWidth="140" style="-fx-alignment: CENTER-RIGHT;"/>
                         </columns>
                         <placeholder>
                             <VBox alignment="CENTER" spacing="15" style="-fx-padding: 45;">

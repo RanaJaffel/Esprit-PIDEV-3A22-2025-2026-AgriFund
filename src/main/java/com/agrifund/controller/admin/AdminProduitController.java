@@ -29,8 +29,7 @@ public class AdminProduitController {
     @FXML private TableColumn<ProduitFinancier, String> colNom;
     @FXML private TableColumn<ProduitFinancier, String> colType;
     @FXML private TableColumn<ProduitFinancier, Double> colTaux;
-    @FXML private TableColumn<ProduitFinancier, Double> colMontantMin;
-    @FXML private TableColumn<ProduitFinancier, Double> colMontantMax;
+    @FXML private TableColumn<ProduitFinancier, Double> colPrixFixe;
     @FXML private TableColumn<ProduitFinancier, String> colBanque;
 
     @FXML private Label lblTotalProduits;
@@ -52,8 +51,7 @@ public class AdminProduitController {
             colNom.setCellValueFactory(new PropertyValueFactory<>("nomProduit"));
             colType.setCellValueFactory(new PropertyValueFactory<>("typeFinancement"));
             colTaux.setCellValueFactory(new PropertyValueFactory<>("tauxInteret"));
-            colMontantMin.setCellValueFactory(new PropertyValueFactory<>("montantMin"));
-            colMontantMax.setCellValueFactory(new PropertyValueFactory<>("montantMax"));
+            colPrixFixe.setCellValueFactory(new PropertyValueFactory<>("prixFixe"));
             colBanque.setCellValueFactory(new PropertyValueFactory<>("nomBanque"));
 
             // Style colonne Type
@@ -102,7 +100,7 @@ public class AdminProduitController {
             });
 
             // Style colonnes montants
-            colMontantMin.setCellFactory(column -> new TableCell<ProduitFinancier, Double>() {
+            colPrixFixe.setCellFactory(column -> new TableCell<ProduitFinancier, Double>() {
                 @Override
                 protected void updateItem(Double montant, boolean empty) {
                     super.updateItem(montant, empty);
@@ -115,7 +113,7 @@ public class AdminProduitController {
                 }
             });
 
-            colMontantMax.setCellFactory(column -> new TableCell<ProduitFinancier, Double>() {
+            colPrixFixe.setCellFactory(column -> new TableCell<ProduitFinancier, Double>() {
                 @Override
                 protected void updateItem(Double montant, boolean empty) {
                     super.updateItem(montant, empty);
@@ -201,8 +199,7 @@ public class AdminProduitController {
                 "📦 Nom: " + produit.getNomProduit() + "\n\n" +
                 "📋 Type: " + produit.getTypeFinancement() + "\n\n" +
                 "💰 Taux d'intérêt: " + String.format("%.2f%%", produit.getTauxInteret()) + "\n\n" +
-                "📊 Montant Min: " + String.format("%,.0f DT", produit.getMontantMin()) + "\n\n" +
-                "📊 Montant Max: " + String.format("%,.0f DT", produit.getMontantMax()) + "\n\n" +
+                "📊 Prix Fixe: " + String.format("%,.0f DT", produit.getPrixFixe()) + "\n\n" +
                 "🏦 Banque: " + (produit.getNomBanque() != null ? produit.getNomBanque() : "Non assignée") + "\n\n" +
                 "═══════════════════════════════════";
 

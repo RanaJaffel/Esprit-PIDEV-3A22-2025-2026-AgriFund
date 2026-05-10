@@ -116,8 +116,8 @@
                         <TableColumn fx:id="colNom" text="Nom du Produit" prefWidth="220"/>
                         <TableColumn fx:id="colType" text="Type" prefWidth="130"/>
                         <TableColumn fx:id="colTaux" text="Taux %" prefWidth="90" style="-fx-alignment: CENTER;"/>
-                        <TableColumn fx:id="colMontantMin" text="Min (DT)" prefWidth="110"/>
-                        <TableColumn fx:id="colMontantMax" text="Max (DT)" prefWidth="110"/>
+                        <TableColumn fx:id="colPrixFixe" text="Min (DT)" prefWidth="110"/>
+                        <TableColumn fx:id="colPrixFixe" text="Max (DT)" prefWidth="110"/>
                         <TableColumn fx:id="colBanque" text="🏦 Banque" prefWidth="180"/>
                     </columns>
                     <placeholder>

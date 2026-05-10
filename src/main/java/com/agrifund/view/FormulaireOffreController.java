@@ -88,8 +88,7 @@ public class FormulaireOffreController {
                 p.setNomProduit(rs.getString("nom_produit"));
                 p.setTypeFinancement(rs.getString("type_financement"));
                 p.setTauxInteret(rs.getDouble("taux_interet"));
-                p.setMontantMin(rs.getDouble("montant_min"));
-                p.setMontantMax(rs.getDouble("montant_max"));
+                p.setPrixFixe(rs.getDouble("prix_fixe"));
                 p.setReglesFinancieres(rs.getString("regles_financieres"));
                 produits.add(p);
             }

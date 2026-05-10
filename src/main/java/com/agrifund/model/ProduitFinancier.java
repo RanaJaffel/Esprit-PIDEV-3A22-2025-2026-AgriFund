@@ -5,8 +5,7 @@ public class ProduitFinancier {
     private String nomProduit;
     private String typeFinancement;
     private double tauxInteret;
-    private double montantMin;
-    private double montantMax;
+    private double prixFixe;
     private String reglesFinancieres;
 
     // NOUVEAU: Lien avec la banque
@@ -19,14 +18,13 @@ public class ProduitFinancier {
 
     // Constructeur complet
     public ProduitFinancier(int idProduit, String nomProduit, String typeFinancement,
-                            double tauxInteret, double montantMin, double montantMax,
+                            double tauxInteret, double prixFixe,
                             String reglesFinancieres) {
         this.idProduit = idProduit;
         this.nomProduit = nomProduit;
         this.typeFinancement = typeFinancement;
         this.tauxInteret = tauxInteret;
-        this.montantMin = montantMin;
-        this.montantMax = montantMax;
+        this.prixFixe = prixFixe;
         this.reglesFinancieres = reglesFinancieres;
     }
 
@@ -43,11 +41,8 @@ public class ProduitFinancier {
     public double getTauxInteret() { return tauxInteret; }
     public void setTauxInteret(double tauxInteret) { this.tauxInteret = tauxInteret; }
 
-    public double getMontantMin() { return montantMin; }
-    public void setMontantMin(double montantMin) { this.montantMin = montantMin; }
-
-    public double getMontantMax() { return montantMax; }
-    public void setMontantMax(double montantMax) { this.montantMax = montantMax; }
+    public double getPrixFixe() { return prixFixe; }
+    public void setPrixFixe(double prixFixe) { this.prixFixe = prixFixe; }
 
     public String getReglesFinancieres() { return reglesFinancieres; }
     public void setReglesFinancieres(String reglesFinancieres) { this.reglesFinancieres = reglesFinancieres; }

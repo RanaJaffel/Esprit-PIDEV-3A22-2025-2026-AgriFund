@@ -34,8 +34,7 @@ public class ProduitFinancierViewController {
     @FXML private TableColumn<ProduitFinancier, String> colNom;
     @FXML private TableColumn<ProduitFinancier, String> colType;
     @FXML private TableColumn<ProduitFinancier, Double> colTaux;
-    @FXML private TableColumn<ProduitFinancier, Double> colMontantMin;
-    @FXML private TableColumn<ProduitFinancier, Double> colMontantMax;
+    @FXML private TableColumn<ProduitFinancier, Double> colPrixFixe;
 
     @FXML private Label lblTotalProduits;
     @FXML private Label lblPrets;
@@ -69,8 +68,7 @@ public class ProduitFinancierViewController {
             colNom.setCellValueFactory(new PropertyValueFactory<>("nomProduit"));
             colType.setCellValueFactory(new PropertyValueFactory<>("typeFinancement"));
             colTaux.setCellValueFactory(new PropertyValueFactory<>("tauxInteret"));
-            colMontantMin.setCellValueFactory(new PropertyValueFactory<>("montantMin"));
-            colMontantMax.setCellValueFactory(new PropertyValueFactory<>("montantMax"));
+            colPrixFixe.setCellValueFactory(new PropertyValueFactory<>("prixFixe"));
 
             // Charger les donnees
             chargerDonnees();
@@ -146,8 +144,7 @@ public class ProduitFinancierViewController {
                 p.setNomProduit(rs.getString("nom_produit"));
                 p.setTypeFinancement(rs.getString("type_financement"));
                 p.setTauxInteret(rs.getDouble("taux_interet"));
-                p.setMontantMin(rs.getDouble("montant_min"));
-                p.setMontantMax(rs.getDouble("montant_max"));
+                p.setPrixFixe(rs.getDouble("prix_fixe"));
                 p.setReglesFinancieres(rs.getString("regles_financieres"));
                 produitsList.add(p);
             }
@@ -492,3 +489,4 @@ public class ProduitFinancierViewController {
         alert.showAndWait();
     }
 }
+

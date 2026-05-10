@@ -23,8 +23,7 @@ public class AdminDetailsProduitController {
     @FXML private Label lblId;
     @FXML private Label lblType;
     @FXML private Label lblTaux;
-    @FXML private Label lblMontantMin;
-    @FXML private Label lblMontantMax;
+    @FXML private Label lblPrixFixe;
     @FXML private TextArea txtRegles;
     @FXML private Label lblMontantMoyen;
     @FXML private Label lblEcart;
@@ -67,15 +66,14 @@ public class AdminDetailsProduitController {
         lblId.setText("#" + produit.getIdProduit());
         lblType.setText(produit.getTypeFinancement());
         lblTaux.setText(String.format("%.2f %%", produit.getTauxInteret()));
-        lblMontantMin.setText(String.format("%,.2f DT", produit.getMontantMin()));
-        lblMontantMax.setText(String.format("%,.2f DT", produit.getMontantMax()));
+        lblPrixFixe.setText(String.format("%,.2f DT", produit.getPrixFixe()));
 
         String regles = produit.getReglesFinancieres();
         txtRegles.setText(regles != null && !regles.trim().isEmpty() ?
                 regles : "Aucune règle financière spécifiée.");
 
-        double moyenne = (produit.getMontantMin() + produit.getMontantMax()) / 2;
-        double ecart = produit.getMontantMax() - produit.getMontantMin();
+        double moyenne = produit.getPrixFixe();
+        double ecart = 0;
         lblMontantMoyen.setText(String.format("%,.2f DT", moyenne));
         lblEcart.setText(String.format("%,.2f DT", ecart));
     }

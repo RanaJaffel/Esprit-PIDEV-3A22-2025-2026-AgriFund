@@ -23,7 +23,7 @@ public class OffreFinanciereService {
             pstmt.setString(3, offre.getStatut());
             pstmt.setInt(4, offre.getIdProduit());
 
-            if (offre.getBanqueId() > 0) {
+            if (offre.getBanqueId() != null && offre.getBanqueId() > 0) {
                 pstmt.setInt(5, offre.getBanqueId());
             } else {
                 pstmt.setNull(5, Types.INTEGER);
@@ -66,7 +66,7 @@ public class OffreFinanciereService {
     public ObservableList<OffreFinanciere> getAllOffresAvecProduit() {
         ObservableList<OffreFinanciere> offres = FXCollections.observableArrayList();
         String sql = "SELECT o.*, p.nom_produit, p.type_financement, p.taux_interet, " +
-                "p.montant_min, p.montant_max, p.regles_financieres, u.nom as banque_nom " +
+                "p.prix_fixe, p.regles_financieres, u.nom as banque_nom " +
                 "FROM offre_financiere o " +
                 "INNER JOIN produit_financier p ON o.id_produit = p.id_produit " +
                 "LEFT JOIN Banque b ON o.banque_id = b.id " +
@@ -84,8 +84,7 @@ public class OffreFinanciereService {
                         rs.getString("nom_produit"),
                         rs.getString("type_financement"),
                         rs.getDouble("taux_interet"),
-                        rs.getDouble("montant_min"),
-                        rs.getDouble("montant_max"),
+                        rs.getDouble("prix_fixe"),
                         rs.getString("regles_financieres")
                 );
 
@@ -167,7 +166,7 @@ public class OffreFinanciereService {
             pstmt.setString(3, offre.getStatut());
             pstmt.setInt(4, offre.getIdProduit());
 
-            if (offre.getBanqueId() > 0) {
+            if (offre.getBanqueId() != null && offre.getBanqueId() > 0) {
                 pstmt.setInt(5, offre.getBanqueId());
             } else {
                 pstmt.setNull(5, Types.INTEGER);
